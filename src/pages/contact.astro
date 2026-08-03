@@ -1,0 +1,13 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { CONTACT_EMAIL } from '../data/site-config';
+---
+
+<Layout title="Contact | ToolKit" description="How to get in touch with ToolKit.">
+  <div class="max-w-2xl mx-auto px-4 py-16">
+    <h1 class="text-3xl font-bold mb-6">Contact</h1>
+    <p class="text-slate-700">
+      For questions, bug reports, or anything else: <a href={`mailto:${CONTACT_EMAIL}`} class="underline">{CONTACT_EMAIL}</a>
+    </p>
+  </div>
+</Layout>

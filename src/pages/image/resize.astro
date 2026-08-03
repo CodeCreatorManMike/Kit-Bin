@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import ToolWidget from '../../components/ToolWidget.astro';
+import AdUnit from '../../components/AdUnit.astro';
 ---
 
 <Layout
@@ -25,6 +26,8 @@ import ToolWidget from '../../components/ToolWidget.astro';
   </div>
 
   <ToolWidget accept="image/*" dropLabel="Drop an image here or click to browse" />
+
+  <AdUnit />
 
   <div class="max-w-2xl mx-auto px-4 py-12 text-slate-700 space-y-4">
     <p>This tool resizes an image to a target width, scaling the height to match automatically.</p>

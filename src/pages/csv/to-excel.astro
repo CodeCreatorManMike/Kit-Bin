@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import ToolWidget from '../../components/ToolWidget.astro';
+import AdUnit from '../../components/AdUnit.astro';
 ---
 
 <Layout
@@ -13,6 +14,8 @@ import ToolWidget from '../../components/ToolWidget.astro';
   </div>
 
   <ToolWidget accept="text/csv,.csv" dropLabel="Drop a CSV file here or click to browse" />
+
+  <AdUnit />
 
   <div class="max-w-2xl mx-auto px-4 py-12 text-slate-700 space-y-4">
     <p>This tool converts a CSV file into an Excel-compatible .xlsx file.</p>

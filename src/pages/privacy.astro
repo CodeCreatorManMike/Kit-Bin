@@ -1,0 +1,62 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { CONTACT_EMAIL } from '../data/site-config';
+---
+
+<Layout title="Privacy Policy | ToolKit" description="ToolKit's privacy policy.">
+  <div class="max-w-2xl mx-auto px-4 py-16 space-y-6 text-slate-700">
+    <h1 class="text-3xl font-bold">Privacy Policy</h1>
+
+    <section>
+      <h2 class="text-xl font-semibold mb-2">Your files</h2>
+      <p>
+        Every tool on this site currently processes files entirely in your browser, using
+        WebAssembly and native browser APIs. Your file is read into your browser's memory, the
+        conversion runs on your device, and the result downloads directly to your device. At no
+        point is a file you select uploaded to any server. This applies to every tool currently
+        live on the site — none of them use a server fallback. If that changes for a specific
+        tool in the future (for very large files or a format that genuinely can't be processed
+        client-side), that tool's own page will say so explicitly.
+      </p>
+    </section>
+
+    <section>
+      <h2 class="text-xl font-semibold mb-2">Accounts and storage</h2>
+      <p>
+        There are no user accounts on this site. Nothing you upload or convert is stored on any
+        server, ever — there's no database for user files.
+      </p>
+    </section>
+
+    <section>
+      <h2 class="text-xl font-semibold mb-2">Analytics</h2>
+      <p>
+        This site does not currently run any analytics or tracking script. If aggregate,
+        cookieless usage analytics (page views, general device/location category — not
+        individual tracking) are added in the future, this section will be updated to say so
+        before that happens.
+      </p>
+    </section>
+
+    <section>
+      <h2 class="text-xl font-semibold mb-2">Advertising</h2>
+      <p>
+        This site is supported by Google AdSense. Google may use cookies and similar
+        technologies to show ads based on your visits to this and other sites. You can review
+        and control the data Google uses for ad personalization at
+        <a href="https://adssettings.google.com" class="underline">Google Ads Settings</a>, and
+        learn more about how Google uses data at
+        <a href="https://policies.google.com/technologies/partner-sites" class="underline"
+          >How Google uses information from sites that use its services</a
+        >.
+      </p>
+    </section>
+
+    <section>
+      <h2 class="text-xl font-semibold mb-2">Contact</h2>
+      <p>
+        Questions about this policy: <a href={`mailto:${CONTACT_EMAIL}`} class="underline">{CONTACT_EMAIL}</a>
+      </p>
+    </section>
+  </div>
+</Layout>

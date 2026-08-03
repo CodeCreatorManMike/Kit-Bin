@@ -1,0 +1,22 @@
+---
+import { ADSENSE_PUBLISHER_ID, ADSENSE_AD_SLOT } from '../data/site-config';
+
+interface Props {
+  slot?: string;
+}
+
+const { slot = ADSENSE_AD_SLOT } = Astro.props;
+---
+
+<div class="max-w-2xl mx-auto px-4 my-6">
+  <ins
+    class="adsbygoogle"
+    style="display:block"
+    data-ad-client={ADSENSE_PUBLISHER_ID}
+    data-ad-slot={slot}
+    data-ad-format="auto"
+    data-full-width-responsive="true"></ins>
+  <script>
+    ((window as unknown as { adsbygoogle: unknown[] }).adsbygoogle ||= []).push({});
+  </script>
+</div>
