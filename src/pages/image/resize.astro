@@ -5,12 +5,12 @@ import AdUnit from '../../components/AdUnit.astro';
 ---
 
 <Layout
-  title="Resize Image Online — Free & No Upload Required | ToolKit"
+  title="Resize Image Online — Free & No Upload Required | Kit-Bin"
   description="Resize an image to a target width in seconds. Runs entirely in your browser — your file is never uploaded to a server."
 >
   <div class="max-w-2xl mx-auto px-4 pt-10 pb-4 text-center">
-    <h1 class="text-3xl font-bold">Resize Image — Free</h1>
-    <p class="mt-2 text-slate-600">Processed entirely in your browser. Your file is never uploaded to a server.</p>
+    <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">Resize Image — Free</h1>
+    <p class="mt-2 text-slate-600 dark:text-slate-400">Processed entirely in your browser. Your file is never uploaded to a server.</p>
   </div>
 
   <div class="max-w-2xl mx-auto px-4 mb-4 flex items-center justify-center gap-2 text-sm">
@@ -20,22 +20,22 @@ import AdUnit from '../../components/AdUnit.astro';
       type="number"
       value="800"
       min="1"
-      class="w-24 rounded border border-slate-300 px-2 py-1"
+      class="w-24 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 px-2 py-1"
     />
-    <span class="text-slate-500">Height scales automatically.</span>
+    <span class="text-slate-500 dark:text-slate-400">Height scales automatically.</span>
   </div>
 
   <ToolWidget accept="image/*" dropLabel="Drop an image here or click to browse" />
 
   <AdUnit />
 
-  <div class="max-w-2xl mx-auto px-4 py-12 text-slate-700 space-y-4">
+  <div class="max-w-2xl mx-auto px-4 py-12 text-slate-700 dark:text-slate-300 space-y-4">
     <p>This tool resizes an image to a target width, scaling the height to match automatically.</p>
     <p>Set your target width, then drop your image above. The resized file downloads automatically once ready.</p>
     <h2 class="font-semibold text-lg pt-2">FAQ</h2>
     <div>
       <p class="font-medium">Does it keep the aspect ratio?</p>
-      <p class="text-slate-600">Yes — height is calculated from your target width automatically.</p>
+      <p class="text-slate-600 dark:text-slate-400">Yes — height is calculated from your target width automatically.</p>
     </div>
   </div>
 

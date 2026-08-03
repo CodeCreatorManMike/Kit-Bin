@@ -5,32 +5,32 @@ import AdUnit from '../../components/AdUnit.astro';
 ---
 
 <Layout
-  title="Trim Video Online — Free & No Upload Required | ToolKit"
+  title="Trim Video Online — Free & No Upload Required | Kit-Bin"
   description="Trim a video to a start and end time in your browser. Your file is never uploaded to a server."
 >
   <div class="max-w-2xl mx-auto px-4 pt-10 pb-4 text-center">
-    <h1 class="text-3xl font-bold">Trim Video — Free</h1>
-    <p class="mt-2 text-slate-600">Processed entirely in your browser. Your file is never uploaded to a server.</p>
+    <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">Trim Video — Free</h1>
+    <p class="mt-2 text-slate-600 dark:text-slate-400">Processed entirely in your browser. Your file is never uploaded to a server.</p>
   </div>
 
   <div class="max-w-2xl mx-auto px-4 mb-4 flex items-center justify-center gap-3 text-sm">
     <label for="start-time">Start (s):</label>
-    <input id="start-time" type="number" value="0" min="0" class="w-20 rounded border border-slate-300 px-2 py-1" />
+    <input id="start-time" type="number" value="0" min="0" class="w-20 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 px-2 py-1" />
     <label for="end-time">End (s):</label>
-    <input id="end-time" type="number" value="10" min="0" class="w-20 rounded border border-slate-300 px-2 py-1" />
+    <input id="end-time" type="number" value="10" min="0" class="w-20 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 px-2 py-1" />
   </div>
 
   <ToolWidget accept="video/*" dropLabel="Drop a video file here or click to browse" />
 
   <AdUnit />
 
-  <div class="max-w-2xl mx-auto px-4 py-12 text-slate-700 space-y-4">
+  <div class="max-w-2xl mx-auto px-4 py-12 text-slate-700 dark:text-slate-300 space-y-4">
     <p>This tool cuts a video down to the time range you specify, using a fast remux where possible.</p>
     <p>Set your start and end time in seconds, then drop your video above.</p>
     <h2 class="font-semibold text-lg pt-2">FAQ</h2>
     <div>
       <p class="font-medium">What format is the output?</p>
-      <p class="text-slate-600">MP4, regardless of the input format.</p>
+      <p class="text-slate-600 dark:text-slate-400">MP4, regardless of the input format.</p>
     </div>
   </div>
 

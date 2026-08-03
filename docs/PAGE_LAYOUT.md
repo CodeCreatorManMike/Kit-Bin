@@ -3,6 +3,29 @@
 Three page templates cover the entire site: **Homepage**, **Category Hub**, **Tool Page**. Build
 each as a reusable Astro layout/component set — do not one-off design individual tool pages.
 
+## Site shell (supersedes "Header" in the diagrams below)
+
+As of the Kit-Bin visual reskin, every page renders through `src/layouts/Layout.astro`, which
+wraps `<slot />` in a persistent left sidebar (`src/components/Sidebar.astro`) instead of the
+flat top header the diagrams below still show — the diagrams' "Header: logo/name · category nav"
+row is now that sidebar. The sidebar holds: logo + "Kit-Bin" wordmark, Home, the 5 category links
+(with icon + active-state highlight from `Astro.url.pathname`), a client-only "Favorites" list,
+a "100% Private" trust panel, and the light/dark toggle. Below `lg` (1024px) the sidebar becomes
+an off-canvas drawer behind a mobile top bar with a hamburger button — this exists because a
+fixed 256px column has no room on phone-width viewports; see `Sidebar.astro` for the breakpoint
+mechanics.
+
+Favorites and the light/dark theme are both plain `localStorage` (`kitbin:favorites`,
+`kitbin:theme`) — client-side UI preferences only, not user file data, so they don't conflict
+with the project's no-accounts/no-persistent-storage rule. `src/lib/favorites.ts` is the shared
+helper; reuse it rather than re-deriving the localStorage key elsewhere.
+
+Per-tool icons live in `public/icons/<category>/<slug>.png` (sourced from the
+`kits-bin-ui-assets` pack) and are referenced via the `icon` field on each entry in
+`src/data/tools.ts` — add that field for any new tool going forward. Dark mode is Tailwind v4's
+class-based variant (`@custom-variant dark` in `global.css`, toggled on `<html>`), not the
+OS-preference-only default.
+
 ## Design principles (apply to every template)
 
 1. **The tool is the hero, not the ad, not the explanation.** The upload/drop zone should be the

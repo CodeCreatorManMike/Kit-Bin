@@ -1,21 +1,17 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import ToolCard from '../../components/ToolCard.astro';
 import { tools } from '../../data/tools';
 
 const imageTools = tools.filter((t) => t.category === 'image');
 ---
 
-<Layout title="Free Image Tools | ToolKit" description="Convert, compress, and resize images entirely in your browser.">
-  <div class="max-w-3xl mx-auto px-4 py-10">
-    <h1 class="text-3xl font-bold">Free Image Tools</h1>
-    <p class="mt-2 text-slate-600">All image tools run entirely in your browser. Files are never uploaded.</p>
-    <div class="mt-8 grid gap-4 sm:grid-cols-2">
-      {imageTools.map((t) => (
-        <a href={t.slug} class="block rounded-xl border border-slate-200 p-5 hover:border-slate-400">
-          <p class="font-semibold">{t.name}</p>
-          <p class="mt-1 text-sm text-slate-600">{t.description}</p>
-        </a>
-      ))}
+<Layout title="Free Image Tools | Kit-Bin" description="Convert, compress, and resize images entirely in your browser.">
+  <div class="max-w-5xl mx-auto px-6 py-10">
+    <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">Free Image Tools</h1>
+    <p class="mt-2 text-slate-600 dark:text-slate-400">All image tools run entirely in your browser. Files are never uploaded.</p>
+    <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {imageTools.map((t) => <ToolCard tool={t} />)}
     </div>
   </div>
 </Layout>

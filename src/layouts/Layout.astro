@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import Footer from '../components/Footer.astro';
+import Sidebar from '../components/Sidebar.astro';
 
 interface Props {
   title: string;
@@ -8,14 +9,6 @@ interface Props {
 }
 
 const { title, description } = Astro.props;
-
-const categories = [
-  { href: '/pdf/', label: 'PDF' },
-  { href: '/image/', label: 'Image' },
-  { href: '/audio/', label: 'Audio' },
-  { href: '/video/', label: 'Video' },
-  { href: '/data/', label: 'Data' },
-];
 ---
 
 <html lang="en">
@@ -26,21 +19,22 @@ const categories = [
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title}</title>
     <!-- ADSENSE_VERIFICATION: replace with the snippet/meta tag from the AdSense dashboard once available -->
+    <script is:inline>
+      // Set the theme class before first paint to avoid a flash of the wrong theme.
+      try {
+        const stored = localStorage.getItem('kitbin:theme');
+        const dark = stored ? stored === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.classList.toggle('dark', dark);
+      } catch {}
+    </script>
   </head>
-  <body class="min-h-screen bg-white text-slate-900 flex flex-col">
-    <header class="border-b border-slate-200">
-      <div class="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
-        <a href="/" class="font-semibold text-lg">ToolKit</a>
-        <nav class="flex gap-4 text-sm">
-          {categories.map((c) => (
-            <a href={c.href} class="text-slate-600 hover:text-slate-900">{c.label}</a>
-          ))}
-        </nav>
-      </div>
-    </header>
-    <main class="flex-1">
-      <slot />
-    </main>
-    <Footer />
+  <body class="min-h-screen bg-white text-slate-900 dark:bg-slate-950 dark:text-slate-100 flex">
+    <Sidebar />
+    <div class="flex-1 flex flex-col min-w-0 pt-14 lg:pt-0">
+      <main class="flex-1">
+        <slot />
+      </main>
+      <Footer />
+    </div>
   </body>
 </html>
