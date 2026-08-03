@@ -97,20 +97,33 @@ is. Read the relevant file before making changes in that area:
 ## Current status
 
 See [`docs/ROADMAP.md`](docs/ROADMAP.md) for the authoritative, up-to-date phase and tool list.
-As of this writing: **Phase 1 / MVP — tools built and verified locally, not yet deployed.**
+As of this writing: **27 of ~28 tools built and verified locally, not yet deployed.**
 
 <!--
 Progress checklist — update as tools ship. Keep in sync with docs/ROADMAP.md.
 
-Phase 1 (MVP):
-- [x] /pdf/merge
-- [x] /pdf/split
-- [x] /pdf/compress
-- [x] /image/heic-to-jpg
-- [x] /image/compress
-- [x] /image/resize
-- [x] /audio/mp3-to-wav
-- [x] Homepage + category hubs live
+PDF:
+- [x] /pdf/merge, /pdf/split, /pdf/compress, /pdf/rotate, /pdf/watermark, /pdf/to-images,
+  /pdf/reorder-pages
+- [ ] /pdf/unlock — attempted, pulled (qpdf-wasm needs COOP/COEP + broken worker resolution
+  under Vite, see docs/TOOL_SPECS.md)
+
+Image:
+- [x] /image/heic-to-jpg, /image/compress, /image/resize, /image/webp-to-png,
+  /image/png-to-webp, /image/svg-to-png, /image/crop
+- [ ] /image/background-remove — Phase 3, not started
+
+Audio:
+- [x] /audio/mp3-to-wav, /audio/wav-to-mp3, /audio/trim, /audio/merge, /audio/volume-normalize
+
+Video:
+- [x] /video/mp4-to-webm, /video/compress, /video/trim, /video/mute, /video/extract-audio,
+  /video/gif-from-video
+
+Data:
+- [x] /csv/to-json, /json/to-csv, /csv/to-excel, /data/csv-cleaner
+
+- [x] Homepage + category hubs live (PDF, Image, Audio, Video, Data)
 - [ ] Deployed to Cloudflare Pages
 - [ ] Search Console connected
 - [ ] AdSense approved
