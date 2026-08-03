@@ -1,36 +1,21 @@
 ---
 import { categories } from '../data/tools';
+import { categoryColors } from '../data/toolIcons';
 
 const currentPath = Astro.url.pathname;
 const isHome = currentPath === '/';
 
-const categoryMeta: Record<string, { bg: string; text: string; icon: string }> = {
-  pdf: {
-    bg: 'bg-red-50 dark:bg-red-950/40',
-    text: 'text-red-600 dark:text-red-400',
-    icon: 'M7 3h7l5 5v13a1 1 0 01-1 1H7a1 1 0 01-1-1V4a1 1 0 011-1zM14 3v5h5',
-  },
-  image: {
-    bg: 'bg-emerald-50 dark:bg-emerald-950/40',
-    text: 'text-emerald-600 dark:text-emerald-400',
-    icon: 'M4 5h16a1 1 0 011 1v12a1 1 0 01-1 1H4a1 1 0 01-1-1V6a1 1 0 011-1zM8 11a2 2 0 100-4 2 2 0 000 4zM3 16l5-5 4 4 3-3 6 6',
-  },
-  audio: {
-    bg: 'bg-amber-50 dark:bg-amber-950/40',
-    text: 'text-amber-600 dark:text-amber-400',
-    icon: 'M9 18V5l11-2v13M9 18a3 3 0 11-6 0 3 3 0 016 0zM20 16a3 3 0 11-6 0 3 3 0 016 0z',
-  },
-  video: {
-    bg: 'bg-violet-50 dark:bg-violet-950/40',
-    text: 'text-violet-600 dark:text-violet-400',
-    icon: 'M4 6a1 1 0 011-1h10a1 1 0 011 1v12a1 1 0 01-1 1H5a1 1 0 01-1-1V6zM16 10l5-3v10l-5-3',
-  },
-  data: {
-    bg: 'bg-cyan-50 dark:bg-cyan-950/40',
-    text: 'text-cyan-600 dark:text-cyan-400',
-    icon: 'M4 5h16v4H4V5zM4 11h7v8H4v-8zM13 11h7v8h-7v-8z',
-  },
+const categoryIconPaths: Record<string, string> = {
+  pdf: 'M7 3h7l5 5v13a1 1 0 01-1 1H7a1 1 0 01-1-1V4a1 1 0 011-1zM14 3v5h5',
+  image: 'M4 5h16a1 1 0 011 1v12a1 1 0 01-1 1H4a1 1 0 01-1-1V6a1 1 0 011-1zM8 11a2 2 0 100-4 2 2 0 000 4zM3 16l5-5 4 4 3-3 6 6',
+  audio: 'M9 18V5l11-2v13M9 18a3 3 0 11-6 0 3 3 0 016 0zM20 16a3 3 0 11-6 0 3 3 0 016 0z',
+  video: 'M4 6a1 1 0 011-1h10a1 1 0 011 1v12a1 1 0 01-1 1H5a1 1 0 01-1-1V6zM16 10l5-3v10l-5-3',
+  data: 'M4 5h16v4H4V5zM4 11h7v8H4v-8zM13 11h7v8h-7v-8z',
 };
+
+const categoryMeta = Object.fromEntries(
+  Object.entries(categoryIconPaths).map(([slug, icon]) => [slug, { ...categoryColors[slug], icon }]),
+);
 ---
 
 <div
@@ -42,8 +27,8 @@ const categoryMeta: Record<string, { bg: string; text: string; icon: string }> =
   class="lg:hidden fixed inset-x-0 top-0 z-20 flex items-center justify-between border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 px-4 py-3"
 >
   <a href="/" class="flex items-center gap-2">
-    <span class="inline-block h-8 w-8 overflow-hidden rounded-lg shrink-0">
-      <img src="/brand/logo-full.png" alt="" class="h-8 w-auto max-w-none -translate-x-0.5" />
+    <span class="inline-block h-8 w-8 shrink-0">
+      <img src="/brand/mark.svg" alt="" class="h-8 w-8" />
     </span>
     <span class="font-semibold text-slate-900 dark:text-slate-100">Kit-Bin</span>
   </a>
@@ -65,8 +50,8 @@ const categoryMeta: Record<string, { bg: string; text: string; icon: string }> =
 >
   <div class="flex items-center justify-between px-5 py-5">
     <a href="/" class="flex items-center gap-2">
-      <span class="inline-block h-9 w-9 overflow-hidden rounded-lg shrink-0">
-        <img src="/brand/logo-full.png" alt="" class="h-9 w-auto max-w-none -translate-x-0.5" />
+      <span class="inline-block h-9 w-9 shrink-0">
+        <img src="/brand/mark.svg" alt="" class="h-9 w-9" />
       </span>
       <span class="leading-tight">
         <span class="block font-semibold text-slate-900 dark:text-slate-100">Kit-Bin</span>
@@ -139,7 +124,10 @@ const categoryMeta: Record<string, { bg: string; text: string; icon: string }> =
 
   <div class="px-3 pb-3">
     <div class="rounded-xl bg-slate-50 dark:bg-slate-900 p-4 text-center">
-      <img src="/illustrations/privacy-shield.png" alt="" class="mx-auto h-14 w-14 object-contain" />
+      <svg viewBox="0 0 24 24" class="mx-auto h-10 w-10 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3z" />
+        <path d="M9.3 12l1.9 1.9 3.5-3.8" />
+      </svg>
       <p class="mt-2 text-sm font-semibold text-slate-800 dark:text-slate-200">100% Private</p>
       <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">Your files never leave your device.</p>
       <a href="/privacy" class="mt-1 inline-block text-xs text-blue-600 dark:text-blue-400 hover:underline">Learn more →</a>
@@ -214,6 +202,7 @@ const categoryMeta: Record<string, { bg: string; text: string; icon: string }> =
 <script>
   import { tools } from '../data/tools';
   import { getFavorites, FAVORITES_CHANGED_EVENT } from '../lib/favorites';
+  import { toolIconHtml } from '../lib/toolIconHtml';
 
   const container = document.getElementById('sidebar-favorites')!;
 
@@ -235,14 +224,10 @@ const categoryMeta: Record<string, { bg: string; text: string; icon: string }> =
       a.href = t.slug;
       a.className =
         'flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-900';
-      const icon = document.createElement('img');
-      icon.src = t.icon;
-      icon.alt = '';
-      icon.className = 'h-5 w-5 object-contain';
       const span = document.createElement('span');
       span.className = 'truncate';
       span.textContent = t.name;
-      a.appendChild(icon);
+      a.insertAdjacentHTML('afterbegin', toolIconHtml(t.slug, t.category));
       a.appendChild(span);
       container.appendChild(a);
     }

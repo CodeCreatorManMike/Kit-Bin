@@ -61,6 +61,33 @@ cost — this phase is where the project stops being free to run.
   the one piece of the entire project with a real, scaling infrastructure cost, so it's the last
   thing built, once there's actual revenue to justify it.
 
+## Competitive research notes (2026-08-03)
+
+Quick survey of iLovePDF, Smallpdf, Squoosh, CloudConvert, and TinyPNG while working on the
+visual reskin. Findings worth keeping in mind for future phases:
+
+- **Our "never uploaded, ever" claim is rarer than it sounds.** TinyPNG markets itself on privacy
+  but every image is uploaded to its servers for processing. CloudConvert doesn't sell your data
+  but still processes server-side. Squoosh is the one mainstream competitor that's genuinely
+  client-side like us. Don't dilute this differentiator — see `COPY_GUIDELINES.md` for the exact,
+  deliberately unembellished wording; the factual claim is already the strongest one in the
+  category, no need to oversell it.
+- **No daily task caps is a real advantage, already true here.** Smallpdf limits free users to 2
+  tasks/day; iLovePDF (no cap) is rated better for it specifically. We have no accounts and no
+  caps at all — worth protecting as a hard requirement if a Pro-tier is ever considered later,
+  not just an incidental side effect of not having accounts yet.
+- **Squoosh's live before/after preview (slider, real-time re-encode) is the standout UX idea
+  worth borrowing**, specifically for `/image/compress` and `/pdf/compress`. Right now those tools
+  show a before→after size stat after the fact (already good, matches `PAGE_LAYOUT.md`'s "concrete
+  outcome metric" rule) but don't let a user *tune* quality before committing. A quality slider
+  that re-runs `compressImage`/`compressPdf` live and updates the size readout would be a genuine
+  UX upgrade — not implemented in this pass (real scope, needs its own design/perf pass for
+  re-encode-on-drag debouncing), but worth prioritizing in Phase 2.
+- iLovePDF's OCR and e-signature tools are noted as differentiators for them, but both need
+  either a substantial WASM OCR engine or a signing/legal-validity story — bigger lifts than
+  anything else in the current catalog. Not proposing these for now; flagging only so a future
+  "what's next" discussion doesn't have to re-discover it from scratch.
+
 ## Explicit non-roadmap
 
 Not planned at any phase, and any future request to add these should be treated as a scope

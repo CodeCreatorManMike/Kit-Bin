@@ -1,5 +1,6 @@
 ---
 import type { Tool } from '../data/tools';
+import ToolIcon from './ToolIcon.astro';
 
 interface Props {
   tool: Tool;
@@ -26,9 +27,7 @@ const { tool } = Astro.props;
       <path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.6l-5.9 3 1.3-6.6-4.9-4.6 6.6-.8L12 2.5z" />
     </svg>
   </button>
-  <span class="inline-flex rounded-lg ring-1 ring-slate-100 dark:ring-slate-700 p-1">
-    <img src={tool.icon} alt="" class="h-8 w-8 object-contain rounded-md" />
-  </span>
+  <ToolIcon slug={tool.slug} category={tool.category} />
   <p class="mt-2 font-medium text-slate-900 dark:text-slate-100 pr-6">{tool.name}</p>
   <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">{tool.description}</p>
 </a>

@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- pencil -->
+  <g transform="rotate(-18 78 70)">
+    <rect x="72" y="30" width="12" height="70" rx="2" fill="#fbbf24" />
+    <path d="M72 30 L78 16 L84 30 Z" fill="#78350f" />
+    <rect x="72" y="94" width="12" height="10" fill="#78350f" />
+  </g>
+  <!-- scissors -->
+  <g transform="rotate(12 120 68)">
+    <circle cx="110" cy="96" r="9" fill="none" stroke="#64748b" stroke-width="5" />
+    <circle cx="132" cy="96" r="9" fill="none" stroke="#64748b" stroke-width="5" />
+    <path d="M112 90 L146 34" stroke="#94a3b8" stroke-width="6" stroke-linecap="round" />
+    <path d="M130 90 L96 34" stroke="#94a3b8" stroke-width="6" stroke-linecap="round" />
+  </g>
+  <!-- bin -->
+  <path d="M55 92 H145 L134 176 a10 10 0 0 1-10 9 H81 a10 10 0 0 1-10-9 Z" fill="#2563eb" />
+  <rect x="48" y="82" width="104" height="14" rx="7" fill="#1d4ed8" />
+  <rect x="86" y="66" width="28" height="14" rx="4" fill="#1d4ed8" />
+  <g stroke="#bfdbfe" stroke-width="5" stroke-linecap="round">
+    <path d="M85 112 v52" />
+    <path d="M100 112 v52" />
+    <path d="M115 112 v52" />
+  </g>
+</svg>
