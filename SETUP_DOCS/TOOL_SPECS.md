@@ -42,6 +42,11 @@ commercial site. Flagged inline below wherever relevant.
 - **Library**: `pdf.js` (Apache-2.0, Mozilla) to render each page to a canvas, then export
   canvas → PNG/JPG via native Canvas API (no extra dependency needed for the export step).
 - **Repo**: github.com/mozilla/pdf.js
+- **Alternative worth a head-to-head evaluation**: `@embedpdf/pdfium` (MIT) — wraps Chrome's own
+  PDFium rendering engine in WASM, generally regarded as having stronger fidelity than pdf.js on
+  edge-case PDFs (unusual fonts, heavy vector graphics) since it's the same engine Chrome uses
+  natively. Worth testing both against a set of gnarly real-world PDFs before committing, given
+  fidelity is explicitly the main risk area for this tool.
 - **Complexity**: Medium (rendering fidelity across complex PDFs — fonts, vector graphics — is
   the main risk area).
 
@@ -51,10 +56,14 @@ commercial site. Flagged inline below wherever relevant.
 
 ### `/pdf/unlock`
 - Scope explicitly to **removing a password the user already knows/owns** (i.e. decrypting a
-  PDF you have the password for, not bypassing protection you don't own). `pdf-lib` has limited
-  encryption support; evaluate `pdf-lib` + `qpdf`-wasm ports if password removal isn't natively
-  supported at time of build. Flag clearly in copy that this is for the user's own files.
-- **Complexity**: Medium — verify library support before committing to this tool for Phase 1.
+  PDF you have the password for, not bypassing protection you don't own). Flag clearly in copy
+  that this is for the user's own files.
+- **Library**: `pdf-lib` has limited encryption support, so use a `qpdf-wasm` port instead —
+  QPDF itself is Apache-2.0, and several independent maintainers have compiled it to WASM (see
+  `OPEN_SOURCE_REPOS.md` for specific repos). Pin a specific version once chosen; these are
+  smaller, less centrally-maintained packages than pdf-lib/pdf.js, so check recent commit
+  activity before committing to one.
+- **Complexity**: Medium.
 
 ### `/pdf/reorder-pages`
 - `pdf-lib` `copyPages` with a user-specified order array; UI is a drag-to-reorder thumbnail
@@ -93,9 +102,15 @@ in what order users expect operations to appear.
   itself does under the hood).
 - **Complexity**: Low.
 
-### `/image/resize`, `/image/crop`
-- Native Canvas API (`drawImage` with target dimensions / source rectangle) — no external
-  library needed at all for these two.
+### `/image/resize`
+- Native Canvas API (`drawImage` with target dimensions) — no external library needed.
+- **Complexity**: Low.
+
+### `/image/crop`
+- **Library**: `Cropper.js` (MIT) for the crop-selection UI/interaction (drag handles, aspect
+  ratio locking); pair with native Canvas API for the actual pixel export once a selection is
+  confirmed. Rolling this interaction by hand is disproportionately fiddly relative to its value
+  — this is a case where the small UI library earns its place.
 - **Complexity**: Low.
 
 ### `/image/svg-to-png`

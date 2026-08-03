@@ -22,9 +22,30 @@ versions.
 | `ffmpeg.wasm` / `@ffmpeg/ffmpeg` | Audio/video processing | Depends on compiled codecs — LGPL core is fine for closed-source with dynamic linking, but many builds bundle GPL components (e.g. libx264), which would obligate the whole product to GPL | **Verify the exact build's codec list before using; prefer Mediabunny where equivalent functionality exists** |
 | `PapaParse` | CSV parsing | MIT | Yes |
 | SheetJS (`xlsx`, community edition) | Spreadsheet read/write | Apache-2.0 | Yes |
-| `fflate` (or equivalent) | In-browser zipping | MIT | Yes |
+| `fflate` | In-browser zipping | MIT | Yes |
 | `gif.js` (or equivalent) | GIF encoding | Verify — historically MIT | Check current repo before use |
+| `qpdf-wasm` (multiple maintainers) | PDF password removal | Wraps Apache-2.0 QPDF | Yes — but pin a version; these ports are less centrally maintained than pdf-lib/pdf.js |
+| `@embedpdf/pdfium` | PDF rendering (alt. to pdf.js) | MIT | Yes |
+| `Cropper.js` | Image crop UI | MIT | Yes |
+| `react-dropzone` | Upload UI (only if using React components) | MIT | Yes |
 | Stirling-PDF | Reference only, not a dependency | AGPL-3.0, server-side Java | **Do not import code. Reference for feature/UX ideas only.** |
+| IT-Tools | Reference only, not a dependency | GPL-3.0 | **Do not import code — see the note on GPL and client-side distribution below.** |
+| BentoPDF | Reference only, not a dependency | Inconsistent across mirrors (AGPL-3.0 and Apache-2.0 both seen); canonical repo has a split commercial/self-hosted license model | **Treat as UX/feature reference only. Do not assume any given fork's license is authoritative.** |
+
+Full research trail and reasoning for every entry above: `OPEN_SOURCE_REPOS.md`.
+
+## A note on GPL specifically (not just AGPL)
+
+The table above previously only flagged AGPL as the recurring trap in this space, but GPL
+deserves the same caution for a project like this one, for a reason that's easy to miss: GPL's
+copyleft obligations attach to *distributing* the covered work, and shipping GPL-derived
+JavaScript to every visitor's browser — which is inherent to how a client-side tool site works —
+is plausibly "distribution" to each visitor in a way that server-side GPL use typically isn't
+(server-side GPL use without AGPL terms generally doesn't trigger source-sharing obligations,
+since no software is being distributed to the end user, just its output). Don't reason "it's
+GPL not AGPL, so client-side is fine" — verify this specifically rather than assuming, and
+default to treating GPL the same as AGPL for anything that would ship inside the site's own
+client bundle.
 
 ## Why AGPL specifically is the recurring trap in this space
 
