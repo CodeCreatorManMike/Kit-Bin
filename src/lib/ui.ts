@@ -58,11 +58,16 @@ export function reset(els: ToolElements) {
   setStatus(els, null);
 }
 
+export type ProgressReporter = (message: string) => void;
+
 interface WireOptions {
   accept: string;
   multiple?: boolean;
   validate?: (files: File[]) => string | null;
-  run: (files: File[]) => Promise<{ blob: Blob; filename: string; note?: string }>;
+  run: (
+    files: File[],
+    reportProgress: ProgressReporter,
+  ) => Promise<{ blob: Blob; filename: string; note?: string }>;
 }
 
 /** Wires drag/drop + click-to-browse + processing + result for a single tool.
@@ -83,7 +88,7 @@ export function wireTool(els: ToolElements, opts: WireOptions) {
     setStatus(els, 'Processing…');
 
     try {
-      const { blob, filename, note } = await opts.run(files);
+      const { blob, filename, note } = await opts.run(files, (message) => setStatus(els, message));
       setStatus(els, null);
       showResult(els, blob, filename, note);
     } catch (err) {

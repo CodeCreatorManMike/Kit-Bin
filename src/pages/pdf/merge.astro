@@ -48,8 +48,8 @@ import AdUnit from '../../components/AdUnit.astro';
         if (files.some((f) => f.type !== 'application/pdf')) return 'This tool needs PDF files.';
         return null;
       },
-      run: async (files) => {
-        const blob = await mergePdfs(files);
+      run: async (files, reportProgress) => {
+        const blob = await mergePdfs(files, reportProgress);
         return { blob, filename: 'merged.pdf' };
       },
     });

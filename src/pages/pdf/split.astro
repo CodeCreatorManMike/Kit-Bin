@@ -39,8 +39,8 @@ import AdUnit from '../../components/AdUnit.astro';
     wireTool(els, {
       accept: 'application/pdf',
       validate: (files) => (files[0]?.type !== 'application/pdf' ? 'This tool needs a PDF file.' : null),
-      run: async (files) => {
-        const { blob, filename } = await splitPdf(files[0]);
+      run: async (files, reportProgress) => {
+        const { blob, filename } = await splitPdf(files[0], reportProgress);
         return { blob, filename };
       },
     });

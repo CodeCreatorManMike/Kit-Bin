@@ -45,8 +45,8 @@ import AdUnit from '../../components/AdUnit.astro';
     wireTool(els, {
       accept: 'application/pdf',
       validate: (files) => (files[0]?.type !== 'application/pdf' ? 'This tool needs a PDF file.' : null),
-      run: async (files) => {
-        const { blob, originalSize, compressedSize } = await compressPdf(files[0]);
+      run: async (files, reportProgress) => {
+        const { blob, originalSize, compressedSize } = await compressPdf(files[0], 60, reportProgress);
         const pct = Math.round((1 - compressedSize / originalSize) * 100);
         const note = `${formatBytes(originalSize)} → ${formatBytes(compressedSize)}${pct > 0 ? ` (${pct}% smaller)` : ''}`;
         return { blob, filename: files[0].name.replace(/\.pdf$/i, '-compressed.pdf'), note };
