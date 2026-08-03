@@ -1,6 +1,5 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import ToolWidget from '../../components/ToolWidget.astro';
 import AdUnit from '../../components/AdUnit.astro';
 ---
 
@@ -13,20 +12,45 @@ import AdUnit from '../../components/AdUnit.astro';
     <p class="mt-2 text-slate-600">Processed entirely in your browser. Your file is never uploaded to a server.</p>
   </div>
 
-  <div class="max-w-2xl mx-auto px-4 mb-4 flex items-center justify-center gap-3 text-sm">
-    <label for="start-time">Start (s):</label>
-    <input id="start-time" type="number" value="0" min="0" class="w-20 rounded border border-slate-300 px-2 py-1" />
-    <label for="end-time">End (s):</label>
-    <input id="end-time" type="number" value="10" min="0" class="w-20 rounded border border-slate-300 px-2 py-1" />
-  </div>
+  <div class="max-w-2xl mx-auto px-4">
+    <div
+      id="dropzone"
+      class="cursor-pointer border-2 border-dashed border-slate-300 rounded-xl p-12 text-center hover:border-slate-400 transition-colors"
+    >
+      <p class="text-lg font-medium">Drop an audio file here or click to browse</p>
+      <p id="file-info" class="mt-2 text-sm text-slate-500"></p>
+      <input id="file-input" type="file" accept="audio/*" class="hidden" />
+    </div>
 
-  <ToolWidget accept="audio/*" dropLabel="Drop an audio file here or click to browse" />
+    <div id="trim-panel" class="hidden mt-4">
+      <p class="text-sm text-slate-600 mb-2">Drag the edges of the highlighted region to pick a start and end point.</p>
+      <div id="waveform" class="rounded-xl border border-slate-200 p-3"></div>
+      <p id="range-readout" class="mt-2 text-center text-sm text-slate-500"></p>
+      <button id="trim-button" class="mt-3 rounded-lg bg-blue-600 px-6 py-3 text-white font-medium hover:bg-blue-700">
+        Trim
+      </button>
+    </div>
+
+    <p id="status" class="hidden mt-4 text-center text-sm text-slate-600"></p>
+
+    <div id="result" class="hidden mt-4 rounded-xl border border-slate-200 p-6 text-center">
+      <a
+        id="download-link"
+        class="inline-block rounded-lg bg-blue-600 px-6 py-3 text-white font-medium hover:bg-blue-700"
+        >Download result</a
+      >
+      <p data-result-note class="mt-2 text-sm text-slate-500"></p>
+      <button id="reset-button" class="mt-4 text-sm text-slate-500 underline hover:text-slate-700">
+        Process another file
+      </button>
+    </div>
+  </div>
 
   <AdUnit />
 
   <div class="max-w-2xl mx-auto px-4 py-12 text-slate-700 space-y-4">
-    <p>This tool cuts an audio file down to the time range you specify.</p>
-    <p>Set your start and end time in seconds, then drop your audio file above.</p>
+    <p>This tool cuts an audio file down to the time range you specify, using a visual waveform to pick the range.</p>
+    <p>Drop your audio file above, drag the region's edges to set start/end, then click trim.</p>
     <h2 class="font-semibold text-lg pt-2">FAQ</h2>
     <div>
       <p class="font-medium">What format is the output?</p>
@@ -35,21 +59,123 @@ import AdUnit from '../../components/AdUnit.astro';
   </div>
 
   <script>
+    import WaveSurfer from 'wavesurfer.js';
+    import RegionsPlugin from 'wavesurfer.js/dist/plugins/regions.esm.js';
     import { trimAudio } from '../../lib/audio/trim';
-    import { getToolElements, wireTool } from '../../lib/ui';
 
-    const startInput = document.querySelector<HTMLInputElement>('#start-time')!;
-    const endInput = document.querySelector<HTMLInputElement>('#end-time')!;
-    const els = getToolElements();
-    wireTool(els, {
-      accept: 'audio/*',
-      validate: (files) => (!files[0]?.type.startsWith('audio/') ? 'This tool needs an audio file.' : null),
-      run: async (files) => {
-        const start = parseFloat(startInput.value) || 0;
-        const end = parseFloat(endInput.value) || start + 10;
-        const blob = await trimAudio(files[0], start, end);
-        return { blob, filename: files[0].name.replace(/\.[^.]+$/, '-trimmed.wav') };
-      },
+    const dropzone = document.querySelector<HTMLElement>('#dropzone')!;
+    const fileInput = document.querySelector<HTMLInputElement>('#file-input')!;
+    const fileInfo = document.querySelector<HTMLElement>('#file-info')!;
+    const trimPanel = document.querySelector<HTMLElement>('#trim-panel')!;
+    const waveformHost = document.querySelector<HTMLElement>('#waveform')!;
+    const rangeReadout = document.querySelector<HTMLElement>('#range-readout')!;
+    const trimButton = document.querySelector<HTMLButtonElement>('#trim-button')!;
+    const status = document.querySelector<HTMLElement>('#status')!;
+    const result = document.querySelector<HTMLElement>('#result')!;
+    const downloadLink = document.querySelector<HTMLAnchorElement>('#download-link')!;
+    const resetButton = document.querySelector<HTMLButtonElement>('#reset-button')!;
+
+    let currentFile: File | null = null;
+    let wavesurfer: WaveSurfer | null = null;
+    let regions: RegionsPlugin | null = null;
+    let currentRegion: ReturnType<RegionsPlugin['addRegion']> | null = null;
+
+    function setStatus(msg: string | null) {
+      status.textContent = msg ?? '';
+      status.classList.toggle('hidden', !msg);
+    }
+
+    function formatTime(seconds: number): string {
+      return seconds.toFixed(1) + 's';
+    }
+
+    function updateReadout() {
+      if (!currentRegion) return;
+      rangeReadout.textContent = `${formatTime(currentRegion.start)} to ${formatTime(currentRegion.end)}`;
+    }
+
+    function handleFile(file: File) {
+      if (!file.type.startsWith('audio/')) {
+        setStatus('This tool needs an audio file.');
+        return;
+      }
+      currentFile = file;
+      fileInfo.textContent = file.name;
+
+      wavesurfer?.destroy();
+      waveformHost.innerHTML = '';
+
+      regions = RegionsPlugin.create();
+      wavesurfer = WaveSurfer.create({
+        container: waveformHost,
+        waveColor: '#94a3b8',
+        progressColor: '#2563eb',
+        height: 96,
+        url: URL.createObjectURL(file),
+        plugins: [regions],
+      });
+
+      wavesurfer.on('decode', () => {
+        const duration = wavesurfer!.getDuration();
+        currentRegion = regions!.addRegion({
+          start: 0,
+          end: duration,
+          color: 'rgba(37, 99, 235, 0.15)',
+          drag: true,
+          resize: true,
+        });
+        updateReadout();
+        trimPanel.classList.remove('hidden');
+        dropzone.classList.add('hidden');
+      });
+
+      regions.on('region-updated', () => updateReadout());
+    }
+
+    dropzone.addEventListener('click', () => fileInput.click());
+    dropzone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropzone.classList.add('border-blue-500');
+    });
+    dropzone.addEventListener('dragleave', () => dropzone.classList.remove('border-blue-500'));
+    dropzone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropzone.classList.remove('border-blue-500');
+      const file = e.dataTransfer?.files?.[0];
+      if (file) handleFile(file);
+    });
+    fileInput.addEventListener('change', () => {
+      const file = fileInput.files?.[0];
+      if (file) handleFile(file);
+    });
+
+    trimButton.addEventListener('click', async () => {
+      if (!currentFile || !currentRegion) return;
+      setStatus('Processing…');
+      try {
+        const blob = await trimAudio(currentFile, currentRegion.start, currentRegion.end);
+        setStatus(null);
+        const url = URL.createObjectURL(blob);
+        downloadLink.href = url;
+        downloadLink.download = currentFile.name.replace(/\.[^.]+$/, '-trimmed.wav');
+        result.classList.remove('hidden');
+        trimPanel.classList.add('hidden');
+      } catch (err) {
+        setStatus(err instanceof Error ? err.message : 'Something went wrong.');
+      }
+    });
+
+    resetButton.addEventListener('click', () => {
+      currentFile = null;
+      currentRegion = null;
+      wavesurfer?.destroy();
+      wavesurfer = null;
+      waveformHost.innerHTML = '';
+      result.classList.add('hidden');
+      dropzone.classList.remove('hidden');
+      fileInfo.textContent = '';
+      fileInput.value = '';
+      setStatus(null);
     });
   </script>
 </Layout>
