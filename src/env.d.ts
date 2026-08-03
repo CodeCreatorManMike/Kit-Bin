@@ -10,6 +10,19 @@ declare module 'gifenc' {
   export function applyPalette(data: Uint8ClampedArray | Uint8Array, palette: number[][], format?: string): Uint8Array;
 }
 
+declare module 'libheif-js/wasm-bundle' {
+  interface HeifImage {
+    get_width(): number;
+    get_height(): number;
+    display(imageData: ImageData, callback: (data: ImageData | null) => void): void;
+  }
+  interface HeifDecoder {
+    decode(buffer: Uint8Array): HeifImage[];
+  }
+  const libheif: { HeifDecoder: new () => HeifDecoder };
+  export default libheif;
+}
+
 declare module 'qpdf-wasm' {
   interface QpdfFS {
     writeFile(path: string, data: Uint8Array): void;

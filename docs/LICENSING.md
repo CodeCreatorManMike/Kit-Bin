@@ -16,7 +16,9 @@ versions.
 | `pdf.js` | PDF rendering | Apache-2.0 (Mozilla) | Yes |
 | `@jsquash/*` (avif, webp, png, jpeg, resize) | Image codecs | Apache-2.0 | Yes |
 | `browser-image-compression` | Image compression | MIT | Yes |
-| `icodec` | Image codecs incl. HEIC | Verify at build time — not confirmed here | **Check before use, especially the HEIC module** |
+| `libheif-js` (`wasm-bundle` build) | HEIC decode (`/image/heic-to-jpg`) | LGPL-3.0, stated correctly in its own `package.json`/`LICENSE` | Yes, with caveats below — replaced `heic2any` for this reason |
+| ~~`heic2any`~~ | ~~HEIC decode~~ | Claims MIT, but silently inlines a compiled `libheif` (LGPL-3.0) WASM/JS blob into its bundle with **no LGPL notice, no license file, and no separate/relinkable artifact** | **No — removed.** Verified by attempting to re-parse its own output and inspecting `dist/heic2any.js` directly: the LGPL component ships with zero attribution. Do not reintroduce. |
+| `icodec` | Image codecs incl. HEIC | Not evaluated further — same underlying `libheif`/HEVC characteristics as any HEIC decoder; `libheif-js` was chosen instead for its correct LGPL attribution | N/A |
 | `@imgly/background-removal` | Background removal | **AGPL-3.0** | **No — do not ship as-is.** Requires either a commercial license from IMG.LY or replacing with a self-integrated Apache-2.0 model via `onnxruntime-web` directly. |
 | Mediabunny | Audio/video processing | Custom permissive license — explicitly allows commercial use in closed-source projects; redistribution obligations apply only if you fork/redistribute the library itself | Yes — preferred over ffmpeg.wasm for this reason |
 | `ffmpeg.wasm` / `@ffmpeg/ffmpeg` | Audio/video processing | Depends on compiled codecs — LGPL core is fine for closed-source with dynamic linking, but many builds bundle GPL components (e.g. libx264), which would obligate the whole product to GPL | **Verify the exact build's codec list before using; prefer Mediabunny where equivalent functionality exists** |
@@ -59,6 +61,25 @@ check for this pattern specifically when a library feels "too easy" for a non-tr
 feature — it usually means either (a) it's genuinely a thin wrapper around a much larger
 pretrained model/toolkit (fine), or (b) that ease-of-use is the free tier of a dual-licensed
 commercial product (needs a license check before shipping).
+
+## HEIC/HEVC: a second, separate risk beyond copyright (`/image/heic-to-jpg`)
+
+`libheif-js`'s LGPL-3.0 terms (above) are a copyright-licensing question. HEIC decoding carries
+a second, unrelated risk: HEIC images encode their actual pixel data with HEVC (H.265), a
+codec covered by patent pools (MPEG-LA and Access Advance) with patents running into the 2030s.
+This is a patent question, not a copyright one — it exists independent of which library or
+license you pick, because it's inherent to decoding HEVC-encoded pixel data at all.
+
+This is why Chrome, Firefox, and Edge don't decode HEIC/HEVC natively on desktop — the patent
+pool licensing cost, not a copyright objection. Every free/open-source HEIC decoder (this one
+included) carries the same unresolved exposure; there's no library swap that fixes it, short of
+dropping HEIC support outright.
+
+**Accepted as a known, industry-wide risk, not a blocker**: no enforcement action against a
+small site offering free decode-only conversion is known to exist, and effectively every
+consumer-facing "HEIC to JPG" web tool operates the same way. Revisit only if this project's
+traffic/revenue becomes large enough that the calculus meaningfully changes, or if evidence of
+actual enforcement in this space surfaces — not on a fixed schedule.
 
 ## Practical rule for this project
 
