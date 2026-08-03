@@ -17,11 +17,13 @@
     "@jsquash/png": "^3.1.1",
     "@jsquash/resize": "^2.1.1",
     "@jsquash/webp": "^1.5.0",
+    "@mediabunny/mp3-encoder": "^1.52.2",
     "@tailwindcss/vite": "^4.3.3",
     "astro": "^7.1.6",
     "browser-image-compression": "^2.0.2",
     "cropperjs": "^2.1.1",
     "fflate": "^0.8.3",
+    "gifenc": "^1.0.3",
     "heic2any": "^0.0.4",
     "mediabunny": "^1.52.2",
     "papaparse": "^5.5.4",
@@ -32,6 +34,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
+    "@types/papaparse": "^5.5.2",
     "typescript": "^6.0.3"
   }
 }

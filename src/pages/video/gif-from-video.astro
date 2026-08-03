@@ -1,0 +1,41 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ToolWidget from '../../components/ToolWidget.astro';
+---
+
+<Layout
+  title="Convert Video to GIF Online — Free & No Upload Required | ToolKit"
+  description="Turn a video clip into a GIF in your browser. Your file is never uploaded to a server."
+>
+  <div class="max-w-2xl mx-auto px-4 pt-10 pb-4 text-center">
+    <h1 class="text-3xl font-bold">Convert Video to GIF — Free</h1>
+    <p class="mt-2 text-slate-600">🔒 Processed entirely in your browser. Your file is never uploaded to a server.</p>
+  </div>
+
+  <ToolWidget accept="video/*" dropLabel="Drop a video file here or click to browse" />
+
+  <div class="max-w-2xl mx-auto px-4 py-12 text-slate-700 space-y-4">
+    <p>This tool converts the first few seconds of a video into an animated GIF.</p>
+    <p>Drop your video above. To keep the file size reasonable, output is capped at 8 seconds, 480px wide, 10fps.</p>
+    <h2 class="font-semibold text-lg pt-2">FAQ</h2>
+    <div>
+      <p class="font-medium">Why is there a length/size cap?</p>
+      <p class="text-slate-600">GIF is an inherently inefficient format — an uncapped conversion can produce a huge file for a few seconds of video.</p>
+    </div>
+  </div>
+
+  <script>
+    import { gifFromVideo } from '../../lib/video/gifFromVideo';
+    import { getToolElements, wireTool } from '../../lib/ui';
+
+    const els = getToolElements();
+    wireTool(els, {
+      accept: 'video/*',
+      validate: (files) => (!files[0]?.type.startsWith('video/') ? 'This tool needs a video file.' : null),
+      run: async (files) => {
+        const blob = await gifFromVideo(files[0]);
+        return { blob, filename: files[0].name.replace(/\.[^.]+$/, '.gif') };
+      },
+    });
+  </script>
+</Layout>

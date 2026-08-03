@@ -1,0 +1,41 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ToolWidget from '../../components/ToolWidget.astro';
+---
+
+<Layout
+  title="Extract Audio from Video Online — Free & No Upload Required | ToolKit"
+  description="Pull the audio track out of a video in your browser. Your file is never uploaded to a server."
+>
+  <div class="max-w-2xl mx-auto px-4 pt-10 pb-4 text-center">
+    <h1 class="text-3xl font-bold">Extract Audio from Video — Free</h1>
+    <p class="mt-2 text-slate-600">🔒 Processed entirely in your browser. Your file is never uploaded to a server.</p>
+  </div>
+
+  <ToolWidget accept="video/*" dropLabel="Drop a video file here or click to browse" />
+
+  <div class="max-w-2xl mx-auto px-4 py-12 text-slate-700 space-y-4">
+    <p>This tool pulls the audio track out of a video file, discarding the video.</p>
+    <p>Drop your video above. The audio file downloads automatically once ready — this is one of the fastest video tools since no video decoding is needed.</p>
+    <h2 class="font-semibold text-lg pt-2">FAQ</h2>
+    <div>
+      <p class="font-medium">What format is the output?</p>
+      <p class="text-slate-600">WebM audio, regardless of the input video format.</p>
+    </div>
+  </div>
+
+  <script>
+    import { extractAudio } from '../../lib/video/convert';
+    import { getToolElements, wireTool } from '../../lib/ui';
+
+    const els = getToolElements();
+    wireTool(els, {
+      accept: 'video/*',
+      validate: (files) => (!files[0]?.type.startsWith('video/') ? 'This tool needs a video file.' : null),
+      run: async (files) => {
+        const blob = await extractAudio(files[0]);
+        return { blob, filename: files[0].name.replace(/\.[^.]+$/, '.webm') };
+      },
+    });
+  </script>
+</Layout>

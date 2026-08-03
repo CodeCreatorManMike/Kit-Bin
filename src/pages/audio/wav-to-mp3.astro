@@ -1,0 +1,41 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ToolWidget from '../../components/ToolWidget.astro';
+---
+
+<Layout
+  title="Convert WAV to MP3 Online — Free & No Upload Required | ToolKit"
+  description="Convert a WAV file to MP3 in seconds. Runs entirely in your browser — your file is never uploaded to a server."
+>
+  <div class="max-w-2xl mx-auto px-4 pt-10 pb-4 text-center">
+    <h1 class="text-3xl font-bold">Convert WAV to MP3 — Free</h1>
+    <p class="mt-2 text-slate-600">🔒 Processed entirely in your browser. Your file is never uploaded to a server.</p>
+  </div>
+
+  <ToolWidget accept="audio/wav,.wav" dropLabel="Drop a WAV file here or click to browse" />
+
+  <div class="max-w-2xl mx-auto px-4 py-12 text-slate-700 space-y-4">
+    <p>This tool converts a WAV audio file into a compressed MP3 file.</p>
+    <p>Drop your WAV above. The MP3 file downloads automatically once ready.</p>
+    <h2 class="font-semibold text-lg pt-2">FAQ</h2>
+    <div>
+      <p class="font-medium">Will this affect quality?</p>
+      <p class="text-slate-600">MP3 is lossy, so there's some quality loss — that's the tradeoff for a much smaller file.</p>
+    </div>
+  </div>
+
+  <script>
+    import { convertAudio } from '../../lib/audio/convert';
+    import { getToolElements, wireTool } from '../../lib/ui';
+
+    const els = getToolElements();
+    wireTool(els, {
+      accept: 'audio/wav,.wav',
+      validate: (files) => (!files[0]?.name.toLowerCase().endsWith('.wav') ? 'This tool needs a WAV file.' : null),
+      run: async (files) => {
+        const blob = await convertAudio(files[0], 'mp3');
+        return { blob, filename: files[0].name.replace(/\.wav$/i, '.mp3') };
+      },
+    });
+  </script>
+</Layout>

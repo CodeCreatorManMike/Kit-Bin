@@ -1,0 +1,144 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout
+  title="Reorder PDF Pages Online — Free & No Upload Required | ToolKit"
+  description="Reorder the pages of a PDF. Runs entirely in your browser — your file is never uploaded to a server."
+>
+  <div class="max-w-2xl mx-auto px-4 pt-10 pb-4 text-center">
+    <h1 class="text-3xl font-bold">Reorder PDF Pages — Free</h1>
+    <p class="mt-2 text-slate-600">🔒 Processed entirely in your browser. Your file is never uploaded to a server.</p>
+  </div>
+
+  <div class="max-w-2xl mx-auto px-4">
+    <div
+      id="dropzone"
+      class="cursor-pointer border-2 border-dashed border-slate-300 rounded-xl p-12 text-center hover:border-slate-400 transition-colors"
+    >
+      <p class="text-lg font-medium">Drop a PDF file here or click to browse</p>
+      <p id="file-info" class="mt-2 text-sm text-slate-500"></p>
+      <input id="file-input" type="file" accept="application/pdf" class="hidden" />
+    </div>
+
+    <div id="order-panel" class="hidden mt-4">
+      <p class="text-sm text-slate-600">
+        This PDF has <span id="page-count" class="font-semibold"></span> pages. Enter the new page
+        order as a comma-separated list of page numbers (e.g. "3,1,2").
+      </p>
+      <input id="order-input" type="text" class="mt-2 w-full rounded border border-slate-300 px-3 py-2" />
+      <button id="apply-button" class="mt-3 rounded-lg bg-blue-600 px-6 py-3 text-white font-medium hover:bg-blue-700">
+        Apply new order
+      </button>
+    </div>
+
+    <p id="status" class="hidden mt-4 text-center text-sm text-slate-600"></p>
+
+    <div id="result" class="hidden mt-4 rounded-xl border border-slate-200 p-6 text-center">
+      <a
+        id="download-link"
+        class="inline-block rounded-lg bg-blue-600 px-6 py-3 text-white font-medium hover:bg-blue-700"
+        >Download result</a
+      >
+      <p data-result-note class="mt-2 text-sm text-slate-500"></p>
+      <button id="reset-button" class="mt-4 text-sm text-slate-500 underline hover:text-slate-700">
+        Process another file
+      </button>
+    </div>
+  </div>
+
+  <div class="max-w-2xl mx-auto px-4 py-12 text-slate-700 space-y-4">
+    <p>This tool changes the order of pages in a PDF to whatever order you specify.</p>
+    <p>Drop your PDF above, enter the new page order, then click apply.</p>
+    <h2 class="font-semibold text-lg pt-2">FAQ</h2>
+    <div>
+      <p class="font-medium">Do I need to include every page?</p>
+      <p class="text-slate-600">Yes — the new order must list every original page number exactly once.</p>
+    </div>
+  </div>
+
+  <script>
+    import { getPageCount, reorderPages } from '../../lib/pdf/reorderPages';
+
+    const dropzone = document.querySelector<HTMLElement>('#dropzone')!;
+    const fileInput = document.querySelector<HTMLInputElement>('#file-input')!;
+    const fileInfo = document.querySelector<HTMLElement>('#file-info')!;
+    const orderPanel = document.querySelector<HTMLElement>('#order-panel')!;
+    const pageCountEl = document.querySelector<HTMLElement>('#page-count')!;
+    const orderInput = document.querySelector<HTMLInputElement>('#order-input')!;
+    const applyButton = document.querySelector<HTMLButtonElement>('#apply-button')!;
+    const status = document.querySelector<HTMLElement>('#status')!;
+    const result = document.querySelector<HTMLElement>('#result')!;
+    const downloadLink = document.querySelector<HTMLAnchorElement>('#download-link')!;
+    const resetButton = document.querySelector<HTMLButtonElement>('#reset-button')!;
+
+    let currentFile: File | null = null;
+
+    function setStatus(msg: string | null) {
+      status.textContent = msg ?? '';
+      status.classList.toggle('hidden', !msg);
+    }
+
+    async function handleFile(file: File) {
+      if (file.type !== 'application/pdf') {
+        setStatus('This tool needs a PDF file.');
+        return;
+      }
+      currentFile = file;
+      fileInfo.textContent = file.name;
+      const count = await getPageCount(file);
+      pageCountEl.textContent = String(count);
+      orderInput.value = Array.from({ length: count }, (_, i) => i + 1).join(',');
+      orderPanel.classList.remove('hidden');
+      setStatus(null);
+    }
+
+    dropzone.addEventListener('click', () => fileInput.click());
+    dropzone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropzone.classList.add('border-blue-500');
+    });
+    dropzone.addEventListener('dragleave', () => dropzone.classList.remove('border-blue-500'));
+    dropzone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropzone.classList.remove('border-blue-500');
+      const file = e.dataTransfer?.files?.[0];
+      if (file) handleFile(file);
+    });
+    fileInput.addEventListener('change', () => {
+      const file = fileInput.files?.[0];
+      if (file) handleFile(file);
+    });
+
+    applyButton.addEventListener('click', async () => {
+      if (!currentFile) return;
+      const order = orderInput.value
+        .split(',')
+        .map((s) => parseInt(s.trim(), 10) - 1)
+        .filter((n) => !Number.isNaN(n));
+
+      setStatus('Processing…');
+      try {
+        const blob = await reorderPages(currentFile, order);
+        setStatus(null);
+        const url = URL.createObjectURL(blob);
+        downloadLink.href = url;
+        downloadLink.download = currentFile.name.replace(/\.pdf$/i, '-reordered.pdf');
+        result.classList.remove('hidden');
+        dropzone.classList.add('hidden');
+        orderPanel.classList.add('hidden');
+      } catch (err) {
+        setStatus(err instanceof Error ? err.message : 'Something went wrong.');
+      }
+    });
+
+    resetButton.addEventListener('click', () => {
+      currentFile = null;
+      result.classList.add('hidden');
+      dropzone.classList.remove('hidden');
+      fileInfo.textContent = '';
+      fileInput.value = '';
+      setStatus(null);
+    });
+  </script>
+</Layout>

@@ -54,16 +54,24 @@ commercial site. Flagged inline below wherever relevant.
 - `pdf-lib` — draw text or an embedded image onto every page at a fixed position/opacity.
 - **Complexity**: Low.
 
-### `/pdf/unlock`
+### `/pdf/unlock` — attempted, currently pulled
 - Scope explicitly to **removing a password the user already knows/owns** (i.e. decrypting a
   PDF you have the password for, not bypassing protection you don't own). Flag clearly in copy
   that this is for the user's own files.
-- **Library**: `pdf-lib` has limited encryption support, so use a `qpdf-wasm` port instead —
-  QPDF itself is Apache-2.0, and several independent maintainers have compiled it to WASM (see
-  `OPEN_SOURCE_REPOS.md` for specific repos). Pin a specific version once chosen; these are
-  smaller, less centrally-maintained packages than pdf-lib/pdf.js, so check recent commit
-  activity before committing to one.
-- **Complexity**: Medium.
+- **Attempted library**: `qpdf-wasm` (jsscheller/qpdf-wasm on npm, v0.1.0, Apache-2.0). Integration
+  failed: this build is pthreads/SharedArrayBuffer-based, so it (a) needs site-wide COOP/COEP
+  cross-origin-isolation headers to run at all — a real tradeoff against third-party iframe
+  embeds (including ad units) that lack CORP headers, not mentioned anywhere else in these docs
+  — and (b) even with those headers set and `crossOriginIsolated: true` confirmed, its internal
+  pthread worker pool fails to spawn under Vite's dev module resolution (`self.location.href`
+  inside the spawned worker doesn't resolve to a loadable script/wasm path). Given the package's
+  minimal docs and v0.1.0 maturity, this is exactly the "less centrally-maintained" risk this
+  file already warned about — not a quick fix.
+- **Status**: pulled from the site rather than shipped broken. Options for revisiting: try one of
+  the other qpdf-wasm forks (`@jspawn/qpdf-wasm`, `neslinesli93/qpdf-wasm`) to see if a
+  non-pthreaded build exists, or a production (non-Vite-dev) bundle may resolve worker paths
+  differently — untested. Re-evaluate before promising this tool in copy/nav.
+- **Complexity**: Medium — turned out High in practice due to the above.
 
 ### `/pdf/reorder-pages`
 - `pdf-lib` `copyPages` with a user-specified order array; UI is a drag-to-reorder thumbnail

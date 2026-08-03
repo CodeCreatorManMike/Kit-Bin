@@ -1,0 +1,47 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ToolWidget from '../../components/ToolWidget.astro';
+---
+
+<Layout
+  title="Add Watermark to PDF Online — Free & No Upload Required | ToolKit"
+  description="Add a text watermark to every page of a PDF. Runs entirely in your browser — your file is never uploaded to a server."
+>
+  <div class="max-w-2xl mx-auto px-4 pt-10 pb-4 text-center">
+    <h1 class="text-3xl font-bold">Watermark PDF — Free</h1>
+    <p class="mt-2 text-slate-600">🔒 Processed entirely in your browser. Your file is never uploaded to a server.</p>
+  </div>
+
+  <div class="max-w-2xl mx-auto px-4 mb-4 flex items-center justify-center gap-2 text-sm">
+    <label for="watermark-text">Watermark text:</label>
+    <input id="watermark-text" type="text" value="CONFIDENTIAL" class="rounded border border-slate-300 px-2 py-1" />
+  </div>
+
+  <ToolWidget accept="application/pdf" dropLabel="Drop a PDF file here or click to browse" />
+
+  <div class="max-w-2xl mx-auto px-4 py-12 text-slate-700 space-y-4">
+    <p>This tool stamps a semi-transparent text watermark diagonally across every page of a PDF.</p>
+    <p>Set your watermark text, then drop your PDF above. The watermarked file downloads automatically once ready.</p>
+    <h2 class="font-semibold text-lg pt-2">FAQ</h2>
+    <div>
+      <p class="font-medium">Can I remove the watermark later?</p>
+      <p class="text-slate-600">Not with this tool — the watermark becomes a permanent part of the page content.</p>
+    </div>
+  </div>
+
+  <script>
+    import { watermarkPdf } from '../../lib/pdf/watermark';
+    import { getToolElements, wireTool } from '../../lib/ui';
+
+    const textInput = document.querySelector<HTMLInputElement>('#watermark-text')!;
+    const els = getToolElements();
+    wireTool(els, {
+      accept: 'application/pdf',
+      validate: (files) => (files[0]?.type !== 'application/pdf' ? 'This tool needs a PDF file.' : null),
+      run: async (files) => {
+        const blob = await watermarkPdf(files[0], textInput.value || 'CONFIDENTIAL');
+        return { blob, filename: files[0].name.replace(/\.pdf$/i, '-watermarked.pdf') };
+      },
+    });
+  </script>
+</Layout>

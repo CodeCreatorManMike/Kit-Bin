@@ -1,0 +1,41 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ToolWidget from '../../components/ToolWidget.astro';
+---
+
+<Layout
+  title="Convert SVG to PNG Online — Free & No Upload Required | ToolKit"
+  description="Convert an SVG image to PNG in seconds. Runs entirely in your browser — your file is never uploaded to a server."
+>
+  <div class="max-w-2xl mx-auto px-4 pt-10 pb-4 text-center">
+    <h1 class="text-3xl font-bold">Convert SVG to PNG — Free</h1>
+    <p class="mt-2 text-slate-600">🔒 Processed entirely in your browser. Your file is never uploaded to a server.</p>
+  </div>
+
+  <ToolWidget accept="image/svg+xml" dropLabel="Drop an SVG file here or click to browse" />
+
+  <div class="max-w-2xl mx-auto px-4 py-12 text-slate-700 space-y-4">
+    <p>This tool rasterizes an SVG file into a PNG image.</p>
+    <p>Drop your SVG above. The PNG downloads automatically once ready.</p>
+    <h2 class="font-semibold text-lg pt-2">FAQ</h2>
+    <div>
+      <p class="font-medium">What if my SVG has no explicit width/height?</p>
+      <p class="text-slate-600">Most SVGs render fine, but ones with external references or unusual filters may not render correctly — check the result before using it.</p>
+    </div>
+  </div>
+
+  <script>
+    import { convertImageFormat } from '../../lib/image/convertFormat';
+    import { getToolElements, wireTool } from '../../lib/ui';
+
+    const els = getToolElements();
+    wireTool(els, {
+      accept: 'image/svg+xml',
+      validate: (files) => (!files[0]?.name.toLowerCase().endsWith('.svg') ? 'This tool needs an SVG file.' : null),
+      run: async (files) => {
+        const blob = await convertImageFormat(files[0], 'image/png');
+        return { blob, filename: files[0].name.replace(/\.svg$/i, '.png') };
+      },
+    });
+  </script>
+</Layout>

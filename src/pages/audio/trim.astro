@@ -1,0 +1,52 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ToolWidget from '../../components/ToolWidget.astro';
+---
+
+<Layout
+  title="Trim Audio Online — Free & No Upload Required | ToolKit"
+  description="Trim an audio file to a start and end time. Runs entirely in your browser — your file is never uploaded to a server."
+>
+  <div class="max-w-2xl mx-auto px-4 pt-10 pb-4 text-center">
+    <h1 class="text-3xl font-bold">Trim Audio — Free</h1>
+    <p class="mt-2 text-slate-600">🔒 Processed entirely in your browser. Your file is never uploaded to a server.</p>
+  </div>
+
+  <div class="max-w-2xl mx-auto px-4 mb-4 flex items-center justify-center gap-3 text-sm">
+    <label for="start-time">Start (s):</label>
+    <input id="start-time" type="number" value="0" min="0" class="w-20 rounded border border-slate-300 px-2 py-1" />
+    <label for="end-time">End (s):</label>
+    <input id="end-time" type="number" value="10" min="0" class="w-20 rounded border border-slate-300 px-2 py-1" />
+  </div>
+
+  <ToolWidget accept="audio/*" dropLabel="Drop an audio file here or click to browse" />
+
+  <div class="max-w-2xl mx-auto px-4 py-12 text-slate-700 space-y-4">
+    <p>This tool cuts an audio file down to the time range you specify.</p>
+    <p>Set your start and end time in seconds, then drop your audio file above.</p>
+    <h2 class="font-semibold text-lg pt-2">FAQ</h2>
+    <div>
+      <p class="font-medium">What format is the output?</p>
+      <p class="text-slate-600">WAV, regardless of the input format.</p>
+    </div>
+  </div>
+
+  <script>
+    import { trimAudio } from '../../lib/audio/trim';
+    import { getToolElements, wireTool } from '../../lib/ui';
+
+    const startInput = document.querySelector<HTMLInputElement>('#start-time')!;
+    const endInput = document.querySelector<HTMLInputElement>('#end-time')!;
+    const els = getToolElements();
+    wireTool(els, {
+      accept: 'audio/*',
+      validate: (files) => (!files[0]?.type.startsWith('audio/') ? 'This tool needs an audio file.' : null),
+      run: async (files) => {
+        const start = parseFloat(startInput.value) || 0;
+        const end = parseFloat(endInput.value) || start + 10;
+        const blob = await trimAudio(files[0], start, end);
+        return { blob, filename: files[0].name.replace(/\.[^.]+$/, '-trimmed.wav') };
+      },
+    });
+  </script>
+</Layout>

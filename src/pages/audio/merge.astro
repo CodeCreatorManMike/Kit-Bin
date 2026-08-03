@@ -1,0 +1,50 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ToolWidget from '../../components/ToolWidget.astro';
+---
+
+<Layout
+  title="Merge Audio Files Online — Free & No Upload Required | ToolKit"
+  description="Combine multiple audio files into one. Runs entirely in your browser — your files are never uploaded to a server."
+>
+  <div class="max-w-2xl mx-auto px-4 pt-10 pb-4 text-center">
+    <h1 class="text-3xl font-bold">Merge Audio Files — Free</h1>
+    <p class="mt-2 text-slate-600">🔒 Processed entirely in your browser. Your file is never uploaded to a server.</p>
+  </div>
+
+  <ToolWidget accept="audio/*" multiple dropLabel="Drop 2+ audio files here or click to browse" />
+
+  <div class="max-w-2xl mx-auto px-4 py-12 text-slate-700 space-y-4">
+    <p>This tool combines multiple audio files into a single file, one after another in the order you select them.</p>
+    <p>Drop your audio files above. The merged file downloads automatically once ready.</p>
+    <h2 class="font-semibold text-lg pt-2">FAQ</h2>
+    <div>
+      <p class="font-medium">What format is the output?</p>
+      <p class="text-slate-600">WAV, regardless of the input formats.</p>
+    </div>
+    <div>
+      <p class="font-medium">Can I merge files with different sample rates?</p>
+      <p class="text-slate-600">It works best when all files share the same sample rate — mixed rates may play back slightly off.</p>
+    </div>
+  </div>
+
+  <script>
+    import { mergeAudio } from '../../lib/audio/merge';
+    import { getToolElements, wireTool } from '../../lib/ui';
+
+    const els = getToolElements();
+    wireTool(els, {
+      accept: 'audio/*',
+      multiple: true,
+      validate: (files) => {
+        if (files.length < 2) return 'Select at least 2 audio files to merge.';
+        if (files.some((f) => !f.type.startsWith('audio/'))) return 'This tool needs audio files.';
+        return null;
+      },
+      run: async (files) => {
+        const blob = await mergeAudio(files);
+        return { blob, filename: 'merged.wav' };
+      },
+    });
+  </script>
+</Layout>

@@ -1,0 +1,41 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ToolWidget from '../../components/ToolWidget.astro';
+---
+
+<Layout
+  title="Convert JSON to CSV Online — Free & No Upload Required | ToolKit"
+  description="Convert a JSON file to CSV in seconds. Runs entirely in your browser — your file is never uploaded to a server."
+>
+  <div class="max-w-2xl mx-auto px-4 pt-10 pb-4 text-center">
+    <h1 class="text-3xl font-bold">Convert JSON to CSV — Free</h1>
+    <p class="mt-2 text-slate-600">🔒 Processed entirely in your browser. Your file is never uploaded to a server.</p>
+  </div>
+
+  <ToolWidget accept="application/json,.json" dropLabel="Drop a JSON file here or click to browse" />
+
+  <div class="max-w-2xl mx-auto px-4 py-12 text-slate-700 space-y-4">
+    <p>This tool converts a JSON array of objects into a CSV file.</p>
+    <p>Drop your JSON above. The CSV file downloads automatically once ready.</p>
+    <h2 class="font-semibold text-lg pt-2">FAQ</h2>
+    <div>
+      <p class="font-medium">What JSON structure does this expect?</p>
+      <p class="text-slate-600">An array of flat objects works best — a single object is also supported and becomes one row.</p>
+    </div>
+  </div>
+
+  <script>
+    import { jsonToCsv } from '../../lib/data/csv';
+    import { getToolElements, wireTool } from '../../lib/ui';
+
+    const els = getToolElements();
+    wireTool(els, {
+      accept: 'application/json,.json',
+      validate: (files) => (!files[0]?.name.toLowerCase().endsWith('.json') ? 'This tool needs a JSON file.' : null),
+      run: async (files) => {
+        const blob = await jsonToCsv(files[0]);
+        return { blob, filename: files[0].name.replace(/\.json$/i, '.csv') };
+      },
+    });
+  </script>
+</Layout>

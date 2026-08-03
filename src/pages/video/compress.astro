@@ -1,0 +1,48 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ToolWidget from '../../components/ToolWidget.astro';
+---
+
+<Layout
+  title="Compress Video Online — Free & No Upload Required | ToolKit"
+  description="Shrink a video's file size in your browser. Your file is never uploaded to a server."
+>
+  <div class="max-w-2xl mx-auto px-4 pt-10 pb-4 text-center">
+    <h1 class="text-3xl font-bold">Compress Video — Free</h1>
+    <p class="mt-2 text-slate-600">🔒 Processed entirely in your browser. Your file is never uploaded to a server.</p>
+  </div>
+
+  <ToolWidget accept="video/*" dropLabel="Drop a video file here or click to browse" />
+
+  <div class="max-w-2xl mx-auto px-4 py-12 text-slate-700 space-y-4">
+    <p>This tool re-encodes a video at a lower quality to shrink its file size.</p>
+    <p>Drop your video above. This re-encodes the full video, so larger files take longer — especially on mobile.</p>
+    <h2 class="font-semibold text-lg pt-2">FAQ</h2>
+    <div>
+      <p class="font-medium">Will this affect quality?</p>
+      <p class="text-slate-600">Yes — that's the tradeoff for a smaller file. Try it on a copy first if quality matters.</p>
+    </div>
+  </div>
+
+  <script>
+    import { compressVideo } from '../../lib/video/convert';
+    import { getToolElements, wireTool } from '../../lib/ui';
+
+    function formatBytes(bytes: number): string {
+      if (bytes < 1024) return `${bytes} B`;
+      if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+      return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+    }
+
+    const els = getToolElements();
+    wireTool(els, {
+      accept: 'video/*',
+      validate: (files) => (!files[0]?.type.startsWith('video/') ? 'This tool needs a video file.' : null),
+      run: async (files) => {
+        const blob = await compressVideo(files[0]);
+        const note = `${formatBytes(files[0].size)} → ${formatBytes(blob.size)}`;
+        return { blob, filename: files[0].name.replace(/\.[^.]+$/, '-compressed.mp4'), note };
+      },
+    });
+  </script>
+</Layout>
