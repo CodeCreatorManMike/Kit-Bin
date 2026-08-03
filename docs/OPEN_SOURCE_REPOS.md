@@ -97,8 +97,32 @@ Already flagged in `LICENSING.md`. No change to this finding — still avoid as-
 ## Audio/Video
 
 ### 🟢 Mediabunny — github.com/Vanilagy/mediabunny
-Custom permissive license, explicit commercial-use allowance. Already the primary
-recommendation across audio and video tools. Confirmed solid, no changes.
+MPL-2.0 (confirmed) — a permissive weak-copyleft license allowing use in closed-source
+commercial projects; modifications only need publishing if you fork the library itself, not
+your application code. Already the primary recommendation across audio and video tools.
+
+### 🟢 Mediabunny official examples — mediabunny.dev/examples
+From the library's own maintainers, same MPL-2.0 terms. Demos cover metadata extraction,
+thumbnail generation, compression, media playback, and live streaming — directly relevant
+reference code for `/audio/trim`, `/audio/merge`, `/video/mp4-to-webm`, `/video/compress`,
+`/video/trim`, `/video/mute`, and `/video/extract-audio`, since Mediabunny's Conversion API
+natively supports transmuxing, transcoding, resizing, rotation, cropping, resampling, and
+trimming as built-in operations rather than something to hand-roll.
+
+### 🟢 wavesurfer.js — github.com/katspaugh/wavesurfer.js
+BSD-3-Clause (confirmed). The standard reference for the waveform-with-draggable-region UI
+needed for `/audio/trim` — drag handles to visually pick a start/end point on the waveform,
+rather than requiring users to type timestamps blind. Pairs with Mediabunny for the actual trim
+operation; wavesurfer.js only handles the visual selection UI. **Implemented** — see
+`src/pages/audio/trim.astro`, using the Regions plugin for the draggable/resizable selection.
+
+### 🟡 FreeCut — github.com/walterlow/freecut (also mirrored as DwareLab/freecut-videoeditor)
+A full browser-based multi-track video editor built on Mediabunny. Overkill as a code source
+for four simple operations, and its license isn't clearly confirmed — it has workspace/project-
+file features suggesting a possible commercial angle, similar to the BentoPDF dual-license
+pattern already flagged above. Fine to open in a browser purely for UX inspiration on how a
+polished Mediabunny-based tool handles trim/mute interactions; do not pull code from it without
+independently verifying its license first. Not used.
 
 ### 🟡 ffmpeg.wasm — github.com/ffmpegwasm/ffmpeg.wasm
 License depends entirely on which codecs are compiled into the specific build in use — confirmed
@@ -108,13 +132,49 @@ where functionality overlaps.
 
 ---
 
+## GIF Encoding (for `/video/gif-from-video`)
+
+### 🟢 gifenc — github.com/mattdesl/gifenc
+MIT. Supersedes `gif.js` as the recommended pick — several independent repos explicitly flag
+older GIF encoders as deprecated in favor of this one, and it's reported as often more than
+twice as fast with comparable visual quality. **Implemented** — see
+`src/lib/video/gifFromVideo.ts`, using Mediabunny's `CanvasSink` for frame sampling.
+
+### 🟡 dylansallred/Video-To-Gif-Converter — github.com/dylansallred/Video-To-Gif-Converter
+A strong single-file, vanilla-JS reference implementation — entirely client-side, no server
+uploads, with a genuinely useful feature set to benchmark against (multiple dithering modes,
+color quality presets, both time-range and frame-sequence selection modes). License isn't
+explicitly stated in what surfaced during research — treat as a UX/feature reference only,
+verify its license independently before copying any code from it directly. Not used; current
+implementation is a simpler fixed-cap version (8s/480px/10fps) without dithering options.
+
+---
+
 ## Data/CSV
 
 ### 🟢 PapaParse — github.com/mholt/PapaParse
-MIT. Already the primary recommendation for CSV parsing.
+MIT. Already the primary recommendation for CSV parsing. Note: an old GitHub mirror
+(`agilebits/PapaParse`) surfaced during research with a stale "needs a maintainer" notice —
+that's a fork snapshot, not the actively-maintained `mholt/PapaParse` repo this project already
+points to. Worth a glance at current commit activity on the real repo as routine diligence, not
+because anything specific is wrong.
 
 ### 🟢 SheetJS (community edition) — Apache-2.0
 Already the primary recommendation for `.xlsx` read/write.
+
+### 🟢 harsh98trivedi/multiformat-data-converter — github.com/harsh98trivedi/multiformat-data-converter
+Not a dependency to install, but a clean architecture reference for `/csv/to-json` and
+`/json/to-csv` specifically: React + Vite + Tailwind + PapaParse + `file-saver`, explicitly
+built to avoid Node-only dependencies so everything stays browser-safe. Useful reference for how
+it structures the convert/copy/download flow across multiple format pairs in one codebase; our
+own `src/lib/data/csv.ts` already follows the same shape (parse → transform → download).
+
+### 🟡 `/data/csv-cleaner` — no standout repo found
+Most "data cleaning" tool repos surfaced during research are Python/pandas-based server-side
+tools, which don't transfer to this project's client-side model. This confirms rather than
+changes what's already in `TOOL_SPECS.md`: this tool is mostly custom rules logic layered on
+top of PapaParse (trim whitespace, dedupe rows, drop empty rows/columns), not something with an
+existing library to lean on.
 
 ### 🟢 fflate — github.com/101arrowz/fflate
 MIT. Confirmed for in-browser zipping (used when `/pdf/split` produces multiple output files).

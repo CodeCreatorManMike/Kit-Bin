@@ -188,10 +188,16 @@ in what order users expect operations to appear.
 - **Complexity**: Low.
 
 ### `/video/gif-from-video`
-- Decode frames via Mediabunny/canvas sampling at a target frame rate, encode via a GIF encoder
-  (e.g. `gif.js`, check license — historically MIT). Watch output file size; GIF is an
-  inherently inefficient format, so cap duration/resolution defaults sensibly in the UI rather
-  than letting users generate 200MB "GIFs."
+- Decode frames via Mediabunny's `CanvasSink` sampling at a target frame rate, encode via `gifenc`
+  (MIT, github.com/mattdesl/gifenc) — supersedes `gif.js`, reported as often more than twice as
+  fast with comparable visual quality; see `OPEN_SOURCE_REPOS.md`. Already implemented this way
+  in `src/lib/video/gifFromVideo.ts`. Watch output file size; GIF is an inherently inefficient
+  format, so cap duration/resolution defaults sensibly in the UI rather than letting users
+  generate 200MB "GIFs." (Current caps: 8s, 480px wide, 10fps.)
+- **UX/feature reference**: dylansallred/Video-To-Gif-Converter — dithering mode options, color
+  quality presets, and both time-range and frame-sequence selection are worth benchmarking
+  against for feature completeness if this tool gets a second pass (reference only — verify its
+  license before copying code; not currently pulled in).
 - **Complexity**: Medium.
 
 **Mobile note for the entire Video category**: a transcode that works fine on desktop can crash

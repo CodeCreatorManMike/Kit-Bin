@@ -25,10 +25,11 @@ versions.
 | `PapaParse` | CSV parsing | MIT | Yes |
 | SheetJS (`xlsx`, community edition) | Spreadsheet read/write | Apache-2.0 | Yes |
 | `fflate` | In-browser zipping | MIT | Yes |
-| `gif.js` (or equivalent) | GIF encoding | Verify — historically MIT | Check current repo before use |
-| `qpdf-wasm` (multiple maintainers) | PDF password removal | Wraps Apache-2.0 QPDF | Yes — but pin a version; these ports are less centrally maintained than pdf-lib/pdf.js |
+| `gifenc` | GIF encoding (`/video/gif-from-video`) | MIT | Yes — supersedes `gif.js`, faster with comparable quality; already in use |
+| `qpdf-wasm` (multiple maintainers) | PDF password removal | Wraps Apache-2.0 QPDF | **No — attempted, pulled.** License is fine, but this build is pthreads/SharedArrayBuffer-based: needs site-wide COOP/COEP headers (conflicts with ad iframes) and its worker pool fails to spawn under Vite even with those headers set. See `TOOL_SPECS.md`'s `/pdf/unlock` entry. |
 | `@embedpdf/pdfium` | PDF rendering (alt. to pdf.js) | MIT | Yes |
 | `Cropper.js` | Image crop UI | MIT | Yes |
+| `wavesurfer.js` (+ Regions plugin) | Waveform/region UI (`/audio/trim`) | BSD-3-Clause | Yes — visual-only, pairs with Mediabunny for the actual trim operation |
 | `react-dropzone` | Upload UI (only if using React components) | MIT | Yes |
 | Stirling-PDF | Reference only, not a dependency | AGPL-3.0, server-side Java | **Do not import code. Reference for feature/UX ideas only.** |
 | IT-Tools | Reference only, not a dependency | GPL-3.0 | **Do not import code — see the note on GPL and client-side distribution below.** |
