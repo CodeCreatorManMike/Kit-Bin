@@ -1,6 +1,7 @@
 # Roadmap
 
-**Current phase: Pre-Phase 1 / scaffolding.** Update this line as work progresses — this file,
+**Current phase: Phase 1 / MVP — all 7 tools + homepage + hubs live locally, not yet deployed.**
+Update this line as work progresses — this file,
 not `CLAUDE.md`, is the source of truth for what phase the project is actually in.
 
 ## Phase 1 — MVP (target: 2-4 weeks)

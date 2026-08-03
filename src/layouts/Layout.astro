@@ -1,0 +1,46 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+
+const categories = [
+  { href: '/pdf/', label: 'PDF' },
+  { href: '/image/', label: 'Image' },
+  { href: '/audio/', label: 'Audio' },
+];
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+  </head>
+  <body class="min-h-screen bg-white text-slate-900 flex flex-col">
+    <header class="border-b border-slate-200">
+      <div class="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
+        <a href="/" class="font-semibold text-lg">ToolKit</a>
+        <nav class="flex gap-4 text-sm">
+          {categories.map((c) => (
+            <a href={c.href} class="text-slate-600 hover:text-slate-900">{c.label}</a>
+          ))}
+        </nav>
+      </div>
+    </header>
+    <main class="flex-1">
+      <slot />
+    </main>
+    <footer class="border-t border-slate-200 mt-12">
+      <div class="max-w-5xl mx-auto px-4 py-8 text-sm text-slate-500">
+        <p>Every tool runs entirely in your browser. Files are never uploaded.</p>
+      </div>
+    </footer>
+  </body>
+</html>

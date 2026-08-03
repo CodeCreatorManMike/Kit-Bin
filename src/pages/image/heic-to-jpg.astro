@@ -1,0 +1,48 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ToolWidget from '../../components/ToolWidget.astro';
+---
+
+<Layout
+  title="Convert HEIC to JPG Online — Free & No Upload Required | ToolKit"
+  description="Convert iPhone HEIC photos to JPG in seconds. Runs entirely in your browser — your file is never uploaded to a server."
+>
+  <div class="max-w-2xl mx-auto px-4 pt-10 pb-4 text-center">
+    <h1 class="text-3xl font-bold">Convert HEIC to JPG — Free</h1>
+    <p class="mt-2 text-slate-600">🔒 Processed entirely in your browser. Your file is never uploaded to a server.</p>
+  </div>
+
+  <ToolWidget accept=".heic,.heif,image/heic,image/heif" dropLabel="Drop a HEIC photo here or click to browse" />
+
+  <div class="max-w-2xl mx-auto px-4 py-12 text-slate-700 space-y-4">
+    <p>This tool converts an iPhone HEIC photo into a standard JPG file.</p>
+    <p>Drop your HEIC photo above. The JPG downloads automatically once ready.</p>
+    <h2 class="font-semibold text-lg pt-2">FAQ</h2>
+    <div>
+      <p class="font-medium">Is my photo uploaded anywhere?</p>
+      <p class="text-slate-600">No. Conversion happens entirely in your browser — your photo never leaves your device.</p>
+    </div>
+    <div>
+      <p class="font-medium">Does this work on mobile?</p>
+      <p class="text-slate-600">Yes, though very large photos may take a few extra seconds on older phones.</p>
+    </div>
+  </div>
+
+  <script>
+    import { heicToJpg } from '../../lib/image/heicToJpg';
+    import { getToolElements, wireTool } from '../../lib/ui';
+
+    const els = getToolElements();
+    wireTool(els, {
+      accept: '.heic,.heif,image/heic,image/heif',
+      validate: (files) => {
+        const name = files[0]?.name.toLowerCase() ?? '';
+        return !name.endsWith('.heic') && !name.endsWith('.heif') ? 'This tool needs a HEIC or HEIF file.' : null;
+      },
+      run: async (files) => {
+        const blob = await heicToJpg(files[0]);
+        return { blob, filename: files[0].name.replace(/\.(heic|heif)$/i, '.jpg') };
+      },
+    });
+  </script>
+</Layout>

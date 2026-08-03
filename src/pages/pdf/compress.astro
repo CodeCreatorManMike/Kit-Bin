@@ -1,0 +1,53 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ToolWidget from '../../components/ToolWidget.astro';
+---
+
+<Layout
+  title="Compress PDF Online — Free & No Upload Required | ToolKit"
+  description="Shrink a PDF's file size in seconds. Runs entirely in your browser — your file is never uploaded to a server."
+>
+  <div class="max-w-2xl mx-auto px-4 pt-10 pb-4 text-center">
+    <h1 class="text-3xl font-bold">Compress PDF — Free</h1>
+    <p class="mt-2 text-slate-600">🔒 Processed entirely in your browser. Your file is never uploaded to a server.</p>
+  </div>
+
+  <ToolWidget accept="application/pdf" dropLabel="Drop a PDF file here or click to browse" />
+
+  <div class="max-w-2xl mx-auto px-4 py-12 text-slate-700 space-y-4">
+    <p>This tool shrinks a PDF's file size by recompressing its embedded images.</p>
+    <p>Drop your PDF above. The compressed file downloads automatically once ready.</p>
+    <h2 class="font-semibold text-lg pt-2">FAQ</h2>
+    <div>
+      <p class="font-medium">Will this affect quality?</p>
+      <p class="text-slate-600">Embedded photos are recompressed at a slightly lower quality; text and vector content are untouched.</p>
+    </div>
+    <div>
+      <p class="font-medium">How much smaller will my file be?</p>
+      <p class="text-slate-600">Depends on the PDF — image-heavy PDFs shrink the most, text-only PDFs may barely change.</p>
+    </div>
+  </div>
+
+  <script>
+    import { compressPdf } from '../../lib/pdf/compress';
+    import { getToolElements, wireTool } from '../../lib/ui';
+
+    function formatBytes(bytes: number): string {
+      if (bytes < 1024) return `${bytes} B`;
+      if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+      return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+    }
+
+    const els = getToolElements();
+    wireTool(els, {
+      accept: 'application/pdf',
+      validate: (files) => (files[0]?.type !== 'application/pdf' ? 'This tool needs a PDF file.' : null),
+      run: async (files) => {
+        const { blob, originalSize, compressedSize } = await compressPdf(files[0]);
+        const pct = Math.round((1 - compressedSize / originalSize) * 100);
+        const note = `${formatBytes(originalSize)} → ${formatBytes(compressedSize)}${pct > 0 ? ` (${pct}% smaller)` : ''}`;
+        return { blob, filename: files[0].name.replace(/\.pdf$/i, '-compressed.pdf'), note };
+      },
+    });
+  </script>
+</Layout>

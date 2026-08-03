@@ -34,8 +34,7 @@ and is read on demand. Do not paste `/docs` content back into this file.
 ## Stack
 
 - Static site, deployed to Cloudflare Pages (free tier).
-- Framework: [DECIDE: Astro (best for content+SEO pages, minimal JS by default) vs Next.js
-  static export — see `docs/ARCHITECTURE.md` for the tradeoff. Default assumption below is Astro.]
+- Framework: Astro (decided — minimal JS by default, per-page code splitting).
 - Styling: Tailwind CSS.
 - Per-tool logic: isolated JS/WASM modules, lazy-loaded per page — never bundle every tool's
   library into a shared chunk (kills load time on unrelated pages).
@@ -44,15 +43,13 @@ and is read on demand. Do not paste `/docs` content back into this file.
 
 ```bash
 npm install
-npm run dev          # local dev server
-npm run build         # static build → dist/
-npm run preview       # preview the static build
-npm run lint
-npm run typecheck
+npm run dev          # local dev server, http://localhost:4321
+npm run build        # static build → dist/
+npm run preview      # preview the static build
+npm run typecheck    # astro check
 ```
 
-(Confirm these match `package.json` once scaffolded — this table is the source of truth for
-Claude, keep it in sync as the project evolves.)
+No lint script yet — add one (ESLint) when it's worth the setup cost, not before.
 
 ## Repo etiquette
 

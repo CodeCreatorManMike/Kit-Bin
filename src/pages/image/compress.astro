@@ -1,0 +1,53 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ToolWidget from '../../components/ToolWidget.astro';
+---
+
+<Layout
+  title="Compress Image Online — Free & No Upload Required | ToolKit"
+  description="Shrink an image's file size in seconds. Runs entirely in your browser — your file is never uploaded to a server."
+>
+  <div class="max-w-2xl mx-auto px-4 pt-10 pb-4 text-center">
+    <h1 class="text-3xl font-bold">Compress Image — Free</h1>
+    <p class="mt-2 text-slate-600">🔒 Processed entirely in your browser. Your file is never uploaded to a server.</p>
+  </div>
+
+  <ToolWidget accept="image/*" dropLabel="Drop an image here or click to browse" />
+
+  <div class="max-w-2xl mx-auto px-4 py-12 text-slate-700 space-y-4">
+    <p>This tool shrinks an image's file size while keeping it visually close to the original.</p>
+    <p>Drop your image above. The compressed file downloads automatically once ready.</p>
+    <h2 class="font-semibold text-lg pt-2">FAQ</h2>
+    <div>
+      <p class="font-medium">Will this affect quality?</p>
+      <p class="text-slate-600">Some quality loss is expected — that's how compression reduces file size. The tool targets a good size/quality balance automatically.</p>
+    </div>
+    <div>
+      <p class="font-medium">Which formats are supported?</p>
+      <p class="text-slate-600">JPG, PNG, and WebP.</p>
+    </div>
+  </div>
+
+  <script>
+    import { compressImage } from '../../lib/image/compress';
+    import { getToolElements, wireTool } from '../../lib/ui';
+
+    function formatBytes(bytes: number): string {
+      if (bytes < 1024) return `${bytes} B`;
+      if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+      return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+    }
+
+    const els = getToolElements();
+    wireTool(els, {
+      accept: 'image/*',
+      validate: (files) => (!files[0]?.type.startsWith('image/') ? 'This tool needs an image file.' : null),
+      run: async (files) => {
+        const { blob, originalSize, compressedSize } = await compressImage(files[0]);
+        const pct = Math.round((1 - compressedSize / originalSize) * 100);
+        const note = `${formatBytes(originalSize)} → ${formatBytes(compressedSize)}${pct > 0 ? ` (${pct}% smaller)` : ''}`;
+        return { blob, filename: files[0].name, note };
+      },
+    });
+  </script>
+</Layout>

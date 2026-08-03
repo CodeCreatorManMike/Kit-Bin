@@ -1,0 +1,35 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { tools, categories } from '../data/tools';
+---
+
+<Layout
+  title="Free Browser-Based File Tools | ToolKit"
+  description="Convert, compress, and edit files entirely in your browser. No uploads, no accounts."
+>
+  <div class="max-w-3xl mx-auto px-4 pt-16 pb-10 text-center">
+    <h1 class="text-4xl font-bold">Convert files instantly.</h1>
+    <p class="mt-3 text-lg text-slate-600">Nothing ever leaves your browser.</p>
+  </div>
+
+  <div class="max-w-3xl mx-auto px-4 grid gap-4 sm:grid-cols-3">
+    {categories.map((c) => (
+      <a href={`/${c.slug}/`} class="block rounded-xl border border-slate-200 p-6 text-center hover:border-slate-400">
+        <p class="font-semibold text-lg">{c.name}</p>
+        <p class="mt-1 text-sm text-slate-500">{tools.filter((t) => t.category === c.slug).length} tools</p>
+      </a>
+    ))}
+  </div>
+
+  <div class="max-w-3xl mx-auto px-4 py-14">
+    <h2 class="text-xl font-semibold mb-4">Popular tools</h2>
+    <div class="grid gap-3 sm:grid-cols-2">
+      {tools.map((t) => (
+        <a href={t.slug} class="block rounded-lg border border-slate-200 p-4 hover:border-slate-400">
+          <p class="font-medium">{t.name}</p>
+          <p class="mt-1 text-sm text-slate-500">{t.description}</p>
+        </a>
+      ))}
+    </div>
+  </div>
+</Layout>
