@@ -1,0 +1,98 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: 'MP4 vs WebM: Which Video Format Should You Actually Use?',
+  datePublished: '2026-08-04',
+  author: { '@type': 'Organization', name: 'Kit-Bin' },
+  description:
+    'MP4 and WebM compared — the codecs inside each container, licensing differences, file size, and a straight answer for which one you need.',
+};
+---
+
+<Layout
+  title="MP4 vs WebM: Which Video Format Should You Actually Use? | Kit-Bin"
+  description="MP4 and WebM compared — the codecs inside each container, licensing differences, file size, and a straight answer for which one you need."
+>
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} is:inline />
+
+  <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-slate-700 dark:text-slate-300 space-y-4">
+    <p class="text-sm"><a href="/guides/" class="text-blue-600 dark:text-blue-400 hover:underline">← All guides</a></p>
+    <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">MP4 vs WebM: Which One Should You Actually Use?</h1>
+
+    <p>
+      MP4 and WebM are both containers — think of a container as the box, not what's inside it. The
+      actual compression happens in the codec wrapped inside that box, and the codec is what really
+      determines file size, quality, and compatibility. Here's what's actually different, and a
+      straight answer for which one to pick.
+    </p>
+
+    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">What's inside each container</h2>
+    <p>
+      <strong>MP4</strong> almost always contains H.264 video (sometimes called AVC) paired with AAC audio. H.264
+      is a 2003 standard that's been refined for over two decades. Every phone, browser, smart TV, and
+      game console made in the last fifteen years has dedicated hardware built in specifically to
+      decode it efficiently — which is why H.264 video plays smoothly even on modest hardware, using
+      very little battery.
+    </p>
+    <p>
+      <strong>WebM</strong> was created by Google specifically to be a royalty-free alternative for web video. It
+      wraps VP8 or VP9 video (VP9 being the modern, much more common choice) with Opus or Vorbis
+      audio. VP9 achieves meaningfully better compression than H.264 — typically 30-50% smaller files
+      at equivalent visual quality — but VP9 encoding is significantly slower (often 5-10 times slower
+      than H.264), and while hardware decode support for VP9 is now widespread on anything made after
+      roughly 2016, hardware encode support is still limited, meaning VP9 relies more on software
+      processing.
+    </p>
+
+    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">The licensing difference that started all of this</h2>
+    <p>
+      H.264 is licensed by a patent pool; the fees are typically absorbed by device manufacturers and
+      software vendors rather than passed to end users directly, but the licensing overhead is real
+      and it's specifically what motivated Google to build VP8/VP9 and the WebM container in the first
+      place — a genuinely royalty-free alternative for open web video, with no patent licensing chain
+      behind it at all.
+    </p>
+
+    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">Compatibility, as of now</h2>
+    <p>
+      For years, the standard advice was "use MP4 for compatibility, WebM if you control the whole
+      playback environment," because Safari didn't support WebM at all. That changed with WebM support
+      added to Safari and iOS — as of 2026, the remaining compatibility gap is limited to genuinely
+      outdated devices (pre-2018 iPhones, pre-2017 Macs), which is a shrinking and already-small
+      audience for most purposes.
+    </p>
+
+    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">The practical answer</h2>
+    <p>
+      <strong>If file size and bandwidth matter more than absolute universal compatibility</strong> — embedding
+      video on your own website, for instance — WebM/VP9 is the better choice; the file-size savings
+      are real and the compatibility gap is now genuinely small.
+    </p>
+    <p>
+      <strong>If you need to guarantee playback everywhere with zero exceptions</strong> — sending a file to
+      someone else, uploading to a platform that specifies its own required format, or archiving for
+      long-term storage where you don't control future playback software — MP4/H.264 remains the safer
+      default specifically because of its universal hardware decode support.
+    </p>
+    <p>
+      <strong>If you're not sure and just need "the one that works everywhere without thinking about it"</strong>: MP4.
+    </p>
+
+    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">Converting</h2>
+    <p>
+      <a href="/video/mp4-to-webm" class="text-blue-600 dark:text-blue-400 hover:underline">MP4 to WebM</a>
+      — runs entirely in your browser using the same remux-where-possible approach that makes
+      container conversions fast rather than a full slow re-encode when the underlying codecs allow it.
+    </p>
+
+    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">Related tools</h2>
+    <p>
+      If you actually just need a smaller file rather than a specific different format, try
+      <a href="/video/compress" class="text-blue-600 dark:text-blue-400 hover:underline">Compress Video</a>
+      first — it may get you the size reduction you're after without needing to change format at all.
+    </p>
+  </article>
+</Layout>

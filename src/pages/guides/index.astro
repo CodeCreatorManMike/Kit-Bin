@@ -1,0 +1,39 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ToolIcon from '../../components/ToolIcon.astro';
+import { guides } from '../../data/guides';
+---
+
+<Layout
+  title="Guides & Explainers | Kit-Bin"
+  description="Plain-language explanations of the file formats and mechanics behind Kit-Bin's tools — why files behave the way they do, and what actually happens when you convert them."
+>
+  <div class="max-w-5xl mx-auto px-6 pt-10 pb-4">
+    <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">Guides</h1>
+    <p class="mt-2 text-slate-600 dark:text-slate-400 max-w-2xl">
+      Short, specific explanations of the file formats and mechanics behind the tools on this
+      site — not generic "how to use a computer" content, but the actual reasons files behave
+      the way they do.
+    </p>
+  </div>
+
+  <div class="max-w-5xl mx-auto px-6 pb-16">
+    <div class="grid gap-4 sm:grid-cols-2">
+      {guides.map((g) => (
+        <a
+          href={g.slug}
+          class="group flex gap-3 rounded-xl border border-slate-200 dark:border-slate-800 p-4 hover:border-slate-400 dark:hover:border-slate-600 bg-white dark:bg-slate-900"
+        >
+          <ToolIcon slug={g.slug} category="guides" />
+          <span>
+            <span class="block font-medium text-slate-900 dark:text-slate-100">{g.cardTitle}</span>
+            <span class="mt-1 block text-sm text-slate-500 dark:text-slate-400">{g.description}</span>
+            <span class="mt-2 inline-block text-sm font-medium text-indigo-600 dark:text-indigo-400 group-hover:underline">
+              Read the guide →
+            </span>
+          </span>
+        </a>
+      ))}
+    </div>
+  </div>
+</Layout>

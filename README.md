@@ -174,6 +174,7 @@ etc.) and update the webhook URL with the new one afterward.
     /audio/
     /video/
     /csv/
+    /guides/               # explainer content layer — see docs/GUIDES.md
     privacy.astro / about.astro / contact.astro / terms.astro
   /components             # UploadZone, ProcessingState, ResultDownload, AdUnit, etc.
   /lib
@@ -198,6 +199,7 @@ is. Read the relevant file before making changes in that area:
 | [`docs/PAGE_LAYOUT.md`](docs/PAGE_LAYOUT.md) | Page templates, upload/processing/result UI states, ad placement rules |
 | [`docs/COPY_GUIDELINES.md`](docs/COPY_GUIDELINES.md) | Voice, trust-signal wording, FAQ structure, meta tag templates |
 | [`docs/SEO.md`](docs/SEO.md) | URL structure, schema markup, internal linking, content depth rules |
+| [`docs/GUIDES.md`](docs/GUIDES.md) | The `/guides/` explainer content layer: routing, internal linking, schema, how to add a new guide |
 | [`docs/LICENSING.md`](docs/LICENSING.md) | **Check before adding any dependency** — license compatibility table |
 | [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) | Hosting, domain, deploy pipeline, launch checklist, cost breakdown |
 | [`docs/SETUP_CHECKLIST.md`](docs/SETUP_CHECKLIST.md) | The literal step-by-step account setup checklist |
@@ -212,6 +214,8 @@ As of this writing:
 
 - **Domain live**: `kit-bin.com`, SSL confirmed working.
 - **27 of ~28 planned tools built and verified locally.**
+- **`/guides/` explainer content layer live** — hub page plus six guides, cross-linked from every
+  relevant tool page, built to strengthen the AdSense editorial review (see `docs/GUIDES.md`).
 - **Deployment**: Cloudflare Pages connected to this repo, auto-deploy on push to `main`.
 - **CI validation pipeline**: self-hosted GitLab CE configured and wired to a GitHub webhook
   (see CI/CD Pipeline above) — confirm the webhook fires successfully on the next push if it
@@ -249,6 +253,7 @@ Data:
 
 Site/infra:
 - [x] Homepage + category hubs live (PDF, Image, Audio, Video, Data)
+- [x] /guides/ content layer (hub + 6 guides) live, cross-linked from tool pages
 - [x] Deployed to Cloudflare Pages, custom domain attached
 - [x] Self-hosted GitLab CI validation pipeline configured (webhook + trigger)
 - [ ] Confirm CI pipeline fires successfully post-domain-change

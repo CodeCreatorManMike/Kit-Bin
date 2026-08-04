@@ -1,0 +1,102 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: 'How Kit-Bin Works',
+  datePublished: '2026-08-04',
+  author: { '@type': 'Organization', name: 'Kit-Bin' },
+  description:
+    'A real technical explanation of client-side file processing — what WebAssembly does, why it means your files genuinely can\'t be uploaded, and how that\'s different from a privacy promise.',
+};
+---
+
+<Layout
+  title="How Kit-Bin Works — Why Your Files Never Leave Your Device | Kit-Bin"
+  description="A real technical explanation of client-side file processing — what WebAssembly does, why it means your files genuinely can't be uploaded, and how that's different from a privacy promise."
+>
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} is:inline />
+
+  <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-slate-700 dark:text-slate-300 space-y-4">
+    <p class="text-sm"><a href="/guides/" class="text-blue-600 dark:text-blue-400 hover:underline">← All guides</a></p>
+    <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">How Kit-Bin Actually Works</h1>
+
+    <p>
+      Every file-conversion site says some version of "we respect your privacy." Most of them still
+      upload your file to a server to actually do the conversion — the privacy claim is a policy
+      decision about what they do with your file afterward, not a technical guarantee about whether
+      your file reaches their server in the first place.
+    </p>
+    <p>
+      Kit-Bin is different in a way that's worth explaining properly, because "trust us" isn't a
+      technical argument. Here's what's actually happening.
+    </p>
+
+    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">The short version</h2>
+    <p>
+      When you drop a file into a tool on this site, it never gets sent anywhere. The conversion
+      happens inside your own browser, using your own device's processing power, and the result is
+      handed back to you directly. There is no upload step for any of the tools currently on this
+      site — not a fast one, not an encrypted one. There isn't a network request carrying your file
+      at all.
+    </p>
+
+    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">The slightly longer, actually technical version</h2>
+    <p>
+      Browsers have supported a technology called WebAssembly (often shortened to WASM) since around
+      2017. WebAssembly lets code written in languages like C++ or Rust — the kind of code that
+      historically only ran as a native application installed on your computer — run directly inside
+      a web page, at speeds close to a native app, without a plugin.
+    </p>
+    <p>
+      That matters here specifically because real file-format libraries (PDF manipulation, image
+      codecs, audio/video processing) are complex pieces of software. Before WebAssembly, running
+      that kind of processing in a browser wasn't practical, so every "online converter" had to send
+      your file to a server, run the real processing software there, and send the result back. That's
+      still how most competing tools work today.
+    </p>
+    <p>
+      Kit-Bin compiles those same kinds of processing libraries to WebAssembly and runs them directly
+      in your browser tab. Your file is read into your browser's own memory (the same way any file you
+      open in any app gets read into memory), the WebAssembly module processes it right there, and the
+      output gets handed to your browser's normal file-download mechanism. At no point does the file's
+      data get packaged into a network request.
+    </p>
+
+    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">Why this is a stronger claim than "we promise not to look"</h2>
+    <p>
+      A server-based converter could, in principle, be perfectly trustworthy — plenty are. But you're
+      relying on a policy: a company's stated intention not to retain, inspect, or misuse your file
+      once it's on their server. That policy could be wrong, could change, or could simply not survive
+      contact with a data breach.
+    </p>
+    <p>
+      Kit-Bin's model removes the question entirely rather than answering it well. There's no server
+      in the file's path to have a policy about. This is a structural fact about how the site is
+      built, not a promise about how it's operated — see the
+      <a href="/privacy" class="text-blue-600 dark:text-blue-400 hover:underline">Privacy Policy</a>
+      for the exact, current wording of what that means for each tool.
+    </p>
+
+    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">The honest limits of this approach</h2>
+    <p>
+      This isn't a claim that browser-side processing can do everything. Some operations — very large
+      video files, or converting between complex office-document formats — currently don't have a
+      practical browser-only solution and either aren't offered on this site yet, or would need a
+      server component if they're added later. If that ever applies to a specific tool, that tool's
+      own page will say so plainly, and the Privacy Policy will be updated to reflect it before it
+      ships. Nothing on this site claims "100% private" in a blanket way that isn't true for every
+      tool that carries the claim.
+    </p>
+
+    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">Related tools</h2>
+    <p>
+      Every tool currently on this site works exactly as described above. Browse the full list on the
+      <a href="/" class="text-blue-600 dark:text-blue-400 hover:underline">homepage</a>, or start with one of the most-used ones:
+      <a href="/pdf/merge" class="text-blue-600 dark:text-blue-400 hover:underline">Merge PDF</a>,
+      <a href="/image/compress" class="text-blue-600 dark:text-blue-400 hover:underline">Compress Image</a>,
+      <a href="/audio/trim" class="text-blue-600 dark:text-blue-400 hover:underline">Trim Audio</a>.
+    </p>
+  </article>
+</Layout>

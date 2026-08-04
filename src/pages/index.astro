@@ -1,7 +1,9 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import ToolCard from '../components/ToolCard.astro';
+import ToolIcon from '../components/ToolIcon.astro';
 import { tools, categories } from '../data/tools';
+import { guides } from '../data/guides';
 
 const popularSlugs = ['/pdf/merge', '/pdf/split', '/pdf/compress', '/image/heic-to-jpg'];
 const popularTools = popularSlugs.map((slug) => tools.find((t) => t.slug === slug)!).filter(Boolean);
@@ -46,7 +48,7 @@ const popularTools = popularSlugs.map((slug) => tools.find((t) => t.slug === slu
 
   <div class="max-w-5xl mx-auto px-6 py-10" id="popular-section">
     <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">Popular Tools</h2>
-    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    <div class="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
       {popularTools.map((t) => <ToolCard tool={t} />)}
     </div>
   </div>
@@ -68,10 +70,35 @@ const popularTools = popularSlugs.map((slug) => tools.find((t) => t.slug === slu
       {categories.map((c) => (
         <div data-category-group={c.slug}>
           <h3 class="text-sm font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500 mb-3">{c.name}</h3>
-          <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div class="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3">
             {tools.filter((t) => t.category === c.slug).map((t) => <ToolCard tool={t} />)}
           </div>
         </div>
+      ))}
+    </div>
+  </div>
+
+  <div class="max-w-5xl mx-auto px-6 pb-16">
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-100">Guides</h2>
+      <a href="/guides/" class="text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline">View all guides →</a>
+    </div>
+    <p class="text-sm text-slate-500 dark:text-slate-400 mb-4 max-w-2xl">
+      Plain-language explanations of the file formats and mechanics behind these tools — why files
+      behave the way they do.
+    </p>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:grid-cols-3">
+      {guides.map((g) => (
+        <a
+          href={g.slug}
+          class="group flex gap-3 rounded-xl border border-slate-200 dark:border-slate-800 p-4 hover:border-slate-400 dark:hover:border-slate-600 bg-white dark:bg-slate-900"
+        >
+          <ToolIcon slug={g.slug} category="guides" size="sm" />
+          <span>
+            <span class="block text-sm font-medium text-slate-900 dark:text-slate-100">{g.cardTitle}</span>
+            <span class="mt-1 block text-xs text-slate-500 dark:text-slate-400">{g.description}</span>
+          </span>
+        </a>
       ))}
     </div>
   </div>

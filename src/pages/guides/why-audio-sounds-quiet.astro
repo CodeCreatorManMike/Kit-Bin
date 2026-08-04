@@ -1,0 +1,88 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: 'Why Does My Audio Sound Quiet Even at Full Volume?',
+  datePublished: '2026-08-04',
+  author: { '@type': 'Organization', name: 'Kit-Bin' },
+  description:
+    'The difference between peak volume and perceived loudness (LUFS), why turning the volume up doesn\'t fix a quiet-sounding recording, and what normalization actually does.',
+};
+---
+
+<Layout
+  title="Why Does My Audio Sound Quiet Even at Full Volume? | Kit-Bin"
+  description="The difference between peak volume and perceived loudness (LUFS), why turning the volume up doesn't fix a quiet-sounding recording, and what normalization actually does."
+>
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} is:inline />
+
+  <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-slate-700 dark:text-slate-300 space-y-4">
+    <p class="text-sm"><a href="/guides/" class="text-blue-600 dark:text-blue-400 hover:underline">← All guides</a></p>
+    <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">Why Does My Audio Sound Quiet No Matter How High You Turn It Up?</h1>
+
+    <p>
+      Two audio files can technically hit the exact same maximum volume and still sound completely
+      different in loudness when you actually listen to them. This isn't a bug in your player, and
+      turning the volume knob up doesn't fix it — because the problem isn't about volume at all. It's
+      about the difference between a file's <em>peak</em> and how loud it <em>sounds</em>.
+    </p>
+
+    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">Peak is not the same thing as loudness</h2>
+    <p>
+      The peak of an audio file is just its single loudest moment — the tallest spike in the waveform,
+      measured as a technical value. A recording of quiet, sparse acoustic guitar with one sharp pluck
+      might have a peak that hits the maximum, while the rest of the track sits far quieter. A dense,
+      compressed pop track might have the same technical peak, but because it's <em>consistently</em> loud
+      throughout rather than mostly quiet with one spike, it sounds dramatically louder overall.
+    </p>
+    <p>
+      Human hearing responds to sustained average loudness over time, not to a single isolated peak.
+      This is exactly why "peak normalization" — raising a file until its loudest single sample hits
+      the maximum — can leave two files at the same technical peak sounding wildly different in
+      practice. It answers "did this file use the full available range," not "how loud does this
+      actually sound."
+    </p>
+
+    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">What LUFS actually measures</h2>
+    <p>
+      The fix is a measurement called LUFS (Loudness Units Full Scale), based on a broadcast standard
+      that applies psychoacoustic weighting — it accounts for the fact that human hearing is more
+      sensitive to some frequencies than others, and it measures average loudness across the entire
+      file rather than a single moment. Every major streaming platform (Spotify, YouTube, Apple Music)
+      targets a specific LUFS value for playback, which is exactly why a quiet acoustic song and a
+      loud, heavily processed pop track end up sounding roughly equally loud on the same playlist —
+      the platform is normalizing to a consistent <em>perceived</em> loudness, not a consistent peak.
+    </p>
+
+    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">What "normalize volume" actually does, then</h2>
+    <p>
+      A volume normalization tool measures a file's actual perceived loudness (not just its peak) and
+      applies a single, uniform gain adjustment across the whole file to bring it to a target level.
+      It's not compression in the audio-production sense — it doesn't change the relationship between
+      the quiet and loud parts of the recording, it just shifts the whole thing up or down as one
+      block until the <em>overall</em> perceived loudness lands where you want it.
+    </p>
+    <p>
+      This is why normalizing a file that already sounds appropriately loud, and re-normalizing it
+      again later, doesn't meaningfully change anything — and running it repeatedly on the same file
+      can very slightly alter the tonal balance for no benefit. Normalize once.
+    </p>
+
+    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">Normalizing</h2>
+    <p>
+      <a href="/audio/volume-normalize" class="text-blue-600 dark:text-blue-400 hover:underline">Normalize Volume</a>
+      — measures the actual perceived loudness of your file and adjusts it to a consistent target,
+      entirely in your browser.
+    </p>
+
+    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">Related tools</h2>
+    <p>
+      If the actual problem is that one section of a longer recording is quiet relative to the rest of
+      the <em>same</em> file (rather than the whole file being quiet relative to other files), normalization
+      won't fix that — that's a job for actual audio editing software, not a volume adjustment across
+      the whole file.
+    </p>
+  </article>
+</Layout>

@@ -1,0 +1,89 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: "Why Won't My iPhone Photos Open on Windows?",
+  datePublished: '2026-08-04',
+  author: { '@type': 'Organization', name: 'Kit-Bin' },
+  description:
+    "Why iPhones save photos as HEIC, why Windows can't open them by default, and when you actually need to convert to JPG.",
+};
+---
+
+<Layout
+  title="Why Won't My iPhone Photos Open on Windows? HEIC Explained | Kit-Bin"
+  description="Why iPhones save photos as HEIC, why Windows can't open them by default, and when you actually need to convert to JPG."
+>
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} is:inline />
+
+  <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-slate-700 dark:text-slate-300 space-y-4">
+    <p class="text-sm"><a href="/guides/" class="text-blue-600 dark:text-blue-400 hover:underline">← All guides</a></p>
+    <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">Why Won't My iPhone Photos Open on Windows?</h1>
+
+    <p>
+      You take a photo on your iPhone, send it to a Windows PC, and get "this file format is not
+      supported" — or the Windows Photos app opens it to a blank screen asking you to buy something
+      from the Microsoft Store. The photo is fine. Windows just doesn't know what to do with it by
+      default. Here's why, and what to actually do about it.
+    </p>
+
+    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">What HEIC actually is</h2>
+    <p>
+      HEIC stands for High Efficiency Image Container. It's Apple's implementation of a broader
+      standard called HEIF. Every iPhone since iOS 11 (released in 2017) saves photos as HEIC by
+      default instead of the older JPG format.
+    </p>
+    <p>
+      The reason is storage, not quality. HEIC photos take up roughly half the space of an equivalent
+      JPG at the same visual quality, because HEIC uses a modern compression method (based on the same
+      underlying technology as HEVC/H.265 video compression) that's simply more efficient than the
+      30-year-old JPG standard. On a phone where storage is limited, that's a meaningful difference —
+      your camera roll fits twice as many photos before you run out of space.
+    </p>
+
+    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">Why Windows doesn't just support it</h2>
+    <p>
+      This isn't Windows being deliberately incompatible. HEIC's compression relies on video-codec
+      technology that requires patent licensing fees. Microsoft chose not to bundle that licensed
+      codec into Windows by default, so out of the box, Windows can't decode HEIC files at all — not
+      "struggles with," genuinely can't, until you separately install the right extension (and on
+      Windows 10 specifically, one of the two required extensions has historically carried a small
+      cost, since Microsoft passes the licensing fee through rather than absorbing it).
+    </p>
+    <p>
+      By the time Apple adopted HEIC in 2017, Windows' core image-handling had already been built
+      around JPG for over two decades. The gap was never going to close quickly.
+    </p>
+
+    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">When you actually need to convert</h2>
+    <p>
+      You don't need to convert every HEIC photo you take. Keep shooting in HEIC for your own device,
+      your own photo library, and anything that stays inside Apple's ecosystem — that's exactly what
+      it's designed for.
+    </p>
+    <p>Convert to JPG specifically when you're:</p>
+    <ul class="list-disc pl-5 space-y-1">
+      <li>Sending a photo to someone on Windows who hasn't installed the HEIC extensions</li>
+      <li>Uploading to a website, form, or application that rejects HEIC outright (a lot of government and business upload forms still do)</li>
+      <li>Attaching to an email that might be opened somewhere without HEIC support</li>
+      <li>Embedding into a Word document, PowerPoint, or PDF for someone else to edit</li>
+    </ul>
+
+    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">Converting</h2>
+    <p>
+      <a href="/image/heic-to-jpg" class="text-blue-600 dark:text-blue-400 hover:underline">Convert HEIC to JPG</a>
+      — runs entirely in your browser, so a whole camera roll's worth of iPhone photos can be
+      batch-converted without uploading a single one anywhere.
+    </p>
+
+    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">Related guide</h2>
+    <p>
+      If you're choosing a format for a website rather than for sharing photos, HEIC isn't actually
+      the right comparison — see
+      <a href="/guides/webp-vs-png-jpg" class="text-blue-600 dark:text-blue-400 hover:underline">WebP vs PNG vs JPG</a>
+      for that decision instead.
+    </p>
+  </article>
+</Layout>

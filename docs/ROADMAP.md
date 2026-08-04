@@ -27,6 +27,9 @@ Also required in Phase 1, not deferrable:
 - Privacy-respecting analytics connected (see `ARCHITECTURE.md`).
 - AdSense applied for and approved — this can take time and gate on site having real content,
   so apply as soon as 4-5 tools are live rather than waiting for full Phase 1 completion.
+- **`/guides/` content layer shipped (2026-08-04)** — six explainer pages plus a hub, built
+  specifically to strengthen the AdSense editorial review (see `docs/GUIDES.md`). This should be
+  in place *before* submitting the AdSense application, not added after a rejection.
 
 ## Phase 2 — Expansion (target: months 2-4)
 

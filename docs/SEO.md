@@ -64,6 +64,16 @@ counterproductive: it reads as SEO filler to users, and it's exactly the kind of
 informational text that's most exposed to being summarized directly in a search AI Overview
 rather than driving a click through to the actual tool.
 
+## The `/guides/` content layer
+
+A separate set of longer-form explainer pages at `/guides/` exists specifically to support the
+AdSense editorial review — tool-only pages read as thin templates to a reviewer even when the
+tool works fine. Guides are not padding for tool pages (those stay at 150-300 words per above)
+and they're not a blog: each one demonstrates specific technical depth about a format/mechanism
+that a generic AI-written post couldn't produce. See `docs/GUIDES.md` for routing, the internal
+linking rules (the trust-signal line on every tool page links to `/guides/how-kit-bin-works`,
+which is the single highest-value link in this layer), and schema (`Article`, not `FAQPage`).
+
 ## Programmatic scaling — deliberately sequenced, not immediate
 
 Format-pair combinatorics (webp→png, png→webp, jpg→webp, jpg→png...) can multiply page count

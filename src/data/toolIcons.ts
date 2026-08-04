@@ -15,6 +15,7 @@ export const categoryColors: Record<string, { bg: string; text: string }> = {
   audio: { bg: 'bg-amber-50 dark:bg-amber-950/40', text: 'text-amber-600 dark:text-amber-400' },
   video: { bg: 'bg-violet-50 dark:bg-violet-950/40', text: 'text-violet-600 dark:text-violet-400' },
   data: { bg: 'bg-cyan-50 dark:bg-cyan-950/40', text: 'text-cyan-600 dark:text-cyan-400' },
+  guides: { bg: 'bg-indigo-50 dark:bg-indigo-950/40', text: 'text-indigo-600 dark:text-indigo-400' },
 };
 
 const page: IconPrimitive[] = [{ t: 'path', d: 'M6 3h8l4 4v14a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z' }, { t: 'path', d: 'M14 3v4h4' }];
@@ -203,5 +204,35 @@ export const toolIcons: Record<string, IconPrimitive[]> = {
     { t: 'path', d: 'M8.5 5v10' },
     { t: 'path', d: 'M18 17.5l3 3' },
     { t: 'path', d: 'M20.5 17.5l-3 3' },
+  ],
+
+  // Guides
+  '/guides/how-kit-bin-works': [
+    { t: 'path', d: 'M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3z' },
+    { t: 'path', d: 'M9.3 12l1.9 1.9 3.5-3.8' },
+  ],
+  '/guides/heic-explained': [
+    { t: 'rect', x: 3, y: 5, w: 18, h: 14, rx: 1.5 },
+    { t: 'circle', cx: 8, cy: 10, r: 1.6 },
+    { t: 'path', d: 'M3 16l5-5 4 4 3-3 6 6' },
+  ],
+  '/guides/why-pdfs-get-large': [
+    ...page,
+    { t: 'path', d: 'M12 15V9' },
+    { t: 'path', d: 'M9.5 11.5L12 9l2.5 2.5' },
+  ],
+  '/guides/webp-vs-png-jpg': [
+    { t: 'rect', x: 3, y: 6, w: 11, h: 11, rx: 1.5 },
+    { t: 'rect', x: 10, y: 3, w: 11, h: 11, rx: 1.5 },
+  ],
+  '/guides/why-audio-sounds-quiet': [
+    { t: 'path', d: 'M4 10v4h4l5 4V6l-5 4H4z' },
+    { t: 'path', d: 'M16 9.5a4 4 0 0 1 0 5' },
+  ],
+  '/guides/mp4-vs-webm': [
+    { t: 'rect', x: 2.5, y: 6, w: 10, h: 8, rx: 1.2 },
+    { t: 'path', d: 'M6 8.5l3 2-3 2z' },
+    { t: 'rect', x: 11.5, y: 10, w: 10, h: 8, rx: 1.2 },
+    { t: 'path', d: 'M15 12.5l3 2-3 2z' },
   ],
 };

@@ -1,0 +1,105 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: 'Why Is My PDF So Big?',
+  datePublished: '2026-08-04',
+  author: { '@type': 'Organization', name: 'Kit-Bin' },
+  description:
+    'The real reasons PDFs balloon in size — embedded images, fonts, and scan resolution — and what a PDF compressor is actually changing when you run one.',
+};
+---
+
+<Layout
+  title="Why Is My PDF So Big? What Compression Actually Does | Kit-Bin"
+  description="The real reasons PDFs balloon in size — embedded images, fonts, and scan resolution — and what a PDF compressor is actually changing when you run one."
+>
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} is:inline />
+
+  <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-slate-700 dark:text-slate-300 space-y-4">
+    <p class="text-sm"><a href="/guides/" class="text-blue-600 dark:text-blue-400 hover:underline">← All guides</a></p>
+    <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">Why Is My PDF So Big?</h1>
+
+    <p>
+      A PDF that's mostly text should be small — often under a hundred kilobytes. If yours is
+      several megabytes or more, something specific is causing it, and it's almost always one of a
+      short list of culprits. Here's what's actually going on, and what a compressor changes when you
+      run one.
+    </p>
+
+    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">The usual suspects</h2>
+    <p>
+      <strong>High-resolution embedded images.</strong> This is the single biggest driver of PDF size by far. A
+      single photo straight from a modern phone camera can be 4-8MB on its own — include a few of
+      those in one document and the file grows fast. Scanned documents are a specific version of this
+      problem: a scanner set to a high DPI (dots per inch) essentially stores every page as a
+      high-resolution photograph, even if the page is just black text on white paper.
+    </p>
+    <p>
+      <strong>Embedded fonts.</strong> PDFs commonly embed the <em>entire</em> font file used in the document — every
+      character, every weight, every variant — even if your document only uses fifty of the several
+      hundred characters in that font. A document using a couple of custom typefaces can carry several
+      megabytes of font data that has nothing to do with your actual content.
+    </p>
+    <p>
+      <strong>Accumulated editing history.</strong> A PDF that's been edited and re-saved multiple times can
+      accumulate redundant data from earlier versions that never gets cleaned up automatically.
+    </p>
+
+    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">What compression actually does</h2>
+    <p>
+      A PDF compressor isn't doing one thing — it's usually doing three, and they have very different
+      trade-offs:
+    </p>
+    <p>
+      <strong>Downsampling images</strong> reduces the resolution of embedded images to something appropriate for
+      how the PDF will actually be viewed. A photo scanned at 600 DPI for print doesn't need anywhere
+      near that resolution if the PDF is only ever going to be viewed on a screen — dropping it to
+      150 DPI is invisible to the eye at normal zoom, but because resolution is squared, cutting DPI by
+      a factor of four cuts the actual pixel data by roughly sixteen times. This is where most of the
+      size reduction comes from, and it's the one part of compression that involves a real, if
+      practically invisible, quality trade-off.
+    </p>
+    <p>
+      <strong>Font subsetting</strong> rewrites the embedded font to include only the characters your document
+      actually uses, instead of the whole typeface file. This is fully lossless — the document looks
+      identical, there's just less unused font data along for the ride.
+    </p>
+    <p><strong>Object cleanup</strong> strips out redundant data left over from previous edits. Also fully lossless.</p>
+
+    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">Why compressing twice doesn't help much</h2>
+    <p>
+      The first compression pass gets most of the available savings. Running a second pass on an
+      already-compressed file typically only saves another few percent, because there's very little
+      redundant data left to remove — the images are already downsampled, the fonts are already
+      subset. If you need a smaller output than one compression pass gets you, adjusting the target
+      resolution and starting over from the original file works better than repeatedly re-compressing
+      an already-compressed one.
+    </p>
+
+    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">When not to compress</h2>
+    <p>
+      If your PDF needs to look right when printed, or contains a design/photography portfolio where
+      image fidelity matters more than file size, aggressive compression can introduce visible
+      softness when someone zooms in. Some files are simply large for a legitimate reason — don't
+      compress a print-ready file down to screen resolution and then send it to a printer.
+    </p>
+
+    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">Compressing</h2>
+    <p>
+      <a href="/pdf/compress" class="text-blue-600 dark:text-blue-400 hover:underline">Compress PDF</a>
+      — runs in your browser, and shows you the size before and after so you can judge the trade-off
+      yourself before downloading.
+    </p>
+
+    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">Related tools</h2>
+    <p>
+      If the size problem is specifically about images inside a PDF you're about to create (rather
+      than one you already have), converting your source images with
+      <a href="/image/compress" class="text-blue-600 dark:text-blue-400 hover:underline">Compress Image</a>
+      before building the PDF avoids the problem entirely.
+    </p>
+  </article>
+</Layout>

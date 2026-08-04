@@ -24,6 +24,7 @@ and is read on demand. Do not paste `/docs` content back into this file.
 | Choosing or adding a dependency | `docs/LICENSING.md` — **check this before every new dependency** |
 | Deciding what to build next | `docs/ROADMAP.md` |
 | System design, thresholds, folder layout | `docs/ARCHITECTURE.md` |
+| Adding/editing a `/guides/` page | `docs/GUIDES.md` — a separate, longer-form content layer from tool pages, built specifically to support the AdSense editorial review; has its own internal-linking and schema rules |
 
 ## IMPORTANT — non-negotiable rules
 

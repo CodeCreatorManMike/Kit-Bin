@@ -1,0 +1,91 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: 'WebP vs PNG vs JPG: Which One Should You Actually Use?',
+  datePublished: '2026-08-04',
+  author: { '@type': 'Organization', name: 'Kit-Bin' },
+  description:
+    'A real technical comparison of WebP, PNG, and JPG — compression method, transparency, browser support, and which format actually wins for each use case.',
+};
+---
+
+<Layout
+  title="WebP vs PNG vs JPG: Which One Should You Actually Use? | Kit-Bin"
+  description="A real technical comparison of WebP, PNG, and JPG — compression method, transparency, browser support, and which format actually wins for each use case."
+>
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} is:inline />
+
+  <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-slate-700 dark:text-slate-300 space-y-4">
+    <p class="text-sm"><a href="/guides/" class="text-blue-600 dark:text-blue-400 hover:underline">← All guides</a></p>
+    <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">WebP vs PNG vs JPG: What the Difference Actually Costs You</h1>
+
+    <p>
+      These three formats get compared constantly, usually in a list that just says "WebP is smaller"
+      without explaining what you're trading away to get there. Here's the actual difference, and when
+      each one genuinely wins.
+    </p>
+
+    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">The core distinction: lossy vs lossless</h2>
+    <p>
+      <strong>JPG</strong> is lossy — it discards some image detail (in ways mostly imperceptible to the human eye)
+      to shrink the file. It has no transparency support at all. Every re-save of a JPG discards a bit
+      more detail, which is why repeatedly editing and re-saving the same JPG gradually degrades it.
+    </p>
+    <p>
+      <strong>PNG</strong> is lossless — every pixel is preserved exactly as the original, with no exceptions. This
+      makes PNG the right choice for anything where sharp edges or exact colors matter: screenshots,
+      logos, diagrams, text-heavy images. The trade-off is size — a photograph saved as PNG can be
+      five to ten times larger than the same photograph as a JPG, because lossless compression is
+      inherently less efficient for the kind of smooth, complex color gradients a real photo contains.
+      PNG also supports full transparency (an alpha channel), which is why it's the standard for logos
+      and icons that need to sit on any background color.
+    </p>
+    <p>
+      <strong>WebP</strong> does both. It supports a lossy mode (competing directly with JPG) and a lossless mode
+      (competing directly with PNG), plus transparency in both modes. In lossy mode, WebP typically
+      produces files 25-35% smaller than an equivalent-quality JPG. In lossless mode, it typically
+      runs about 25% smaller than an equivalent PNG. It's not a different trade-off than JPG or PNG —
+      it's a more efficient version of both of their trade-offs at once.
+    </p>
+
+    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">So why doesn't everyone just use WebP for everything?</h2>
+    <p>
+      Mostly compatibility history, and that history is now mostly resolved. WebP support used to be
+      inconsistent across browsers and older image-editing software; as of 2026, all current major
+      browsers support it fully, and the remaining gap is almost entirely old, unmaintained software
+      rather than anything a typical user will run into. The practical reasons to still reach for JPG
+      or PNG specifically are:
+    </p>
+    <ul class="list-disc pl-5 space-y-1">
+      <li><strong>JPG</strong>: universal compatibility with genuinely ancient software, or when a platform explicitly requires it (some upload forms and print services still only accept JPG)</li>
+      <li><strong>PNG</strong>: same universal-compatibility reasoning, plus any workflow where you need guaranteed pixel-perfect lossless quality and don't want to think about whether the receiving end supports WebP</li>
+    </ul>
+
+    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">The practical answer</h2>
+    <p>
+      For a photo you're putting on a website: WebP, lossy mode. For a logo or screenshot you're
+      putting on a website: WebP, lossless mode, or PNG if you want maximum compatibility insurance
+      and the file size difference doesn't matter. For anything you're sending somewhere that
+      explicitly wants JPG or PNG — an upload form, an old piece of software, a print shop — give it
+      what it's asking for rather than fighting the requirement.
+    </p>
+
+    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">Converting</h2>
+    <p>
+      <a href="/image/webp-to-png" class="text-blue-600 dark:text-blue-400 hover:underline">WebP to PNG</a>
+      · <a href="/image/png-to-webp" class="text-blue-600 dark:text-blue-400 hover:underline">PNG to WebP</a>
+      · <a href="/image/compress" class="text-blue-600 dark:text-blue-400 hover:underline">Compress Image</a>
+    </p>
+
+    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">Related guide</h2>
+    <p>
+      If the image in question is a photo straight off an iPhone, it's probably HEIC, not JPG or PNG
+      in the first place — see
+      <a href="/guides/heic-explained" class="text-blue-600 dark:text-blue-400 hover:underline">Why Won't My iPhone Photos Open on Windows?</a>
+      for that specific case.
+    </p>
+  </article>
+</Layout>
