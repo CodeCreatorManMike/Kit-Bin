@@ -18,9 +18,9 @@ const schema = {
 >
   <script type="application/ld+json" set:html={JSON.stringify(schema)} is:inline />
 
-  <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-slate-700 dark:text-slate-300 space-y-4">
-    <p class="text-sm"><a href="/guides/" class="text-blue-600 dark:text-blue-400 hover:underline">← All guides</a></p>
-    <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">How Kit-Bin Actually Works</h1>
+  <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-ink dark:text-slate-300 space-y-4">
+    <p class="text-sm"><a href="/guides/" class="text-primary dark:text-blue-400 hover:underline">← All guides</a></p>
+    <h1 class="text-3xl font-bold text-ink dark:text-slate-100">How Kit-Bin Actually Works</h1>
 
     <p>
       Every file-conversion site says some version of "we respect your privacy." Most of them still
@@ -33,7 +33,7 @@ const schema = {
       technical argument. Here's what's actually happening.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">The short version</h2>
+    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">The short version</h2>
     <p>
       When you drop a file into a tool on this site, it never gets sent anywhere. The conversion
       happens inside your own browser, using your own device's processing power, and the result is
@@ -42,7 +42,7 @@ const schema = {
       at all.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">The slightly longer, actually technical version</h2>
+    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">The slightly longer, actually technical version</h2>
     <p>
       Browsers have supported a technology called WebAssembly (often shortened to WASM) since around
       2017. WebAssembly lets code written in languages like C++ or Rust — the kind of code that
@@ -64,7 +64,7 @@ const schema = {
       data get packaged into a network request.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">Why this is a stronger claim than "we promise not to look"</h2>
+    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Why this is a stronger claim than "we promise not to look"</h2>
     <p>
       A server-based converter could, in principle, be perfectly trustworthy — plenty are. But you're
       relying on a policy: a company's stated intention not to retain, inspect, or misuse your file
@@ -75,11 +75,11 @@ const schema = {
       Kit-Bin's model removes the question entirely rather than answering it well. There's no server
       in the file's path to have a policy about. This is a structural fact about how the site is
       built, not a promise about how it's operated — see the
-      <a href="/privacy" class="text-blue-600 dark:text-blue-400 hover:underline">Privacy Policy</a>
+      <a href="/privacy" class="text-primary dark:text-blue-400 hover:underline">Privacy Policy</a>
       for the exact, current wording of what that means for each tool.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">The honest limits of this approach</h2>
+    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">The honest limits of this approach</h2>
     <p>
       This isn't a claim that browser-side processing can do everything. Some operations — very large
       video files, or converting between complex office-document formats — currently don't have a
@@ -90,13 +90,13 @@ const schema = {
       tool that carries the claim.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">Related tools</h2>
+    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Related tools</h2>
     <p>
       Every tool currently on this site works exactly as described above. Browse the full list on the
-      <a href="/" class="text-blue-600 dark:text-blue-400 hover:underline">homepage</a>, or start with one of the most-used ones:
-      <a href="/pdf/merge" class="text-blue-600 dark:text-blue-400 hover:underline">Merge PDF</a>,
-      <a href="/image/compress" class="text-blue-600 dark:text-blue-400 hover:underline">Compress Image</a>,
-      <a href="/audio/trim" class="text-blue-600 dark:text-blue-400 hover:underline">Trim Audio</a>.
+      <a href="/" class="text-primary dark:text-blue-400 hover:underline">homepage</a>, or start with one of the most-used ones:
+      <a href="/pdf/merge" class="text-primary dark:text-blue-400 hover:underline">Merge PDF</a>,
+      <a href="/image/compress" class="text-primary dark:text-blue-400 hover:underline">Compress Image</a>,
+      <a href="/audio/trim" class="text-primary dark:text-blue-400 hover:underline">Trim Audio</a>.
     </p>
   </article>
 </Layout>

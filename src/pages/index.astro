@@ -4,6 +4,7 @@ import ToolCard from '../components/ToolCard.astro';
 import ToolIcon from '../components/ToolIcon.astro';
 import { tools, categories } from '../data/tools';
 import { guides } from '../data/guides';
+import { categoryColors } from '../data/toolIcons';
 
 const popularSlugs = ['/pdf/merge', '/pdf/split', '/pdf/compress', '/image/heic-to-jpg'];
 const popularTools = popularSlugs.map((slug) => tools.find((t) => t.slug === slug)!).filter(Boolean);
@@ -13,23 +14,23 @@ const popularTools = popularSlugs.map((slug) => tools.find((t) => t.slug === slu
   title="Kit-Bin — Free Browser-Based File Tools"
   description="Convert, compress, and edit files entirely in your browser. No uploads, no accounts."
 >
-  <div class="max-w-5xl mx-auto px-6 pt-14 pb-8 flex flex-col sm:flex-row items-center gap-8">
-    <div class="flex-1 text-center sm:text-left">
-      <h1 class="text-4xl sm:text-5xl font-bold text-slate-900 dark:text-slate-100">
-        Powerful tools.<br /><span class="text-blue-600 dark:text-blue-400">Simplified.</span>
+  <div class="max-w-5xl mx-auto px-6 pt-6 sm:pt-14 pb-4 sm:pb-8 flex flex-row items-center gap-4 sm:gap-8">
+    <div class="flex-1 text-left">
+      <h1 class="text-3xl sm:text-5xl font-bold tracking-tight text-ink dark:text-slate-100">
+        Powerful tools.<br /><span class="text-primary dark:text-blue-400">Simplified.</span>
       </h1>
-      <p class="mt-4 text-lg text-slate-600 dark:text-slate-400">
+      <p class="mt-2 sm:mt-4 text-sm sm:text-lg text-muted dark:text-slate-400 max-w-md">
         Everything you need to work with your files in one beautiful, easy to use toolkit.
       </p>
     </div>
-    <img src="/illustrations/hero.svg" alt="" class="h-40 w-40 object-contain shrink-0" />
+    <img src="/illustrations/hero.svg" alt="" class="h-20 w-20 sm:h-40 sm:w-40 object-contain shrink-0" />
   </div>
 
   <div class="max-w-5xl mx-auto px-6">
     <div class="relative">
       <svg
         viewBox="0 0 24 24"
-        class="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400"
+        class="absolute left-4 top-1/2 -translate-y-1/2 h-4.5 w-4.5 text-muted"
         fill="none"
         stroke="currentColor"
         stroke-width="2"
@@ -41,13 +42,13 @@ const popularTools = popularSlugs.map((slug) => tools.find((t) => t.slug === slu
         id="tool-search"
         type="text"
         placeholder="Search tools... (e.g. merge pdf, compress image)"
-        class="w-full rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-3 pl-12 pr-4 text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        class="w-full rounded-xl border border-border-soft dark:border-slate-800 bg-surface dark:bg-slate-900 py-3 pl-11 pr-4 text-sm text-ink dark:text-slate-100 placeholder:text-muted shadow-[0_1px_2px_rgba(16,24,47,0.04)] outline-none transition-shadow focus:border-primary/40 focus:ring-4 focus:ring-primary/10"
       />
     </div>
   </div>
 
-  <div class="max-w-5xl mx-auto px-6 py-10" id="popular-section">
-    <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">Popular Tools</h2>
+  <div class="max-w-5xl mx-auto px-6 py-8 sm:py-10" id="popular-section">
+    <h2 class="text-lg font-semibold text-ink dark:text-slate-100 mb-4">Popular Tools</h2>
     <div class="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
       {popularTools.map((t) => <ToolCard tool={t} />)}
     </div>
@@ -55,21 +56,24 @@ const popularTools = popularSlugs.map((slug) => tools.find((t) => t.slug === slu
 
   <div class="max-w-5xl mx-auto px-6 pb-16">
     <div class="flex items-center justify-between mb-4">
-      <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-100">All Tools</h2>
-      <div class="flex gap-1 rounded-lg border border-slate-200 dark:border-slate-800 p-1 text-sm">
-        <button type="button" data-tab="all" class="rounded-md px-3 py-1 font-medium" aria-pressed="true">All</button>
-        <button type="button" data-tab="favorites" class="rounded-md px-3 py-1 font-medium" aria-pressed="false">Favorites</button>
+      <h2 class="text-lg font-semibold text-ink dark:text-slate-100">All Tools</h2>
+      <div class="inline-flex items-center gap-0.5 rounded-lg bg-app-bg dark:bg-slate-900 border border-border-soft dark:border-slate-800 p-1 text-sm">
+        <button type="button" data-tab="all" class="rounded-md px-3.5 py-1.5 font-medium transition-all duration-150" aria-pressed="true">All</button>
+        <button type="button" data-tab="favorites" class="rounded-md px-3.5 py-1.5 font-medium transition-all duration-150" aria-pressed="false">Favorites</button>
       </div>
     </div>
 
-    <p id="no-results" class="hidden text-sm text-slate-500 dark:text-slate-400 py-8 text-center">
+    <p id="no-results" class="hidden text-sm text-muted dark:text-slate-400 py-8 text-center">
       No tools match your search.
     </p>
 
     <div id="tool-groups" class="space-y-8">
       {categories.map((c) => (
         <div data-category-group={c.slug}>
-          <h3 class="text-sm font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500 mb-3">{c.name}</h3>
+          <h3 class={`flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide mb-3 ${categoryColors[c.slug].text}`}>
+            <span class={`h-1.5 w-1.5 rounded-full ${categoryColors[c.slug].dot}`}></span>
+            {c.name}
+          </h3>
           <div class="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3">
             {tools.filter((t) => t.category === c.slug).map((t) => <ToolCard tool={t} />)}
           </div>
@@ -80,10 +84,10 @@ const popularTools = popularSlugs.map((slug) => tools.find((t) => t.slug === slu
 
   <div class="max-w-5xl mx-auto px-6 pb-16">
     <div class="flex items-center justify-between mb-4">
-      <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-100">Guides</h2>
-      <a href="/guides/" class="text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline">View all guides →</a>
+      <h2 class="text-lg font-semibold text-ink dark:text-slate-100">Guides</h2>
+      <a href="/guides/" class="text-sm font-medium text-primary dark:text-blue-400 hover:underline">View all guides →</a>
     </div>
-    <p class="text-sm text-slate-500 dark:text-slate-400 mb-4 max-w-2xl">
+    <p class="text-sm text-muted dark:text-slate-400 mb-4 max-w-2xl">
       Plain-language explanations of the file formats and mechanics behind these tools — why files
       behave the way they do.
     </p>
@@ -91,12 +95,12 @@ const popularTools = popularSlugs.map((slug) => tools.find((t) => t.slug === slu
       {guides.map((g) => (
         <a
           href={g.slug}
-          class="group flex gap-3 rounded-xl border border-slate-200 dark:border-slate-800 p-4 hover:border-slate-400 dark:hover:border-slate-600 bg-white dark:bg-slate-900"
+          class="group flex gap-3 rounded-xl border border-border-soft dark:border-slate-800 p-4 shadow-[0_1px_2px_rgba(16,24,47,0.04)] transition-all duration-150 hover:border-primary/25 hover:shadow-[0_6px_16px_rgba(16,24,47,0.08)] hover:-translate-y-0.5 bg-surface dark:bg-slate-900"
         >
           <ToolIcon slug={g.slug} category="guides" size="sm" />
           <span>
-            <span class="block text-sm font-medium text-slate-900 dark:text-slate-100">{g.cardTitle}</span>
-            <span class="mt-1 block text-xs text-slate-500 dark:text-slate-400">{g.description}</span>
+            <span class="block text-sm font-semibold text-ink dark:text-slate-100">{g.cardTitle}</span>
+            <span class="mt-1 block text-xs text-muted dark:text-slate-400">{g.description}</span>
           </span>
         </a>
       ))}
@@ -118,10 +122,13 @@ const popularTools = popularSlugs.map((slug) => tools.find((t) => t.slug === slu
       tabButtons.forEach((btn) => {
         const isActive = btn.dataset.tab === activeTab;
         btn.setAttribute('aria-pressed', String(isActive));
-        btn.classList.toggle('bg-blue-600', isActive);
-        btn.classList.toggle('text-white', isActive);
-        btn.classList.toggle('text-slate-600', !isActive);
-        btn.classList.toggle('dark:text-slate-300', !isActive);
+        btn.classList.toggle('bg-surface', isActive);
+        btn.classList.toggle('dark:bg-slate-800', isActive);
+        btn.classList.toggle('text-ink', isActive);
+        btn.classList.toggle('shadow-sm', isActive);
+        btn.classList.toggle('dark:text-slate-100', isActive);
+        btn.classList.toggle('text-muted', !isActive);
+        btn.classList.toggle('dark:text-slate-400', !isActive);
       });
     }
 

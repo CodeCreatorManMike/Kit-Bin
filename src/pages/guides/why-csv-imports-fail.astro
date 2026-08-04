@@ -18,9 +18,9 @@ const schema = {
 >
   <script type="application/ld+json" set:html={JSON.stringify(schema)} is:inline />
 
-  <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-slate-700 dark:text-slate-300 space-y-4">
-    <p class="text-sm"><a href="/guides/" class="text-blue-600 dark:text-blue-400 hover:underline">← All guides</a></p>
-    <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">Why CSV Imports Fail</h1>
+  <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-ink dark:text-slate-300 space-y-4">
+    <p class="text-sm"><a href="/guides/" class="text-primary dark:text-blue-400 hover:underline">← All guides</a></p>
+    <h1 class="text-3xl font-bold text-ink dark:text-slate-100">Why CSV Imports Fail</h1>
 
     <p>
       "CSV" stands for comma-separated values, but the format has no single official
@@ -29,7 +29,7 @@ const schema = {
       almost always one of four specific, diagnosable problems.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">1. The wrong delimiter</h2>
+    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">1. The wrong delimiter</h2>
     <p>
       Not every CSV actually uses commas. Excel, depending on your system's regional settings,
       often exports CSV files delimited by semicolons instead — because in locales where a comma
@@ -42,7 +42,7 @@ const schema = {
       semicolons or tabs between values instead of commas, that's your delimiter mismatch.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">2. Unescaped commas inside a field</h2>
+    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">2. Unescaped commas inside a field</h2>
     <p>
       A text field that legitimately contains a comma — an address like "123 Main St, Apt 4," or
       a company name like "Smith, Jones & Co." — has to be wrapped in quotes for a CSV parser to
@@ -55,7 +55,7 @@ const schema = {
       is almost always why.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">3. Character encoding</h2>
+    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">3. Character encoding</h2>
     <p>
       A CSV is just text, and text has to be decoded using a specific character encoding —
       commonly UTF-8, but older files (especially from older Windows software) sometimes use
@@ -69,7 +69,7 @@ const schema = {
       encoding mismatch.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">4. Genuinely messy data</h2>
+    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">4. Genuinely messy data</h2>
     <p>
       Separate from format problems, a CSV can just contain messy data: rows that are completely
       blank, columns nobody ever filled in, duplicate rows from a script that ran twice, or
@@ -77,7 +77,7 @@ const schema = {
       the file parses correctly, the data itself just needs cleaning up before it's useful.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">What a cleaning tool can and can't fix</h2>
+    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">What a cleaning tool can and can't fix</h2>
     <p>
       Delimiter mismatches, unescaped-comma row breakage, and encoding problems all require
       knowing something about the file's origin or intent that a generic tool can't safely guess
@@ -87,19 +87,19 @@ const schema = {
       guessing at ambiguous structure.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">Cleaning what can be safely cleaned</h2>
+    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Cleaning what can be safely cleaned</h2>
     <p>
-      <a href="/data/csv-cleaner" class="text-blue-600 dark:text-blue-400 hover:underline">CSV Cleaner</a>
+      <a href="/data/csv-cleaner" class="text-primary dark:text-blue-400 hover:underline">CSV Cleaner</a>
       — trims whitespace, drops empty rows/columns, and removes exact duplicates, entirely in
       your browser. It won't fix a delimiter mismatch or unescaped commas — those need fixing at
       the source, in whatever program generated the file.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">Related tools</h2>
+    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Related tools</h2>
     <p>
       Once your CSV parses cleanly, convert it with
-      <a href="/csv/to-json" class="text-blue-600 dark:text-blue-400 hover:underline">CSV to JSON</a>
-      or <a href="/csv/to-excel" class="text-blue-600 dark:text-blue-400 hover:underline">CSV to Excel</a>.
+      <a href="/csv/to-json" class="text-primary dark:text-blue-400 hover:underline">CSV to JSON</a>
+      or <a href="/csv/to-excel" class="text-primary dark:text-blue-400 hover:underline">CSV to Excel</a>.
     </p>
   </article>
 </Layout>

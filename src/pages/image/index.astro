@@ -3,23 +3,32 @@ import Layout from '../../layouts/Layout.astro';
 import CategorySchema from '../../components/CategorySchema.astro';
 import ToolCard from '../../components/ToolCard.astro';
 import { tools } from '../../data/tools';
+import { categoryColors, categoryIconPaths } from '../../data/toolIcons';
 
 const imageTools = tools.filter((t) => t.category === 'image');
+const meta = categoryColors.image;
 ---
 
 <Layout title="Free Image Tools | Kit-Bin" description="Convert HEIC, WebP, PNG, and SVG images, or resize, crop, and compress a photo, entirely in your browser.">
   <CategorySchema categoryName="Image Tools" />
   <div class="max-w-5xl mx-auto px-6 py-10">
-    <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">Free Image Tools</h1>
-    <p class="mt-3 text-slate-600 dark:text-slate-400 max-w-2xl">
+    <div class="flex items-center gap-3">
+      <span class={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${meta.bg} ${meta.text}`}>
+        <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.75">
+          <path d={categoryIconPaths.image} stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </span>
+      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-ink dark:text-slate-100">Free Image Tools</h1>
+    </div>
+    <p class="mt-3 text-muted dark:text-slate-400 max-w-2xl">
       Convert HEIC iPhone photos, WebP, PNG, and SVG files, or resize, crop, and compress an
       image for email, a website, or an app that rejects files above a certain size. Every tool
       below runs entirely in your browser — your photo is never uploaded anywhere.
     </p>
-    <p class="mt-3 text-slate-600 dark:text-slate-400 max-w-2xl">
+    <p class="mt-3 text-muted dark:text-slate-400 max-w-2xl">
       Unsure which format to convert to? Read
-      <a href="/guides/webp-vs-png-jpg" class="text-blue-600 dark:text-blue-400 hover:underline">WebP vs PNG vs JPG</a>
-      or <a href="/guides/heic-explained" class="text-blue-600 dark:text-blue-400 hover:underline">why iPhone photos use HEIC</a>
+      <a href="/guides/webp-vs-png-jpg" class="text-primary dark:text-blue-400 hover:underline">WebP vs PNG vs JPG</a>
+      or <a href="/guides/heic-explained" class="text-primary dark:text-blue-400 hover:underline">why iPhone photos use HEIC</a>
       in the first place.
     </p>
     <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

@@ -1,3 +1,17 @@
 @import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));
+
+/* Kit-Bin design tokens — shared across every component instead of scattering
+ * one-off color values. Light-mode only; dark mode keeps using the existing
+ * slate palette via explicit dark: variants alongside these. */
+@theme {
+  --color-primary: #3157e8;
+  --color-primary-hover: #2646c9;
+  --color-primary-tint: #eef2fe;
+  --color-ink: #10182f;
+  --color-muted: #66738d;
+  --color-app-bg: #f8fafd;
+  --color-surface: #ffffff;
+  --color-border-soft: #e4e9f2;
+}
