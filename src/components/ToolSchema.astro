@@ -1,0 +1,66 @@
+---
+import { tools, categories } from '../data/tools';
+
+interface Faq {
+  q: string;
+  a: string;
+}
+
+interface Props {
+  name: string;
+  description: string;
+  faqs: Faq[];
+}
+
+const { name, description, faqs } = Astro.props;
+const url = new URL(Astro.url.pathname, Astro.site).toString();
+const siteOrigin = Astro.site?.toString().replace(/\/$/, '') ?? '';
+
+const currentTool = tools.find((t) => t.slug === Astro.url.pathname.replace(/\/$/, ''));
+const category = currentTool ? categories.find((c) => c.slug === currentTool.category) : undefined;
+
+const breadcrumbItems = category
+  ? [
+      { name: 'Home', item: siteOrigin + '/' },
+      { name: category.name, item: `${siteOrigin}/${category.slug}/` },
+      { name, item: url },
+    ]
+  : [
+      { name: 'Home', item: siteOrigin + '/' },
+      { name, item: url },
+    ];
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'SoftwareApplication',
+      name,
+      description,
+      url,
+      applicationCategory: 'Utility',
+      operatingSystem: 'Any',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: faqs.map((f) => ({
+        '@type': 'Question',
+        name: f.q,
+        acceptedAnswer: { '@type': 'Answer', text: f.a },
+      })),
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: breadcrumbItems.map((b, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        name: b.name,
+        item: b.item,
+      })),
+    },
+  ],
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(schema)} is:inline />

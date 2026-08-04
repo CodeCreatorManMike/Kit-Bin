@@ -1,4 +1,6 @@
 ---
+import { KOFI_URL } from '../data/site-config';
+
 interface Props {
   class?: string;
 }
@@ -7,7 +9,7 @@ const { class: className = '' } = Astro.props;
 ---
 
 <a
-  href="https://ko-fi.com/michaeljones22017"
+  href={KOFI_URL}
   target="_blank"
   rel="noopener noreferrer"
   class={`inline-flex items-center gap-1.5 rounded-full bg-red-500 hover:bg-red-600 text-white font-semibold shadow-sm transition-colors ${className}`}

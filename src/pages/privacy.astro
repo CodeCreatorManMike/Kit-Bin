@@ -3,12 +3,16 @@ import Layout from '../layouts/Layout.astro';
 import { CONTACT_EMAIL } from '../data/site-config';
 ---
 
-<Layout title="Privacy Policy | Kit-Bin" description="Kit-Bin's privacy policy.">
+<Layout
+  title="Privacy Policy | Kit-Bin"
+  description="What happens to your files on Kit-Bin, what data is and isn't collected, and how Google AdSense uses cookies on this site."
+>
   <div class="max-w-2xl mx-auto px-4 py-16 space-y-6 text-slate-700 dark:text-slate-300">
     <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">Privacy Policy</h1>
+    <p class="text-sm text-slate-500 dark:text-slate-500">Last updated: August 2026</p>
 
     <section>
-      <h2 class="text-xl font-semibold mb-2">Your files</h2>
+      <h2 class="text-xl font-semibold text-slate-900 dark:text-slate-100 mb-2">Your files</h2>
       <p>
         Every tool on this site currently processes files entirely in your browser, using
         WebAssembly and native browser APIs. Your file is read into your browser's memory, the
@@ -21,7 +25,7 @@ import { CONTACT_EMAIL } from '../data/site-config';
     </section>
 
     <section>
-      <h2 class="text-xl font-semibold mb-2">Accounts and storage</h2>
+      <h2 class="text-xl font-semibold text-slate-900 dark:text-slate-100 mb-2">Accounts and storage</h2>
       <p>
         There are no user accounts on this site. Nothing you upload or convert is stored on any
         server, ever — there's no database for user files.
@@ -29,7 +33,7 @@ import { CONTACT_EMAIL } from '../data/site-config';
     </section>
 
     <section>
-      <h2 class="text-xl font-semibold mb-2">Analytics</h2>
+      <h2 class="text-xl font-semibold text-slate-900 dark:text-slate-100 mb-2">Analytics</h2>
       <p>
         This site does not currently run any analytics or tracking script. If aggregate,
         cookieless usage analytics (page views, general device/location category — not
@@ -39,7 +43,7 @@ import { CONTACT_EMAIL } from '../data/site-config';
     </section>
 
     <section>
-      <h2 class="text-xl font-semibold mb-2">Advertising</h2>
+      <h2 class="text-xl font-semibold text-slate-900 dark:text-slate-100 mb-2">Advertising</h2>
       <p>
         This site is supported by Google AdSense. Google may use cookies and similar
         technologies to show ads based on your visits to this and other sites. You can review
@@ -53,7 +57,7 @@ import { CONTACT_EMAIL } from '../data/site-config';
     </section>
 
     <section>
-      <h2 class="text-xl font-semibold mb-2">Contact</h2>
+      <h2 class="text-xl font-semibold text-slate-900 dark:text-slate-100 mb-2">Contact</h2>
       <p>
         Questions about this policy: <a href={`mailto:${CONTACT_EMAIL}`} class="underline">{CONTACT_EMAIL}</a>
       </p>

@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import ToolSchema from '../../components/ToolSchema.astro';
 import ToolWidget from '../../components/ToolWidget.astro';
 import AdUnit from '../../components/AdUnit.astro';
 ---
@@ -8,6 +9,17 @@ import AdUnit from '../../components/AdUnit.astro';
   title="Compress Video Online — Free & No Upload Required | Kit-Bin"
   description="Shrink a video's file size in your browser. Your file is never uploaded to a server."
 >
+  <ToolSchema
+    name="Compress Video"
+    description="Shrink a video's file size in your browser. Your file is never uploaded to a server."
+    faqs={[
+    {
+      "q": "Will this affect quality?",
+      "a": "Yes — that's the tradeoff for a smaller file. Try it on a copy first if quality matters."
+    }
+  ]}
+  />
+
   <div class="max-w-2xl mx-auto px-4 pt-10 pb-4 text-center">
     <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">Compress Video — Free</h1>
     <p class="mt-2 text-slate-600 dark:text-slate-400"><a href="/guides/how-kit-bin-works" class="hover:underline decoration-dotted underline-offset-2">Processed entirely in your browser. Your file is never uploaded to a server.</a></p>

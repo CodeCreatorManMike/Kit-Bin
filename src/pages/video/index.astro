@@ -1,15 +1,26 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import CategorySchema from '../../components/CategorySchema.astro';
 import ToolCard from '../../components/ToolCard.astro';
 import { tools } from '../../data/tools';
 
 const videoTools = tools.filter((t) => t.category === 'video');
 ---
 
-<Layout title="Free Video Tools | Kit-Bin" description="Convert, compress, and edit video files entirely in your browser.">
+<Layout title="Free Video Tools | Kit-Bin" description="Compress, trim, mute, convert, and extract audio from a video file entirely in your browser.">
+  <CategorySchema categoryName="Video Tools" />
   <div class="max-w-5xl mx-auto px-6 py-10">
     <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">Free Video Tools</h1>
-    <p class="mt-2 text-slate-600 dark:text-slate-400">All video tools run entirely in your browser. Files are never uploaded. Large files may be slow on mobile.</p>
+    <p class="mt-3 text-slate-600 dark:text-slate-400 max-w-2xl">
+      Compress a video for upload, trim a clip to a specific range, remove or extract its audio
+      track, convert between MP4 and WebM, or turn a short clip into a GIF. Every tool below runs
+      entirely in your browser — your video is never uploaded anywhere. Large files may be slower
+      on mobile devices due to memory limits.
+    </p>
+    <p class="mt-3 text-slate-600 dark:text-slate-400 max-w-2xl">
+      Not sure whether to pick MP4 or WebM? Read
+      <a href="/guides/mp4-vs-webm" class="text-blue-600 dark:text-blue-400 hover:underline">MP4 vs WebM: which one should you actually use?</a>
+    </p>
     <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {videoTools.map((t) => <ToolCard tool={t} />)}
     </div>

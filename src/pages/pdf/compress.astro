@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import ToolSchema from '../../components/ToolSchema.astro';
 import ToolWidget from '../../components/ToolWidget.astro';
 import AdUnit from '../../components/AdUnit.astro';
 ---
@@ -8,6 +9,21 @@ import AdUnit from '../../components/AdUnit.astro';
   title="Compress PDF Online — Free & No Upload Required | Kit-Bin"
   description="Shrink a PDF's file size in seconds. Runs entirely in your browser — your file is never uploaded to a server."
 >
+  <ToolSchema
+    name="Compress PDF"
+    description="Shrink a PDF's file size in seconds. Runs entirely in your browser — your file is never uploaded to a server."
+    faqs={[
+    {
+      "q": "Will this affect quality?",
+      "a": "Embedded photos are recompressed at a slightly lower quality; text and vector content are untouched."
+    },
+    {
+      "q": "How much smaller will my file be?",
+      "a": "Depends on the PDF — image-heavy PDFs shrink the most, text-only PDFs may barely change."
+    }
+  ]}
+  />
+
   <div class="max-w-2xl mx-auto px-4 pt-10 pb-4 text-center">
     <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">Compress PDF — Free</h1>
     <p class="mt-2 text-slate-600 dark:text-slate-400"><a href="/guides/how-kit-bin-works" class="hover:underline decoration-dotted underline-offset-2">Processed entirely in your browser. Your file is never uploaded to a server.</a></p>
