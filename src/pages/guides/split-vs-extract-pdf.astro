@@ -18,9 +18,9 @@ const schema = {
 >
   <script type="application/ld+json" set:html={JSON.stringify(schema)} is:inline />
 
-  <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-slate-700 dark:text-slate-300 space-y-4">
-    <p class="text-sm"><a href="/guides/" class="text-blue-600 dark:text-blue-400 hover:underline">← All guides</a></p>
-    <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">Split vs Extract: Two Different PDF Operations</h1>
+  <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-ink dark:text-slate-300 space-y-4">
+    <p class="text-sm"><a href="/guides/" class="text-primary dark:text-blue-400 hover:underline">← All guides</a></p>
+    <h1 class="text-3xl font-bold text-ink dark:text-slate-100">Split vs Extract: Two Different PDF Operations</h1>
 
     <p>
       "Split" and "extract" get used almost interchangeably in casual conversation about PDFs, but
@@ -28,7 +28,7 @@ const schema = {
       one leaves you with either far too many files or far too few.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">Splitting a PDF</h2>
+    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Splitting a PDF</h2>
     <p>
       A pure "split" tool takes every page in a document and turns it into its own separate PDF
       file — a 20-page document becomes 20 one-page files, delivered as a zip. There's no
@@ -37,7 +37,7 @@ const schema = {
       them all separated to sort through afterward.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">Extracting pages</h2>
+    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Extracting pages</h2>
     <p>
       "Extract" tools let you choose specific pages or a page range (like "pages 3, 7, and 12–15")
       and pull just those into a new document — either as one combined file or as separate files
@@ -45,22 +45,22 @@ const schema = {
       which pages you need and want everything else left out.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">Where this site's Split PDF tool fits</h2>
+    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Where this site's Split PDF tool fits</h2>
     <p>
-      <a href="/pdf/split" class="text-blue-600 dark:text-blue-400 hover:underline">Split PDF</a>
+      <a href="/pdf/split" class="text-primary dark:text-blue-400 hover:underline">Split PDF</a>
       on this site is the exhaustive kind — it always splits every page into its own file with no
       range selection. If you need only specific pages pulled out, the practical workaround today
       is to split the whole document, then keep only the page files you actually need and discard
       the rest, or use
-      <a href="/pdf/reorder-pages" class="text-blue-600 dark:text-blue-400 hover:underline">Reorder PDF Pages</a>
+      <a href="/pdf/reorder-pages" class="text-primary dark:text-blue-400 hover:underline">Reorder PDF Pages</a>
       first to move the pages you want to keep together before splitting.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">Related tools</h2>
+    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Related tools</h2>
     <p>
       Going the other direction and recombining files? See
-      <a href="/pdf/merge" class="text-blue-600 dark:text-blue-400 hover:underline">Merge PDF</a>
-      and <a href="/guides/merge-pdf-privately" class="text-blue-600 dark:text-blue-400 hover:underline">how to merge PDFs without uploading them</a>.
+      <a href="/pdf/merge" class="text-primary dark:text-blue-400 hover:underline">Merge PDF</a>
+      and <a href="/guides/merge-pdf-privately" class="text-primary dark:text-blue-400 hover:underline">how to merge PDFs without uploading them</a>.
     </p>
   </article>
 </Layout>

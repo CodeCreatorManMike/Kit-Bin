@@ -20,11 +20,21 @@ Favorites and the light/dark theme are both plain `localStorage` (`kitbin:favori
 with the project's no-accounts/no-persistent-storage rule. `src/lib/favorites.ts` is the shared
 helper; reuse it rather than re-deriving the localStorage key elsewhere.
 
-Per-tool icons live in `public/icons/<category>/<slug>.png` (sourced from the
-`kits-bin-ui-assets` pack) and are referenced via the `icon` field on each entry in
-`src/data/tools.ts` — add that field for any new tool going forward. Dark mode is Tailwind v4's
-class-based variant (`@custom-variant dark` in `global.css`, toggled on `<html>`), not the
-OS-preference-only default.
+Per-tool icons are hand-drawn SVG line icons, not files — defined as path primitives in
+`src/data/toolIcons.ts` (keyed by tool slug) and rendered by `ToolIcon.astro` (or, for the
+sidebar's dynamically-built Favorites list, the string-returning `toolIconHtml()` in
+`src/lib/toolIconHtml.ts`, which must stay in sync with `ToolIcon.astro`'s rendering). Add a new
+entry there for any new tool — do not drop in a raster icon. Category accent colors and icon
+glyphs live in the same file (`categoryColors`, `categoryIconPaths`), shared by the sidebar nav,
+category hub page headers, and the homepage's category group headings.
+
+Design tokens (`--color-primary`, `--color-ink`, `--color-muted`, `--color-app-bg`,
+`--color-surface`, `--color-border-soft`) are defined once via Tailwind v4's `@theme` block in
+`global.css` and used as regular utility classes (`bg-primary`, `text-ink`, etc.) — use these
+instead of raw `slate-*`/`blue-*` values for any new light-mode styling, so the whole site stays
+on one consistent palette. Dark mode is Tailwind v4's class-based variant (`@custom-variant dark`
+in `global.css`, toggled on `<html>`), not the OS-preference-only default, and still uses the
+plain `slate`/`blue` palette directly (no dark-mode equivalents were defined for the new tokens).
 
 ## Design principles (apply to every template)
 

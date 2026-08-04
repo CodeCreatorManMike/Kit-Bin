@@ -18,9 +18,9 @@ const schema = {
 >
   <script type="application/ld+json" set:html={JSON.stringify(schema)} is:inline />
 
-  <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-slate-700 dark:text-slate-300 space-y-4">
-    <p class="text-sm"><a href="/guides/" class="text-blue-600 dark:text-blue-400 hover:underline">← All guides</a></p>
-    <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">Why Is My PDF So Big?</h1>
+  <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-ink dark:text-slate-300 space-y-4">
+    <p class="text-sm"><a href="/guides/" class="text-primary dark:text-blue-400 hover:underline">← All guides</a></p>
+    <h1 class="text-3xl font-bold text-ink dark:text-slate-100">Why Is My PDF So Big?</h1>
 
     <p>
       A PDF that's mostly text should be small — often under a hundred kilobytes. If yours is
@@ -29,7 +29,7 @@ const schema = {
       run one.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">The usual suspects</h2>
+    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">The usual suspects</h2>
     <p>
       <strong>High-resolution embedded images.</strong> This is the single biggest driver of PDF size by far. A
       single photo straight from a modern phone camera can be 4-8MB on its own — include a few of
@@ -48,7 +48,7 @@ const schema = {
       accumulate redundant data from earlier versions that never gets cleaned up automatically.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">What compression actually does</h2>
+    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">What compression actually does</h2>
     <p>
       A PDF compressor isn't doing one thing — it's usually doing three, and they have very different
       trade-offs:
@@ -69,7 +69,7 @@ const schema = {
     </p>
     <p><strong>Object cleanup</strong> strips out redundant data left over from previous edits. Also fully lossless.</p>
 
-    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">Why compressing twice doesn't help much</h2>
+    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Why compressing twice doesn't help much</h2>
     <p>
       The first compression pass gets most of the available savings. Running a second pass on an
       already-compressed file typically only saves another few percent, because there's very little
@@ -79,7 +79,7 @@ const schema = {
       an already-compressed one.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">When not to compress</h2>
+    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">When not to compress</h2>
     <p>
       If your PDF needs to look right when printed, or contains a design/photography portfolio where
       image fidelity matters more than file size, aggressive compression can introduce visible
@@ -87,18 +87,18 @@ const schema = {
       compress a print-ready file down to screen resolution and then send it to a printer.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">Compressing</h2>
+    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Compressing</h2>
     <p>
-      <a href="/pdf/compress" class="text-blue-600 dark:text-blue-400 hover:underline">Compress PDF</a>
+      <a href="/pdf/compress" class="text-primary dark:text-blue-400 hover:underline">Compress PDF</a>
       — runs in your browser, and shows you the size before and after so you can judge the trade-off
       yourself before downloading.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">Related tools</h2>
+    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Related tools</h2>
     <p>
       If the size problem is specifically about images inside a PDF you're about to create (rather
       than one you already have), converting your source images with
-      <a href="/image/compress" class="text-blue-600 dark:text-blue-400 hover:underline">Compress Image</a>
+      <a href="/image/compress" class="text-primary dark:text-blue-400 hover:underline">Compress Image</a>
       before building the PDF avoids the problem entirely.
     </p>
   </article>

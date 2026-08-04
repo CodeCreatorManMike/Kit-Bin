@@ -18,9 +18,9 @@ const schema = {
 >
   <script type="application/ld+json" set:html={JSON.stringify(schema)} is:inline />
 
-  <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-slate-700 dark:text-slate-300 space-y-4">
-    <p class="text-sm"><a href="/guides/" class="text-blue-600 dark:text-blue-400 hover:underline">← All guides</a></p>
-    <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">WebP vs PNG vs JPG: What the Difference Actually Costs You</h1>
+  <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-ink dark:text-slate-300 space-y-4">
+    <p class="text-sm"><a href="/guides/" class="text-primary dark:text-blue-400 hover:underline">← All guides</a></p>
+    <h1 class="text-3xl font-bold text-ink dark:text-slate-100">WebP vs PNG vs JPG: What the Difference Actually Costs You</h1>
 
     <p>
       These three formats get compared constantly, usually in a list that just says "WebP is smaller"
@@ -28,7 +28,7 @@ const schema = {
       each one genuinely wins.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">The core distinction: lossy vs lossless</h2>
+    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">The core distinction: lossy vs lossless</h2>
     <p>
       <strong>JPG</strong> is lossy — it discards some image detail (in ways mostly imperceptible to the human eye)
       to shrink the file. It has no transparency support at all. Every re-save of a JPG discards a bit
@@ -51,7 +51,7 @@ const schema = {
       it's a more efficient version of both of their trade-offs at once.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">So why doesn't everyone just use WebP for everything?</h2>
+    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">So why doesn't everyone just use WebP for everything?</h2>
     <p>
       Mostly compatibility history, and that history is now mostly resolved. WebP support used to be
       inconsistent across browsers and older image-editing software; as of 2026, all current major
@@ -64,7 +64,7 @@ const schema = {
       <li><strong>PNG</strong>: same universal-compatibility reasoning, plus any workflow where you need guaranteed pixel-perfect lossless quality and don't want to think about whether the receiving end supports WebP</li>
     </ul>
 
-    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">The practical answer</h2>
+    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">The practical answer</h2>
     <p>
       For a photo you're putting on a website: WebP, lossy mode. For a logo or screenshot you're
       putting on a website: WebP, lossless mode, or PNG if you want maximum compatibility insurance
@@ -73,18 +73,18 @@ const schema = {
       what it's asking for rather than fighting the requirement.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">Converting</h2>
+    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Converting</h2>
     <p>
-      <a href="/image/webp-to-png" class="text-blue-600 dark:text-blue-400 hover:underline">WebP to PNG</a>
-      · <a href="/image/png-to-webp" class="text-blue-600 dark:text-blue-400 hover:underline">PNG to WebP</a>
-      · <a href="/image/compress" class="text-blue-600 dark:text-blue-400 hover:underline">Compress Image</a>
+      <a href="/image/webp-to-png" class="text-primary dark:text-blue-400 hover:underline">WebP to PNG</a>
+      · <a href="/image/png-to-webp" class="text-primary dark:text-blue-400 hover:underline">PNG to WebP</a>
+      · <a href="/image/compress" class="text-primary dark:text-blue-400 hover:underline">Compress Image</a>
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">Related guide</h2>
+    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Related guide</h2>
     <p>
       If the image in question is a photo straight off an iPhone, it's probably HEIC, not JPG or PNG
       in the first place — see
-      <a href="/guides/heic-explained" class="text-blue-600 dark:text-blue-400 hover:underline">Why Won't My iPhone Photos Open on Windows?</a>
+      <a href="/guides/heic-explained" class="text-primary dark:text-blue-400 hover:underline">Why Won't My iPhone Photos Open on Windows?</a>
       for that specific case.
     </p>
   </article>

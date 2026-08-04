@@ -18,9 +18,9 @@ const schema = {
 >
   <script type="application/ld+json" set:html={JSON.stringify(schema)} is:inline />
 
-  <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-slate-700 dark:text-slate-300 space-y-4">
-    <p class="text-sm"><a href="/guides/" class="text-blue-600 dark:text-blue-400 hover:underline">← All guides</a></p>
-    <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">Why Some PDFs Barely Compress</h1>
+  <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-ink dark:text-slate-300 space-y-4">
+    <p class="text-sm"><a href="/guides/" class="text-primary dark:text-blue-400 hover:underline">← All guides</a></p>
+    <h1 class="text-3xl font-bold text-ink dark:text-slate-100">Why Some PDFs Barely Compress</h1>
 
     <p>
       Run a 40MB PDF through a compressor and get a 38MB file back, and it's easy to assume the
@@ -28,7 +28,7 @@ const schema = {
       compressor is able to touch.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">What a PDF compressor actually compresses</h2>
+    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">What a PDF compressor actually compresses</h2>
     <p>
       A PDF file is a container holding several very different kinds of content: vector drawing
       instructions, embedded fonts, plain text, and — usually the biggest contributor to file
@@ -37,7 +37,7 @@ const schema = {
       them at a lower quality setting, which is where the size reduction actually comes from.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">Why a PDF with little to no images barely shrinks</h2>
+    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Why a PDF with little to no images barely shrinks</h2>
     <p>
       Vector graphics, embedded fonts, and plain text are already compact by nature — a page of
       text takes up a few kilobytes regardless of how many words are on it, because it's stored
@@ -48,7 +48,7 @@ const schema = {
       the size estimate itself was off.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">What actually determines the win</h2>
+    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">What actually determines the win</h2>
     <ul class="list-disc pl-5 space-y-1">
       <li><strong>Scanned documents:</strong> usually compress well — each page is one large JPEG, and re-encoding it at lower quality has a real, visible effect on file size.</li>
       <li><strong>Photo-heavy reports:</strong> compress well for the same reason — the embedded photos are the bulk of the size.</li>
@@ -57,15 +57,15 @@ const schema = {
     </ul>
 
     <p>
-      This site's <a href="/pdf/compress" class="text-blue-600 dark:text-blue-400 hover:underline">Compress PDF</a>
+      This site's <a href="/pdf/compress" class="text-primary dark:text-blue-400 hover:underline">Compress PDF</a>
       tool follows exactly this approach: it finds embedded JPEG images and re-encodes them at a
       lower quality, leaving text, fonts, and vector content untouched — which is why the result
       you get tracks directly with how image-heavy your original file was.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">Related</h2>
+    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Related</h2>
     <p>
-      <a href="/guides/why-pdfs-get-large" class="text-blue-600 dark:text-blue-400 hover:underline">Why is my PDF so big?</a>
+      <a href="/guides/why-pdfs-get-large" class="text-primary dark:text-blue-400 hover:underline">Why is my PDF so big?</a>
       covers the other side of this — what actually causes a large file size in the first place.
     </p>
   </article>

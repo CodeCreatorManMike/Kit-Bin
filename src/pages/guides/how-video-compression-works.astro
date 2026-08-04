@@ -18,23 +18,23 @@ const schema = {
 >
   <script type="application/ld+json" set:html={JSON.stringify(schema)} is:inline />
 
-  <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-slate-700 dark:text-slate-300 space-y-4">
-    <p class="text-sm"><a href="/guides/" class="text-blue-600 dark:text-blue-400 hover:underline">← All guides</a></p>
-    <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">How Video Compression Actually Works</h1>
+  <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-ink dark:text-slate-300 space-y-4">
+    <p class="text-sm"><a href="/guides/" class="text-primary dark:text-blue-400 hover:underline">← All guides</a></p>
+    <h1 class="text-3xl font-bold text-ink dark:text-slate-100">How Video Compression Actually Works</h1>
 
     <p>
       "Compress the video" sounds like one action, but a video file's size comes from four
       independent factors, and a compressor is really adjusting some combination of them.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">Resolution</h2>
+    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Resolution</h2>
     <p>
       The pixel dimensions of each frame. Dropping from 1080p to 720p reduces the number of pixels
       per frame by more than half, which is one of the most effective ways to shrink a file — but
       it's a visible, permanent change to the video's sharpness.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">Bitrate</h2>
+    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Bitrate</h2>
     <p>
       How much data is used to encode each second of video, usually measured in megabits per
       second. Bitrate and file size are directly proportional — half the bitrate is roughly half
@@ -43,7 +43,7 @@ const schema = {
       high-detail scenes.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">Codec</h2>
+    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Codec</h2>
     <p>
       The compression algorithm itself. Newer codecs (H.265/HEVC, AV1, VP9) squeeze more visual
       quality out of the same bitrate than older ones (H.264), because they use more sophisticated
@@ -52,7 +52,7 @@ const schema = {
       not universally supported by every player or editor.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">Frame rate</h2>
+    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Frame rate</h2>
     <p>
       How many frames are captured per second. Dropping from 60fps to 30fps roughly halves the
       number of frames that need encoding, cutting file size — at the cost of motion looking
@@ -60,7 +60,7 @@ const schema = {
       content.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">Why every lossy compression changes something</h2>
+    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Why every lossy compression changes something</h2>
     <p>
       These four levers all trade file size against a specific, identifiable kind of visual
       quality — sharpness, smoothness, detail in motion, or fine texture. There's no setting that
@@ -70,7 +70,7 @@ const schema = {
     </p>
 
     <p>
-      <a href="/video/compress" class="text-blue-600 dark:text-blue-400 hover:underline">Compress Video</a>
+      <a href="/video/compress" class="text-primary dark:text-blue-400 hover:underline">Compress Video</a>
       on this site uses one fixed quality setting rather than exposing these controls
       individually — it re-encodes at a lower bitrate automatically rather than letting you dial
       in resolution or codec by hand.

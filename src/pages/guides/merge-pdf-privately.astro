@@ -18,9 +18,9 @@ const schema = {
 >
   <script type="application/ld+json" set:html={JSON.stringify(schema)} is:inline />
 
-  <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-slate-700 dark:text-slate-300 space-y-4">
-    <p class="text-sm"><a href="/guides/" class="text-blue-600 dark:text-blue-400 hover:underline">← All guides</a></p>
-    <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">Merging PDFs Without Uploading Them</h1>
+  <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-ink dark:text-slate-300 space-y-4">
+    <p class="text-sm"><a href="/guides/" class="text-primary dark:text-blue-400 hover:underline">← All guides</a></p>
+    <h1 class="text-3xl font-bold text-ink dark:text-slate-100">Merging PDFs Without Uploading Them</h1>
 
     <p>
       Most "merge PDF" sites work the same way: you upload your files to their server, a script
@@ -30,7 +30,7 @@ const schema = {
       server, even briefly, outside your control.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">What "uploaded" actually means</h2>
+    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">What "uploaded" actually means</h2>
     <p>
       Once a file leaves your device over the network, you're trusting that service's storage
       practices, its retention policy, whoever has access to its servers, and its security against
@@ -39,7 +39,7 @@ const schema = {
       delete your files after 1 hour" is a policy statement, not a guarantee.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">The alternative: merge in the browser</h2>
+    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">The alternative: merge in the browser</h2>
     <p>
       A PDF merge doesn't actually require a server at all — it's mechanical work (copying pages
       from each source file into one new file) that a browser can do entirely on your own device
@@ -47,25 +47,25 @@ const schema = {
       to you as a download; nothing is ever sent anywhere.
     </p>
     <p>
-      <a href="/pdf/merge" class="text-blue-600 dark:text-blue-400 hover:underline">Merge PDF</a>
+      <a href="/pdf/merge" class="text-primary dark:text-blue-400 hover:underline">Merge PDF</a>
       on this site works this way — read
-      <a href="/guides/how-kit-bin-works" class="text-blue-600 dark:text-blue-400 hover:underline">how Kit-Bin works</a>
+      <a href="/guides/how-kit-bin-works" class="text-primary dark:text-blue-400 hover:underline">how Kit-Bin works</a>
       for the technical detail on why that's verifiable rather than just a claim.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">How to check any tool, not just this one</h2>
+    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">How to check any tool, not just this one</h2>
     <p>
       Open your browser's network tab before using a file tool. Drop in a file and watch for
       outgoing requests. A tool that processes files client-side won't show your file's data
       leaving in a network request; a server-based one will show an upload.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">Related tools</h2>
+    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Related tools</h2>
     <p>
       Already merged and need to reorder pages first? Try
-      <a href="/pdf/reorder-pages" class="text-blue-600 dark:text-blue-400 hover:underline">Reorder PDF Pages</a>.
+      <a href="/pdf/reorder-pages" class="text-primary dark:text-blue-400 hover:underline">Reorder PDF Pages</a>.
       Need the opposite operation? See
-      <a href="/guides/split-vs-extract-pdf" class="text-blue-600 dark:text-blue-400 hover:underline">Split vs Extract PDF Pages</a>.
+      <a href="/guides/split-vs-extract-pdf" class="text-primary dark:text-blue-400 hover:underline">Split vs Extract PDF Pages</a>.
     </p>
   </article>
 </Layout>

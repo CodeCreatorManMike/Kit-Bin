@@ -11,23 +11,23 @@ const { accept, multiple = false, dropLabel = 'Drop file here or click to browse
 <div class="max-w-2xl mx-auto px-4">
   <div
     id="dropzone"
-    class="cursor-pointer border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-xl p-12 text-center hover:border-slate-400 dark:hover:border-slate-500 transition-colors"
+    class="cursor-pointer border-2 border-dashed border-border-soft dark:border-slate-700 rounded-xl p-12 text-center hover:border-primary/40 dark:hover:border-slate-500 transition-colors"
   >
     <p class="text-lg font-medium">{dropLabel}</p>
-    <p id="file-info" class="mt-2 text-sm text-slate-500 dark:text-slate-400"></p>
+    <p id="file-info" class="mt-2 text-sm text-muted dark:text-slate-400"></p>
     <input id="file-input" type="file" accept={accept} multiple={multiple} class="hidden" />
   </div>
 
-  <p id="status" class="hidden mt-4 text-center text-sm text-slate-600 dark:text-slate-400"></p>
+  <p id="status" class="hidden mt-4 text-center text-sm text-muted dark:text-slate-400"></p>
 
-  <div id="result" class="hidden mt-4 rounded-xl border border-slate-200 dark:border-slate-700 p-6 text-center">
+  <div id="result" class="hidden mt-4 rounded-xl border border-border-soft dark:border-slate-700 p-6 text-center">
     <a
       id="download-link"
-      class="inline-block rounded-lg bg-blue-600 dark:bg-blue-500 px-6 py-3 text-white font-medium hover:bg-blue-700 dark:hover:bg-blue-600"
+      class="inline-block rounded-lg bg-primary dark:bg-blue-500 px-6 py-3 text-white font-medium hover:bg-primary-hover dark:hover:bg-blue-600"
       >Download result</a
     >
-    <p data-result-note class="mt-2 text-sm text-slate-500 dark:text-slate-400"></p>
-    <button id="reset-button" class="mt-4 text-sm text-slate-500 dark:text-slate-400 underline hover:text-slate-700 dark:hover:text-slate-200">
+    <p data-result-note class="mt-2 text-sm text-muted dark:text-slate-400"></p>
+    <button id="reset-button" class="mt-4 text-sm text-muted dark:text-slate-400 underline hover:text-ink dark:hover:text-slate-200">
       Process another file
     </button>
   </div>

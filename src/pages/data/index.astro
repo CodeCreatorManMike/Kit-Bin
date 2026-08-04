@@ -3,15 +3,24 @@ import Layout from '../../layouts/Layout.astro';
 import CategorySchema from '../../components/CategorySchema.astro';
 import ToolCard from '../../components/ToolCard.astro';
 import { tools } from '../../data/tools';
+import { categoryColors, categoryIconPaths } from '../../data/toolIcons';
 
 const dataTools = tools.filter((t) => t.category === 'data');
+const meta = categoryColors.data;
 ---
 
 <Layout title="Free Data Tools | Kit-Bin" description="Convert between CSV, JSON, and Excel, and clean up messy CSV data, entirely in your browser.">
   <CategorySchema categoryName="Data Tools" />
   <div class="max-w-5xl mx-auto px-6 py-10">
-    <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">Free Data Tools</h1>
-    <p class="mt-3 text-slate-600 dark:text-slate-400 max-w-2xl">
+    <div class="flex items-center gap-3">
+      <span class={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${meta.bg} ${meta.text}`}>
+        <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.75">
+          <path d={categoryIconPaths.data} stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </span>
+      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-ink dark:text-slate-100">Free Data Tools</h1>
+    </div>
+    <p class="mt-3 text-muted dark:text-slate-400 max-w-2xl">
       Convert CSV data to JSON or Excel, flatten JSON back into rows, or clean up a messy CSV file
       before importing it somewhere else. Every tool below runs entirely in your browser — your
       data file is never uploaded anywhere.

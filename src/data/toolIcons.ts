@@ -9,13 +9,23 @@ export type IconPrimitive =
   | { t: 'path'; d: string }
   | { t: 'polyline'; points: string };
 
-export const categoryColors: Record<string, { bg: string; text: string }> = {
-  pdf: { bg: 'bg-red-50 dark:bg-red-950/40', text: 'text-red-600 dark:text-red-400' },
-  image: { bg: 'bg-emerald-50 dark:bg-emerald-950/40', text: 'text-emerald-600 dark:text-emerald-400' },
-  audio: { bg: 'bg-amber-50 dark:bg-amber-950/40', text: 'text-amber-600 dark:text-amber-400' },
-  video: { bg: 'bg-violet-50 dark:bg-violet-950/40', text: 'text-violet-600 dark:text-violet-400' },
-  data: { bg: 'bg-cyan-50 dark:bg-cyan-950/40', text: 'text-cyan-600 dark:text-cyan-400' },
-  guides: { bg: 'bg-indigo-50 dark:bg-indigo-950/40', text: 'text-indigo-600 dark:text-indigo-400' },
+export const categoryColors: Record<string, { bg: string; text: string; dot: string }> = {
+  pdf: { bg: 'bg-red-50 dark:bg-red-950/40', text: 'text-red-600 dark:text-red-400', dot: 'bg-red-400' },
+  image: { bg: 'bg-emerald-50 dark:bg-emerald-950/40', text: 'text-emerald-600 dark:text-emerald-400', dot: 'bg-emerald-400' },
+  audio: { bg: 'bg-amber-50 dark:bg-amber-950/40', text: 'text-amber-600 dark:text-amber-400', dot: 'bg-amber-400' },
+  video: { bg: 'bg-violet-50 dark:bg-violet-950/40', text: 'text-violet-600 dark:text-violet-400', dot: 'bg-violet-400' },
+  data: { bg: 'bg-cyan-50 dark:bg-cyan-950/40', text: 'text-cyan-600 dark:text-cyan-400', dot: 'bg-cyan-400' },
+  guides: { bg: 'bg-indigo-50 dark:bg-indigo-950/40', text: 'text-indigo-600 dark:text-indigo-400', dot: 'bg-indigo-400' },
+};
+
+/** Single-path category glyphs, used by the sidebar nav and category hub page headers. */
+export const categoryIconPaths: Record<string, string> = {
+  pdf: 'M7 3h7l5 5v13a1 1 0 01-1 1H7a1 1 0 01-1-1V4a1 1 0 011-1zM14 3v5h5',
+  image: 'M4 5h16a1 1 0 011 1v12a1 1 0 01-1 1H4a1 1 0 01-1-1V6a1 1 0 011-1zM8 11a2 2 0 100-4 2 2 0 000 4zM3 16l5-5 4 4 3-3 6 6',
+  audio: 'M9 18V5l11-2v13M9 18a3 3 0 11-6 0 3 3 0 016 0zM20 16a3 3 0 11-6 0 3 3 0 016 0z',
+  video: 'M4 6a1 1 0 011-1h10a1 1 0 011 1v12a1 1 0 01-1 1H5a1 1 0 01-1-1V6zM16 10l5-3v10l-5-3',
+  data: 'M4 5h16v4H4V5zM4 11h7v8H4v-8zM13 11h7v8h-7v-8z',
+  guides: 'M4 5c2-1 6-1 8 0v14c-2-1-6-1-8 0V5zM20 5c-2-1-6-1-8 0v14c2-1 6-1 8 0V5z',
 };
 
 const page: IconPrimitive[] = [{ t: 'path', d: 'M6 3h8l4 4v14a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z' }, { t: 'path', d: 'M14 3v4h4' }];

@@ -29,15 +29,15 @@ import AdUnit from '../../components/AdUnit.astro';
   />
 
   <div class="max-w-2xl mx-auto px-4 pt-10 pb-4 text-center">
-    <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">Extract Audio from a Video File</h1>
-    <p class="mt-2 text-slate-600 dark:text-slate-400"><a href="/guides/how-kit-bin-works" class="hover:underline decoration-dotted underline-offset-2">Processed entirely in your browser. Your file is never uploaded to a server.</a></p>
+    <h1 class="text-3xl font-bold text-ink dark:text-slate-100">Extract Audio from a Video File</h1>
+    <p class="mt-2 text-muted dark:text-slate-400"><a href="/guides/how-kit-bin-works" class="hover:underline decoration-dotted underline-offset-2">Processed entirely in your browser. Your file is never uploaded to a server.</a></p>
   </div>
 
   <ToolWidget accept="video/*" dropLabel="Drop a video file here or click to browse" />
 
   <AdUnit />
 
-  <div class="max-w-2xl mx-auto px-4 py-12 text-slate-700 dark:text-slate-300 space-y-6">
+  <div class="max-w-2xl mx-auto px-4 py-12 text-ink dark:text-slate-300 space-y-6">
     <p>This tool pulls the existing audio track out of a video file, discarding the video entirely.</p>
     <p>Drop your video above. The audio file downloads automatically once ready — this is one of the fastest tools on the site, since it copies the audio stream directly rather than decoding and re-encoding it.</p>
     <div>
@@ -45,21 +45,21 @@ import AdUnit from '../../components/AdUnit.astro';
       <div class="space-y-4 mt-2">
         <div>
           <p class="font-medium">What format is the output?</p>
-          <p class="text-slate-600 dark:text-slate-400">WebM audio, regardless of the input video format.</p>
+          <p class="text-muted dark:text-slate-400">WebM audio, regardless of the input video format.</p>
         </div>
         <div>
           <p class="font-medium">Is this the same as converting the video to audio?</p>
-          <p class="text-slate-600 dark:text-slate-400">Not quite — this demuxes the existing audio track directly rather than decoding and re-encoding it, which is why it's fast. If you need a specific audio format like MP3, use the WebM output with an audio converter afterward.</p>
+          <p class="text-muted dark:text-slate-400">Not quite — this demuxes the existing audio track directly rather than decoding and re-encoding it, which is why it's fast. If you need a specific audio format like MP3, use the WebM output with an audio converter afterward.</p>
         </div>
         <div>
           <p class="font-medium">What can I use the extracted audio for?</p>
-          <p class="text-slate-600 dark:text-slate-400">Pulling the audio from an interview or podcast recording, saving a song from a music video file you already own, or getting a voice memo out of a screen recording.</p>
+          <p class="text-muted dark:text-slate-400">Pulling the audio from an interview or podcast recording, saving a song from a music video file you already own, or getting a voice memo out of a screen recording.</p>
         </div>
       </div>
     </div>
     <p class="text-sm">
       Need the video without the sound instead? Try
-      <a href="/video/mute" class="text-blue-600 dark:text-blue-400 hover:underline">Mute Video</a>.
+      <a href="/video/mute" class="text-primary dark:text-blue-400 hover:underline">Mute Video</a>.
     </p>
   </div>
 

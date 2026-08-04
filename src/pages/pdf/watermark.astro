@@ -31,26 +31,26 @@ const faqs = [
   />
 
   <div class="max-w-2xl mx-auto px-4 pt-10 pb-4 text-center">
-    <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">Watermark a PDF Online</h1>
-    <p class="mt-2 text-slate-600 dark:text-slate-400"><a href="/guides/how-kit-bin-works" class="hover:underline decoration-dotted underline-offset-2">Processed entirely in your browser. Your file is never uploaded to a server.</a></p>
+    <h1 class="text-3xl font-bold text-ink dark:text-slate-100">Watermark a PDF Online</h1>
+    <p class="mt-2 text-muted dark:text-slate-400"><a href="/guides/how-kit-bin-works" class="hover:underline decoration-dotted underline-offset-2">Processed entirely in your browser. Your file is never uploaded to a server.</a></p>
   </div>
 
   <div class="max-w-2xl mx-auto px-4 mb-4 flex items-center justify-center gap-2 text-sm">
     <label for="watermark-text">Watermark text:</label>
-    <input id="watermark-text" type="text" value="CONFIDENTIAL" class="rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 px-2 py-1" />
+    <input id="watermark-text" type="text" value="CONFIDENTIAL" class="rounded border border-border-soft dark:border-slate-700 bg-surface dark:bg-slate-900 text-ink dark:text-slate-100 px-2 py-1" />
   </div>
 
   <ToolWidget accept="application/pdf" dropLabel="Drop a PDF file here or click to browse" />
 
   <AdUnit />
 
-  <div class="max-w-2xl mx-auto px-4 py-12 text-slate-700 dark:text-slate-300 space-y-6">
+  <div class="max-w-2xl mx-auto px-4 py-12 text-ink dark:text-slate-300 space-y-6">
     <p>
       Set your watermark text — "DRAFT," "CONFIDENTIAL," a name, a date — and drop your PDF above.
       A semi-transparent stamp is drawn diagonally across every page, then the file downloads
       automatically once ready.
     </p>
-    <p class="text-slate-600 dark:text-slate-400">
+    <p class="text-muted dark:text-slate-400">
       A visible watermark is a signal, not a lock: it makes a document's status obvious at a
       glance and discourages someone from passing it off as final, but it doesn't stop anyone from
       opening, copying, or printing the file.
@@ -62,7 +62,7 @@ const faqs = [
         {faqs.map((f) => (
           <div>
             <p class="font-medium">{f.q}</p>
-            <p class="text-slate-600 dark:text-slate-400">{f.a}</p>
+            <p class="text-muted dark:text-slate-400">{f.a}</p>
           </div>
         ))}
       </div>

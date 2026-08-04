@@ -39,15 +39,15 @@ const faqs = [
   />
 
   <div class="max-w-2xl mx-auto px-4 pt-10 pb-4 text-center">
-    <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">Convert HEIC Photos to JPG</h1>
-    <p class="mt-2 text-slate-600 dark:text-slate-400"><a href="/guides/how-kit-bin-works" class="hover:underline decoration-dotted underline-offset-2">Processed entirely in your browser. Your file is never uploaded to a server.</a></p>
+    <h1 class="text-3xl font-bold text-ink dark:text-slate-100">Convert HEIC Photos to JPG</h1>
+    <p class="mt-2 text-muted dark:text-slate-400"><a href="/guides/how-kit-bin-works" class="hover:underline decoration-dotted underline-offset-2">Processed entirely in your browser. Your file is never uploaded to a server.</a></p>
   </div>
 
   <ToolWidget accept=".heic,.heif,image/heic,image/heif" dropLabel="Drop a HEIC photo here or click to browse" />
 
   <AdUnit />
 
-  <div class="max-w-2xl mx-auto px-4 py-12 text-slate-700 dark:text-slate-300 space-y-6">
+  <div class="max-w-2xl mx-auto px-4 py-12 text-ink dark:text-slate-300 space-y-6">
     <p>
       Convert HEIC photos from an iPhone to widely compatible JPG images. Use JPG when a Windows
       application, website, or older device can't open the original HEIC file — JPG is
@@ -60,17 +60,17 @@ const faqs = [
         {faqs.map((f) => (
           <div>
             <p class="font-medium">{f.q}</p>
-            <p class="text-slate-600 dark:text-slate-400">{f.a}</p>
+            <p class="text-muted dark:text-slate-400">{f.a}</p>
           </div>
         ))}
       </div>
     </div>
 
-    <p class="text-sm">Want to understand why iPhone photos use this format in the first place? <a href="/guides/heic-explained" class="text-blue-600 dark:text-blue-400 hover:underline">Read the guide</a></p>
+    <p class="text-sm">Want to understand why iPhone photos use this format in the first place? <a href="/guides/heic-explained" class="text-primary dark:text-blue-400 hover:underline">Read the guide</a></p>
     <p class="text-sm">
       Need the JPG smaller, or a specific size? Try
-      <a href="/image/compress" class="text-blue-600 dark:text-blue-400 hover:underline">Compress Image</a>
-      or <a href="/image/resize" class="text-blue-600 dark:text-blue-400 hover:underline">Resize Image</a> next.
+      <a href="/image/compress" class="text-primary dark:text-blue-400 hover:underline">Compress Image</a>
+      or <a href="/image/resize" class="text-primary dark:text-blue-400 hover:underline">Resize Image</a> next.
     </p>
   </div>
 

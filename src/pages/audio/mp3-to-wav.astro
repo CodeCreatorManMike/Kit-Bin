@@ -35,15 +35,15 @@ const faqs = [
   />
 
   <div class="max-w-2xl mx-auto px-4 pt-10 pb-4 text-center">
-    <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">Convert MP3 to an Uncompressed WAV File</h1>
-    <p class="mt-2 text-slate-600 dark:text-slate-400"><a href="/guides/how-kit-bin-works" class="hover:underline decoration-dotted underline-offset-2">Processed entirely in your browser. Your file is never uploaded to a server.</a></p>
+    <h1 class="text-3xl font-bold text-ink dark:text-slate-100">Convert MP3 to an Uncompressed WAV File</h1>
+    <p class="mt-2 text-muted dark:text-slate-400"><a href="/guides/how-kit-bin-works" class="hover:underline decoration-dotted underline-offset-2">Processed entirely in your browser. Your file is never uploaded to a server.</a></p>
   </div>
 
   <ToolWidget accept="audio/mpeg,.mp3" dropLabel="Drop an MP3 file here or click to browse" />
 
   <AdUnit />
 
-  <div class="max-w-2xl mx-auto px-4 py-12 text-slate-700 dark:text-slate-300 space-y-6">
+  <div class="max-w-2xl mx-auto px-4 py-12 text-ink dark:text-slate-300 space-y-6">
     <p>
       Converting MP3 to WAV makes the audio easier to use in editors that expect uncompressed
       PCM. It does not restore detail that was removed when the MP3 was originally encoded — it
@@ -56,7 +56,7 @@ const faqs = [
         {faqs.map((f) => (
           <div>
             <p class="font-medium">{f.q}</p>
-            <p class="text-slate-600 dark:text-slate-400">{f.a}</p>
+            <p class="text-muted dark:text-slate-400">{f.a}</p>
           </div>
         ))}
       </div>
@@ -64,8 +64,8 @@ const faqs = [
 
     <p class="text-sm">
       Need to trim or combine the result? Try
-      <a href="/audio/trim" class="text-blue-600 dark:text-blue-400 hover:underline">Trim Audio</a>
-      or <a href="/audio/merge" class="text-blue-600 dark:text-blue-400 hover:underline">Merge Audio</a>.
+      <a href="/audio/trim" class="text-primary dark:text-blue-400 hover:underline">Trim Audio</a>
+      or <a href="/audio/merge" class="text-primary dark:text-blue-400 hover:underline">Merge Audio</a>.
     </p>
   </div>
 

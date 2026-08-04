@@ -18,9 +18,9 @@ const schema = {
 >
   <script type="application/ld+json" set:html={JSON.stringify(schema)} is:inline />
 
-  <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-slate-700 dark:text-slate-300 space-y-4">
-    <p class="text-sm"><a href="/guides/" class="text-blue-600 dark:text-blue-400 hover:underline">← All guides</a></p>
-    <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">Resizing Without Distortion</h1>
+  <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-ink dark:text-slate-300 space-y-4">
+    <p class="text-sm"><a href="/guides/" class="text-primary dark:text-blue-400 hover:underline">← All guides</a></p>
+    <h1 class="text-3xl font-bold text-ink dark:text-slate-100">Resizing Without Distortion</h1>
 
     <p>
       A stretched-looking photo — faces slightly too wide, circles turned into ovals — almost
@@ -28,7 +28,7 @@ const schema = {
       match the original image's proportions.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">What aspect ratio actually is</h2>
+    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">What aspect ratio actually is</h2>
     <p>
       Aspect ratio is just the relationship between an image's width and height, expressed as a
       ratio — a 4000×3000 photo has a 4:3 ratio, meaning for every 4 units of width there are 3
@@ -38,7 +38,7 @@ const schema = {
       the original.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">The math</h2>
+    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">The math</h2>
     <p>
       To resize proportionally, pick one dimension and calculate the other:
       <code class="rounded bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5">new height = original height × (new width ÷ original width)</code>.
@@ -46,7 +46,7 @@ const schema = {
       3000 × (1200 ÷ 4000) = 900px — so 1200×900, not 1200×anything-else.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">Why some tools distort by default</h2>
+    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Why some tools distort by default</h2>
     <p>
       Tools that expose separate width and height fields without linking them let you type in any
       combination, including ones that don't match the source ratio — the tool doesn't guess your
@@ -55,20 +55,20 @@ const schema = {
       possible by construction.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">Where this site's Resize Image tool fits</h2>
+    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Where this site's Resize Image tool fits</h2>
     <p>
-      <a href="/image/resize" class="text-blue-600 dark:text-blue-400 hover:underline">Resize Image</a>
+      <a href="/image/resize" class="text-primary dark:text-blue-400 hover:underline">Resize Image</a>
       on this site takes a target width and scales the height to match automatically, so the
       aspect ratio can't be broken through the tool itself — it doesn't currently expose an
       independent height field or a percentage-based resize.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">Upscaling is a separate issue</h2>
+    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Upscaling is a separate issue</h2>
     <p>
       Keeping the correct ratio prevents distortion, but it doesn't add detail — scaling a small
       image up to a larger size just stretches the existing pixels across more space and can't
       recover detail that was never captured. See
-      <a href="/guides/compression-vs-resizing" class="text-blue-600 dark:text-blue-400 hover:underline">compression vs resizing</a>
+      <a href="/guides/compression-vs-resizing" class="text-primary dark:text-blue-400 hover:underline">compression vs resizing</a>
       for more on what resizing can and can't do.
     </p>
   </article>

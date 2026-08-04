@@ -18,16 +18,16 @@ const schema = {
 >
   <script type="application/ld+json" set:html={JSON.stringify(schema)} is:inline />
 
-  <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-slate-700 dark:text-slate-300 space-y-4">
-    <p class="text-sm"><a href="/guides/" class="text-blue-600 dark:text-blue-400 hover:underline">← All guides</a></p>
-    <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">Why WebP to PNG Makes Files Bigger</h1>
+  <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-ink dark:text-slate-300 space-y-4">
+    <p class="text-sm"><a href="/guides/" class="text-primary dark:text-blue-400 hover:underline">← All guides</a></p>
+    <h1 class="text-3xl font-bold text-ink dark:text-slate-100">Why WebP to PNG Makes Files Bigger</h1>
 
     <p>
       Convert a WebP image to PNG and the result is often noticeably larger than the source —
       sometimes several times larger. That's expected behavior, not a broken conversion.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">Two different compression approaches</h2>
+    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Two different compression approaches</h2>
     <p>
       WebP's lossless mode and lossy mode both use more modern, more efficient compression
       techniques than PNG — WebP was designed specifically to beat PNG and JPEG at their own
@@ -36,7 +36,7 @@ const schema = {
       when both are storing the image losslessly with zero quality loss.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">If the source was lossy WebP</h2>
+    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">If the source was lossy WebP</h2>
     <p>
       If the original WebP was saved in lossy mode (common for photos), converting to PNG doesn't
       just re-pack the same data more loosely — it takes the already-decoded pixels and stores all
@@ -45,14 +45,14 @@ const schema = {
       uncompressed-relative-to-WebP, which naturally takes more space.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">So why convert at all?</h2>
+    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">So why convert at all?</h2>
     <p>
       Not every tool or platform accepts WebP — older image editors, some CMS upload systems, and
       certain print workflows still expect PNG or JPEG specifically. The size increase is the
       cost of that compatibility, the same tradeoff as HEIC-to-JPG conversion for photos.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">If file size matters more than compatibility</h2>
+    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">If file size matters more than compatibility</h2>
     <p>
       If you don't specifically need PNG, keeping the file as WebP (or converting a photo to JPEG
       instead, which also compresses more efficiently than PNG for photographic content) will
@@ -60,8 +60,8 @@ const schema = {
     </p>
 
     <p>
-      <a href="/image/webp-to-png" class="text-blue-600 dark:text-blue-400 hover:underline">Convert WebP to PNG</a>
-      and <a href="/guides/webp-vs-png-jpg" class="text-blue-600 dark:text-blue-400 hover:underline">read the full WebP vs PNG vs JPG comparison</a>
+      <a href="/image/webp-to-png" class="text-primary dark:text-blue-400 hover:underline">Convert WebP to PNG</a>
+      and <a href="/guides/webp-vs-png-jpg" class="text-primary dark:text-blue-400 hover:underline">read the full WebP vs PNG vs JPG comparison</a>
       for when each format actually wins.
     </p>
   </article>

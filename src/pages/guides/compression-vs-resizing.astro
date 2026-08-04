@@ -18,9 +18,9 @@ const schema = {
 >
   <script type="application/ld+json" set:html={JSON.stringify(schema)} is:inline />
 
-  <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-slate-700 dark:text-slate-300 space-y-4">
-    <p class="text-sm"><a href="/guides/" class="text-blue-600 dark:text-blue-400 hover:underline">← All guides</a></p>
-    <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">Image Compression vs Resizing</h1>
+  <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-ink dark:text-slate-300 space-y-4">
+    <p class="text-sm"><a href="/guides/" class="text-primary dark:text-blue-400 hover:underline">← All guides</a></p>
+    <h1 class="text-3xl font-bold text-ink dark:text-slate-100">Image Compression vs Resizing</h1>
 
     <p>
       Both compression and resizing make an image file smaller, which is exactly why they get
@@ -28,7 +28,7 @@ const schema = {
       picking the wrong one either wastes effort or damages the image more than necessary.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">Compression changes how efficiently the same pixels are stored</h2>
+    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Compression changes how efficiently the same pixels are stored</h2>
     <p>
       An image compressor keeps the same pixel grid — the same width and height — and changes how
       that pixel data is encoded. Lossy compression (JPG, lossy WebP) throws away some visual
@@ -38,7 +38,7 @@ const schema = {
       encoded more efficiently, or with a bit of blur/artifacting at high compression.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">Resizing changes the actual pixel grid</h2>
+    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Resizing changes the actual pixel grid</h2>
     <p>
       Resizing reduces the number of pixels the image actually contains — a 3000×2000 photo
       resized to 1200×800 has genuinely fewer pixels to store, which is usually a much bigger
@@ -47,7 +47,7 @@ const schema = {
       doesn't need to be print-resolution).
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">Why resizing usually wins for file size</h2>
+    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Why resizing usually wins for file size</h2>
     <p>
       Pixel count scales with the square of the dimension — halving both width and height doesn't
       cut the pixel count in half, it cuts it to a quarter. That's why resizing a huge photo down
@@ -56,7 +56,7 @@ const schema = {
       artifacts that heavy compression can leave behind.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">When compression is still the right tool</h2>
+    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">When compression is still the right tool</h2>
     <p>
       If you need to keep the image at its original dimensions — a print-resolution photo, a
       design asset someone else will resize later, an image where you genuinely don't know the
@@ -64,7 +64,7 @@ const schema = {
       permanently discarding resolution you might need later.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">The practical order</h2>
+    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">The practical order</h2>
     <p>
       If a large file needs to be small and you know roughly how it'll be displayed: resize first
       to the dimensions you actually need, then compress the result if it still needs to be
@@ -72,11 +72,11 @@ const schema = {
       compression pass, since resizing recalculates the pixel data anyway.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">Tools</h2>
+    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Tools</h2>
     <p>
-      <a href="/image/resize" class="text-blue-600 dark:text-blue-400 hover:underline">Resize Image</a>
+      <a href="/image/resize" class="text-primary dark:text-blue-400 hover:underline">Resize Image</a>
       to change dimensions, then
-      <a href="/image/compress" class="text-blue-600 dark:text-blue-400 hover:underline">Compress Image</a>
+      <a href="/image/compress" class="text-primary dark:text-blue-400 hover:underline">Compress Image</a>
       if the resized file still needs to be smaller — both run entirely in your browser.
     </p>
   </article>
