@@ -3,25 +3,35 @@ import Layout from '../../layouts/Layout.astro';
 import ToolSchema from '../../components/ToolSchema.astro';
 import ToolWidget from '../../components/ToolWidget.astro';
 import AdUnit from '../../components/AdUnit.astro';
+
+const faqs = [
+  {
+    q: 'What resolution are the images?',
+    a: 'Pages render at 2x scale for sharp results, similar to a high-DPI screenshot — zooming in well beyond that will look soft, since a PNG has a fixed pixel grid rather than infinite detail.',
+  },
+  {
+    q: 'What do I get for a multi-page PDF?',
+    a: 'A zip file containing one PNG per page, numbered in page order.',
+  },
+  {
+    q: 'Does the text stay selectable in the output?',
+    a: 'No — PNG is a raster image format, so every page becomes pixels. If you need to keep text selectable and searchable, keep the original PDF instead of converting it to images.',
+  },
+];
 ---
 
 <Layout
-  title="Convert PDF to Images Online — Free & No Upload Required | Kit-Bin"
+  title="PDF to PNG Converter — Save Every Page as an Image | Kit-Bin"
   description="Convert every page of a PDF to a PNG image. Runs entirely in your browser — your file is never uploaded to a server."
 >
   <ToolSchema
-    name="Convert PDF to Images"
+    name="PDF to PNG"
     description="Convert every page of a PDF to a PNG image. Runs entirely in your browser — your file is never uploaded to a server."
-    faqs={[
-    {
-      "q": "What resolution are the images?",
-      "a": "Pages render at 2x scale for sharp results, similar to a high-DPI screenshot."
-    }
-  ]}
+    faqs={faqs}
   />
 
   <div class="max-w-2xl mx-auto px-4 pt-10 pb-4 text-center">
-    <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">Convert PDF to Images — Free</h1>
+    <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">Convert PDF Pages to PNG Images</h1>
     <p class="mt-2 text-slate-600 dark:text-slate-400"><a href="/guides/how-kit-bin-works" class="hover:underline decoration-dotted underline-offset-2">Processed entirely in your browser. Your file is never uploaded to a server.</a></p>
   </div>
 
@@ -29,14 +39,40 @@ import AdUnit from '../../components/AdUnit.astro';
 
   <AdUnit />
 
-  <div class="max-w-2xl mx-auto px-4 py-12 text-slate-700 dark:text-slate-300 space-y-4">
-    <p>This tool renders every page of a PDF to a PNG image, delivered as a zip when there's more than one page.</p>
-    <p>Drop your PDF above. The images download automatically once ready.</p>
-    <h2 class="font-semibold text-lg pt-2">FAQ</h2>
+  <div class="max-w-2xl mx-auto px-4 py-12 text-slate-700 dark:text-slate-300 space-y-6">
+    <p>
+      Drop a PDF above and every page renders to its own PNG image — a single page downloads
+      directly, more than one page downloads as a zip. This is useful when you need to paste a
+      page into a document, a slide, or a chat that doesn't accept PDF attachments.
+    </p>
+
     <div>
-      <p class="font-medium">What resolution are the images?</p>
-      <p class="text-slate-600 dark:text-slate-400">Pages render at 2x scale for sharp results, similar to a high-DPI screenshot.</p>
+      <h2 class="font-semibold text-lg">What actually happens to the page</h2>
+      <p class="text-slate-600 dark:text-slate-400">
+        Each page is rendered to a canvas at 2x scale and exported as a PNG — the same underlying
+        approach a PDF viewer uses to display a page on screen, just saved as an image instead of
+        drawn to your screen. Text becomes pixels in the process: it will look identical at normal
+        zoom, but it's no longer selectable, searchable, or copyable the way it was in the PDF.
+      </p>
     </div>
+
+    <div>
+      <h2 class="font-semibold text-lg pt-2">FAQ</h2>
+      <div class="space-y-4 mt-2">
+        {faqs.map((f) => (
+          <div>
+            <p class="font-medium">{f.q}</p>
+            <p class="text-slate-600 dark:text-slate-400">{f.a}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <p class="text-sm">
+      Only need specific pages, not the whole document? Try
+      <a href="/pdf/split" class="text-blue-600 dark:text-blue-400 hover:underline">Split PDF</a>
+      first.
+    </p>
   </div>
 
   <script>

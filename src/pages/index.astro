@@ -7,19 +7,54 @@ import { guides } from '../data/guides';
 
 const popularSlugs = ['/pdf/merge', '/pdf/split', '/pdf/compress', '/image/heic-to-jpg'];
 const popularTools = popularSlugs.map((slug) => tools.find((t) => t.slug === slug)!).filter(Boolean);
+
+const categoryBlurbs: Record<string, string> = {
+  pdf: 'Merge, split, compress, rotate, watermark, convert, and rearrange PDF files.',
+  image: 'Convert HEIC, WebP, PNG, and SVG files, or resize, crop, and compress images.',
+  audio: 'Convert, trim, join, and normalize MP3 and WAV audio.',
+  video: 'Compress, trim, mute, convert, and extract audio from video files.',
+  data: 'Convert and clean CSV, JSON, and Excel-compatible data.',
+};
+
+const siteSchema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Organization',
+      name: 'Kit-Bin',
+      url: 'https://kit-bin.com/',
+      logo: 'https://kit-bin.com/brand/mark.svg',
+    },
+    {
+      '@type': 'WebSite',
+      name: 'Kit-Bin',
+      url: 'https://kit-bin.com/',
+      description: 'Free online file tools for PDF, images, audio, video, and data — running entirely in your browser.',
+    },
+  ],
+};
 ---
 
 <Layout
-  title="Kit-Bin — Free Browser-Based File Tools"
-  description="Convert, compress, and edit files entirely in your browser. No uploads, no accounts."
+  title="Free Online File Tools for PDF, Images, Audio, Video and Data | Kit-Bin"
+  description="Merge PDFs, convert images, trim audio, compress video, and clean CSV files with free browser-based tools. No software installation, and your files never leave your device."
 >
+  <script type="application/ld+json" set:html={JSON.stringify(siteSchema)} is:inline />
+
   <div class="max-w-5xl mx-auto px-6 pt-14 pb-8 flex flex-col sm:flex-row items-center gap-8">
     <div class="flex-1 text-center sm:text-left">
       <h1 class="text-4xl sm:text-5xl font-bold text-slate-900 dark:text-slate-100">
-        Powerful tools.<br /><span class="text-blue-600 dark:text-blue-400">Simplified.</span>
+        Free file tools that work in your browser
       </h1>
       <p class="mt-4 text-lg text-slate-600 dark:text-slate-400">
-        Everything you need to work with your files in one beautiful, easy to use toolkit.
+        Merge PDFs, convert images, edit audio and video, and transform CSV or JSON files without
+        installing software. Kit-Bin gives you fast, focused tools for everyday file problems in
+        one private, easy-to-use toolkit.
+      </p>
+      <p class="mt-2 text-sm text-slate-500 dark:text-slate-500">
+        <a href="/guides/how-kit-bin-works" class="hover:underline decoration-dotted underline-offset-2"
+          >Your files are processed on your device and never uploaded to Kit-Bin.</a
+        >
       </p>
     </div>
     <img src="/illustrations/hero.svg" alt="" class="h-40 w-40 object-contain shrink-0" />
@@ -40,9 +75,20 @@ const popularTools = popularSlugs.map((slug) => tools.find((t) => t.slug === slu
       <input
         id="tool-search"
         type="text"
-        placeholder="Search tools... (e.g. merge pdf, compress image)"
+        placeholder="Search PDF, image, audio, video, and data tools…"
         class="w-full rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-3 pl-12 pr-4 text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
+    </div>
+  </div>
+
+  <div class="max-w-5xl mx-auto px-6 pt-10">
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+      {categories.map((c) => (
+        <a href={`/${c.slug}/`} class="block rounded-xl border border-slate-200 dark:border-slate-800 p-4 hover:border-slate-400 dark:hover:border-slate-600 bg-white dark:bg-slate-900">
+          <p class="font-semibold text-slate-900 dark:text-slate-100">{c.name}</p>
+          <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">{categoryBlurbs[c.slug]}</p>
+        </a>
+      ))}
     </div>
   </div>
 
