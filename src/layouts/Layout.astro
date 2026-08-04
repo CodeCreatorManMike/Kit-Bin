@@ -24,9 +24,11 @@ const { title, description } = Astro.props;
     <!-- ADSENSE_VERIFICATION: replace with the snippet/meta tag from the AdSense dashboard once available -->
     <script is:inline>
       // Set the theme class before first paint to avoid a flash of the wrong theme.
+      // Defaults to dark for first-time visitors; an explicit toggle choice
+      // (stored in localStorage) always wins after that.
       try {
         const stored = localStorage.getItem('kitbin:theme');
-        const dark = stored ? stored === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const dark = stored ? stored === 'dark' : true;
         document.documentElement.classList.toggle('dark', dark);
       } catch {}
     </script>
