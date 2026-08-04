@@ -1,0 +1,42 @@
+---
+import { tools, categories } from '../data/tools';
+import { guides } from '../data/guides';
+
+const pathname = Astro.url.pathname.replace(/\/$/, '') || '/';
+
+const tool = tools.find((t) => t.slug === pathname);
+const category = categories.find((c) => `/${c.slug}` === pathname);
+const guide = guides.find((g) => g.slug === pathname);
+const isGuidesHub = pathname === '/guides';
+
+type Crumb = { name: string; href?: string };
+let crumbs: Crumb[] | null = null;
+
+if (tool) {
+  const cat = categories.find((c) => c.slug === tool.category)!;
+  crumbs = [{ name: 'Home', href: '/' }, { name: cat.name, href: `/${cat.slug}/` }, { name: tool.name }];
+} else if (category) {
+  crumbs = [{ name: 'Home', href: '/' }, { name: category.name }];
+} else if (guide) {
+  crumbs = [{ name: 'Home', href: '/' }, { name: 'Guides', href: '/guides/' }, { name: guide.cardTitle }];
+} else if (isGuidesHub) {
+  crumbs = [{ name: 'Home', href: '/' }, { name: 'Guides' }];
+}
+---
+
+{crumbs && (
+  <nav aria-label="Breadcrumb" class="max-w-5xl mx-auto px-6 pt-4 text-sm text-slate-500 dark:text-slate-500">
+    <ol class="flex flex-wrap items-center gap-1">
+      {crumbs.map((c, i) => (
+        <li class="flex items-center gap-1">
+          {i > 0 && <span aria-hidden="true">/</span>}
+          {c.href ? (
+            <a href={c.href} class="hover:text-slate-700 dark:hover:text-slate-300 hover:underline">{c.name}</a>
+          ) : (
+            <span class="text-slate-700 dark:text-slate-300">{c.name}</span>
+          )}
+        </li>
+      ))}
+    </ol>
+  </nav>
+)}

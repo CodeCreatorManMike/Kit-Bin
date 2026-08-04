@@ -8,12 +8,40 @@ import { categoryColors } from '../data/toolIcons';
 
 const popularSlugs = ['/pdf/merge', '/pdf/split', '/pdf/compress', '/image/heic-to-jpg'];
 const popularTools = popularSlugs.map((slug) => tools.find((t) => t.slug === slug)!).filter(Boolean);
+
+const categoryBlurbs: Record<string, string> = {
+  pdf: 'Merge, split, compress, rotate, watermark, convert, and rearrange PDF files.',
+  image: 'Convert HEIC, WebP, PNG, and SVG files, or resize, crop, and compress images.',
+  audio: 'Convert, trim, join, and normalize MP3 and WAV audio.',
+  video: 'Compress, trim, mute, convert, and extract audio from video files.',
+  data: 'Convert and clean CSV, JSON, and Excel-compatible data.',
+};
+
+const siteSchema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Organization',
+      name: 'Kit-Bin',
+      url: 'https://kit-bin.com/',
+      logo: 'https://kit-bin.com/brand/mark.svg',
+    },
+    {
+      '@type': 'WebSite',
+      name: 'Kit-Bin',
+      url: 'https://kit-bin.com/',
+      description: 'Free online file tools for PDF, images, audio, video, and data — running entirely in your browser.',
+    },
+  ],
+};
 ---
 
 <Layout
-  title="Kit-Bin — Free Browser-Based File Tools"
-  description="Convert, compress, and edit files entirely in your browser. No uploads, no accounts."
+  title="Free Online File Tools for PDF, Images, Audio, Video and Data | Kit-Bin"
+  description="Merge PDFs, convert images, trim audio, compress video, and clean CSV files with free browser-based tools. No software installation, and your files never leave your device."
 >
+  <script type="application/ld+json" set:html={JSON.stringify(siteSchema)} is:inline />
+
   <div class="max-w-5xl mx-auto px-6 pt-6 sm:pt-14 pb-4 sm:pb-8 flex flex-row items-center gap-4 sm:gap-8">
     <div class="flex-1 text-left">
       <h1 class="text-3xl sm:text-5xl font-bold tracking-tight text-ink dark:text-slate-100">
@@ -21,6 +49,11 @@ const popularTools = popularSlugs.map((slug) => tools.find((t) => t.slug === slu
       </h1>
       <p class="mt-2 sm:mt-4 text-sm sm:text-lg text-muted dark:text-slate-400 max-w-md">
         Everything you need to work with your files in one beautiful, easy to use toolkit.
+      </p>
+      <p class="mt-2 text-xs sm:text-sm text-muted dark:text-slate-500">
+        <a href="/guides/how-kit-bin-works" class="hover:underline decoration-dotted underline-offset-2"
+          >Your files are processed on your device and never uploaded to Kit-Bin.</a
+        >
       </p>
     </div>
     <img src="/illustrations/hero.svg" alt="" class="h-20 w-20 sm:h-40 sm:w-40 object-contain shrink-0" />
@@ -44,6 +77,20 @@ const popularTools = popularSlugs.map((slug) => tools.find((t) => t.slug === slu
         placeholder="Search tools... (e.g. merge pdf, compress image)"
         class="w-full rounded-xl border border-border-soft dark:border-slate-800 bg-surface dark:bg-slate-900 py-3 pl-11 pr-4 text-sm text-ink dark:text-slate-100 placeholder:text-muted shadow-[0_1px_2px_rgba(16,24,47,0.04)] outline-none transition-shadow focus:border-primary/40 focus:ring-4 focus:ring-primary/10"
       />
+    </div>
+  </div>
+
+  <div class="max-w-5xl mx-auto px-6 pt-6 sm:pt-10">
+    <div class="grid gap-3 sm:gap-4 grid-cols-2 lg:grid-cols-5">
+      {categories.map((c) => (
+        <a
+          href={`/${c.slug}/`}
+          class="block rounded-xl border border-border-soft dark:border-slate-800 p-4 shadow-[0_1px_2px_rgba(16,24,47,0.04)] transition-all duration-150 hover:border-primary/25 hover:shadow-[0_6px_16px_rgba(16,24,47,0.08)] hover:-translate-y-0.5 bg-surface dark:bg-slate-900"
+        >
+          <p class="font-semibold text-ink dark:text-slate-100">{c.name}</p>
+          <p class="mt-1 text-sm text-muted dark:text-slate-400">{categoryBlurbs[c.slug]}</p>
+        </a>
+      ))}
     </div>
   </div>
 
