@@ -3,29 +3,39 @@ import Layout from '../../layouts/Layout.astro';
 import ToolSchema from '../../components/ToolSchema.astro';
 import ToolWidget from '../../components/ToolWidget.astro';
 import AdUnit from '../../components/AdUnit.astro';
+
+const faqs = [
+  {
+    q: 'Is my file uploaded anywhere?',
+    a: 'No. Splitting happens entirely in your browser — your PDF never leaves your device.',
+  },
+  {
+    q: 'What do I get for a multi-page PDF?',
+    a: 'A zip file containing one single-page PDF per original page, numbered in order.',
+  },
+  {
+    q: 'Can I choose a page range instead of every page separately?',
+    a: "Not with this tool — it always splits into one file per page. If you only need specific pages kept together (like removing a cover page), use Reorder PDF Pages instead, or split and re-merge the pages you want.",
+  },
+  {
+    q: 'Does splitting reduce quality?',
+    a: "No — each page is copied as-is into its own file, not re-rendered or re-encoded.",
+  },
+];
 ---
 
 <Layout
-  title="Split PDF Files Online — Free & No Upload Required | Kit-Bin"
+  title="Split PDF Online — Extract PDF Pages | Kit-Bin"
   description="Split a PDF into individual pages in seconds. Runs entirely in your browser — your file is never uploaded to a server."
 >
   <ToolSchema
     name="Split PDF Into Pages"
     description="Split a PDF into individual pages in seconds. Runs entirely in your browser — your file is never uploaded to a server."
-    faqs={[
-    {
-      "q": "Is my file uploaded anywhere?",
-      "a": "No. Splitting happens entirely in your browser — your PDF never leaves your device."
-    },
-    {
-      "q": "What do I get for a multi-page PDF?",
-      "a": "A zip file containing one single-page PDF per original page."
-    }
-  ]}
+    faqs={faqs}
   />
 
   <div class="max-w-2xl mx-auto px-4 pt-10 pb-4 text-center">
-    <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">Split PDF Into Pages — Free</h1>
+    <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">Split a PDF into Separate Pages</h1>
     <p class="mt-2 text-slate-600 dark:text-slate-400"><a href="/guides/how-kit-bin-works" class="hover:underline decoration-dotted underline-offset-2">Processed entirely in your browser. Your file is never uploaded to a server.</a></p>
   </div>
 
@@ -33,18 +43,31 @@ import AdUnit from '../../components/AdUnit.astro';
 
   <AdUnit />
 
-  <div class="max-w-2xl mx-auto px-4 py-12 text-slate-700 dark:text-slate-300 space-y-4">
-    <p>This tool splits a PDF into one file per page, delivered as a zip when there's more than one page.</p>
-    <p>Drop your PDF above. The split files download automatically once ready.</p>
-    <h2 class="font-semibold text-lg pt-2">FAQ</h2>
+  <div class="max-w-2xl mx-auto px-4 py-12 text-slate-700 dark:text-slate-300 space-y-6">
+    <p>
+      Drop a PDF above and every page becomes its own single-page PDF — a one-page source file
+      downloads directly, more than one page downloads as a zip. This splits by page, not by a
+      page range: if you need pages 1–3 kept together as one file, split first, then
+      <a href="/pdf/merge" class="text-blue-600 dark:text-blue-400 hover:underline">merge</a> the
+      pages you want back into a single document.
+    </p>
+
     <div>
-      <p class="font-medium">Is my file uploaded anywhere?</p>
-      <p class="text-slate-600 dark:text-slate-400">No. Splitting happens entirely in your browser — your PDF never leaves your device.</p>
+      <h2 class="font-semibold text-lg pt-2">FAQ</h2>
+      <div class="space-y-4 mt-2">
+        {faqs.map((f) => (
+          <div>
+            <p class="font-medium">{f.q}</p>
+            <p class="text-slate-600 dark:text-slate-400">{f.a}</p>
+          </div>
+        ))}
+      </div>
     </div>
-    <div>
-      <p class="font-medium">What do I get for a multi-page PDF?</p>
-      <p class="text-slate-600 dark:text-slate-400">A zip file containing one single-page PDF per original page.</p>
-    </div>
+
+    <p class="text-sm">
+      Only want to remove or reorder pages, not split every page out? Try
+      <a href="/pdf/reorder-pages" class="text-blue-600 dark:text-blue-400 hover:underline">Reorder PDF Pages</a>.
+    </p>
   </div>
 
   <script>

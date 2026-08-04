@@ -3,29 +3,43 @@ import Layout from '../../layouts/Layout.astro';
 import ToolSchema from '../../components/ToolSchema.astro';
 import ToolWidget from '../../components/ToolWidget.astro';
 import AdUnit from '../../components/AdUnit.astro';
+
+const faqs = [
+  {
+    q: 'Is my photo uploaded anywhere?',
+    a: 'No. Conversion happens entirely in your browser — your photo never leaves your device.',
+  },
+  {
+    q: 'Does this work on mobile?',
+    a: 'Yes, though very large photos may take a few extra seconds on older phones.',
+  },
+  {
+    q: 'What\'s the difference between HEIC and HEIF?',
+    a: 'HEIF is the underlying container format; HEIC is the specific file extension Apple uses for HEIF images, typically encoded with HEVC. In practice, "HEIC file" and "HEIF photo" refer to the same thing on an iPhone.',
+  },
+  {
+    q: 'Will the JPG look different from the original?',
+    a: "It should look extremely similar at normal viewing sizes, but it's a new lossy encoding — not a lossless format conversion. Repeatedly converting back and forth will degrade quality slightly each time, same as any JPG re-save.",
+  },
+  {
+    q: 'What happens to photo metadata like location and date?',
+    a: "This tool focuses on the image data itself; camera/location/date metadata isn't guaranteed to carry over the same way it does when AirDropping or exporting from Photos. If you need that metadata preserved exactly, check the output before deleting your original.",
+  },
+];
 ---
 
 <Layout
-  title="Convert HEIC to JPG Online — Free & No Upload Required | Kit-Bin"
+  title="HEIC to JPG Converter — Convert iPhone Photos | Kit-Bin"
   description="Convert iPhone HEIC photos to JPG in seconds. Runs entirely in your browser — your file is never uploaded to a server."
 >
   <ToolSchema
     name="Convert HEIC to JPG"
     description="Convert iPhone HEIC photos to JPG in seconds. Runs entirely in your browser — your file is never uploaded to a server."
-    faqs={[
-    {
-      "q": "Is my photo uploaded anywhere?",
-      "a": "No. Conversion happens entirely in your browser — your photo never leaves your device."
-    },
-    {
-      "q": "Does this work on mobile?",
-      "a": "Yes, though very large photos may take a few extra seconds on older phones."
-    }
-  ]}
+    faqs={faqs}
   />
 
   <div class="max-w-2xl mx-auto px-4 pt-10 pb-4 text-center">
-    <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">Convert HEIC to JPG — Free</h1>
+    <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">Convert HEIC Photos to JPG</h1>
     <p class="mt-2 text-slate-600 dark:text-slate-400"><a href="/guides/how-kit-bin-works" class="hover:underline decoration-dotted underline-offset-2">Processed entirely in your browser. Your file is never uploaded to a server.</a></p>
   </div>
 
@@ -33,19 +47,31 @@ import AdUnit from '../../components/AdUnit.astro';
 
   <AdUnit />
 
-  <div class="max-w-2xl mx-auto px-4 py-12 text-slate-700 dark:text-slate-300 space-y-4">
-    <p>This tool converts an iPhone HEIC photo into a standard JPG file.</p>
-    <p>Drop your HEIC photo above. The JPG downloads automatically once ready.</p>
-    <h2 class="font-semibold text-lg pt-2">FAQ</h2>
+  <div class="max-w-2xl mx-auto px-4 py-12 text-slate-700 dark:text-slate-300 space-y-6">
+    <p>
+      Convert HEIC photos from an iPhone to widely compatible JPG images. Use JPG when a Windows
+      application, website, or older device can't open the original HEIC file — JPG is
+      recognized almost everywhere HEIC isn't.
+    </p>
+
     <div>
-      <p class="font-medium">Is my photo uploaded anywhere?</p>
-      <p class="text-slate-600 dark:text-slate-400">No. Conversion happens entirely in your browser — your photo never leaves your device.</p>
+      <h2 class="font-semibold text-lg pt-2">FAQ</h2>
+      <div class="space-y-4 mt-2">
+        {faqs.map((f) => (
+          <div>
+            <p class="font-medium">{f.q}</p>
+            <p class="text-slate-600 dark:text-slate-400">{f.a}</p>
+          </div>
+        ))}
+      </div>
     </div>
-    <div>
-      <p class="font-medium">Does this work on mobile?</p>
-      <p class="text-slate-600 dark:text-slate-400">Yes, though very large photos may take a few extra seconds on older phones.</p>
-    </div>
+
     <p class="text-sm">Want to understand why iPhone photos use this format in the first place? <a href="/guides/heic-explained" class="text-blue-600 dark:text-blue-400 hover:underline">Read the guide</a></p>
+    <p class="text-sm">
+      Need the JPG smaller, or a specific size? Try
+      <a href="/image/compress" class="text-blue-600 dark:text-blue-400 hover:underline">Compress Image</a>
+      or <a href="/image/resize" class="text-blue-600 dark:text-blue-400 hover:underline">Resize Image</a> next.
+    </p>
   </div>
 
   <script>

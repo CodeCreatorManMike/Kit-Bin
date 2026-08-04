@@ -3,6 +3,25 @@ import Layout from '../../layouts/Layout.astro';
 import ToolSchema from '../../components/ToolSchema.astro';
 import ToolWidget from '../../components/ToolWidget.astro';
 import AdUnit from '../../components/AdUnit.astro';
+
+const faqs = [
+  {
+    q: 'Will this affect quality?',
+    a: "Yes — that's the tradeoff for a smaller file. The video and audio are both re-encoded at a lower quality setting. Try it on a copy first if quality matters.",
+  },
+  {
+    q: 'Can I choose the target size, resolution, or bitrate?',
+    a: "Not currently — this tool uses one fixed quality setting for video and audio rather than exposing target size, resolution, or bitrate as options. If you need a specific output size, you may need to try compressing more than once, or use dedicated video-editing software with manual bitrate control.",
+  },
+  {
+    q: 'Why does compressing always change something, even a little?',
+    a: "Video compression is lossy by nature — reducing file size means throwing away some picture or audio detail the codec judges least noticeable. Resolution, frame rate, bitrate, and codec efficiency all trade off against file size; there's no way to shrink a file meaningfully without changing some of that data.",
+  },
+  {
+    q: 'Does the output stay in the same container format?',
+    a: 'The compressed file is always saved as MP4, regardless of the input container.',
+  },
+];
 ---
 
 <Layout
@@ -12,16 +31,11 @@ import AdUnit from '../../components/AdUnit.astro';
   <ToolSchema
     name="Compress Video"
     description="Shrink a video's file size in your browser. Your file is never uploaded to a server."
-    faqs={[
-    {
-      "q": "Will this affect quality?",
-      "a": "Yes — that's the tradeoff for a smaller file. Try it on a copy first if quality matters."
-    }
-  ]}
+    faqs={faqs}
   />
 
   <div class="max-w-2xl mx-auto px-4 pt-10 pb-4 text-center">
-    <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">Compress Video — Free</h1>
+    <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">Compress a Video File</h1>
     <p class="mt-2 text-slate-600 dark:text-slate-400"><a href="/guides/how-kit-bin-works" class="hover:underline decoration-dotted underline-offset-2">Processed entirely in your browser. Your file is never uploaded to a server.</a></p>
   </div>
 
@@ -29,13 +43,18 @@ import AdUnit from '../../components/AdUnit.astro';
 
   <AdUnit />
 
-  <div class="max-w-2xl mx-auto px-4 py-12 text-slate-700 dark:text-slate-300 space-y-4">
-    <p>This tool re-encodes a video at a lower quality to shrink its file size.</p>
-    <p>Drop your video above. This re-encodes the full video, so larger files take longer — especially on mobile.</p>
-    <h2 class="font-semibold text-lg pt-2">FAQ</h2>
+  <div class="max-w-2xl mx-auto px-4 py-12 text-slate-700 dark:text-slate-300 space-y-6">
+    <p>This tool re-encodes a video's audio and video streams at a lower fixed quality to shrink its file size. Drop your video above — this re-encodes the full file, so larger videos take longer, especially on mobile.</p>
     <div>
-      <p class="font-medium">Will this affect quality?</p>
-      <p class="text-slate-600 dark:text-slate-400">Yes — that's the tradeoff for a smaller file. Try it on a copy first if quality matters.</p>
+      <h2 class="font-semibold text-lg pt-2">FAQ</h2>
+      <div class="space-y-4 mt-2">
+        {faqs.map((f) => (
+          <div>
+            <p class="font-medium">{f.q}</p>
+            <p class="text-slate-600 dark:text-slate-400">{f.a}</p>
+          </div>
+        ))}
+      </div>
     </div>
   </div>
 

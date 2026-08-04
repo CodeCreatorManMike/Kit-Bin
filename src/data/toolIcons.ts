@@ -245,4 +245,42 @@ export const toolIcons: Record<string, IconPrimitive[]> = {
     { t: 'rect', x: 13, y: 13, w: 8, h: 8, rx: 1 },
     { t: 'path', d: 'M11 11l-3 3m14-3l-3 3' },
   ],
+  '/guides/merge-pdf-privately': [
+    ...page,
+    { t: 'path', d: 'M9 12l2 2 4-4' },
+    { t: 'path', d: 'M6 4v-1a2 2 0 0 1 2-2' },
+  ],
+  '/guides/split-vs-extract-pdf': [
+    { t: 'rect', x: 3, y: 4, w: 8, h: 16, rx: 1.2 },
+    { t: 'rect', x: 13, y: 4, w: 8, h: 16, rx: 1.2 },
+    { t: 'path', d: 'M11 8v8' },
+  ],
+  '/guides/why-pdf-compression-barely-works': [
+    ...page,
+    { t: 'path', d: 'M9 15h6M9 12h6M9 9h3' },
+  ],
+  '/guides/heic-vs-jpg': [
+    { t: 'rect', x: 3, y: 6, w: 8, h: 12, rx: 1.2 },
+    { t: 'rect', x: 13, y: 6, w: 8, h: 12, rx: 1.2 },
+    { t: 'path', d: 'M11 12h2' },
+  ],
+  '/guides/webp-to-png-file-size': [
+    { t: 'rect', x: 3, y: 6, w: 9, h: 9, rx: 1.2 },
+    { t: 'rect', x: 12, y: 9, w: 9, h: 9, rx: 1.2 },
+    { t: 'path', d: 'M15 4v3M13.5 5.5h3' },
+  ],
+  '/guides/resize-without-distorting': [
+    { t: 'rect', x: 4, y: 4, w: 16, h: 16, rx: 1.5 },
+    { t: 'rect', x: 8, y: 8, w: 8, h: 8, rx: 1 },
+    { t: 'path', d: 'M4 4l4 4m12-4l-4 4m0 12l4-4m-16 4l4-4' },
+  ],
+  '/guides/how-video-compression-works': [
+    { t: 'rect', x: 2.5, y: 6, w: 15, h: 12, rx: 1.5 },
+    { t: 'path', d: 'M9 10l3.5 2-3.5 2z' },
+  ],
+  '/guides/csv-vs-json': [
+    { t: 'rect', x: 2.5, y: 4, w: 8, h: 16, rx: 1.2 },
+    { t: 'path', d: 'M4.5 8h4M4.5 12h4M4.5 16h4' },
+    { t: 'path', d: 'M14 4l2.5 2-2.5 2M18 12l2.5 2-2.5 2M14 20l2.5-2-2.5-2' },
+  ],
 };

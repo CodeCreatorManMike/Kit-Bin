@@ -20,12 +20,20 @@ import AdUnit from '../../components/AdUnit.astro';
     {
       "q": "Can I merge files with different sample rates?",
       "a": "It works best when all files share the same sample rate — mixed rates may play back slightly off."
+    },
+    {
+      "q": "Does this join files one after another, or mix them together?",
+      "a": "Joins them sequentially — the second file starts playing right after the first ends. This isn't a mixing tool; it won't overlay two tracks to play at the same time."
+    },
+    {
+      "q": "Can I reorder the files before merging?",
+      "a": "The order you select or drop the files in is the order they'll play in the output — select them in the order you want."
     }
   ]}
   />
 
   <div class="max-w-2xl mx-auto px-4 pt-10 pb-4 text-center">
-    <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">Merge Audio Files — Free</h1>
+    <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">Combine Multiple Audio Files into One Track</h1>
     <p class="mt-2 text-slate-600 dark:text-slate-400"><a href="/guides/how-kit-bin-works" class="hover:underline decoration-dotted underline-offset-2">Processed entirely in your browser. Your file is never uploaded to a server.</a></p>
   </div>
 
@@ -33,17 +41,28 @@ import AdUnit from '../../components/AdUnit.astro';
 
   <AdUnit />
 
-  <div class="max-w-2xl mx-auto px-4 py-12 text-slate-700 dark:text-slate-300 space-y-4">
-    <p>This tool combines multiple audio files into a single file, one after another in the order you select them.</p>
-    <p>Drop your audio files above. The merged file downloads automatically once ready.</p>
-    <h2 class="font-semibold text-lg pt-2">FAQ</h2>
+  <div class="max-w-2xl mx-auto px-4 py-12 text-slate-700 dark:text-slate-300 space-y-6">
+    <p>Drop 2 or more audio files above, in the order you want them to play. The merged file downloads automatically once ready — the files play back to back, not mixed together.</p>
     <div>
-      <p class="font-medium">What format is the output?</p>
-      <p class="text-slate-600 dark:text-slate-400">WAV, regardless of the input formats.</p>
-    </div>
-    <div>
-      <p class="font-medium">Can I merge files with different sample rates?</p>
-      <p class="text-slate-600 dark:text-slate-400">It works best when all files share the same sample rate — mixed rates may play back slightly off.</p>
+      <h2 class="font-semibold text-lg pt-2">FAQ</h2>
+      <div class="space-y-4 mt-2">
+        <div>
+          <p class="font-medium">What format is the output?</p>
+          <p class="text-slate-600 dark:text-slate-400">WAV, regardless of the input formats.</p>
+        </div>
+        <div>
+          <p class="font-medium">Can I merge files with different sample rates?</p>
+          <p class="text-slate-600 dark:text-slate-400">It works best when all files share the same sample rate — mixed rates may play back slightly off.</p>
+        </div>
+        <div>
+          <p class="font-medium">Does this join files one after another, or mix them together?</p>
+          <p class="text-slate-600 dark:text-slate-400">Joins them sequentially — the second file starts playing right after the first ends. This isn't a mixing tool; it won't overlay two tracks to play at the same time.</p>
+        </div>
+        <div>
+          <p class="font-medium">Can I reorder the files before merging?</p>
+          <p class="text-slate-600 dark:text-slate-400">The order you select or drop the files in is the order they'll play in the output — select them in the order you want.</p>
+        </div>
+      </div>
     </div>
   </div>
 

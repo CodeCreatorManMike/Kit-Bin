@@ -54,4 +54,52 @@ export const guides: Guide[] = [
     cardTitle: 'Compression vs Resizing',
     description: 'Two different operations that both shrink a file, and why picking the wrong one wastes the other\'s benefit.',
   },
+  {
+    slug: '/guides/merge-pdf-privately',
+    title: 'How to Merge PDF Files Without Uploading Private Documents',
+    cardTitle: 'Merging PDFs Without Uploading Them',
+    description: 'Why "free PDF merger" sites are a privacy risk for sensitive documents, and how to combine PDFs without a server ever seeing them.',
+  },
+  {
+    slug: '/guides/split-vs-extract-pdf',
+    title: 'Split PDF vs Extract PDF Pages: What Is the Difference?',
+    cardTitle: 'Split vs Extract: Two Different PDF Operations',
+    description: 'Splitting and extracting sound similar but produce different results — here is the actual distinction.',
+  },
+  {
+    slug: '/guides/why-pdf-compression-barely-works',
+    title: 'Why PDF Compression Sometimes Makes Almost No Difference',
+    cardTitle: 'Why Some PDFs Barely Compress',
+    description: 'PDF compressors mostly re-encode embedded images — a PDF with none has almost nothing to shrink.',
+  },
+  {
+    slug: '/guides/heic-vs-jpg',
+    title: 'HEIC vs JPG: Quality, Size, Metadata and Compatibility',
+    cardTitle: 'HEIC vs JPG: A Real Comparison',
+    description: 'What you actually gain and lose converting an iPhone photo from HEIC to JPG.',
+  },
+  {
+    slug: '/guides/webp-to-png-file-size',
+    title: 'Why Converting WebP to PNG Creates a Larger File',
+    cardTitle: 'Why WebP to PNG Makes Files Bigger',
+    description: 'It is not a bug — PNG and WebP compress images in fundamentally different ways.',
+  },
+  {
+    slug: '/guides/resize-without-distorting',
+    title: 'How to Resize an Image Without Distorting Its Aspect Ratio',
+    cardTitle: 'Resizing Without Distortion',
+    description: 'The math behind aspect ratio, and why typing in both width and height independently usually breaks it.',
+  },
+  {
+    slug: '/guides/how-video-compression-works',
+    title: 'How Video Compression Works: Resolution, Bitrate, Codec and Frame Rate',
+    cardTitle: 'How Video Compression Actually Works',
+    description: 'The four levers that control a video\'s file size, and what each one actually trades away.',
+  },
+  {
+    slug: '/guides/csv-vs-json',
+    title: 'CSV vs JSON: Which Format Should You Use?',
+    cardTitle: 'CSV vs JSON: Which One Do You Need?',
+    description: 'Flat tables versus nested structure — a practical answer, not just a feature list.',
+  },
 ];

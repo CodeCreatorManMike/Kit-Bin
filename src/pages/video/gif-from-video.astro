@@ -3,6 +3,25 @@ import Layout from '../../layouts/Layout.astro';
 import ToolSchema from '../../components/ToolSchema.astro';
 import ToolWidget from '../../components/ToolWidget.astro';
 import AdUnit from '../../components/AdUnit.astro';
+
+const faqs = [
+  {
+    q: 'Why is there a length/size cap?',
+    a: "GIF is an inherently inefficient format for video — it stores every frame as a separate indexed-color image, so an uncapped conversion can produce a huge file for just a few seconds of footage. Output here is capped at 8 seconds, 480px wide, and 10fps to keep the result usable.",
+  },
+  {
+    q: 'Will the colors look accurate?',
+    a: 'GIF is limited to a 256-color palette per frame, so gradients, photos, and subtle color detail can show visible banding or dithering compared to the source video.',
+  },
+  {
+    q: 'Does the GIF include audio?',
+    a: "No — GIF has no audio support at all. This tool only converts the video's picture, not its sound.",
+  },
+  {
+    q: 'Can I convert a longer clip by trimming it first?',
+    a: 'Yes — use <a href="/video/trim" class="text-blue-600 dark:text-blue-400 hover:underline">Trim Video</a> to cut down to the section you want before converting, since the cap applies to whatever you drop in.',
+  },
+];
 ---
 
 <Layout
@@ -12,16 +31,11 @@ import AdUnit from '../../components/AdUnit.astro';
   <ToolSchema
     name="Convert Video to GIF"
     description="Turn a video clip into a GIF in your browser. Your file is never uploaded to a server."
-    faqs={[
-    {
-      "q": "Why is there a length/size cap?",
-      "a": "GIF is an inherently inefficient format — an uncapped conversion can produce a huge file for a few seconds of video."
-    }
-  ]}
+    faqs={faqs.map((f) => ({ q: f.q, a: f.a.replace(/<[^>]+>/g, '') }))}
   />
 
   <div class="max-w-2xl mx-auto px-4 pt-10 pb-4 text-center">
-    <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">Convert Video to GIF — Free</h1>
+    <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">Convert a Video Clip to GIF</h1>
     <p class="mt-2 text-slate-600 dark:text-slate-400"><a href="/guides/how-kit-bin-works" class="hover:underline decoration-dotted underline-offset-2">Processed entirely in your browser. Your file is never uploaded to a server.</a></p>
   </div>
 
@@ -29,13 +43,18 @@ import AdUnit from '../../components/AdUnit.astro';
 
   <AdUnit />
 
-  <div class="max-w-2xl mx-auto px-4 py-12 text-slate-700 dark:text-slate-300 space-y-4">
-    <p>This tool converts the first few seconds of a video into an animated GIF.</p>
-    <p>Drop your video above. To keep the file size reasonable, output is capped at 8 seconds, 480px wide, 10fps.</p>
-    <h2 class="font-semibold text-lg pt-2">FAQ</h2>
+  <div class="max-w-2xl mx-auto px-4 py-12 text-slate-700 dark:text-slate-300 space-y-6">
+    <p>This tool converts the first few seconds of a video into an animated GIF. Drop your video above — to keep the file size reasonable, output is capped at 8 seconds, 480px wide, 10fps.</p>
     <div>
-      <p class="font-medium">Why is there a length/size cap?</p>
-      <p class="text-slate-600 dark:text-slate-400">GIF is an inherently inefficient format — an uncapped conversion can produce a huge file for a few seconds of video.</p>
+      <h2 class="font-semibold text-lg pt-2">FAQ</h2>
+      <div class="space-y-4 mt-2">
+        {faqs.map((f) => (
+          <div>
+            <p class="font-medium">{f.q}</p>
+            <p class="text-slate-600 dark:text-slate-400" set:html={f.a} />
+          </div>
+        ))}
+      </div>
     </div>
   </div>
 

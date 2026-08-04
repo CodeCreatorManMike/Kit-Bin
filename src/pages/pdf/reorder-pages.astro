@@ -15,12 +15,20 @@ import AdUnit from '../../components/AdUnit.astro';
     {
       "q": "Do I need to include every page?",
       "a": "Yes — the new order must list every original page number exactly once."
+    },
+    {
+      "q": "Can I delete a page instead of just reordering?",
+      "a": "Only by leaving it out of the order you type — but then every remaining page must still be listed exactly once, so this works more like picking which pages to keep and in what order."
+    },
+    {
+      "q": "Does this change the page content itself?",
+      "a": "No — it only changes page sequence. Each page's content is copied as-is; nothing is rewritten or re-rendered."
     }
   ]}
   />
 
   <div class="max-w-2xl mx-auto px-4 pt-10 pb-4 text-center">
-    <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">Reorder PDF Pages — Free</h1>
+    <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">Reorder Pages in a PDF</h1>
     <p class="mt-2 text-slate-600 dark:text-slate-400"><a href="/guides/how-kit-bin-works" class="hover:underline decoration-dotted underline-offset-2">Processed entirely in your browser. Your file is never uploaded to a server.</a></p>
   </div>
 
@@ -62,14 +70,28 @@ import AdUnit from '../../components/AdUnit.astro';
 
   <AdUnit />
 
-  <div class="max-w-2xl mx-auto px-4 py-12 text-slate-700 dark:text-slate-300 space-y-4">
-    <p>This tool changes the order of pages in a PDF to whatever order you specify.</p>
-    <p>Drop your PDF above, enter the new page order, then click apply.</p>
-    <h2 class="font-semibold text-lg pt-2">FAQ</h2>
+  <div class="max-w-2xl mx-auto px-4 py-12 text-slate-700 dark:text-slate-300 space-y-6">
+    <p>Drop your PDF above, then type the new page order as a comma-separated list — the tool changes page sequence without rewriting the visible page contents.</p>
     <div>
-      <p class="font-medium">Do I need to include every page?</p>
-      <p class="text-slate-600 dark:text-slate-400">Yes — the new order must list every original page number exactly once.</p>
+      <h2 class="font-semibold text-lg pt-2">FAQ</h2>
+      <div class="space-y-4 mt-2">
+        <div>
+          <p class="font-medium">Do I need to include every page?</p>
+          <p class="text-slate-600 dark:text-slate-400">Yes — the new order must list every original page number exactly once.</p>
+        </div>
+        <div>
+          <p class="font-medium">Can I delete a page instead of just reordering?</p>
+          <p class="text-slate-600 dark:text-slate-400">Only by leaving it out of the order you type — but then every remaining page must still be listed exactly once, so this works more like picking which pages to keep and in what order.</p>
+        </div>
+        <div>
+          <p class="font-medium">Does this change the page content itself?</p>
+          <p class="text-slate-600 dark:text-slate-400">No — it only changes page sequence. Each page's content is copied as-is; nothing is rewritten or re-rendered.</p>
+        </div>
+      </div>
     </div>
+    <p class="text-sm">
+      Need to combine files first? Try <a href="/pdf/merge" class="text-blue-600 dark:text-blue-400 hover:underline">Merge PDF</a>.
+    </p>
   </div>
 
   <script>

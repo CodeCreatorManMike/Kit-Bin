@@ -3,29 +3,39 @@ import Layout from '../../layouts/Layout.astro';
 import ToolSchema from '../../components/ToolSchema.astro';
 import ToolWidget from '../../components/ToolWidget.astro';
 import AdUnit from '../../components/AdUnit.astro';
+
+const faqs = [
+  {
+    q: 'Is my file uploaded anywhere?',
+    a: 'No. Conversion happens entirely in your browser — your audio never leaves your device.',
+  },
+  {
+    q: 'Why is the WAV file bigger than the MP3?',
+    a: "WAV is uncompressed audio, so it's expected to be significantly larger than MP3 — often 5-10x, depending on the original MP3 bitrate.",
+  },
+  {
+    q: 'Does converting to WAV restore audio quality lost in the MP3?',
+    a: "No. MP3 is a lossy format — detail removed during the original MP3 encoding is gone and can't be recovered. Converting to WAV just stores the MP3's existing audio data uncompressed; it doesn't add anything back.",
+  },
+  {
+    q: 'Why convert to WAV at all, then?',
+    a: "Some audio editors and older software expect uncompressed PCM audio rather than a compressed format, or handle WAV more reliably for further processing.",
+  },
+];
 ---
 
 <Layout
-  title="Convert MP3 to WAV Online — Free & No Upload Required | Kit-Bin"
+  title="MP3 to WAV Converter — Create an Uncompressed Audio File | Kit-Bin"
   description="Convert an MP3 file to WAV in seconds. Runs entirely in your browser — your file is never uploaded to a server."
 >
   <ToolSchema
     name="Convert MP3 to WAV"
     description="Convert an MP3 file to WAV in seconds. Runs entirely in your browser — your file is never uploaded to a server."
-    faqs={[
-    {
-      "q": "Is my file uploaded anywhere?",
-      "a": "No. Conversion happens entirely in your browser — your audio never leaves your device."
-    },
-    {
-      "q": "Why is the WAV file bigger than the MP3?",
-      "a": "WAV is uncompressed audio, so it's expected to be significantly larger than MP3."
-    }
-  ]}
+    faqs={faqs}
   />
 
   <div class="max-w-2xl mx-auto px-4 pt-10 pb-4 text-center">
-    <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">Convert MP3 to WAV — Free</h1>
+    <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">Convert MP3 to an Uncompressed WAV File</h1>
     <p class="mt-2 text-slate-600 dark:text-slate-400"><a href="/guides/how-kit-bin-works" class="hover:underline decoration-dotted underline-offset-2">Processed entirely in your browser. Your file is never uploaded to a server.</a></p>
   </div>
 
@@ -33,18 +43,30 @@ import AdUnit from '../../components/AdUnit.astro';
 
   <AdUnit />
 
-  <div class="max-w-2xl mx-auto px-4 py-12 text-slate-700 dark:text-slate-300 space-y-4">
-    <p>This tool converts an MP3 audio file into an uncompressed WAV file.</p>
-    <p>Drop your MP3 above. The WAV file downloads automatically once ready.</p>
-    <h2 class="font-semibold text-lg pt-2">FAQ</h2>
+  <div class="max-w-2xl mx-auto px-4 py-12 text-slate-700 dark:text-slate-300 space-y-6">
+    <p>
+      Converting MP3 to WAV makes the audio easier to use in editors that expect uncompressed
+      PCM. It does not restore detail that was removed when the MP3 was originally encoded — it
+      just stores the same audio data without further compression.
+    </p>
+
     <div>
-      <p class="font-medium">Is my file uploaded anywhere?</p>
-      <p class="text-slate-600 dark:text-slate-400">No. Conversion happens entirely in your browser — your audio never leaves your device.</p>
+      <h2 class="font-semibold text-lg pt-2">FAQ</h2>
+      <div class="space-y-4 mt-2">
+        {faqs.map((f) => (
+          <div>
+            <p class="font-medium">{f.q}</p>
+            <p class="text-slate-600 dark:text-slate-400">{f.a}</p>
+          </div>
+        ))}
+      </div>
     </div>
-    <div>
-      <p class="font-medium">Why is the WAV file bigger than the MP3?</p>
-      <p class="text-slate-600 dark:text-slate-400">WAV is uncompressed audio, so it's expected to be significantly larger than MP3.</p>
-    </div>
+
+    <p class="text-sm">
+      Need to trim or combine the result? Try
+      <a href="/audio/trim" class="text-blue-600 dark:text-blue-400 hover:underline">Trim Audio</a>
+      or <a href="/audio/merge" class="text-blue-600 dark:text-blue-400 hover:underline">Merge Audio</a>.
+    </p>
   </div>
 
   <script>

@@ -3,6 +3,25 @@ import Layout from '../../layouts/Layout.astro';
 import ToolSchema from '../../components/ToolSchema.astro';
 import ToolWidget from '../../components/ToolWidget.astro';
 import AdUnit from '../../components/AdUnit.astro';
+
+const faqs = [
+  {
+    q: 'Is MP4 or WebM the actual video codec?',
+    a: "Neither — MP4 and WebM are containers, not codecs. This tool re-encodes the video and audio streams to codecs WebM supports (typically VP9 video and Opus audio) and repackages them in a WebM container.",
+  },
+  {
+    q: 'Will quality change?',
+    a: "Re-encoding to a different codec involves some quality loss, since the video is decoded and recompressed rather than copied byte-for-byte. It's usually not noticeable at normal viewing sizes.",
+  },
+  {
+    q: "When should I keep MP4 instead of converting?",
+    a: "MP4 (H.264) has the widest compatibility — it plays natively on virtually every device, video editor, and older browser. WebM is well-supported in modern browsers and is common for web embeds, but if you need a file to open reliably in unfamiliar software, MP4 is the safer choice.",
+  },
+  {
+    q: 'Does this work on mobile?',
+    a: 'Yes, but large videos may be slow or use significant memory on phones — try a smaller file first if it stalls.',
+  },
+];
 ---
 
 <Layout
@@ -12,16 +31,11 @@ import AdUnit from '../../components/AdUnit.astro';
   <ToolSchema
     name="Convert MP4 to WebM"
     description="Convert an MP4 video to WebM in your browser. Your file is never uploaded to a server."
-    faqs={[
-    {
-      "q": "Does this work on mobile?",
-      "a": "Yes, but large videos may be slow or use significant memory on phones — try a smaller file first if it stalls."
-    }
-  ]}
+    faqs={faqs}
   />
 
   <div class="max-w-2xl mx-auto px-4 pt-10 pb-4 text-center">
-    <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">Convert MP4 to WebM — Free</h1>
+    <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">Convert MP4 to WebM</h1>
     <p class="mt-2 text-slate-600 dark:text-slate-400"><a href="/guides/how-kit-bin-works" class="hover:underline decoration-dotted underline-offset-2">Processed entirely in your browser. Your file is never uploaded to a server.</a></p>
   </div>
 
@@ -29,13 +43,18 @@ import AdUnit from '../../components/AdUnit.astro';
 
   <AdUnit />
 
-  <div class="max-w-2xl mx-auto px-4 py-12 text-slate-700 dark:text-slate-300 space-y-4">
-    <p>This tool converts an MP4 video to the WebM format.</p>
-    <p>Drop your MP4 above. The WebM file downloads automatically once ready — larger files take longer, especially on mobile.</p>
-    <h2 class="font-semibold text-lg pt-2">FAQ</h2>
+  <div class="max-w-2xl mx-auto px-4 py-12 text-slate-700 dark:text-slate-300 space-y-6">
+    <p>This tool re-encodes an MP4 video into WebM, a container format better suited to some web-embed use cases. Drop your MP4 above — larger files take longer, especially on mobile.</p>
     <div>
-      <p class="font-medium">Does this work on mobile?</p>
-      <p class="text-slate-600 dark:text-slate-400">Yes, but large videos may be slow or use significant memory on phones — try a smaller file first if it stalls.</p>
+      <h2 class="font-semibold text-lg pt-2">FAQ</h2>
+      <div class="space-y-4 mt-2">
+        {faqs.map((f) => (
+          <div>
+            <p class="font-medium">{f.q}</p>
+            <p class="text-slate-600 dark:text-slate-400">{f.a}</p>
+          </div>
+        ))}
+      </div>
     </div>
     <p class="text-sm">Not sure if you actually need WebM? <a href="/guides/mp4-vs-webm" class="text-blue-600 dark:text-blue-400 hover:underline">Read the comparison</a></p>
   </div>

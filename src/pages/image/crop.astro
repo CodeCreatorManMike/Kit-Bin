@@ -15,12 +15,20 @@ import AdUnit from '../../components/AdUnit.astro';
     {
       "q": "Can I resize the crop selection?",
       "a": "Yes — drag the handles on any edge or corner of the selection box."
+    },
+    {
+      "q": "What's the difference between cropping and resizing?",
+      "a": "Cropping removes the pixels outside your selection — the remaining image keeps its original resolution. Resizing changes the overall dimensions of the whole image without removing anything. Use crop to cut out part of a photo; use resize to make the whole image smaller or larger."
+    },
+    {
+      "q": "Does cropping affect image quality?",
+      "a": "No — the kept portion of the image is exported as-is, at its original pixel density."
     }
   ]}
   />
 
   <div class="max-w-2xl mx-auto px-4 pt-10 pb-4 text-center">
-    <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">Crop Image — Free</h1>
+    <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">Crop an Image in Your Browser</h1>
     <p class="mt-2 text-slate-600 dark:text-slate-400"><a href="/guides/how-kit-bin-works" class="hover:underline decoration-dotted underline-offset-2">Processed entirely in your browser. Your file is never uploaded to a server.</a></p>
   </div>
 
@@ -58,14 +66,29 @@ import AdUnit from '../../components/AdUnit.astro';
 
   <AdUnit />
 
-  <div class="max-w-2xl mx-auto px-4 py-12 text-slate-700 dark:text-slate-300 space-y-4">
-    <p>This tool crops an image to a selection you drag and resize on screen.</p>
-    <p>Drop your image above, drag the selection box to the area you want, then click crop.</p>
-    <h2 class="font-semibold text-lg pt-2">FAQ</h2>
+  <div class="max-w-2xl mx-auto px-4 py-12 text-slate-700 dark:text-slate-300 space-y-6">
+    <p>Drop your image above, drag the selection box to the area you want to keep, then click crop.</p>
     <div>
-      <p class="font-medium">Can I resize the crop selection?</p>
-      <p class="text-slate-600 dark:text-slate-400">Yes — drag the handles on any edge or corner of the selection box.</p>
+      <h2 class="font-semibold text-lg pt-2">FAQ</h2>
+      <div class="space-y-4 mt-2">
+        <div>
+          <p class="font-medium">Can I resize the crop selection?</p>
+          <p class="text-slate-600 dark:text-slate-400">Yes — drag the handles on any edge or corner of the selection box.</p>
+        </div>
+        <div>
+          <p class="font-medium">What's the difference between cropping and resizing?</p>
+          <p class="text-slate-600 dark:text-slate-400">Cropping removes the pixels outside your selection — the remaining image keeps its original resolution. Resizing changes the overall dimensions of the whole image without removing anything. Use crop to cut out part of a photo; use resize to make the whole image smaller or larger.</p>
+        </div>
+        <div>
+          <p class="font-medium">Does cropping affect image quality?</p>
+          <p class="text-slate-600 dark:text-slate-400">No — the kept portion of the image is exported as-is, at its original pixel density.</p>
+        </div>
+      </div>
     </div>
+    <p class="text-sm">
+      Need to change the whole image's dimensions instead? Try
+      <a href="/image/resize" class="text-blue-600 dark:text-blue-400 hover:underline">Resize Image</a>.
+    </p>
   </div>
 
   <script>

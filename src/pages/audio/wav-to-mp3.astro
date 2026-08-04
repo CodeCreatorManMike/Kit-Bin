@@ -3,25 +3,35 @@ import Layout from '../../layouts/Layout.astro';
 import ToolSchema from '../../components/ToolSchema.astro';
 import ToolWidget from '../../components/ToolWidget.astro';
 import AdUnit from '../../components/AdUnit.astro';
+
+const faqs = [
+  {
+    q: 'Will this affect quality?',
+    a: "Yes — MP3 is lossy, so there's some quality loss. That's the tradeoff for a much smaller file, and at normal listening volumes it's usually not noticeable for speech or typical music.",
+  },
+  {
+    q: 'Does mono vs. stereo matter?',
+    a: "This tool preserves whatever channel layout your WAV file already has — it doesn't force mono or stereo. A mono source will produce a smaller MP3 than an equivalent stereo one.",
+  },
+  {
+    q: 'Is there a bitrate setting?',
+    a: "Not currently — the tool uses a single default quality setting rather than exposing bitrate as a choice.",
+  },
+];
 ---
 
 <Layout
-  title="Convert WAV to MP3 Online — Free & No Upload Required | Kit-Bin"
+  title="WAV to MP3 Converter — Make Audio Files Smaller | Kit-Bin"
   description="Convert a WAV file to MP3 in seconds. Runs entirely in your browser — your file is never uploaded to a server."
 >
   <ToolSchema
     name="Convert WAV to MP3"
     description="Convert a WAV file to MP3 in seconds. Runs entirely in your browser — your file is never uploaded to a server."
-    faqs={[
-    {
-      "q": "Will this affect quality?",
-      "a": "MP3 is lossy, so there's some quality loss — that's the tradeoff for a much smaller file."
-    }
-  ]}
+    faqs={faqs}
   />
 
   <div class="max-w-2xl mx-auto px-4 pt-10 pb-4 text-center">
-    <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">Convert WAV to MP3 — Free</h1>
+    <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">Make a WAV File Smaller as MP3</h1>
     <p class="mt-2 text-slate-600 dark:text-slate-400"><a href="/guides/how-kit-bin-works" class="hover:underline decoration-dotted underline-offset-2">Processed entirely in your browser. Your file is never uploaded to a server.</a></p>
   </div>
 
@@ -29,13 +39,23 @@ import AdUnit from '../../components/AdUnit.astro';
 
   <AdUnit />
 
-  <div class="max-w-2xl mx-auto px-4 py-12 text-slate-700 dark:text-slate-300 space-y-4">
-    <p>This tool converts a WAV audio file into a compressed MP3 file.</p>
-    <p>Drop your WAV above. The MP3 file downloads automatically once ready.</p>
-    <h2 class="font-semibold text-lg pt-2">FAQ</h2>
+  <div class="max-w-2xl mx-auto px-4 py-12 text-slate-700 dark:text-slate-300 space-y-6">
+    <p>
+      Uncompressed WAV files are large — converting to MP3 trades some audio detail for a file
+      that's typically a fraction of the size, which matters for email attachments, storage, or
+      uploading somewhere with a size limit.
+    </p>
+
     <div>
-      <p class="font-medium">Will this affect quality?</p>
-      <p class="text-slate-600 dark:text-slate-400">MP3 is lossy, so there's some quality loss — that's the tradeoff for a much smaller file.</p>
+      <h2 class="font-semibold text-lg pt-2">FAQ</h2>
+      <div class="space-y-4 mt-2">
+        {faqs.map((f) => (
+          <div>
+            <p class="font-medium">{f.q}</p>
+            <p class="text-slate-600 dark:text-slate-400">{f.a}</p>
+          </div>
+        ))}
+      </div>
     </div>
   </div>
 

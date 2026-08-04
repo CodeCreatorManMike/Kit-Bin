@@ -3,6 +3,25 @@ import Layout from '../../layouts/Layout.astro';
 import ToolSchema from '../../components/ToolSchema.astro';
 import ToolWidget from '../../components/ToolWidget.astro';
 import AdUnit from '../../components/AdUnit.astro';
+
+const faqs = [
+  {
+    q: 'What format is the output?',
+    a: 'MP4, regardless of the input format.',
+  },
+  {
+    q: 'Does trimming lose quality?',
+    a: "The video and audio inside your chosen range are re-encoded during the trim, so there can be a small amount of quality change — this isn't a raw byte-copy cut. It's generally not noticeable at normal viewing sizes.",
+  },
+  {
+    q: "Can I trim more than one section out of a video?",
+    a: 'Not in one pass — this tool trims to a single continuous start and end time. To keep multiple separate sections, trim and download each section individually.',
+  },
+  {
+    q: 'How precise is the start/end time?',
+    a: 'Times are entered in seconds and can include decimals for finer control, but exact frame-accurate cuts are not guaranteed on every file.',
+  },
+];
 ---
 
 <Layout
@@ -12,16 +31,11 @@ import AdUnit from '../../components/AdUnit.astro';
   <ToolSchema
     name="Trim Video"
     description="Trim a video to a start and end time in your browser. Your file is never uploaded to a server."
-    faqs={[
-    {
-      "q": "What format is the output?",
-      "a": "MP4, regardless of the input format."
-    }
-  ]}
+    faqs={faqs}
   />
 
   <div class="max-w-2xl mx-auto px-4 pt-10 pb-4 text-center">
-    <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">Trim Video — Free</h1>
+    <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">Trim a Video to a Start and End Time</h1>
     <p class="mt-2 text-slate-600 dark:text-slate-400"><a href="/guides/how-kit-bin-works" class="hover:underline decoration-dotted underline-offset-2">Processed entirely in your browser. Your file is never uploaded to a server.</a></p>
   </div>
 
@@ -36,13 +50,18 @@ import AdUnit from '../../components/AdUnit.astro';
 
   <AdUnit />
 
-  <div class="max-w-2xl mx-auto px-4 py-12 text-slate-700 dark:text-slate-300 space-y-4">
-    <p>This tool cuts a video down to the time range you specify, using a fast remux where possible.</p>
-    <p>Set your start and end time in seconds, then drop your video above.</p>
-    <h2 class="font-semibold text-lg pt-2">FAQ</h2>
+  <div class="max-w-2xl mx-auto px-4 py-12 text-slate-700 dark:text-slate-300 space-y-6">
+    <p>This tool cuts a video down to the start and end time you specify. Set your times in seconds, then drop your video above.</p>
     <div>
-      <p class="font-medium">What format is the output?</p>
-      <p class="text-slate-600 dark:text-slate-400">MP4, regardless of the input format.</p>
+      <h2 class="font-semibold text-lg pt-2">FAQ</h2>
+      <div class="space-y-4 mt-2">
+        {faqs.map((f) => (
+          <div>
+            <p class="font-medium">{f.q}</p>
+            <p class="text-slate-600 dark:text-slate-400">{f.a}</p>
+          </div>
+        ))}
+      </div>
     </div>
   </div>
 

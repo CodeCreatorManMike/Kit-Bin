@@ -3,25 +3,35 @@ import Layout from '../../layouts/Layout.astro';
 import ToolSchema from '../../components/ToolSchema.astro';
 import ToolWidget from '../../components/ToolWidget.astro';
 import AdUnit from '../../components/AdUnit.astro';
+
+const faqs = [
+  {
+    q: 'What if my SVG has no explicit width/height?',
+    a: "Most SVGs render fine, but ones with external references or unusual filters may not render correctly — check the result before using it.",
+  },
+  {
+    q: 'What resolution does the PNG come out at?',
+    a: "The PNG matches the SVG's own intrinsic dimensions. SVG is vector-based — it can be rendered at any size without quality loss — but once it's rasterized to PNG, that image has a fixed pixel grid and won't scale up cleanly beyond it.",
+  },
+  {
+    q: 'Will embedded fonts or filters render correctly?',
+    a: "Simple SVGs with basic shapes and system fonts render reliably. SVGs with embedded custom fonts, external image references, or complex CSS filters are the most likely to render differently than they do in a full browser — check the output before relying on it.",
+  },
+];
 ---
 
 <Layout
-  title="Convert SVG to PNG Online — Free & No Upload Required | Kit-Bin"
+  title="SVG to PNG Converter at Any Size | Kit-Bin"
   description="Convert an SVG image to PNG in seconds. Runs entirely in your browser — your file is never uploaded to a server."
 >
   <ToolSchema
     name="Convert SVG to PNG"
     description="Convert an SVG image to PNG in seconds. Runs entirely in your browser — your file is never uploaded to a server."
-    faqs={[
-    {
-      "q": "What if my SVG has no explicit width/height?",
-      "a": "Most SVGs render fine, but ones with external references or unusual filters may not render correctly — check the result before using it."
-    }
-  ]}
+    faqs={faqs}
   />
 
   <div class="max-w-2xl mx-auto px-4 pt-10 pb-4 text-center">
-    <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">Convert SVG to PNG — Free</h1>
+    <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">Convert SVG Files to PNG</h1>
     <p class="mt-2 text-slate-600 dark:text-slate-400"><a href="/guides/how-kit-bin-works" class="hover:underline decoration-dotted underline-offset-2">Processed entirely in your browser. Your file is never uploaded to a server.</a></p>
   </div>
 
@@ -29,13 +39,28 @@ import AdUnit from '../../components/AdUnit.astro';
 
   <AdUnit />
 
-  <div class="max-w-2xl mx-auto px-4 py-12 text-slate-700 dark:text-slate-300 space-y-4">
-    <p>This tool rasterizes an SVG file into a PNG image.</p>
-    <p>Drop your SVG above. The PNG downloads automatically once ready.</p>
-    <h2 class="font-semibold text-lg pt-2">FAQ</h2>
+  <div class="max-w-2xl mx-auto px-4 py-12 text-slate-700 dark:text-slate-300 space-y-6">
+    <p>
+      Rasterize an SVG file into a PNG image for use in places that don't accept vector graphics —
+      most email clients, some CMS image fields, or older software.
+    </p>
+    <p class="text-slate-600 dark:text-slate-400">
+      SVG is vector-based, meaning it's described as shapes and paths rather than a fixed grid of
+      pixels — that's why it scales to any size without blurring. PNG doesn't have that property:
+      it captures the SVG at one specific resolution, so it's the wrong direction to go if you
+      still need to resize the image later without quality loss.
+    </p>
+
     <div>
-      <p class="font-medium">What if my SVG has no explicit width/height?</p>
-      <p class="text-slate-600 dark:text-slate-400">Most SVGs render fine, but ones with external references or unusual filters may not render correctly — check the result before using it.</p>
+      <h2 class="font-semibold text-lg pt-2">FAQ</h2>
+      <div class="space-y-4 mt-2">
+        {faqs.map((f) => (
+          <div>
+            <p class="font-medium">{f.q}</p>
+            <p class="text-slate-600 dark:text-slate-400">{f.a}</p>
+          </div>
+        ))}
+      </div>
     </div>
   </div>
 
