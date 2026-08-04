@@ -1,0 +1,105 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: 'Why CSV Imports Fail: Delimiters, Quotes, Encoding and Broken Rows',
+  datePublished: '2026-08-04',
+  author: { '@type': 'Organization', name: 'Kit-Bin' },
+  description:
+    'The specific, diagnosable reasons a CSV file fails to import cleanly — wrong delimiter, unescaped commas, character encoding, and which of these a cleaning tool can and can\'t fix.',
+};
+---
+
+<Layout
+  title="Why CSV Imports Fail: Delimiters, Quotes, Encoding and Broken Rows | Kit-Bin"
+  description="The specific, diagnosable reasons a CSV file fails to import cleanly, and which ones a cleaning tool can and can't fix."
+>
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} is:inline />
+
+  <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-slate-700 dark:text-slate-300 space-y-4">
+    <p class="text-sm"><a href="/guides/" class="text-blue-600 dark:text-blue-400 hover:underline">← All guides</a></p>
+    <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">Why CSV Imports Fail</h1>
+
+    <p>
+      "CSV" stands for comma-separated values, but the format has no single official
+      specification everyone follows exactly the same way — which is why a file that opens fine
+      in one program can fail, silently corrupt, or throw an error in another. The failure is
+      almost always one of four specific, diagnosable problems.
+    </p>
+
+    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">1. The wrong delimiter</h2>
+    <p>
+      Not every CSV actually uses commas. Excel, depending on your system's regional settings,
+      often exports CSV files delimited by semicolons instead — because in locales where a comma
+      is the decimal separator (as in many European number formats), using it as a column
+      separator too would be ambiguous. If you open a semicolon-delimited file with a
+      comma-only parser, every row looks like a single column with semicolons inside it.
+    </p>
+    <p>
+      <strong>How to tell:</strong> open the file in a plain text editor. If every line has
+      semicolons or tabs between values instead of commas, that's your delimiter mismatch.
+    </p>
+
+    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">2. Unescaped commas inside a field</h2>
+    <p>
+      A text field that legitimately contains a comma — an address like "123 Main St, Apt 4," or
+      a company name like "Smith, Jones & Co." — has to be wrapped in quotes for a CSV parser to
+      treat that comma as part of the text rather than a new column boundary. If the file that
+      generated the CSV didn't quote the field correctly, the row silently splits into extra
+      columns, throwing off every column after it for that row.
+    </p>
+    <p>
+      <strong>How to tell:</strong> if a specific row has more columns than the header row, this
+      is almost always why.
+    </p>
+
+    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">3. Character encoding</h2>
+    <p>
+      A CSV is just text, and text has to be decoded using a specific character encoding —
+      commonly UTF-8, but older files (especially from older Windows software) sometimes use
+      Windows-1252 or another legacy encoding instead. Open a file with the wrong encoding
+      assumed and accented characters, curly quotes, or non-English names turn into garbled
+      symbols, even though the underlying data was never actually corrupted.
+    </p>
+    <p>
+      <strong>How to tell:</strong> names or words appear with strange characters like "Ã©" where
+      an accented letter should be — that's a classic UTF-8-read-as-Latin-1 (or vice versa)
+      encoding mismatch.
+    </p>
+
+    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">4. Genuinely messy data</h2>
+    <p>
+      Separate from format problems, a CSV can just contain messy data: rows that are completely
+      blank, columns nobody ever filled in, duplicate rows from a script that ran twice, or
+      inconsistent whitespace around values. This category is different from the three above —
+      the file parses correctly, the data itself just needs cleaning up before it's useful.
+    </p>
+
+    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">What a cleaning tool can and can't fix</h2>
+    <p>
+      Delimiter mismatches, unescaped-comma row breakage, and encoding problems all require
+      knowing something about the file's origin or intent that a generic tool can't safely guess
+      — misinterpreting any of these risks silently corrupting data rather than fixing it. A
+      cleaning tool can safely handle problem #4: trimming whitespace, dropping fully empty
+      rows/columns, and removing exact duplicate rows, because none of those operations require
+      guessing at ambiguous structure.
+    </p>
+
+    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">Cleaning what can be safely cleaned</h2>
+    <p>
+      <a href="/data/csv-cleaner" class="text-blue-600 dark:text-blue-400 hover:underline">CSV Cleaner</a>
+      — trims whitespace, drops empty rows/columns, and removes exact duplicates, entirely in
+      your browser. It won't fix a delimiter mismatch or unescaped commas — those need fixing at
+      the source, in whatever program generated the file.
+    </p>
+
+    <h2 class="font-semibold text-lg pt-2 text-slate-900 dark:text-slate-100">Related tools</h2>
+    <p>
+      Once your CSV parses cleanly, convert it with
+      <a href="/csv/to-json" class="text-blue-600 dark:text-blue-400 hover:underline">CSV to JSON</a>
+      or <a href="/csv/to-excel" class="text-blue-600 dark:text-blue-400 hover:underline">CSV to Excel</a>.
+    </p>
+  </article>
+</Layout>

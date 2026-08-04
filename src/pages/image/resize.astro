@@ -16,6 +16,14 @@ import AdUnit from '../../components/AdUnit.astro';
     {
       "q": "Does it keep the aspect ratio?",
       "a": "Yes — height is calculated from your target width automatically."
+    },
+    {
+      "q": "Can I set an exact height, or only width?",
+      "a": "Only width, currently — height always scales proportionally to keep the image from distorting."
+    },
+    {
+      "q": "Can resizing make a small image bigger without losing quality?",
+      "a": "It can make the file dimensions bigger, but it cannot add detail that was never captured — enlarging a low-resolution image just makes the existing pixels bigger and softer, not sharper."
     }
   ]}
   />
@@ -42,13 +50,26 @@ import AdUnit from '../../components/AdUnit.astro';
   <AdUnit />
 
   <div class="max-w-2xl mx-auto px-4 py-12 text-slate-700 dark:text-slate-300 space-y-4">
-    <p>This tool resizes an image to a target width, scaling the height to match automatically.</p>
+    <p>This tool resizes an image to a target width, scaling the height to match automatically so the image never distorts.</p>
     <p>Set your target width, then drop your image above. The resized file downloads automatically once ready.</p>
     <h2 class="font-semibold text-lg pt-2">FAQ</h2>
     <div>
       <p class="font-medium">Does it keep the aspect ratio?</p>
       <p class="text-slate-600 dark:text-slate-400">Yes — height is calculated from your target width automatically.</p>
     </div>
+    <div>
+      <p class="font-medium">Can I set an exact height, or only width?</p>
+      <p class="text-slate-600 dark:text-slate-400">Only width, currently — height always scales proportionally to keep the image from distorting.</p>
+    </div>
+    <div>
+      <p class="font-medium">Can resizing make a small image bigger without losing quality?</p>
+      <p class="text-slate-600 dark:text-slate-400">It can make the file dimensions bigger, but it cannot add detail that was never captured — enlarging a low-resolution image just makes the existing pixels bigger and softer, not sharper.</p>
+    </div>
+    <p class="text-sm">
+      Trying to shrink a file rather than change its dimensions? Read
+      <a href="/guides/compression-vs-resizing" class="text-blue-600 dark:text-blue-400 hover:underline">Compression vs Resizing</a>
+      to see which one you actually need.
+    </p>
   </div>
 
   <script>

@@ -235,4 +235,14 @@ export const toolIcons: Record<string, IconPrimitive[]> = {
     { t: 'rect', x: 11.5, y: 10, w: 10, h: 8, rx: 1.2 },
     { t: 'path', d: 'M15 12.5l3 2-3 2z' },
   ],
+  '/guides/why-csv-imports-fail': [
+    { t: 'rect', x: 3, y: 4, w: 18, h: 16, rx: 1.5 },
+    { t: 'path', d: 'M3 9h18M9 9v11M15 9v11' },
+    { t: 'path', d: 'M17 15l2 2 2-2' },
+  ],
+  '/guides/compression-vs-resizing': [
+    { t: 'rect', x: 3, y: 3, w: 8, h: 8, rx: 1 },
+    { t: 'rect', x: 13, y: 13, w: 8, h: 8, rx: 1 },
+    { t: 'path', d: 'M11 11l-3 3m14-3l-3 3' },
+  ],
 };

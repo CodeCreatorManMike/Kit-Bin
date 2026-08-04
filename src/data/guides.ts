@@ -42,4 +42,16 @@ export const guides: Guide[] = [
     cardTitle: 'MP4 vs WebM: Which One Should You Actually Use',
     description: 'Two containers, different codecs inside, and a real answer for which one you need.',
   },
+  {
+    slug: '/guides/why-csv-imports-fail',
+    title: 'Why CSV Imports Fail: Delimiters, Quotes, Encoding and Broken Rows',
+    cardTitle: 'Why CSV Imports Fail',
+    description: 'The specific, diagnosable reasons a CSV rejects on import — and which ones a cleaner tool can and can\'t fix.',
+  },
+  {
+    slug: '/guides/compression-vs-resizing',
+    title: 'Image Compression vs Resizing: Which One Makes a File Smaller?',
+    cardTitle: 'Compression vs Resizing',
+    description: 'Two different operations that both shrink a file, and why picking the wrong one wastes the other\'s benefit.',
+  },
 ];
