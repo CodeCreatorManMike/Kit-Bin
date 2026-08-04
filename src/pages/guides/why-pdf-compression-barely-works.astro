@@ -8,13 +8,13 @@ const schema = {
   datePublished: '2026-08-04',
   author: { '@type': 'Organization', name: 'Kit-Bin' },
   description:
-    'PDF compressors mostly work by re-encoding embedded JPEG images — a PDF built from text, vectors, or PNG images has almost nothing for that process to shrink.',
+    'PDF compressors mostly work by re-encoding embedded JPEG images. A PDF built from text, vectors, or PNG images has almost nothing for that process to shrink.',
 };
 ---
 
 <Layout
   title="Why PDF Compression Sometimes Makes Almost No Difference | Kit-Bin"
-  description="PDF compressors mostly re-encode embedded JPEG images — a PDF with none has almost nothing to shrink."
+  description="PDF compressors mostly re-encode embedded JPEG images. A PDF with none has almost nothing to shrink."
 >
   <script type="application/ld+json" set:html={JSON.stringify(schema)} is:inline />
 
@@ -24,49 +24,49 @@ const schema = {
 
     <p>
       Run a 40MB PDF through a compressor and get a 38MB file back, and it's easy to assume the
-      tool didn't work. Usually it did work — there just wasn't much in the file that a
+      tool didn't work. Usually it did work. There just wasn't much in the file that a
       compressor is able to touch.
     </p>
 
     <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">What a PDF compressor actually compresses</h2>
     <p>
       A PDF file is a container holding several very different kinds of content: vector drawing
-      instructions, embedded fonts, plain text, and — usually the biggest contributor to file
-      size — embedded raster images, most commonly JPEGs from scanned pages or inserted photos.
+      instructions, embedded fonts, plain text, and, usually the biggest contributor to file
+      size, embedded raster images, most commonly JPEGs from scanned pages or inserted photos.
       "Compressing a PDF" almost always means finding those embedded JPEG images and re-encoding
       them at a lower quality setting, which is where the size reduction actually comes from.
     </p>
 
     <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Why a PDF with little to no images barely shrinks</h2>
     <p>
-      Vector graphics, embedded fonts, and plain text are already compact by nature — a page of
+      Vector graphics, embedded fonts, and plain text are already compact by nature. A page of
       text takes up a few kilobytes regardless of how many words are on it, because it's stored
       as instructions and character codes, not pixels. A compressor re-encoding JPEGs has nothing
       to do to a document built entirely from text and vectors, since there's no image data to
       shrink. A 40MB "PDF" made of a hundred text pages was never going to compress much no
-      matter what tool you use — the size is coming from somewhere compression doesn't reach, or
+      matter what tool you use. The size is coming from somewhere compression doesn't reach, or
       the size estimate itself was off.
     </p>
 
     <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">What actually determines the win</h2>
     <ul class="list-disc pl-5 space-y-1">
-      <li><strong>Scanned documents:</strong> usually compress well — each page is one large JPEG, and re-encoding it at lower quality has a real, visible effect on file size.</li>
-      <li><strong>Photo-heavy reports:</strong> compress well for the same reason — the embedded photos are the bulk of the size.</li>
+      <li><strong>Scanned documents:</strong> usually compress well. Each page is one large JPEG, and re-encoding it at lower quality has a real, visible effect on file size.</li>
+      <li><strong>Photo-heavy reports:</strong> compress well for the same reason. The embedded photos are the bulk of the size.</li>
       <li><strong>Text-only documents:</strong> barely change, because there's no image data to touch.</li>
-      <li><strong>Already-compressed images:</strong> if the source JPEGs were already saved at a low quality, re-encoding them again has little left to gain — you're compressing an already-compressed file.</li>
+      <li><strong>Already-compressed images:</strong> if the source JPEGs were already saved at a low quality, re-encoding them again has little left to gain. You're compressing an already-compressed file.</li>
     </ul>
 
     <p>
       This site's <a href="/pdf/compress" class="text-primary dark:text-blue-400 hover:underline">Compress PDF</a>
       tool follows exactly this approach: it finds embedded JPEG images and re-encodes them at a
-      lower quality, leaving text, fonts, and vector content untouched — which is why the result
+      lower quality, leaving text, fonts, and vector content untouched, which is why the result
       you get tracks directly with how image-heavy your original file was.
     </p>
 
     <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Related</h2>
     <p>
       <a href="/guides/why-pdfs-get-large" class="text-primary dark:text-blue-400 hover:underline">Why is my PDF so big?</a>
-      covers the other side of this — what actually causes a large file size in the first place.
+      covers the other side of this, what actually causes a large file size in the first place.
     </p>
   </article>
 </Layout>

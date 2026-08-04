@@ -7,30 +7,30 @@ import AdUnit from '../../components/AdUnit.astro';
 const faqs = [
   {
     q: 'Will this affect quality?',
-    a: 'For JPG and WebP, yes — some quality loss is expected, since that\'s how lossy compression reduces file size. For PNG, the compression is lossless (no visible quality change), but the size reduction is usually smaller as a result.',
+    a: 'For JPG and WebP, yes, some quality loss is expected, since that\'s how lossy compression reduces file size. For PNG, the compression is lossless (no visible quality change), but the size reduction is usually smaller as a result.',
   },
   {
     q: 'Which formats are supported?',
-    a: 'JPG, PNG, and WebP. The output stays in the same format as the input — this tool doesn\'t convert between formats.',
+    a: 'JPG, PNG, and WebP. The output stays in the same format as the input. This tool doesn\'t convert between formats.',
   },
   {
     q: 'Why did my PNG barely shrink?',
-    a: 'PNG compression here is lossless — it can only remove redundancy the original encoder left behind, not throw away visible detail. If your PNG was already efficiently encoded, there may be very little left to save. Converting to JPG or WebP will shrink it further, but changes the format and (for JPG) removes transparency.',
+    a: 'PNG compression here is lossless. It can only remove redundancy the original encoder left behind, not throw away visible detail. If your PNG was already efficiently encoded, there may be very little left to save. Converting to JPG or WebP will shrink it further, but changes the format and (for JPG) removes transparency.',
   },
   {
     q: 'Why is the result bigger than my original in some cases?',
-    a: "It isn't — if re-encoding wouldn't actually make the file smaller, this tool keeps your original file instead of returning a larger one.",
+    a: "It isn't. If re-encoding wouldn't actually make the file smaller, this tool keeps your original file instead of returning a larger one.",
   },
 ];
 ---
 
 <Layout
   title="Compress Images Online in Your Browser | Kit-Bin"
-  description="Reduce a JPG, PNG, or WebP image's file size without changing its format. Runs entirely in your browser — your file is never uploaded to a server."
+  description="Reduce a JPG, PNG, or WebP image's file size without changing its format. Runs entirely in your browser. Your file is never uploaded to a server."
 >
   <ToolSchema
     name="Compress Image"
-    description="Reduce a JPG, PNG, or WebP image's file size without changing its format. Runs entirely in your browser — your file is never uploaded to a server."
+    description="Reduce a JPG, PNG, or WebP image's file size without changing its format. Runs entirely in your browser. Your file is never uploaded to a server."
     faqs={faqs}
   />
 
@@ -46,16 +46,16 @@ const faqs = [
   <div class="max-w-2xl mx-auto px-4 py-12 text-ink dark:text-slate-300 space-y-6">
     <p>
       Drop a JPG, PNG, or WebP image above. This tool re-encodes it using the same codec family
-      the format already uses, so a JPG stays a JPG and a PNG stays a PNG — it's useful when an
+      the format already uses, so a JPG stays a JPG and a PNG stays a PNG. It's useful when an
       email attachment limit, a website upload cap, or an app's storage quota rejects a file that's
       otherwise fine.
     </p>
 
     <div>
-      <h2 class="font-semibold text-lg">JPG and WebP vs. PNG — different trade-offs</h2>
+      <h2 class="font-semibold text-lg">JPG and WebP vs. PNG, different trade-offs</h2>
       <p class="text-muted dark:text-slate-400">
         JPG and WebP compression here is lossy: the tool trades a small, usually invisible amount
-        of visual detail for a meaningfully smaller file. PNG compression is lossless — it
+        of visual detail for a meaningfully smaller file. PNG compression is lossless. It
         re-encodes the same exact pixels more efficiently, which is safer for screenshots and
         interface graphics but typically saves less space than converting to a lossy format
         would.

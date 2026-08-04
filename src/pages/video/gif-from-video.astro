@@ -7,7 +7,7 @@ import AdUnit from '../../components/AdUnit.astro';
 const faqs = [
   {
     q: 'Why is there a length/size cap?',
-    a: "GIF is an inherently inefficient format for video — it stores every frame as a separate indexed-color image, so an uncapped conversion can produce a huge file for just a few seconds of footage. Output here is capped at 8 seconds, 480px wide, and 10fps to keep the result usable.",
+    a: "GIF is an inherently inefficient format for video. It stores every frame as a separate indexed-color image, so an uncapped conversion can produce a huge file for just a few seconds of footage. Output here is capped at 8 seconds, 480px wide, and 10fps to keep the result usable.",
   },
   {
     q: 'Will the colors look accurate?',
@@ -15,17 +15,17 @@ const faqs = [
   },
   {
     q: 'Does the GIF include audio?',
-    a: "No — GIF has no audio support at all. This tool only converts the video's picture, not its sound.",
+    a: "No. GIF has no audio support at all. This tool only converts the video's picture, not its sound.",
   },
   {
     q: 'Can I convert a longer clip by trimming it first?',
-    a: 'Yes — use <a href="/video/trim" class="text-primary dark:text-blue-400 hover:underline">Trim Video</a> to cut down to the section you want before converting, since the cap applies to whatever you drop in.',
+    a: 'Yes, use <a href="/video/trim" class="text-primary dark:text-blue-400 hover:underline">Trim Video</a> to cut down to the section you want before converting, since the cap applies to whatever you drop in.',
   },
 ];
 ---
 
 <Layout
-  title="Convert Video to GIF Online — Free & No Upload Required | Kit-Bin"
+  title="Convert Video to GIF Online, Free & No Upload Required | Kit-Bin"
   description="Turn a video clip into a GIF in your browser. Your file is never uploaded to a server."
 >
   <ToolSchema
@@ -44,7 +44,7 @@ const faqs = [
   <AdUnit />
 
   <div class="max-w-2xl mx-auto px-4 py-12 text-ink dark:text-slate-300 space-y-6">
-    <p>This tool converts the first few seconds of a video into an animated GIF. Drop your video above — to keep the file size reasonable, output is capped at 8 seconds, 480px wide, 10fps.</p>
+    <p>This tool converts the first few seconds of a video into an animated GIF. Drop your video above. To keep the file size reasonable, output is capped at 8 seconds, 480px wide, 10fps.</p>
     <div>
       <h2 class="font-semibold text-lg pt-2">FAQ</h2>
       <div class="space-y-4 mt-2">

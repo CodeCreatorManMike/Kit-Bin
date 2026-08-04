@@ -6,12 +6,12 @@ import AdUnit from '../../components/AdUnit.astro';
 ---
 
 <Layout
-  title="Normalize Audio Volume Online — Free & No Upload Required | Kit-Bin"
-  description="Normalize an audio file's volume to a consistent peak level. Runs entirely in your browser — your file is never uploaded to a server."
+  title="Normalize Audio Volume Online, Free & No Upload Required | Kit-Bin"
+  description="Normalize an audio file's volume to a consistent peak level. Runs entirely in your browser. Your file is never uploaded to a server."
 >
   <ToolSchema
     name="Normalize Audio Volume"
-    description="Normalize an audio file's volume to a consistent peak level. Runs entirely in your browser — your file is never uploaded to a server."
+    description="Normalize an audio file's volume to a consistent peak level. Runs entirely in your browser. Your file is never uploaded to a server."
     faqs={[
     {
       "q": "What format is the output?",
@@ -19,11 +19,11 @@ import AdUnit from '../../components/AdUnit.astro';
     },
     {
       "q": "Does this even out quiet and loud sections within the recording?",
-      "a": "No. This tool raises or lowers the complete signal so its highest peak reaches the target level — it does not compress the difference between quiet and loud passages. A recording with one loud moment and long quiet stretches will still have that same gap after normalizing; only the overall level shifts."
+      "a": "No. This tool raises or lowers the complete signal so its highest peak reaches the target level. It does not compress the difference between quiet and loud passages. A recording with one loud moment and long quiet stretches will still have that same gap after normalizing; only the overall level shifts."
     },
     {
       "q": "Is this the same as loudness (LUFS) normalization?",
-      "a": "No — this is peak normalization, which looks only at the single loudest sample in the file. Loudness normalization measures perceived volume across the whole recording and is a different calculation entirely."
+      "a": "No, this is peak normalization, which looks only at the single loudest sample in the file. Loudness normalization measures perceived volume across the whole recording and is a different calculation entirely."
     }
   ]}
   />
@@ -38,7 +38,7 @@ import AdUnit from '../../components/AdUnit.astro';
   <AdUnit />
 
   <div class="max-w-2xl mx-auto px-4 py-12 text-ink dark:text-slate-300 space-y-6">
-    <p>This tool boosts or reduces an audio file's volume so its loudest point sits just below clipping — peak normalization, not full loudness matching.</p>
+    <p>This tool boosts or reduces an audio file's volume so its loudest point sits just below clipping, peak normalization, not full loudness matching.</p>
     <p>Drop your audio file above. The normalized file downloads automatically once ready.</p>
     <div>
       <h2 class="font-semibold text-lg pt-2">FAQ</h2>
@@ -49,11 +49,11 @@ import AdUnit from '../../components/AdUnit.astro';
         </div>
         <div>
           <p class="font-medium">Does this even out quiet and loud sections within the recording?</p>
-          <p class="text-muted dark:text-slate-400">No. This tool raises or lowers the complete signal so its highest peak reaches the target level — it does not compress the difference between quiet and loud passages. A recording with one loud moment and long quiet stretches will still have that same gap after normalizing; only the overall level shifts.</p>
+          <p class="text-muted dark:text-slate-400">No. This tool raises or lowers the complete signal so its highest peak reaches the target level. It does not compress the difference between quiet and loud passages. A recording with one loud moment and long quiet stretches will still have that same gap after normalizing; only the overall level shifts.</p>
         </div>
         <div>
           <p class="font-medium">Is this the same as loudness (LUFS) normalization?</p>
-          <p class="text-muted dark:text-slate-400">No — this is peak normalization, which looks only at the single loudest sample in the file. Loudness normalization measures perceived volume across the whole recording and is a different calculation entirely.</p>
+          <p class="text-muted dark:text-slate-400">No, this is peak normalization, which looks only at the single loudest sample in the file. Loudness normalization measures perceived volume across the whole recording and is a different calculation entirely.</p>
         </div>
       </div>
     </div>

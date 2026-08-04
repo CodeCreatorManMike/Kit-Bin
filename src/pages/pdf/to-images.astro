@@ -7,7 +7,7 @@ import AdUnit from '../../components/AdUnit.astro';
 const faqs = [
   {
     q: 'What resolution are the images?',
-    a: 'Pages render at 2x scale for sharp results, similar to a high-DPI screenshot — zooming in well beyond that will look soft, since a PNG has a fixed pixel grid rather than infinite detail.',
+    a: 'Pages render at 2x scale for sharp results, similar to a high-DPI screenshot. Zooming in well beyond that will look soft, since a PNG has a fixed pixel grid rather than infinite detail.',
   },
   {
     q: 'What do I get for a multi-page PDF?',
@@ -15,18 +15,18 @@ const faqs = [
   },
   {
     q: 'Does the text stay selectable in the output?',
-    a: 'No — PNG is a raster image format, so every page becomes pixels. If you need to keep text selectable and searchable, keep the original PDF instead of converting it to images.',
+    a: 'No. PNG is a raster image format, so every page becomes pixels. If you need to keep text selectable and searchable, keep the original PDF instead of converting it to images.',
   },
 ];
 ---
 
 <Layout
-  title="PDF to PNG Converter — Save Every Page as an Image | Kit-Bin"
-  description="Convert every page of a PDF to a PNG image. Runs entirely in your browser — your file is never uploaded to a server."
+  title="PDF to PNG Converter, Save Every Page as an Image | Kit-Bin"
+  description="Convert every page of a PDF to a PNG image. Runs entirely in your browser. Your file is never uploaded to a server."
 >
   <ToolSchema
     name="PDF to PNG"
-    description="Convert every page of a PDF to a PNG image. Runs entirely in your browser — your file is never uploaded to a server."
+    description="Convert every page of a PDF to a PNG image. Runs entirely in your browser. Your file is never uploaded to a server."
     faqs={faqs}
   />
 
@@ -41,7 +41,7 @@ const faqs = [
 
   <div class="max-w-2xl mx-auto px-4 py-12 text-ink dark:text-slate-300 space-y-6">
     <p>
-      Drop a PDF above and every page renders to its own PNG image — a single page downloads
+      Drop a PDF above and every page renders to its own PNG image. A single page downloads
       directly, more than one page downloads as a zip. This is useful when you need to paste a
       page into a document, a slide, or a chat that doesn't accept PDF attachments.
     </p>
@@ -49,7 +49,7 @@ const faqs = [
     <div>
       <h2 class="font-semibold text-lg">What actually happens to the page</h2>
       <p class="text-muted dark:text-slate-400">
-        Each page is rendered to a canvas at 2x scale and exported as a PNG — the same underlying
+        Each page is rendered to a canvas at 2x scale and exported as a PNG, the same underlying
         approach a PDF viewer uses to display a page on screen, just saved as an image instead of
         drawn to your screen. Text becomes pixels in the process: it will look identical at normal
         zoom, but it's no longer selectable, searchable, or copyable the way it was in the PDF.

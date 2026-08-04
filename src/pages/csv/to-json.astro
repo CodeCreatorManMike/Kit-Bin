@@ -7,11 +7,11 @@ import AdUnit from '../../components/AdUnit.astro';
 const faqs = [
   {
     q: 'Does my CSV need a header row?',
-    a: "Yes — the first row's values become the JSON object keys, and every following row becomes one object using those keys.",
+    a: "Yes, the first row's values become the JSON object keys, and every following row becomes one object using those keys.",
   },
   {
     q: 'Does it handle commas inside quoted fields?',
-    a: 'Yes — the parser follows standard CSV quoting rules, so a comma inside a quoted value is not treated as a column separator.',
+    a: 'Yes, the parser follows standard CSV quoting rules, so a comma inside a quoted value is not treated as a column separator.',
   },
   {
     q: 'What happens to blank rows or blank cells?',
@@ -19,18 +19,18 @@ const faqs = [
   },
   {
     q: 'Are numbers and booleans converted to their JSON types?',
-    a: "No — every value comes out of a CSV as text, and this tool keeps them as strings (e.g. \"42\" rather than 42) rather than guessing types. If your downstream tool needs real numbers, you'll need to convert them there.",
+    a: "No, every value comes out of a CSV as text, and this tool keeps them as strings (e.g. \"42\" rather than 42) rather than guessing types. If your downstream tool needs real numbers, you'll need to convert them there.",
   },
 ];
 ---
 
 <Layout
-  title="Convert CSV to JSON Online — Free & No Upload Required | Kit-Bin"
-  description="Convert a CSV file to JSON in seconds. Runs entirely in your browser — your file is never uploaded to a server."
+  title="Convert CSV to JSON Online, Free & No Upload Required | Kit-Bin"
+  description="Convert a CSV file to JSON in seconds. Runs entirely in your browser. Your file is never uploaded to a server."
 >
   <ToolSchema
     name="Convert CSV to JSON"
-    description="Convert a CSV file to JSON in seconds. Runs entirely in your browser — your file is never uploaded to a server."
+    description="Convert a CSV file to JSON in seconds. Runs entirely in your browser. Your file is never uploaded to a server."
     faqs={faqs}
   />
 
@@ -44,7 +44,7 @@ const faqs = [
   <AdUnit />
 
   <div class="max-w-2xl mx-auto px-4 py-12 text-ink dark:text-slate-300 space-y-6">
-    <p>This tool converts a CSV file into a JSON array of objects, using the header row as keys. Drop your CSV above — the JSON file downloads automatically once ready.</p>
+    <p>This tool converts a CSV file into a JSON array of objects, using the header row as keys. Drop your CSV above. The JSON file downloads automatically once ready.</p>
     <div>
       <h2 class="font-semibold text-lg pt-2">FAQ</h2>
       <div class="space-y-4 mt-2">

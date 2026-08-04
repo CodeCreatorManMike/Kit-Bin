@@ -7,7 +7,7 @@ import AdUnit from '../../components/AdUnit.astro';
 const faqs = [
   {
     q: 'Why convert to WebP?',
-    a: 'WebP is typically smaller than PNG at similar visual quality, which matters for website load times. Actual savings depend heavily on image content — flat-color graphics and screenshots often shrink a lot; photographic PNGs shrink the most.',
+    a: 'WebP is typically smaller than PNG at similar visual quality, which matters for website load times. Actual savings depend heavily on image content. Flat-color graphics and screenshots often shrink a lot; photographic PNGs shrink the most.',
   },
   {
     q: 'Is the conversion lossy or lossless?',
@@ -22,11 +22,11 @@ const faqs = [
 
 <Layout
   title="PNG to WebP Converter for Smaller Web Images | Kit-Bin"
-  description="Convert a PNG image to WebP in seconds. Runs entirely in your browser — your file is never uploaded to a server."
+  description="Convert a PNG image to WebP in seconds. Runs entirely in your browser. Your file is never uploaded to a server."
 >
   <ToolSchema
     name="Convert PNG to WebP"
-    description="Convert a PNG image to WebP in seconds. Runs entirely in your browser — your file is never uploaded to a server."
+    description="Convert a PNG image to WebP in seconds. Runs entirely in your browser. Your file is never uploaded to a server."
     faqs={faqs}
   />
 
@@ -42,7 +42,7 @@ const faqs = [
   <div class="max-w-2xl mx-auto px-4 py-12 text-ink dark:text-slate-300 space-y-6">
     <p>
       Convert a PNG image to WebP for a smaller website asset. This is a lossy conversion by
-      default — it trades a bit of visual detail for a meaningfully smaller file, which is the
+      default. It trades a bit of visual detail for a meaningfully smaller file, which is the
       right trade for most web images but not for source files you'll keep editing.
     </p>
 

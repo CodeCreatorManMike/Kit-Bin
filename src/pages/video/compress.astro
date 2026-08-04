@@ -7,15 +7,15 @@ import AdUnit from '../../components/AdUnit.astro';
 const faqs = [
   {
     q: 'Will this affect quality?',
-    a: "Yes — that's the tradeoff for a smaller file. The video and audio are both re-encoded at a lower quality setting. Try it on a copy first if quality matters.",
+    a: "Yes, that's the tradeoff for a smaller file. The video and audio are both re-encoded at a lower quality setting. Try it on a copy first if quality matters.",
   },
   {
     q: 'Can I choose the target size, resolution, or bitrate?',
-    a: "Not currently — this tool uses one fixed quality setting for video and audio rather than exposing target size, resolution, or bitrate as options. If you need a specific output size, you may need to try compressing more than once, or use dedicated video-editing software with manual bitrate control.",
+    a: "Not currently. This tool uses one fixed quality setting for video and audio rather than exposing target size, resolution, or bitrate as options. If you need a specific output size, you may need to try compressing more than once, or use dedicated video-editing software with manual bitrate control.",
   },
   {
     q: 'Why does compressing always change something, even a little?',
-    a: "Video compression is lossy by nature — reducing file size means throwing away some picture or audio detail the codec judges least noticeable. Resolution, frame rate, bitrate, and codec efficiency all trade off against file size; there's no way to shrink a file meaningfully without changing some of that data.",
+    a: "Video compression is lossy by nature. Reducing file size means throwing away some picture or audio detail the codec judges least noticeable. Resolution, frame rate, bitrate, and codec efficiency all trade off against file size; there's no way to shrink a file meaningfully without changing some of that data.",
   },
   {
     q: 'Does the output stay in the same container format?',
@@ -25,7 +25,7 @@ const faqs = [
 ---
 
 <Layout
-  title="Compress Video Online — Free & No Upload Required | Kit-Bin"
+  title="Compress Video Online, Free & No Upload Required | Kit-Bin"
   description="Shrink a video's file size in your browser. Your file is never uploaded to a server."
 >
   <ToolSchema
@@ -44,7 +44,7 @@ const faqs = [
   <AdUnit />
 
   <div class="max-w-2xl mx-auto px-4 py-12 text-ink dark:text-slate-300 space-y-6">
-    <p>This tool re-encodes a video's audio and video streams at a lower fixed quality to shrink its file size. Drop your video above — this re-encodes the full file, so larger videos take longer, especially on mobile.</p>
+    <p>This tool re-encodes a video's audio and video streams at a lower fixed quality to shrink its file size. Drop your video above. This re-encodes the full file, so larger videos take longer, especially on mobile.</p>
     <div>
       <h2 class="font-semibold text-lg pt-2">FAQ</h2>
       <div class="space-y-4 mt-2">

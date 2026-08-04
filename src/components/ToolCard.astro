@@ -1,12 +1,14 @@
 ---
 import type { Tool } from '../data/tools';
 import ToolIcon from './ToolIcon.astro';
+import { categoryColors } from '../data/toolIcons';
 
 interface Props {
   tool: Tool;
 }
 
 const { tool } = Astro.props;
+const accent = (categoryColors[tool.category] ?? categoryColors.pdf).dot;
 ---
 
 <a
@@ -15,10 +17,13 @@ const { tool } = Astro.props;
   data-slug={tool.slug}
   data-name={tool.name.toLowerCase()}
   data-description={tool.description.toLowerCase()}
-  class="group relative flex flex-col rounded-xl border border-border-soft dark:border-slate-800 p-3.5 bg-surface dark:bg-slate-900 shadow-[0_1px_2px_rgba(16,24,47,0.04)] transition-all duration-150 hover:border-primary/25 hover:shadow-[0_6px_16px_rgba(16,24,47,0.08)] hover:-translate-y-0.5 active:translate-y-0 active:shadow-[0_1px_2px_rgba(16,24,47,0.04)] active:scale-[0.98]"
+  class="group relative flex flex-col overflow-hidden rounded-xl border border-border-soft dark:border-slate-800 p-3.5 bg-surface dark:bg-slate-900 shadow-[0_1px_2px_rgba(16,24,47,0.04)] transition-all duration-150 hover:border-primary/25 hover:shadow-[0_6px_16px_rgba(16,24,47,0.08)] hover:-translate-y-0.5 active:translate-y-0 active:shadow-[0_1px_2px_rgba(16,24,47,0.04)] active:scale-[0.98]"
 >
+  <span class={`absolute inset-x-0 top-0 h-0.5 scale-x-0 ${accent} transition-transform duration-200 origin-left group-hover:scale-x-100`} aria-hidden="true"></span>
   <div class="flex items-start justify-between">
-    <ToolIcon slug={tool.slug} category={tool.category} size="sm" />
+    <div class="transition-transform duration-200 group-hover:scale-110 group-hover:-rotate-3">
+      <ToolIcon slug={tool.slug} category={tool.category} size="sm" />
+    </div>
     <button
       type="button"
       data-favorite-toggle

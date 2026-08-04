@@ -7,26 +7,26 @@ import AdUnit from '../../components/AdUnit.astro';
 const faqs = [
   {
     q: 'Does it rotate every page the same way?',
-    a: 'Yes — all pages rotate by the same amount you select. Rotating individual pages to different orientations isn\'t supported yet.',
+    a: 'Yes, all pages rotate by the same amount you select. Rotating individual pages to different orientations isn\'t supported yet.',
   },
   {
     q: 'Is this permanent, or just how my viewer displays it?',
-    a: "Permanent — the rotation is written into the saved PDF's page data, so it opens rotated correctly in any PDF viewer, not just the one you used to check it.",
+    a: "Permanent. The rotation is written into the saved PDF's page data, so it opens rotated correctly in any PDF viewer, not just the one you used to check it.",
   },
   {
     q: 'Does rotating affect quality?',
-    a: "No — this changes the page's rotation metadata, not its content. Text and images are untouched.",
+    a: "No, this changes the page's rotation metadata, not its content. Text and images are untouched.",
   },
 ];
 ---
 
 <Layout
   title="Rotate PDF Pages Online and Save Them | Kit-Bin"
-  description="Rotate every page in a PDF and save the new orientation permanently. Runs entirely in your browser — your file is never uploaded to a server."
+  description="Rotate every page in a PDF and save the new orientation permanently. Runs entirely in your browser. Your file is never uploaded to a server."
 >
   <ToolSchema
     name="Rotate PDF"
-    description="Rotate every page in a PDF and save the new orientation permanently. Runs entirely in your browser — your file is never uploaded to a server."
+    description="Rotate every page in a PDF and save the new orientation permanently. Runs entirely in your browser. Your file is never uploaded to a server."
     faqs={faqs}
   />
 
@@ -50,14 +50,14 @@ const faqs = [
 
   <div class="max-w-2xl mx-auto px-4 py-12 text-ink dark:text-slate-300 space-y-6">
     <p>
-      Choose a rotation, drop your PDF above, and every page rotates by the same amount —
+      Choose a rotation, drop your PDF above, and every page rotates by the same amount,
       permanently, not just in whatever viewer you happen to open it in next. This is different
       from rotating the view in a PDF reader, which resets the next time someone else opens the
       file; this tool changes what's actually saved.
     </p>
     <p class="text-muted dark:text-slate-400">
-      This tool rotates the whole document by one amount. If only some pages are sideways — a
-      common case with scanned documents — you'll need to accept rotating every page and check
+      This tool rotates the whole document by one amount. If only some pages are sideways, a
+      common case with scanned documents, you'll need to accept rotating every page and check
       the result, since selecting individual pages for different rotations isn't supported yet.
     </p>
 

@@ -8,13 +8,13 @@ const schema = {
   datePublished: '2026-08-04',
   author: { '@type': 'Organization', name: 'Kit-Bin' },
   description:
-    'Flat tables versus nested structure — a practical comparison of CSV and JSON and when each one is the right choice.',
+    'Flat tables versus nested structure, a practical comparison of CSV and JSON and when each one is the right choice.',
 };
 ---
 
 <Layout
   title="CSV vs JSON: Which Format Should You Use? | Kit-Bin"
-  description="Flat tables versus nested structure — a practical answer, not just a feature list."
+  description="Flat tables versus nested structure, a practical answer, not just a feature list."
 >
   <script type="application/ld+json" set:html={JSON.stringify(schema)} is:inline />
 
@@ -29,18 +29,18 @@ const schema = {
 
     <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">CSV: flat tables</h2>
     <p>
-      CSV is rows and columns — one header row defining field names, then one line per record.
+      CSV is rows and columns, one header row defining field names, then one line per record.
       It maps directly onto a spreadsheet, which is exactly what makes it useful: any
       non-technical person can open a CSV in Excel or Google Sheets, and every data analysis tool
       reads it natively. Its limitation is structural: CSV has no native way to represent nested
-      data. A field can't hold a list or another object — everything has to be one value per
+      data. A field can't hold a list or another object. Everything has to be one value per
       cell.
     </p>
 
     <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">JSON: nested structure</h2>
     <p>
       JSON can represent objects inside objects, arrays inside fields, and data that doesn't fit
-      a flat table at all — a customer record with a list of orders, each order with a list of
+      a flat table at all, a customer record with a list of orders, each order with a list of
       line items, nested as deeply as needed. This is what most APIs and modern web applications
       actually use internally, because real-world data is rarely perfectly flat. The tradeoff is
       that it's not spreadsheet-friendly, and a person can't casually open a large JSON file and
@@ -57,17 +57,17 @@ const schema = {
 
     <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Converting between them</h2>
     <p>
-      Converting flat JSON (an array of simple objects, no nesting) to CSV is lossless — every
+      Converting flat JSON (an array of simple objects, no nesting) to CSV is lossless. Every
       field maps to a column cleanly. Converting CSV to JSON is always safe, since a table is a
       valid (if simple) shape of JSON data. The lossy direction is converting <em>nested</em> JSON
-      to CSV — nested fields either get flattened awkwardly or dropped, since CSV has no native
+      to CSV. Nested fields either get flattened awkwardly or dropped, since CSV has no native
       place to put them.
     </p>
 
     <p>
       <a href="/csv/to-json" class="text-primary dark:text-blue-400 hover:underline">Convert CSV to JSON</a>
-      or <a href="/json/to-csv" class="text-primary dark:text-blue-400 hover:underline">Convert JSON to CSV</a>
-      — both run entirely in your browser.
+      or <a href="/json/to-csv" class="text-primary dark:text-blue-400 hover:underline">Convert JSON to CSV</a>,
+      both run entirely in your browser.
     </p>
   </article>
 </Layout>

@@ -17,6 +17,14 @@ const categoryBlurbs: Record<string, string> = {
   data: 'Convert and clean CSV, JSON, and Excel-compatible data.',
 };
 
+const categoryGradients: Record<string, string> = {
+  pdf: 'from-red-500/10 via-red-400/5',
+  image: 'from-emerald-500/10 via-emerald-400/5',
+  audio: 'from-amber-500/10 via-amber-400/5',
+  video: 'from-violet-500/10 via-violet-400/5',
+  data: 'from-cyan-500/10 via-cyan-400/5',
+};
+
 const siteSchema = {
   '@context': 'https://schema.org',
   '@graph': [
@@ -30,7 +38,7 @@ const siteSchema = {
       '@type': 'WebSite',
       name: 'Kit-Bin',
       url: 'https://kit-bin.com/',
-      description: 'Free online file tools for PDF, images, audio, video, and data — running entirely in your browser.',
+      description: 'Free online file tools for PDF, images, audio, video, and data, running entirely in your browser.',
     },
   ],
 };
@@ -42,21 +50,33 @@ const siteSchema = {
 >
   <script type="application/ld+json" set:html={JSON.stringify(siteSchema)} is:inline />
 
-  <div class="max-w-5xl mx-auto px-6 pt-6 sm:pt-14 pb-4 sm:pb-8 flex flex-row items-center gap-4 sm:gap-8">
-    <div class="flex-1 text-left">
-      <h1 class="text-3xl sm:text-5xl font-bold tracking-tight text-ink dark:text-slate-100">
-        Powerful tools.<br /><span class="text-primary dark:text-blue-400">Simplified.</span>
-      </h1>
-      <p class="mt-2 sm:mt-4 text-sm sm:text-lg text-muted dark:text-slate-400 max-w-md">
-        Everything you need to work with your files in one beautiful, easy to use toolkit.
-      </p>
-      <p class="mt-2 text-xs sm:text-sm text-muted dark:text-slate-500">
-        <a href="/guides/how-kit-bin-works" class="hover:underline decoration-dotted underline-offset-2"
-          >Your files are processed on your device and never uploaded to Kit-Bin.</a
-        >
-      </p>
+  <div class="relative overflow-hidden">
+    <div
+      class="animate-blob pointer-events-none absolute -top-24 -left-16 h-64 w-64 rounded-full bg-gradient-to-br from-primary/25 via-violet-400/20 to-transparent blur-3xl"
+      aria-hidden="true"
+    ></div>
+    <div
+      class="animate-blob pointer-events-none absolute -top-10 right-0 h-56 w-56 rounded-full bg-gradient-to-bl from-emerald-400/20 via-cyan-400/15 to-transparent blur-3xl"
+      style="animation-delay: -7s"
+      aria-hidden="true"
+    ></div>
+
+    <div class="relative max-w-5xl mx-auto px-6 pt-6 sm:pt-14 pb-4 sm:pb-8 flex flex-row items-center gap-4 sm:gap-8">
+      <div class="flex-1 text-left animate-fade-in-up">
+        <h1 class="text-3xl sm:text-5xl font-bold tracking-tight text-ink dark:text-slate-100">
+          Powerful tools.<br /><span class="bg-gradient-to-r from-primary via-violet-500 to-cyan-500 dark:from-blue-400 dark:via-violet-400 dark:to-cyan-300 bg-clip-text text-transparent">Simplified.</span>
+        </h1>
+        <p class="mt-2 sm:mt-4 text-sm sm:text-lg text-muted dark:text-slate-400 max-w-md">
+          Everything you need to work with your files in one beautiful, easy to use toolkit.
+        </p>
+        <p class="mt-2 text-xs sm:text-sm text-muted dark:text-slate-500">
+          <a href="/guides/how-kit-bin-works" class="hover:underline decoration-dotted underline-offset-2"
+            >Your files are processed on your device and never uploaded to Kit-Bin.</a
+          >
+        </p>
+      </div>
+      <img src="/illustrations/hero.svg" alt="" class="animate-float h-20 w-20 sm:h-40 sm:w-40 object-contain shrink-0" />
     </div>
-    <img src="/illustrations/hero.svg" alt="" class="h-20 w-20 sm:h-40 sm:w-40 object-contain shrink-0" />
   </div>
 
   <div class="max-w-5xl mx-auto px-6">
@@ -85,10 +105,11 @@ const siteSchema = {
       {categories.map((c) => (
         <a
           href={`/${c.slug}/`}
-          class="block rounded-xl border border-border-soft dark:border-slate-800 p-4 shadow-[0_1px_2px_rgba(16,24,47,0.04)] transition-all duration-150 hover:border-primary/25 hover:shadow-[0_6px_16px_rgba(16,24,47,0.08)] hover:-translate-y-0.5 bg-surface dark:bg-slate-900"
+          class={`group relative block overflow-hidden rounded-xl border border-border-soft dark:border-slate-800 p-4 shadow-[0_1px_2px_rgba(16,24,47,0.04)] transition-all duration-150 hover:border-primary/25 hover:shadow-[0_6px_16px_rgba(16,24,47,0.08)] hover:-translate-y-0.5 bg-surface dark:bg-slate-900`}
         >
-          <p class="font-semibold text-ink dark:text-slate-100">{c.name}</p>
-          <p class="mt-1 text-sm text-muted dark:text-slate-400">{categoryBlurbs[c.slug]}</p>
+          <div class={`absolute inset-0 bg-gradient-to-br ${categoryGradients[c.slug]} to-transparent opacity-0 transition-opacity duration-200 group-hover:opacity-100`} aria-hidden="true"></div>
+          <p class="relative font-semibold text-ink dark:text-slate-100">{c.name}</p>
+          <p class="relative mt-1 text-sm text-muted dark:text-slate-400">{categoryBlurbs[c.slug]}</p>
         </a>
       ))}
     </div>
@@ -135,7 +156,7 @@ const siteSchema = {
       <a href="/guides/" class="text-sm font-medium text-primary dark:text-blue-400 hover:underline">View all guides →</a>
     </div>
     <p class="text-sm text-muted dark:text-slate-400 mb-4 max-w-2xl">
-      Plain-language explanations of the file formats and mechanics behind these tools — why files
+      Plain-language explanations of the file formats and mechanics behind these tools, why files
       behave the way they do.
     </p>
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:grid-cols-3">

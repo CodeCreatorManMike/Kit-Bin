@@ -7,11 +7,11 @@ import AdUnit from '../../components/AdUnit.astro';
 const faqs = [
   {
     q: 'Does this delete the audio, or replace it with silence?',
-    a: "It removes the audio track entirely — the output file has no audio track at all, rather than a silent one. Some players show a shorter total duration display as a result, since there's nothing to read a track length from.",
+    a: "It removes the audio track entirely. The output file has no audio track at all, rather than a silent one. Some players show a shorter total duration display as a result, since there's nothing to read a track length from.",
   },
   {
     q: 'Does muting affect video quality?',
-    a: "No — only the audio track is discarded. The video stream itself isn't touched.",
+    a: "No. Only the audio track is discarded. The video stream itself isn't touched.",
   },
   {
     q: 'What format is the output?',
@@ -21,7 +21,7 @@ const faqs = [
 ---
 
 <Layout
-  title="Mute Video Online — Free & No Upload Required | Kit-Bin"
+  title="Mute Video Online, Free & No Upload Required | Kit-Bin"
   description="Remove the audio track from a video in your browser. Your file is never uploaded to a server."
 >
   <ToolSchema
@@ -40,7 +40,7 @@ const faqs = [
   <AdUnit />
 
   <div class="max-w-2xl mx-auto px-4 py-12 text-ink dark:text-slate-300 space-y-6">
-    <p>This tool removes the audio track from a video, keeping the video itself unchanged. Drop your video above — the muted file downloads automatically once ready.</p>
+    <p>This tool removes the audio track from a video, keeping the video itself unchanged. Drop your video above. The muted file downloads automatically once ready.</p>
     <div>
       <h2 class="font-semibold text-lg pt-2">FAQ</h2>
       <div class="space-y-4 mt-2">
@@ -52,7 +52,7 @@ const faqs = [
         ))}
       </div>
     </div>
-    <p class="text-sm">Need the opposite — just the audio? Try <a href="/video/extract-audio" class="text-primary dark:text-blue-400 hover:underline">Extract Audio from Video</a>.</p>
+    <p class="text-sm">Need the opposite, just the audio? Try <a href="/video/extract-audio" class="text-primary dark:text-blue-400 hover:underline">Extract Audio from Video</a>.</p>
   </div>
 
   <script>

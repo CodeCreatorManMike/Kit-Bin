@@ -8,7 +8,7 @@ const schema = {
   datePublished: '2026-08-04',
   author: { '@type': 'Organization', name: 'Kit-Bin' },
   description:
-    'The four levers that control a video file\'s size — resolution, bitrate, codec, and frame rate — and what each one actually trades away.',
+    'The four levers that control a video file\'s size, resolution, bitrate, codec, and frame rate, and what each one actually trades away.',
 };
 ---
 
@@ -30,14 +30,14 @@ const schema = {
     <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Resolution</h2>
     <p>
       The pixel dimensions of each frame. Dropping from 1080p to 720p reduces the number of pixels
-      per frame by more than half, which is one of the most effective ways to shrink a file — but
+      per frame by more than half, which is one of the most effective ways to shrink a file, but
       it's a visible, permanent change to the video's sharpness.
     </p>
 
     <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Bitrate</h2>
     <p>
       How much data is used to encode each second of video, usually measured in megabits per
-      second. Bitrate and file size are directly proportional — half the bitrate is roughly half
+      second. Bitrate and file size are directly proportional. Half the bitrate is roughly half
       the file size for the same duration. Lower bitrate means the codec has less budget to
       represent detail and motion, showing up as blockiness or blur, especially in fast-moving or
       high-detail scenes.
@@ -48,14 +48,14 @@ const schema = {
       The compression algorithm itself. Newer codecs (H.265/HEVC, AV1, VP9) squeeze more visual
       quality out of the same bitrate than older ones (H.264), because they use more sophisticated
       techniques to predict and encode frames. Switching codecs without touching resolution or
-      bitrate can still shrink a file meaningfully — but newer codecs are also slower to encode and
+      bitrate can still shrink a file meaningfully, but newer codecs are also slower to encode and
       not universally supported by every player or editor.
     </p>
 
     <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Frame rate</h2>
     <p>
       How many frames are captured per second. Dropping from 60fps to 30fps roughly halves the
-      number of frames that need encoding, cutting file size — at the cost of motion looking
+      number of frames that need encoding, cutting file size, at the cost of motion looking
       noticeably less smooth, which matters more for fast action than for talking-head or static
       content.
     </p>
@@ -63,7 +63,7 @@ const schema = {
     <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Why every lossy compression changes something</h2>
     <p>
       These four levers all trade file size against a specific, identifiable kind of visual
-      quality — sharpness, smoothness, detail in motion, or fine texture. There's no setting that
+      quality, sharpness, smoothness, detail in motion, or fine texture. There's no setting that
       shrinks a file "for free"; a compressor is always giving something up, and a good result is
       about choosing which quality loss matters least for a given video, not avoiding loss
       entirely.
@@ -72,7 +72,7 @@ const schema = {
     <p>
       <a href="/video/compress" class="text-primary dark:text-blue-400 hover:underline">Compress Video</a>
       on this site uses one fixed quality setting rather than exposing these controls
-      individually — it re-encodes at a lower bitrate automatically rather than letting you dial
+      individually. It re-encodes at a lower bitrate automatically rather than letting you dial
       in resolution or codec by hand.
     </p>
   </article>

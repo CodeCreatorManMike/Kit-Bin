@@ -14,7 +14,7 @@ const box = size === 'sm' ? 'h-8 w-8' : 'h-10 w-10';
 const svgSize = size === 'sm' ? 'h-4.5 w-4.5' : 'h-5.5 w-5.5';
 ---
 
-<span class={`inline-flex items-center justify-center rounded-xl ${box} ${colors.bg} ${colors.text}`}>
+<span class={`inline-flex items-center justify-center rounded-xl ${box} ${colors.bg} ${colors.text} transition-transform`}>
   <svg viewBox="0 0 24 24" class={svgSize} fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
     {primitives.map((p) => {
       if (p.t === 'rect') return <rect x={p.x} y={p.y} width={p.w} height={p.h} rx={p.rx ?? 0} />;

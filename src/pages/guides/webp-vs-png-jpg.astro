@@ -8,13 +8,13 @@ const schema = {
   datePublished: '2026-08-04',
   author: { '@type': 'Organization', name: 'Kit-Bin' },
   description:
-    'A real technical comparison of WebP, PNG, and JPG — compression method, transparency, browser support, and which format actually wins for each use case.',
+    'A real technical comparison of WebP, PNG, and JPG, compression method, transparency, browser support, and which format actually wins for each use case.',
 };
 ---
 
 <Layout
   title="WebP vs PNG vs JPG: Which One Should You Actually Use? | Kit-Bin"
-  description="A real technical comparison of WebP, PNG, and JPG — compression method, transparency, browser support, and which format actually wins for each use case."
+  description="A real technical comparison of WebP, PNG, and JPG, compression method, transparency, browser support, and which format actually wins for each use case."
 >
   <script type="application/ld+json" set:html={JSON.stringify(schema)} is:inline />
 
@@ -30,14 +30,14 @@ const schema = {
 
     <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">The core distinction: lossy vs lossless</h2>
     <p>
-      <strong>JPG</strong> is lossy — it discards some image detail (in ways mostly imperceptible to the human eye)
+      <strong>JPG</strong> is lossy. It discards some image detail (in ways mostly imperceptible to the human eye)
       to shrink the file. It has no transparency support at all. Every re-save of a JPG discards a bit
       more detail, which is why repeatedly editing and re-saving the same JPG gradually degrades it.
     </p>
     <p>
-      <strong>PNG</strong> is lossless — every pixel is preserved exactly as the original, with no exceptions. This
+      <strong>PNG</strong> is lossless. Every pixel is preserved exactly as the original, with no exceptions. This
       makes PNG the right choice for anything where sharp edges or exact colors matter: screenshots,
-      logos, diagrams, text-heavy images. The trade-off is size — a photograph saved as PNG can be
+      logos, diagrams, text-heavy images. The trade-off is size. A photograph saved as PNG can be
       five to ten times larger than the same photograph as a JPG, because lossless compression is
       inherently less efficient for the kind of smooth, complex color gradients a real photo contains.
       PNG also supports full transparency (an alpha channel), which is why it's the standard for logos
@@ -47,8 +47,8 @@ const schema = {
       <strong>WebP</strong> does both. It supports a lossy mode (competing directly with JPG) and a lossless mode
       (competing directly with PNG), plus transparency in both modes. In lossy mode, WebP typically
       produces files 25-35% smaller than an equivalent-quality JPG. In lossless mode, it typically
-      runs about 25% smaller than an equivalent PNG. It's not a different trade-off than JPG or PNG —
-      it's a more efficient version of both of their trade-offs at once.
+      runs about 25% smaller than an equivalent PNG. It's not a different trade-off than JPG or PNG.
+      It's a more efficient version of both of their trade-offs at once.
     </p>
 
     <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">So why doesn't everyone just use WebP for everything?</h2>
@@ -69,7 +69,7 @@ const schema = {
       For a photo you're putting on a website: WebP, lossy mode. For a logo or screenshot you're
       putting on a website: WebP, lossless mode, or PNG if you want maximum compatibility insurance
       and the file size difference doesn't matter. For anything you're sending somewhere that
-      explicitly wants JPG or PNG — an upload form, an old piece of software, a print shop — give it
+      explicitly wants JPG or PNG, an upload form, an old piece of software, a print shop, give it
       what it's asking for rather than fighting the requirement.
     </p>
 
@@ -83,7 +83,7 @@ const schema = {
     <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Related guide</h2>
     <p>
       If the image in question is a photo straight off an iPhone, it's probably HEIC, not JPG or PNG
-      in the first place — see
+      in the first place. See
       <a href="/guides/heic-explained" class="text-primary dark:text-blue-400 hover:underline">Why Won't My iPhone Photos Open on Windows?</a>
       for that specific case.
     </p>

@@ -7,23 +7,23 @@ import AdUnit from '../../components/AdUnit.astro';
 const faqs = [
   {
     q: 'Is my file uploaded anywhere?',
-    a: 'No. Merging happens entirely in your browser using WebAssembly — your PDFs never leave your device.',
+    a: 'No. Merging happens entirely in your browser using WebAssembly. Your PDFs never leave your device.',
   },
   {
     q: 'Does merging reduce quality?',
-    a: "No — pages are copied as-is into the new document, not re-rendered or re-encoded, so there's no quality loss from the merge itself.",
+    a: "No, pages are copied as-is into the new document, not re-rendered or re-encoded, so there's no quality loss from the merge itself.",
   },
   {
     q: 'Are bookmarks, forms, and annotations preserved?',
-    a: "Form fields and annotations belong to the page and copy across with it. A document-level bookmark outline (the sidebar navigation some PDFs have) is not carried over — each source file's outline is separate from its pages.",
+    a: "Form fields and annotations belong to the page and copy across with it. A document-level bookmark outline (the sidebar navigation some PDFs have) is not carried over. Each source file's outline is separate from its pages.",
   },
   {
     q: 'Can I merge scanned PDFs?',
-    a: "Yes — a scanned PDF is just pages containing image content, which copies the same way as any other page.",
+    a: "Yes, a scanned PDF is just pages containing image content, which copies the same way as any other page.",
   },
   {
     q: 'Can I undo a merge?',
-    a: "There's no in-tool undo, but nothing happens to your original files — they're never modified, only read. Re-run the tool with the files in a different order if you need to redo it.",
+    a: "There's no in-tool undo, but nothing happens to your original files. They're never modified, only read. Re-run the tool with the files in a different order if you need to redo it.",
   },
   {
     q: 'Is there a file size or page limit?',
@@ -31,18 +31,18 @@ const faqs = [
   },
   {
     q: 'Does this work on mobile?',
-    a: 'Yes — merging runs the same way on mobile browsers as desktop.',
+    a: 'Yes, merging runs the same way on mobile browsers as desktop.',
   },
 ];
 ---
 
 <Layout
-  title="Merge PDF Online — Combine PDF Files Privately | Kit-Bin"
-  description="Combine multiple PDFs into one file in seconds. Runs entirely in your browser — your files are never uploaded to a server."
+  title="Merge PDF Online, Combine PDF Files Privately | Kit-Bin"
+  description="Combine multiple PDFs into one file in seconds. Runs entirely in your browser. Your files are never uploaded to a server."
 >
   <ToolSchema
     name="Merge PDF Files Online"
-    description="Combine multiple PDFs into one file in seconds. Runs entirely in your browser — your files are never uploaded to a server."
+    description="Combine multiple PDFs into one file in seconds. Runs entirely in your browser. Your files are never uploaded to a server."
     faqs={faqs}
   />
 
@@ -58,14 +58,14 @@ const faqs = [
   <div class="max-w-2xl mx-auto px-4 py-12 text-ink dark:text-slate-300 space-y-6">
     <p>
       Combine multiple PDF files into one document, in the order you select them. Kit-Bin
-      processes the files in your browser, so you can merge private documents — contracts,
-      statements, scanned records — without uploading them anywhere.
+      processes the files in your browser, so you can merge private documents, contracts,
+      statements, scanned records, without uploading them anywhere.
     </p>
 
     <div>
       <h2 class="font-semibold text-lg">What happens during a merge</h2>
       <p class="text-muted dark:text-slate-400">
-        Each page is copied directly from its source file into a new document — the page content
+        Each page is copied directly from its source file into a new document. The page content
         itself is never re-rendered or re-encoded, so there's no generation loss the way there
         would be with, say, printing to PDF and rescanning. Page order follows the order you
         select files in; drop files in the order you want them to appear.

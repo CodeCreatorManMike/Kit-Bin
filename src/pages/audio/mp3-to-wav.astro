@@ -7,15 +7,15 @@ import AdUnit from '../../components/AdUnit.astro';
 const faqs = [
   {
     q: 'Is my file uploaded anywhere?',
-    a: 'No. Conversion happens entirely in your browser — your audio never leaves your device.',
+    a: 'No. Conversion happens entirely in your browser. Your audio never leaves your device.',
   },
   {
     q: 'Why is the WAV file bigger than the MP3?',
-    a: "WAV is uncompressed audio, so it's expected to be significantly larger than MP3 — often 5-10x, depending on the original MP3 bitrate.",
+    a: "WAV is uncompressed audio, so it's expected to be significantly larger than MP3, often 5-10x, depending on the original MP3 bitrate.",
   },
   {
     q: 'Does converting to WAV restore audio quality lost in the MP3?',
-    a: "No. MP3 is a lossy format — detail removed during the original MP3 encoding is gone and can't be recovered. Converting to WAV just stores the MP3's existing audio data uncompressed; it doesn't add anything back.",
+    a: "No. MP3 is a lossy format. Detail removed during the original MP3 encoding is gone and can't be recovered. Converting to WAV just stores the MP3's existing audio data uncompressed; it doesn't add anything back.",
   },
   {
     q: 'Why convert to WAV at all, then?',
@@ -25,12 +25,12 @@ const faqs = [
 ---
 
 <Layout
-  title="MP3 to WAV Converter — Create an Uncompressed Audio File | Kit-Bin"
-  description="Convert an MP3 file to WAV in seconds. Runs entirely in your browser — your file is never uploaded to a server."
+  title="MP3 to WAV Converter, Create an Uncompressed Audio File | Kit-Bin"
+  description="Convert an MP3 file to WAV in seconds. Runs entirely in your browser. Your file is never uploaded to a server."
 >
   <ToolSchema
     name="Convert MP3 to WAV"
-    description="Convert an MP3 file to WAV in seconds. Runs entirely in your browser — your file is never uploaded to a server."
+    description="Convert an MP3 file to WAV in seconds. Runs entirely in your browser. Your file is never uploaded to a server."
     faqs={faqs}
   />
 
@@ -46,7 +46,7 @@ const faqs = [
   <div class="max-w-2xl mx-auto px-4 py-12 text-ink dark:text-slate-300 space-y-6">
     <p>
       Converting MP3 to WAV makes the audio easier to use in editors that expect uncompressed
-      PCM. It does not restore detail that was removed when the MP3 was originally encoded — it
+      PCM. It does not restore detail that was removed when the MP3 was originally encoded. It
       just stores the same audio data without further compression.
     </p>
 

@@ -11,22 +11,22 @@ const faqs = [
   },
   {
     q: 'What happens to nested objects or arrays inside a field?',
-    a: "Nested structures don't flatten into separate columns — they're written into the cell as their JSON text representation, which usually isn't what you want in a spreadsheet. This tool works best on already-flat data.",
+    a: "Nested structures don't flatten into separate columns. They're written into the cell as their JSON text representation, which usually isn't what you want in a spreadsheet. This tool works best on already-flat data.",
   },
   {
     q: 'Do all objects need the same keys?',
-    a: 'No — if objects have different keys, the output includes a column for every key seen across all objects, leaving cells blank for objects missing that key.',
+    a: 'No, if objects have different keys, the output includes a column for every key seen across all objects, leaving cells blank for objects missing that key.',
   },
 ];
 ---
 
 <Layout
-  title="Convert JSON to CSV Online — Free & No Upload Required | Kit-Bin"
-  description="Convert a JSON file to CSV in seconds. Runs entirely in your browser — your file is never uploaded to a server."
+  title="Convert JSON to CSV Online, Free & No Upload Required | Kit-Bin"
+  description="Convert a JSON file to CSV in seconds. Runs entirely in your browser. Your file is never uploaded to a server."
 >
   <ToolSchema
     name="Convert JSON to CSV"
-    description="Convert a JSON file to CSV in seconds. Runs entirely in your browser — your file is never uploaded to a server."
+    description="Convert a JSON file to CSV in seconds. Runs entirely in your browser. Your file is never uploaded to a server."
     faqs={faqs}
   />
 
@@ -40,7 +40,7 @@ const faqs = [
   <AdUnit />
 
   <div class="max-w-2xl mx-auto px-4 py-12 text-ink dark:text-slate-300 space-y-6">
-    <p>This tool converts a JSON array of objects into a CSV file. Drop your JSON above — the CSV file downloads automatically once ready.</p>
+    <p>This tool converts a JSON array of objects into a CSV file. Drop your JSON above. The CSV file downloads automatically once ready.</p>
     <div>
       <h2 class="font-semibold text-lg pt-2">FAQ</h2>
       <div class="space-y-4 mt-2">

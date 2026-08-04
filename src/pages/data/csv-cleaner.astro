@@ -11,26 +11,26 @@ const faqs = [
   },
   {
     q: 'Does this fix a CSV with the wrong delimiter, like semicolons instead of commas?',
-    a: "No — the parser expects standard comma-delimited CSV. If your file uses semicolons, tabs, or a different delimiter, it may parse as one column instead of several. Open the file in a text editor first to check which delimiter it actually uses.",
+    a: "No, the parser expects standard comma-delimited CSV. If your file uses semicolons, tabs, or a different delimiter, it may parse as one column instead of several. Open the file in a text editor first to check which delimiter it actually uses.",
   },
   {
     q: 'Will this fix rows with the wrong number of columns?',
-    a: "No. Rows with more or fewer columns than the header (common when a text field contains an unescaped comma) are left as-is — the cleaner only trims, drops empty rows/columns, and dedupes; it doesn't try to repair malformed rows, since guessing which column a stray value belongs in would risk silently corrupting your data.",
+    a: "No. Rows with more or fewer columns than the header (common when a text field contains an unescaped comma) are left as-is. The cleaner only trims, drops empty rows/columns, and dedupes; it doesn't try to repair malformed rows, since guessing which column a stray value belongs in would risk silently corrupting your data.",
   },
   {
     q: 'What happens to a column that only contains empty values in some rows, not all?',
-    a: "It stays. Only columns that are empty in every single row are dropped — a column with even one non-empty value anywhere in the file is kept as-is.",
+    a: "It stays. Only columns that are empty in every single row are dropped. A column with even one non-empty value anywhere in the file is kept as-is.",
   },
 ];
 ---
 
 <Layout
-  title="CSV Cleaner — Trim, Deduplicate and Repair CSV Files | Kit-Bin"
-  description="Trim whitespace, remove duplicate rows, and drop empty rows/columns from a CSV before importing it. Runs entirely in your browser — no upload."
+  title="CSV Cleaner, Trim, Deduplicate and Repair CSV Files | Kit-Bin"
+  description="Trim whitespace, remove duplicate rows, and drop empty rows/columns from a CSV before importing it. Runs entirely in your browser, no upload."
 >
   <ToolSchema
     name="CSV Cleaner"
-    description="Trim whitespace, remove duplicate rows, and drop empty rows/columns from a CSV before importing it. Runs entirely in your browser — no upload."
+    description="Trim whitespace, remove duplicate rows, and drop empty rows/columns from a CSV before importing it. Runs entirely in your browser, no upload."
     faqs={faqs}
   />
 
@@ -49,7 +49,7 @@ const faqs = [
         A CSV exported from a spreadsheet, a form, or a database dump often carries small problems
         that break an import somewhere else: stray whitespace around values, rows that are
         entirely blank, columns nobody ever filled in, or the same row appearing twice because a
-        script ran twice. This tool fixes exactly those four things — nothing more, nothing that
+        script ran twice. This tool fixes exactly those four things, nothing more, nothing that
         guesses at your data.
       </p>
     </div>
@@ -70,7 +70,7 @@ const faqs = [
         It won't detect or convert delimiters (comma vs. semicolon vs. tab), fix rows with the
         wrong column count, normalize date formats, fix character-encoding problems, or catch
         near-duplicates that differ by case or a typo. Those require knowing the intent behind
-        your specific data, which a generic cleaner can't safely assume — see
+        your specific data, which a generic cleaner can't safely assume. See
         <a href="/guides/why-csv-imports-fail" class="text-primary dark:text-blue-400 hover:underline"
           >why CSV imports fail</a
         >
@@ -82,7 +82,7 @@ const faqs = [
       <h2 class="font-semibold text-lg">Troubleshooting</h2>
       <p class="text-muted dark:text-slate-400">
         <strong>Rows → rows count didn't change:</strong> your file had no fully-empty rows/columns
-        and no exact duplicates — nothing to clean.
+        and no exact duplicates, nothing to clean.
       </p>
       <p class="text-muted dark:text-slate-400 mt-2">
         <strong>Result looks like one giant column:</strong> your file likely uses a delimiter
@@ -90,7 +90,7 @@ const faqs = [
       </p>
       <p class="text-muted dark:text-slate-400 mt-2">
         <strong>Two rows that look identical to you weren't merged:</strong> check for invisible
-        differences — trailing spaces beyond what trimming catches, a different letter case, or a
+        differences, trailing spaces beyond what trimming catches, a different letter case, or a
         hidden character copied in from another source.
       </p>
     </div>

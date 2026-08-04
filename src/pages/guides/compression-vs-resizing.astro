@@ -8,13 +8,13 @@ const schema = {
   datePublished: '2026-08-04',
   author: { '@type': 'Organization', name: 'Kit-Bin' },
   description:
-    'Compression and resizing both shrink a file, but they change completely different things — here\'s how to pick the right one instead of guessing.',
+    'Compression and resizing both shrink a file, but they change completely different things. Here\'s how to pick the right one instead of guessing.',
 };
 ---
 
 <Layout
   title="Image Compression vs Resizing: Which One Makes a File Smaller? | Kit-Bin"
-  description="Compression and resizing both shrink a file, but they change completely different things — how to pick the right one instead of guessing."
+  description="Compression and resizing both shrink a file, but they change completely different things, how to pick the right one instead of guessing."
 >
   <script type="application/ld+json" set:html={JSON.stringify(schema)} is:inline />
 
@@ -30,17 +30,17 @@ const schema = {
 
     <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Compression changes how efficiently the same pixels are stored</h2>
     <p>
-      An image compressor keeps the same pixel grid — the same width and height — and changes how
+      An image compressor keeps the same pixel grid, the same width and height, and changes how
       that pixel data is encoded. Lossy compression (JPG, lossy WebP) throws away some visual
       detail a viewer is unlikely to notice; lossless compression (PNG) finds redundancy in the
       pixel data and stores it more efficiently without discarding anything. Either way, the
-      image dimensions don't change — a 3000×2000 photo compressed hard is still 3000×2000, just
+      image dimensions don't change. A 3000×2000 photo compressed hard is still 3000×2000, just
       encoded more efficiently, or with a bit of blur/artifacting at high compression.
     </p>
 
     <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Resizing changes the actual pixel grid</h2>
     <p>
-      Resizing reduces the number of pixels the image actually contains — a 3000×2000 photo
+      Resizing reduces the number of pixels the image actually contains. A 3000×2000 photo
       resized to 1200×800 has genuinely fewer pixels to store, which is usually a much bigger
       file-size win than compression alone when the image is being displayed smaller than its
       original resolution anyway (a thumbnail, a blog post image, an email attachment that
@@ -49,7 +49,7 @@ const schema = {
 
     <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Why resizing usually wins for file size</h2>
     <p>
-      Pixel count scales with the square of the dimension — halving both width and height doesn't
+      Pixel count scales with the square of the dimension. Halving both width and height doesn't
       cut the pixel count in half, it cuts it to a quarter. That's why resizing a huge photo down
       to the size it'll actually be displayed at almost always saves more space than compressing
       it at full resolution, and does it without introducing the visible softness or blocky
@@ -58,9 +58,9 @@ const schema = {
 
     <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">When compression is still the right tool</h2>
     <p>
-      If you need to keep the image at its original dimensions — a print-resolution photo, a
+      If you need to keep the image at its original dimensions, a print-resolution photo, a
       design asset someone else will resize later, an image where you genuinely don't know the
-      final display size — compression is the only option that reduces file size without
+      final display size, compression is the only option that reduces file size without
       permanently discarding resolution you might need later.
     </p>
 
@@ -68,7 +68,7 @@ const schema = {
     <p>
       If a large file needs to be small and you know roughly how it'll be displayed: resize first
       to the dimensions you actually need, then compress the result if it still needs to be
-      smaller. Doing it in the other order — compressing first, then resizing — wastes the
+      smaller. Doing it in the other order, compressing first, then resizing, wastes the
       compression pass, since resizing recalculates the pixel data anyway.
     </p>
 
@@ -77,7 +77,7 @@ const schema = {
       <a href="/image/resize" class="text-primary dark:text-blue-400 hover:underline">Resize Image</a>
       to change dimensions, then
       <a href="/image/compress" class="text-primary dark:text-blue-400 hover:underline">Compress Image</a>
-      if the resized file still needs to be smaller — both run entirely in your browser.
+      if the resized file still needs to be smaller, both run entirely in your browser.
     </p>
   </article>
 </Layout>

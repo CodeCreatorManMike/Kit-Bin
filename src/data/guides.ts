@@ -16,7 +16,7 @@ export const guides: Guide[] = [
     slug: '/guides/heic-explained',
     title: "Why Won't My iPhone Photos Open on Windows?",
     cardTitle: "Why Your iPhone Photos Won't Open on Windows",
-    description: "HEIC, explained properly — why Apple uses it, why Windows doesn't, and when to convert.",
+    description: "HEIC, explained properly, why Apple uses it, why Windows doesn't, and when to convert.",
   },
   {
     slug: '/guides/why-pdfs-get-large',
@@ -28,7 +28,7 @@ export const guides: Guide[] = [
     slug: '/guides/webp-vs-png-jpg',
     title: 'WebP vs PNG vs JPG: What the Difference Actually Costs You',
     cardTitle: 'WebP vs PNG vs JPG: What the Difference Actually Costs You',
-    description: 'A real technical comparison, not a listicle — when each format genuinely wins.',
+    description: 'A real technical comparison, not a listicle, when each format genuinely wins.',
   },
   {
     slug: '/guides/why-audio-sounds-quiet',
@@ -46,7 +46,7 @@ export const guides: Guide[] = [
     slug: '/guides/why-csv-imports-fail',
     title: 'Why CSV Imports Fail: Delimiters, Quotes, Encoding and Broken Rows',
     cardTitle: 'Why CSV Imports Fail',
-    description: 'The specific, diagnosable reasons a CSV rejects on import — and which ones a cleaner tool can and can\'t fix.',
+    description: 'The specific, diagnosable reasons a CSV rejects on import, and which ones a cleaner tool can and can\'t fix.',
   },
   {
     slug: '/guides/compression-vs-resizing',
@@ -64,13 +64,13 @@ export const guides: Guide[] = [
     slug: '/guides/split-vs-extract-pdf',
     title: 'Split PDF vs Extract PDF Pages: What Is the Difference?',
     cardTitle: 'Split vs Extract: Two Different PDF Operations',
-    description: 'Splitting and extracting sound similar but produce different results — here is the actual distinction.',
+    description: 'Splitting and extracting sound similar but produce different results. Here is the actual distinction.',
   },
   {
     slug: '/guides/why-pdf-compression-barely-works',
     title: 'Why PDF Compression Sometimes Makes Almost No Difference',
     cardTitle: 'Why Some PDFs Barely Compress',
-    description: 'PDF compressors mostly re-encode embedded images — a PDF with none has almost nothing to shrink.',
+    description: 'PDF compressors mostly re-encode embedded images. A PDF with none has almost nothing to shrink.',
   },
   {
     slug: '/guides/heic-vs-jpg',
@@ -82,7 +82,7 @@ export const guides: Guide[] = [
     slug: '/guides/webp-to-png-file-size',
     title: 'Why Converting WebP to PNG Creates a Larger File',
     cardTitle: 'Why WebP to PNG Makes Files Bigger',
-    description: 'It is not a bug — PNG and WebP compress images in fundamentally different ways.',
+    description: 'It is not a bug. PNG and WebP compress images in fundamentally different ways.',
   },
   {
     slug: '/guides/resize-without-distorting',
@@ -100,6 +100,6 @@ export const guides: Guide[] = [
     slug: '/guides/csv-vs-json',
     title: 'CSV vs JSON: Which Format Should You Use?',
     cardTitle: 'CSV vs JSON: Which One Do You Need?',
-    description: 'Flat tables versus nested structure — a practical answer, not just a feature list.',
+    description: 'Flat tables versus nested structure, a practical answer, not just a feature list.',
   },
 ];

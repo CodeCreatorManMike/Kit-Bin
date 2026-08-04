@@ -137,7 +137,7 @@ const categoryMeta = Object.fromEntries(
     <div>
       <p class="px-3 text-xs font-semibold uppercase tracking-wide text-muted/80 dark:text-slate-500">Favorites</p>
       <div id="sidebar-favorites" class="mt-2 space-y-0.5">
-        <p class="px-3 text-xs text-muted dark:text-slate-500" data-empty-state>No favorites yet — star a tool to pin it here.</p>
+        <p class="px-3 text-xs text-muted dark:text-slate-500" data-empty-state>No favorites yet. Star a tool to pin it here.</p>
       </div>
     </div>
   </nav>
@@ -240,7 +240,7 @@ const categoryMeta = Object.fromEntries(
     if (favTools.length === 0) {
       const empty = document.createElement('p');
       empty.className = 'px-3 text-xs text-muted dark:text-slate-500';
-      empty.textContent = 'No favorites yet — star a tool to pin it here.';
+      empty.textContent = 'No favorites yet. Star a tool to pin it here.';
       container.appendChild(empty);
       return;
     }

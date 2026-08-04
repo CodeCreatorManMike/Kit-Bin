@@ -13,8 +13,8 @@ const meta = categoryColors.data;
   <CategorySchema categoryName="Data Tools" />
   <div class="max-w-5xl mx-auto px-6 py-10">
     <div class="flex items-center gap-3">
-      <span class={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${meta.bg} ${meta.text}`}>
-        <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.75">
+      <span class={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${meta.gradient} text-white shadow-lg shadow-black/10`}>
+        <svg viewBox="0 0 24 24" class="h-5.5 w-5.5" fill="none" stroke="currentColor" stroke-width="1.75">
           <path d={categoryIconPaths.data} stroke-linecap="round" stroke-linejoin="round" />
         </svg>
       </span>
@@ -22,7 +22,7 @@ const meta = categoryColors.data;
     </div>
     <p class="mt-3 text-muted dark:text-slate-400 max-w-2xl">
       Convert CSV data to JSON or Excel, flatten JSON back into rows, or clean up a messy CSV file
-      before importing it somewhere else. Every tool below runs entirely in your browser — your
+      before importing it somewhere else. Every tool below runs entirely in your browser. Your
       data file is never uploaded anywhere.
     </p>
     <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

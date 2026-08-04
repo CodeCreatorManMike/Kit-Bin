@@ -9,13 +9,13 @@ export type IconPrimitive =
   | { t: 'path'; d: string }
   | { t: 'polyline'; points: string };
 
-export const categoryColors: Record<string, { bg: string; text: string; dot: string }> = {
-  pdf: { bg: 'bg-red-50 dark:bg-red-950/40', text: 'text-red-600 dark:text-red-400', dot: 'bg-red-400' },
-  image: { bg: 'bg-emerald-50 dark:bg-emerald-950/40', text: 'text-emerald-600 dark:text-emerald-400', dot: 'bg-emerald-400' },
-  audio: { bg: 'bg-amber-50 dark:bg-amber-950/40', text: 'text-amber-600 dark:text-amber-400', dot: 'bg-amber-400' },
-  video: { bg: 'bg-violet-50 dark:bg-violet-950/40', text: 'text-violet-600 dark:text-violet-400', dot: 'bg-violet-400' },
-  data: { bg: 'bg-cyan-50 dark:bg-cyan-950/40', text: 'text-cyan-600 dark:text-cyan-400', dot: 'bg-cyan-400' },
-  guides: { bg: 'bg-indigo-50 dark:bg-indigo-950/40', text: 'text-indigo-600 dark:text-indigo-400', dot: 'bg-indigo-400' },
+export const categoryColors: Record<string, { bg: string; text: string; dot: string; gradient: string }> = {
+  pdf: { bg: 'bg-red-50 dark:bg-red-950/40', text: 'text-red-600 dark:text-red-400', dot: 'bg-red-400', gradient: 'bg-gradient-to-br from-red-400 to-orange-400' },
+  image: { bg: 'bg-emerald-50 dark:bg-emerald-950/40', text: 'text-emerald-600 dark:text-emerald-400', dot: 'bg-emerald-400', gradient: 'bg-gradient-to-br from-emerald-400 to-teal-400' },
+  audio: { bg: 'bg-amber-50 dark:bg-amber-950/40', text: 'text-amber-600 dark:text-amber-400', dot: 'bg-amber-400', gradient: 'bg-gradient-to-br from-amber-400 to-orange-400' },
+  video: { bg: 'bg-violet-50 dark:bg-violet-950/40', text: 'text-violet-600 dark:text-violet-400', dot: 'bg-violet-400', gradient: 'bg-gradient-to-br from-violet-400 to-fuchsia-400' },
+  data: { bg: 'bg-cyan-50 dark:bg-cyan-950/40', text: 'text-cyan-600 dark:text-cyan-400', dot: 'bg-cyan-400', gradient: 'bg-gradient-to-br from-cyan-400 to-blue-400' },
+  guides: { bg: 'bg-indigo-50 dark:bg-indigo-950/40', text: 'text-indigo-600 dark:text-indigo-400', dot: 'bg-indigo-400', gradient: 'bg-gradient-to-br from-indigo-400 to-violet-400' },
 };
 
 /** Single-path category glyphs, used by the sidebar nav and category hub page headers. */

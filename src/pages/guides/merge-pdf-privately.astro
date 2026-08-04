@@ -26,7 +26,7 @@ const schema = {
       Most "merge PDF" sites work the same way: you upload your files to their server, a script
       combines them there, and you download the result. For a school handout that's harmless. For
       a signed contract, a medical record, a tax document, or anything with names, addresses, or
-      account numbers on it, that upload is a real exposure — the file sits on someone else's
+      account numbers on it, that upload is a real exposure. The file sits on someone else's
       server, even briefly, outside your control.
     </p>
 
@@ -34,21 +34,21 @@ const schema = {
     <p>
       Once a file leaves your device over the network, you're trusting that service's storage
       practices, its retention policy, whoever has access to its servers, and its security against
-      breach — none of which you can verify from the outside. Many of these sites are legitimate
+      breach, none of which you can verify from the outside. Many of these sites are legitimate
       and delete files quickly, but you have no way to confirm that from the browser, and "we
       delete your files after 1 hour" is a policy statement, not a guarantee.
     </p>
 
     <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">The alternative: merge in the browser</h2>
     <p>
-      A PDF merge doesn't actually require a server at all — it's mechanical work (copying pages
+      A PDF merge doesn't actually require a server at all. It's mechanical work (copying pages
       from each source file into one new file) that a browser can do entirely on your own device
       using WebAssembly. The files are read from your disk into memory, combined, and handed back
       to you as a download; nothing is ever sent anywhere.
     </p>
     <p>
       <a href="/pdf/merge" class="text-primary dark:text-blue-400 hover:underline">Merge PDF</a>
-      on this site works this way — read
+      on this site works this way. Read
       <a href="/guides/how-kit-bin-works" class="text-primary dark:text-blue-400 hover:underline">how Kit-Bin works</a>
       for the technical detail on why that's verifiable rather than just a claim.
     </p>

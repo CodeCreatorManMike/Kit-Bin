@@ -7,7 +7,7 @@ import AdUnit from '../../components/AdUnit.astro';
 const faqs = [
   {
     q: 'Is MP4 or WebM the actual video codec?',
-    a: "Neither — MP4 and WebM are containers, not codecs. This tool re-encodes the video and audio streams to codecs WebM supports (typically VP9 video and Opus audio) and repackages them in a WebM container.",
+    a: "Neither. MP4 and WebM are containers, not codecs. This tool re-encodes the video and audio streams to codecs WebM supports (typically VP9 video and Opus audio) and repackages them in a WebM container.",
   },
   {
     q: 'Will quality change?',
@@ -15,17 +15,17 @@ const faqs = [
   },
   {
     q: "When should I keep MP4 instead of converting?",
-    a: "MP4 (H.264) has the widest compatibility — it plays natively on virtually every device, video editor, and older browser. WebM is well-supported in modern browsers and is common for web embeds, but if you need a file to open reliably in unfamiliar software, MP4 is the safer choice.",
+    a: "MP4 (H.264) has the widest compatibility. It plays natively on virtually every device, video editor, and older browser. WebM is well-supported in modern browsers and is common for web embeds, but if you need a file to open reliably in unfamiliar software, MP4 is the safer choice.",
   },
   {
     q: 'Does this work on mobile?',
-    a: 'Yes, but large videos may be slow or use significant memory on phones — try a smaller file first if it stalls.',
+    a: 'Yes, but large videos may be slow or use significant memory on phones. Try a smaller file first if it stalls.',
   },
 ];
 ---
 
 <Layout
-  title="Convert MP4 to WebM Online — Free & No Upload Required | Kit-Bin"
+  title="Convert MP4 to WebM Online, Free & No Upload Required | Kit-Bin"
   description="Convert an MP4 video to WebM in your browser. Your file is never uploaded to a server."
 >
   <ToolSchema
@@ -44,7 +44,7 @@ const faqs = [
   <AdUnit />
 
   <div class="max-w-2xl mx-auto px-4 py-12 text-ink dark:text-slate-300 space-y-6">
-    <p>This tool re-encodes an MP4 video into WebM, a container format better suited to some web-embed use cases. Drop your MP4 above — larger files take longer, especially on mobile.</p>
+    <p>This tool re-encodes an MP4 video into WebM, a container format better suited to some web-embed use cases. Drop your MP4 above. Larger files take longer, especially on mobile.</p>
     <div>
       <h2 class="font-semibold text-lg pt-2">FAQ</h2>
       <div class="space-y-4 mt-2">

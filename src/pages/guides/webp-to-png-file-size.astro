@@ -8,13 +8,13 @@ const schema = {
   datePublished: '2026-08-04',
   author: { '@type': 'Organization', name: 'Kit-Bin' },
   description:
-    'PNG and WebP compress images in fundamentally different ways — a larger file after converting WebP to PNG is expected, not a bug.',
+    'PNG and WebP compress images in fundamentally different ways. A larger file after converting WebP to PNG is expected, not a bug.',
 };
 ---
 
 <Layout
   title="Why Converting WebP to PNG Creates a Larger File | Kit-Bin"
-  description="It is not a bug — PNG and WebP compress images in fundamentally different ways."
+  description="It is not a bug. PNG and WebP compress images in fundamentally different ways."
 >
   <script type="application/ld+json" set:html={JSON.stringify(schema)} is:inline />
 
@@ -23,14 +23,14 @@ const schema = {
     <h1 class="text-3xl font-bold text-ink dark:text-slate-100">Why WebP to PNG Makes Files Bigger</h1>
 
     <p>
-      Convert a WebP image to PNG and the result is often noticeably larger than the source —
+      Convert a WebP image to PNG and the result is often noticeably larger than the source,
       sometimes several times larger. That's expected behavior, not a broken conversion.
     </p>
 
     <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Two different compression approaches</h2>
     <p>
       WebP's lossless mode and lossy mode both use more modern, more efficient compression
-      techniques than PNG — WebP was designed specifically to beat PNG and JPEG at their own
+      techniques than PNG. WebP was designed specifically to beat PNG and JPEG at their own
       jobs. PNG uses an older lossless compression scheme (DEFLATE, the same family used by ZIP
       files) that simply doesn't squeeze image data as tightly as WebP's algorithm does, even
       when both are storing the image losslessly with zero quality loss.
@@ -39,7 +39,7 @@ const schema = {
     <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">If the source was lossy WebP</h2>
     <p>
       If the original WebP was saved in lossy mode (common for photos), converting to PNG doesn't
-      just re-pack the same data more loosely — it takes the already-decoded pixels and stores all
+      just re-pack the same data more loosely. It takes the already-decoded pixels and stores all
       of them losslessly, including any compression artifacts from the original lossy encode.
       You're not recovering detail the lossy WebP threw away; you're just storing what's left,
       uncompressed-relative-to-WebP, which naturally takes more space.
@@ -47,7 +47,7 @@ const schema = {
 
     <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">So why convert at all?</h2>
     <p>
-      Not every tool or platform accepts WebP — older image editors, some CMS upload systems, and
+      Not every tool or platform accepts WebP. Older image editors, some CMS upload systems, and
       certain print workflows still expect PNG or JPEG specifically. The size increase is the
       cost of that compatibility, the same tradeoff as HEIC-to-JPG conversion for photos.
     </p>

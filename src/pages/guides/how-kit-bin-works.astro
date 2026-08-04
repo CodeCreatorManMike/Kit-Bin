@@ -8,13 +8,13 @@ const schema = {
   datePublished: '2026-08-04',
   author: { '@type': 'Organization', name: 'Kit-Bin' },
   description:
-    'A real technical explanation of client-side file processing — what WebAssembly does, why it means your files genuinely can\'t be uploaded, and how that\'s different from a privacy promise.',
+    'A real technical explanation of client-side file processing, what WebAssembly does, why it means your files genuinely can\'t be uploaded, and how that\'s different from a privacy promise.',
 };
 ---
 
 <Layout
-  title="How Kit-Bin Works — Why Your Files Never Leave Your Device | Kit-Bin"
-  description="A real technical explanation of client-side file processing — what WebAssembly does, why it means your files genuinely can't be uploaded, and how that's different from a privacy promise."
+  title="How Kit-Bin Works. Why Your Files Never Leave Your Device | Kit-Bin"
+  description="A real technical explanation of client-side file processing, what WebAssembly does, why it means your files genuinely can't be uploaded, and how that's different from a privacy promise."
 >
   <script type="application/ld+json" set:html={JSON.stringify(schema)} is:inline />
 
@@ -24,7 +24,7 @@ const schema = {
 
     <p>
       Every file-conversion site says some version of "we respect your privacy." Most of them still
-      upload your file to a server to actually do the conversion — the privacy claim is a policy
+      upload your file to a server to actually do the conversion. The privacy claim is a policy
       decision about what they do with your file afterward, not a technical guarantee about whether
       your file reaches their server in the first place.
     </p>
@@ -38,15 +38,15 @@ const schema = {
       When you drop a file into a tool on this site, it never gets sent anywhere. The conversion
       happens inside your own browser, using your own device's processing power, and the result is
       handed back to you directly. There is no upload step for any of the tools currently on this
-      site — not a fast one, not an encrypted one. There isn't a network request carrying your file
+      site, not a fast one, not an encrypted one. There isn't a network request carrying your file
       at all.
     </p>
 
     <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">The slightly longer, actually technical version</h2>
     <p>
       Browsers have supported a technology called WebAssembly (often shortened to WASM) since around
-      2017. WebAssembly lets code written in languages like C++ or Rust — the kind of code that
-      historically only ran as a native application installed on your computer — run directly inside
+      2017. WebAssembly lets code written in languages like C++ or Rust, the kind of code that
+      historically only ran as a native application installed on your computer, run directly inside
       a web page, at speeds close to a native app, without a plugin.
     </p>
     <p>
@@ -66,7 +66,7 @@ const schema = {
 
     <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Why this is a stronger claim than "we promise not to look"</h2>
     <p>
-      A server-based converter could, in principle, be perfectly trustworthy — plenty are. But you're
+      A server-based converter could, in principle, be perfectly trustworthy. Plenty are. But you're
       relying on a policy: a company's stated intention not to retain, inspect, or misuse your file
       once it's on their server. That policy could be wrong, could change, or could simply not survive
       contact with a data breach.
@@ -74,15 +74,15 @@ const schema = {
     <p>
       Kit-Bin's model removes the question entirely rather than answering it well. There's no server
       in the file's path to have a policy about. This is a structural fact about how the site is
-      built, not a promise about how it's operated — see the
+      built, not a promise about how it's operated. See the
       <a href="/privacy" class="text-primary dark:text-blue-400 hover:underline">Privacy Policy</a>
       for the exact, current wording of what that means for each tool.
     </p>
 
     <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">The honest limits of this approach</h2>
     <p>
-      This isn't a claim that browser-side processing can do everything. Some operations — very large
-      video files, or converting between complex office-document formats — currently don't have a
+      This isn't a claim that browser-side processing can do everything. Some operations, very large
+      video files, or converting between complex office-document formats, currently don't have a
       practical browser-only solution and either aren't offered on this site yet, or would need a
       server component if they're added later. If that ever applies to a specific tool, that tool's
       own page will say so plainly, and the Privacy Policy will be updated to reflect it before it

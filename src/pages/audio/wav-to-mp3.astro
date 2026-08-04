@@ -7,26 +7,26 @@ import AdUnit from '../../components/AdUnit.astro';
 const faqs = [
   {
     q: 'Will this affect quality?',
-    a: "Yes — MP3 is lossy, so there's some quality loss. That's the tradeoff for a much smaller file, and at normal listening volumes it's usually not noticeable for speech or typical music.",
+    a: "Yes, MP3 is lossy, so there's some quality loss. That's the tradeoff for a much smaller file, and at normal listening volumes it's usually not noticeable for speech or typical music.",
   },
   {
     q: 'Does mono vs. stereo matter?',
-    a: "This tool preserves whatever channel layout your WAV file already has — it doesn't force mono or stereo. A mono source will produce a smaller MP3 than an equivalent stereo one.",
+    a: "This tool preserves whatever channel layout your WAV file already has. It doesn't force mono or stereo. A mono source will produce a smaller MP3 than an equivalent stereo one.",
   },
   {
     q: 'Is there a bitrate setting?',
-    a: "Not currently — the tool uses a single default quality setting rather than exposing bitrate as a choice.",
+    a: "Not currently, the tool uses a single default quality setting rather than exposing bitrate as a choice.",
   },
 ];
 ---
 
 <Layout
-  title="WAV to MP3 Converter — Make Audio Files Smaller | Kit-Bin"
-  description="Convert a WAV file to MP3 in seconds. Runs entirely in your browser — your file is never uploaded to a server."
+  title="WAV to MP3 Converter, Make Audio Files Smaller | Kit-Bin"
+  description="Convert a WAV file to MP3 in seconds. Runs entirely in your browser. Your file is never uploaded to a server."
 >
   <ToolSchema
     name="Convert WAV to MP3"
-    description="Convert a WAV file to MP3 in seconds. Runs entirely in your browser — your file is never uploaded to a server."
+    description="Convert a WAV file to MP3 in seconds. Runs entirely in your browser. Your file is never uploaded to a server."
     faqs={faqs}
   />
 
@@ -41,7 +41,7 @@ const faqs = [
 
   <div class="max-w-2xl mx-auto px-4 py-12 text-ink dark:text-slate-300 space-y-6">
     <p>
-      Uncompressed WAV files are large — converting to MP3 trades some audio detail for a file
+      Uncompressed WAV files are large. Converting to MP3 trades some audio detail for a file
       that's typically a fraction of the size, which matters for email attachments, storage, or
       uploading somewhere with a size limit.
     </p>

@@ -7,11 +7,11 @@ import AdUnit from '../../components/AdUnit.astro';
 const faqs = [
   {
     q: 'Does formatting carry over?',
-    a: 'No — CSV is plain text with no formatting information, so there is nothing to carry over. You get raw data in a single sheet with default Excel formatting.',
+    a: 'No, CSV is plain text with no formatting information, so there is nothing to carry over. You get raw data in a single sheet with default Excel formatting.',
   },
   {
     q: 'Will numbers be stored as real numbers or as text?',
-    a: 'The conversion lets Excel infer cell types from the data, so values that look numeric are typically stored as numbers rather than text — but formatting like leading zeros or specific decimal display is not preserved.',
+    a: 'The conversion lets Excel infer cell types from the data, so values that look numeric are typically stored as numbers rather than text, but formatting like leading zeros or specific decimal display is not preserved.',
   },
   {
     q: 'Does this create multiple sheets or one?',
@@ -21,12 +21,12 @@ const faqs = [
 ---
 
 <Layout
-  title="Convert CSV to Excel Online — Free & No Upload Required | Kit-Bin"
-  description="Convert a CSV file to an Excel .xlsx file. Runs entirely in your browser — your file is never uploaded to a server."
+  title="Convert CSV to Excel Online, Free & No Upload Required | Kit-Bin"
+  description="Convert a CSV file to an Excel .xlsx file. Runs entirely in your browser. Your file is never uploaded to a server."
 >
   <ToolSchema
     name="Convert CSV to Excel"
-    description="Convert a CSV file to an Excel .xlsx file. Runs entirely in your browser — your file is never uploaded to a server."
+    description="Convert a CSV file to an Excel .xlsx file. Runs entirely in your browser. Your file is never uploaded to a server."
     faqs={faqs}
   />
 
@@ -40,7 +40,7 @@ const faqs = [
   <AdUnit />
 
   <div class="max-w-2xl mx-auto px-4 py-12 text-ink dark:text-slate-300 space-y-6">
-    <p>This tool converts a CSV file into an Excel-compatible .xlsx file. Drop your CSV above — the .xlsx file downloads automatically once ready.</p>
+    <p>This tool converts a CSV file into an Excel-compatible .xlsx file. Drop your CSV above. The .xlsx file downloads automatically once ready.</p>
     <div>
       <h2 class="font-semibold text-lg pt-2">FAQ</h2>
       <div class="space-y-4 mt-2">

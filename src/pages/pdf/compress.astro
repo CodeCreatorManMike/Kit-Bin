@@ -15,22 +15,22 @@ const faqs = [
   },
   {
     q: 'Why did my file barely shrink at all?',
-    a: "This tool only recompresses embedded JPEG images — it doesn't touch PNG-encoded images, fonts, or document structure. If your PDF is mostly text, or its images are already heavily compressed, there's little left to reduce.",
+    a: "This tool only recompresses embedded JPEG images. It doesn't touch PNG-encoded images, fonts, or document structure. If your PDF is mostly text, or its images are already heavily compressed, there's little left to reduce.",
   },
   {
     q: 'Can I compress a PDF that already went through this tool once?',
-    a: "Yes, but expect close to zero further reduction — you're re-compressing already-lossy JPEG data, which loses more visible quality for very little size benefit each additional pass.",
+    a: "Yes, but expect close to zero further reduction. You're re-compressing already-lossy JPEG data, which loses more visible quality for very little size benefit each additional pass.",
   },
 ];
 ---
 
 <Layout
-  title="Compress PDF Online — Reduce PDF File Size | Kit-Bin"
-  description="Shrink a PDF by recompressing its embedded photos. Runs entirely in your browser — your file is never uploaded to a server."
+  title="Compress PDF Online, Reduce PDF File Size | Kit-Bin"
+  description="Shrink a PDF by recompressing its embedded photos. Runs entirely in your browser. Your file is never uploaded to a server."
 >
   <ToolSchema
     name="Compress PDF"
-    description="Shrink a PDF by recompressing its embedded photos. Runs entirely in your browser — your file is never uploaded to a server."
+    description="Shrink a PDF by recompressing its embedded photos. Runs entirely in your browser. Your file is never uploaded to a server."
     faqs={faqs}
   />
 
@@ -45,7 +45,7 @@ const faqs = [
 
   <div class="max-w-2xl mx-auto px-4 py-12 text-ink dark:text-slate-300 space-y-6">
     <p>
-      Drop a PDF above and it downloads a smaller version automatically once ready — no settings
+      Drop a PDF above and it downloads a smaller version automatically once ready, no settings
       to configure. Under the hood, this tool finds every embedded JPEG image in the document,
       decodes it, and re-encodes it at a lower quality setting.
     </p>
@@ -53,7 +53,7 @@ const faqs = [
     <div>
       <h2 class="font-semibold text-lg">What this changes, specifically</h2>
       <p class="text-muted dark:text-slate-400">
-        Embedded JPEG photos are recompressed. Text stays as real, selectable text — it is never
+        Embedded JPEG photos are recompressed. Text stays as real, selectable text. It is never
         rasterized. Vector graphics, fonts, and document structure are left exactly as they were.
         PNG-encoded images inside the PDF are also left untouched, since they're typically
         interface graphics or diagrams where visible artifacts would be more noticeable relative
@@ -65,7 +65,7 @@ const faqs = [
       <h2 class="font-semibold text-lg">When this won't help much</h2>
       <p class="text-muted dark:text-slate-400">
         A text-only contract, invoice, or report has no embedded photos to recompress, so
-        compression will do close to nothing — that's expected, not a bug. A PDF that's already
+        compression will do close to nothing. That's expected, not a bug. A PDF that's already
         been compressed once (by this tool, or another one using similar JPEG re-encoding) will
         also show diminishing returns on a second pass.
       </p>
