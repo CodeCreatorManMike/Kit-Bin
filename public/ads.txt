@@ -1,2 +1,1 @@
-# Placeholder - replace with the exact line from the AdSense dashboard once a publisher ID exists.
-# Format: google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0
+google.com, pub-5446651960329896, DIRECT, f08c47fec0942fa0
