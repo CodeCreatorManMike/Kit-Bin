@@ -1,4 +1,4 @@
-# Kit-Bin — Free Browser-Based File Tools
+# Kit-Bin: Free Browser-Based File Tools
 
 Convert, compress, and edit files entirely in your browser. No uploads, no accounts, no file
 size games — your files never leave your device.
