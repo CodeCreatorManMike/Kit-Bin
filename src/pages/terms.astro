@@ -1,0 +1,51 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { CONTACT_EMAIL } from '../data/site-config';
+---
+
+<Layout
+  title="Terms of Service | Kit-Bin"
+  description="The terms for using Kit-Bin's free browser-based file tools: acceptable use, no warranty, and liability."
+>
+  <div class="max-w-2xl mx-auto px-4 py-16 space-y-6 text-ink dark:text-slate-300">
+    <h1 class="text-3xl font-bold text-ink dark:text-slate-100">Terms of Service</h1>
+    <p class="text-sm text-muted dark:text-slate-500">Last updated: August 2026</p>
+
+    <section>
+      <h2 class="text-xl font-semibold text-ink dark:text-slate-100 mb-2">Acceptable use</h2>
+      <p>
+        Use these tools only on files you own or have the right to process. Don't use this site
+        to bypass protection on files that aren't yours, or for any unlawful purpose.
+      </p>
+    </section>
+
+    <section>
+      <h2 class="text-xl font-semibold text-ink dark:text-slate-100 mb-2">No warranty</h2>
+      <p>
+        This site is provided as-is, free of charge, with no guarantee of uptime, accuracy, or
+        fitness for any particular purpose. Always keep your own backup of any file before
+        converting it.
+      </p>
+    </section>
+
+    <section>
+      <h2 class="text-xl font-semibold text-ink dark:text-slate-100 mb-2">Liability</h2>
+      <p>
+        We're not liable for any loss or damage arising from your use of this site, to the
+        extent permitted by law.
+      </p>
+    </section>
+
+    <section>
+      <h2 class="text-xl font-semibold text-ink dark:text-slate-100 mb-2">Changes</h2>
+      <p>These terms may be updated from time to time. Continued use of the site means you accept the current version.</p>
+    </section>
+
+    <section>
+      <h2 class="text-xl font-semibold text-ink dark:text-slate-100 mb-2">Contact</h2>
+      <p>
+        Questions about these terms: <a href={`mailto:${CONTACT_EMAIL}`} class="underline">{CONTACT_EMAIL}</a>
+      </p>
+    </section>
+  </div>
+</Layout>
