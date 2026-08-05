@@ -1,0 +1,134 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ToolHeader from '../../components/ToolHeader.astro';
+import FaqAccordion from '../../components/FaqAccordion.astro';
+import ToolSchema from '../../components/ToolSchema.astro';
+import ToolWidget from '../../components/ToolWidget.astro';
+import AdUnit from '../../components/AdUnit.astro';
+
+const faqs = [
+  {
+    q: 'Is my file uploaded anywhere?',
+    a: 'No. The PDF is read in your browser and the new file is built there too. Nothing is sent to a server, and the file you dropped in is never modified.',
+  },
+  {
+    q: 'How do I write the page range?',
+    a: 'Single pages and ranges separated by commas: 1-3, 7, 10-12. Spaces anywhere are fine. Pages come out in the order you type them, so 5, 1 gives you page 5 followed by page 1.',
+  },
+  {
+    q: 'What happens if I type a range backwards or a page that does not exist?',
+    a: 'Nothing is extracted and you get told what is wrong. A backwards range like 5-2 is rejected rather than silently flipped, and a page above the document’s page count is reported with the real count so you can correct it.',
+  },
+  {
+    q: 'Does extracting reduce quality?',
+    a: 'No. Pages are copied across as they are, not rasterized or re-rendered, so text stays selectable and images keep their original data.',
+  },
+  {
+    q: 'How is this different from Split PDF?',
+    a: 'Split PDF always breaks a document into one file per page. This tool keeps a chosen selection together in a single PDF, and can also give you one file per selected page if you prefer.',
+  },
+];
+---
+
+<Layout
+  title="Extract Pages from a PDF, Free & No Upload Required | Kit-Bin"
+  description="Pull specific pages out of a PDF into a new file, keeping them in one document. Runs entirely in your browser. Your file is never uploaded to a server."
+>
+  <ToolSchema
+    name="Extract PDF Pages"
+    description="Pull specific pages out of a PDF into a new file, keeping them in one document. Runs entirely in your browser. Your file is never uploaded to a server."
+    faqs={faqs}
+  />
+
+  <ToolHeader title="Extract Specific Pages from a PDF" />
+
+  <div class="max-w-2xl mx-auto px-4 mb-4 space-y-3 text-sm">
+    <div class="flex items-center justify-center gap-2">
+      <label for="page-range">Pages:</label>
+      <input
+        id="page-range"
+        type="text"
+        value="1-3"
+        placeholder="1-3, 7, 10-12"
+        class="rounded border border-border-soft dark:border-slate-700 bg-surface dark:bg-slate-900 text-ink dark:text-slate-100 px-2 py-1"
+      />
+    </div>
+    <div class="flex items-center justify-center gap-2">
+      <label for="extract-mode">Output:</label>
+      <select id="extract-mode" class="rounded border border-border-soft dark:border-slate-700 bg-surface dark:bg-slate-900 text-ink dark:text-slate-100 px-2 py-1">
+        <option value="single">One PDF with all selected pages</option>
+        <option value="separate">A zip with one PDF per page</option>
+      </select>
+    </div>
+  </div>
+
+  <ToolWidget accept="application/pdf" dropLabel="Drop a PDF file here or click to browse" />
+
+  <AdUnit />
+
+  <div class="max-w-2xl mx-auto px-4 py-12 text-ink dark:text-slate-300 space-y-6">
+    <p>
+      This tool copies the pages you name out of a PDF and into a new file. Type the pages you
+      want, choose whether they stay together in one document or come back as one PDF per page,
+      then drop your PDF above. The pages are copied as-is rather than rasterized, so text stays
+      selectable and images keep their original data, and the file you dropped in is never changed.
+    </p>
+    <p class="text-muted dark:text-slate-400">
+      Ranges are read in the order you type them, so 5, 1 puts page 5 first. Repeats are dropped
+      after the first time a page appears. A range written backwards, like 5-2, is rejected with a
+      message instead of being flipped for you, and a page number above the document's page count
+      stops the extraction and tells you the real count. Nothing is produced until the whole range
+      is valid.
+    </p>
+    <p class="text-muted dark:text-slate-400">
+      If you want every page as its own file, that is{' '}
+      <a href="/pdf/split" class="text-primary dark:text-blue-400 hover:underline">Split PDF</a>{' '}
+      rather than this tool. To change the order of pages inside a document without removing any,
+      use{' '}
+      <a href="/pdf/reorder-pages" class="text-primary dark:text-blue-400 hover:underline">Reorder PDF Pages</a>.
+    </p>
+
+    <div>
+      <h2 class="font-semibold text-lg pt-2">FAQ</h2>
+      <div class="mt-3">
+        <FaqAccordion faqs={faqs} />
+      </div>
+    </div>
+
+    <p class="text-sm">
+      Pulling pages from more than one PDF? Extract from each, then combine the results with{' '}
+      <a href="/pdf/merge" class="text-primary dark:text-blue-400 hover:underline">Merge PDF</a>.
+    </p>
+    <p class="text-sm">
+      Still deciding which one you need? Read{' '}
+      <a href="/guides/split-vs-extract-pdf" class="text-primary dark:text-blue-400 hover:underline">Split vs Extract PDF Pages</a>.
+    </p>
+  </div>
+
+  <script>
+    import { extractPages, getPageCount, parsePageRanges } from '../../lib/pdf/extractPages';
+    import { getToolElements, wireTool } from '../../lib/ui';
+
+    const rangeInput = document.querySelector<HTMLInputElement>('#page-range')!;
+    const modeSelect = document.querySelector<HTMLSelectElement>('#extract-mode')!;
+    const els = getToolElements();
+
+    wireTool(els, {
+      accept: 'application/pdf',
+      validate: (files) => (files[0]?.type !== 'application/pdf' ? 'This tool needs a PDF file.' : null),
+      run: async (files, reportProgress) => {
+        const file = files[0];
+        reportProgress('Reading PDF…');
+        const pageCount = await getPageCount(file);
+        const pages = parsePageRanges(rangeInput.value, pageCount);
+        const mode = modeSelect.value === 'separate' ? 'separate' : 'single';
+        const { blob, filename } = await extractPages(file, pages, mode, reportProgress);
+        return {
+          blob,
+          filename,
+          note: `${pages.length} page${pages.length === 1 ? '' : 's'} extracted from ${pageCount}.`,
+        };
+      },
+    });
+  </script>
+</Layout>

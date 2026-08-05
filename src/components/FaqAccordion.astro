@@ -1,0 +1,60 @@
+---
+/** Interactive FAQ built on <details>/<summary>.
+ *
+ * Deliberately not a JS accordion: the answer text stays in the DOM whether the
+ * item is open or closed, so it is crawlable and matches the FAQPage schema,
+ * it works with keyboard and screen readers for free, and it needs zero JS. */
+import type { Faq } from '../data/faqs';
+
+interface Props {
+  faqs: Faq[];
+  /** Emit FAQPage JSON-LD. Only one FAQPage block per page. */
+  schema?: boolean;
+  /** Open the first item so the section does not read as an empty list. */
+  openFirst?: boolean;
+}
+
+const { faqs, schema = false, openFirst = true } = Astro.props;
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+---
+
+{schema && <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} is:inline />}
+
+<div class="divide-y divide-border-soft dark:divide-slate-800 rounded-2xl border border-border-soft dark:border-slate-800 bg-surface dark:bg-slate-900 overflow-hidden">
+  {faqs.map((f, i) => (
+    <details class="group" open={openFirst && i === 0}>
+      <summary
+        class="flex cursor-pointer list-none items-center justify-between gap-4 px-5 py-4 text-sm font-medium text-ink dark:text-slate-100 transition-colors hover:bg-app-bg dark:hover:bg-slate-800/60"
+      >
+        <span>{f.q}</span>
+        <span
+          class="grid h-6 w-6 shrink-0 place-items-center rounded-full border border-border-soft dark:border-slate-700 text-muted transition-transform duration-200 group-open:rotate-45"
+          aria-hidden="true"
+        >
+          <svg viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+            <path d="M12 5v14M5 12h14" />
+          </svg>
+        </span>
+      </summary>
+      <div class="px-5 pb-4 -mt-1 text-sm leading-relaxed text-muted dark:text-slate-400">
+        <Fragment set:html={f.a} />
+      </div>
+    </details>
+  ))}
+</div>
+
+<style>
+  /* Safari renders a disclosure triangle even with list-style:none on the parent. */
+  summary::-webkit-details-marker {
+    display: none;
+  }
+</style>

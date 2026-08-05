@@ -1,0 +1,139 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ToolHeader from '../../components/ToolHeader.astro';
+import FaqAccordion from '../../components/FaqAccordion.astro';
+import ToolSchema from '../../components/ToolSchema.astro';
+import ToolWidget from '../../components/ToolWidget.astro';
+import AdUnit from '../../components/AdUnit.astro';
+
+const faqs = [
+  {
+    q: 'Is my file uploaded anywhere?',
+    a: 'No. The numbers are drawn in your browser and the new PDF is built there. Nothing is sent to a server.',
+  },
+  {
+    q: 'Does this change the existing page content?',
+    a: 'No. Each number is added as a new line of text on top of the page. Nothing already on the page is moved, removed, or re-rendered.',
+  },
+  {
+    q: 'What if my PDF mixes page sizes?',
+    a: 'Each page is measured individually and the number is placed relative to that page, so a document mixing letter, A4, and landscape pages still gets numbers in the same visual spot on every page.',
+  },
+  {
+    q: 'Can I start numbering at something other than 1?',
+    a: 'Yes. Set the starting number and counting continues from there. You can also skip the first page, which leaves a cover page blank while the page after it takes the starting number.',
+  },
+  {
+    q: 'Can I remove the numbers later?',
+    a: 'Not with this tool. Once saved, the numbers are ordinary page content. Keep your original file if you may need an unnumbered copy.',
+  },
+];
+---
+
+<Layout
+  title="Add Page Numbers to a PDF, Free & No Upload Required | Kit-Bin"
+  description="Number the pages of a PDF and pick the position and starting number. Runs entirely in your browser. Your file is never uploaded to a server."
+>
+  <ToolSchema
+    name="Add Page Numbers to PDF"
+    description="Number the pages of a PDF and pick the position and starting number. Runs entirely in your browser. Your file is never uploaded to a server."
+    faqs={faqs}
+  />
+
+  <ToolHeader title="Add Page Numbers to a PDF" />
+
+  <div class="max-w-2xl mx-auto px-4 mb-4 space-y-3 text-sm">
+    <div class="flex items-center justify-center gap-2">
+      <label for="number-position">Position:</label>
+      <select id="number-position" class="rounded border border-border-soft dark:border-slate-700 bg-surface dark:bg-slate-900 text-ink dark:text-slate-100 px-2 py-1">
+        <option value="bottom-center">Bottom center</option>
+        <option value="bottom-right">Bottom right</option>
+        <option value="bottom-left">Bottom left</option>
+      </select>
+    </div>
+    <div class="flex items-center justify-center gap-2">
+      <label for="start-number">Start at:</label>
+      <input
+        id="start-number"
+        type="number"
+        min="0"
+        step="1"
+        value="1"
+        class="w-20 rounded border border-border-soft dark:border-slate-700 bg-surface dark:bg-slate-900 text-ink dark:text-slate-100 px-2 py-1"
+      />
+    </div>
+    <div class="flex items-center justify-center gap-2">
+      <input id="skip-first" type="checkbox" class="rounded border-border-soft dark:border-slate-700" />
+      <label for="skip-first">Leave the first page unnumbered</label>
+    </div>
+  </div>
+
+  <ToolWidget accept="application/pdf" dropLabel="Drop a PDF file here or click to browse" />
+
+  <AdUnit />
+
+  <div class="max-w-2xl mx-auto px-4 py-12 text-ink dark:text-slate-300 space-y-6">
+    <p>
+      This tool writes a page number near the bottom of every page in a PDF. Pick a position and a
+      starting number, tick the box if a cover page should stay blank, then drop your PDF above.
+    </p>
+    <p class="text-muted dark:text-slate-400">
+      The numbers are drawn as new text on top of the existing content in plain Helvetica, black,
+      with a half-inch margin. Whatever is already on the page is untouched: no content is moved,
+      re-rendered, or re-encoded to make room, so a number can land on top of existing text if a
+      page already has something in that corner. Each page is measured on its own, so a document
+      that mixes page sizes or orientations gets its numbers placed correctly page by page rather
+      than against one assumed size.
+    </p>
+    <p class="text-muted dark:text-slate-400">
+      Numbering is a single running count. Per-section numbering, roman numerals, and formats like
+      "Page 3 of 12" are not supported.
+    </p>
+    <p class="text-muted dark:text-slate-400">
+      Numbering usually comes last. If you are assembling a document from several files, run{' '}
+      <a href="/pdf/merge" class="text-primary dark:text-blue-400 hover:underline">Merge PDF</a>{' '}
+      first, settle the order with{' '}
+      <a href="/pdf/reorder-pages" class="text-primary dark:text-blue-400 hover:underline">Reorder PDF Pages</a>, then number the result so the count matches the finished document.
+    </p>
+
+    <div>
+      <h2 class="font-semibold text-lg pt-2">FAQ</h2>
+      <div class="mt-3">
+        <FaqAccordion faqs={faqs} />
+      </div>
+    </div>
+
+    <p class="text-sm">
+      Only need part of a document numbered? Pull those pages out first with{' '}
+      <a href="/pdf/extract-pages" class="text-primary dark:text-blue-400 hover:underline">Extract PDF Pages</a>.
+    </p>
+  </div>
+
+  <script>
+    import { addPageNumbers } from '../../lib/pdf/pageNumbers';
+    import type { PageNumberPosition } from '../../lib/pdf/pageNumbers';
+    import { getToolElements, wireTool } from '../../lib/ui';
+
+    const positionSelect = document.querySelector<HTMLSelectElement>('#number-position')!;
+    const startInput = document.querySelector<HTMLInputElement>('#start-number')!;
+    const skipFirst = document.querySelector<HTMLInputElement>('#skip-first')!;
+    const els = getToolElements();
+
+    wireTool(els, {
+      accept: 'application/pdf',
+      validate: (files) => (files[0]?.type !== 'application/pdf' ? 'This tool needs a PDF file.' : null),
+      run: async (files) => {
+        const parsed = parseInt(startInput.value, 10);
+        if (!Number.isFinite(parsed) || parsed < 0) {
+          throw new Error('The starting number needs to be 0 or higher.');
+        }
+        const blob = await addPageNumbers(files[0], {
+          position: positionSelect.value as PageNumberPosition,
+          startAt: parsed,
+          skipFirstPage: skipFirst.checked,
+        });
+        return { blob, filename: files[0].name.replace(/\.pdf$/i, '-numbered.pdf') };
+      },
+    });
+  </script>
+</Layout>

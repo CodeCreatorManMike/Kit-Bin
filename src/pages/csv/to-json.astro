@@ -1,5 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import ToolHeader from '../../components/ToolHeader.astro';
+import FaqAccordion from '../../components/FaqAccordion.astro';
 import ToolSchema from '../../components/ToolSchema.astro';
 import ToolWidget from '../../components/ToolWidget.astro';
 import AdUnit from '../../components/AdUnit.astro';
@@ -34,10 +36,7 @@ const faqs = [
     faqs={faqs}
   />
 
-  <div class="max-w-2xl mx-auto px-4 pt-10 pb-4 text-center">
-    <h1 class="text-3xl font-bold text-ink dark:text-slate-100">Convert a CSV File to JSON</h1>
-    <p class="mt-2 text-muted dark:text-slate-400"><a href="/guides/how-kit-bin-works" class="hover:underline decoration-dotted underline-offset-2">Processed entirely in your browser. Your file is never uploaded to a server.</a></p>
-  </div>
+  <ToolHeader title="Convert a CSV File to JSON" />
 
   <ToolWidget accept="text/csv,.csv" dropLabel="Drop a CSV file here or click to browse" />
 
@@ -47,13 +46,8 @@ const faqs = [
     <p>This tool converts a CSV file into a JSON array of objects, using the header row as keys. Drop your CSV above. The JSON file downloads automatically once ready.</p>
     <div>
       <h2 class="font-semibold text-lg pt-2">FAQ</h2>
-      <div class="space-y-4 mt-2">
-        {faqs.map((f) => (
-          <div>
-            <p class="font-medium">{f.q}</p>
-            <p class="text-muted dark:text-slate-400">{f.a}</p>
-          </div>
-        ))}
+      <div class="mt-3">
+        <FaqAccordion faqs={faqs} />
       </div>
     </div>
     <p class="text-sm">Dealing with messy CSV data first? <a href="/data/csv-cleaner" class="text-primary dark:text-blue-400 hover:underline">Try CSV Cleaner</a>, or read <a href="/guides/why-csv-imports-fail" class="text-primary dark:text-blue-400 hover:underline">why CSV imports fail</a>.</p>

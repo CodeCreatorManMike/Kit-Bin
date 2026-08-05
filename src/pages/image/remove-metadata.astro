@@ -1,0 +1,391 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ToolHeader from '../../components/ToolHeader.astro';
+import FaqAccordion from '../../components/FaqAccordion.astro';
+import ToolSchema from '../../components/ToolSchema.astro';
+import AdUnit from '../../components/AdUnit.astro';
+
+const faqs = [
+  {
+    q: 'Does this reduce image quality?',
+    a: 'No. The image is never decoded or re-encoded. For a JPEG the tool walks the file\'s marker segments, drops the metadata ones, and copies the compressed scan data through byte for byte. For a PNG it drops metadata chunks and copies every remaining chunk unchanged. The pixels that come out are the same pixels that went in.',
+  },
+  {
+    q: 'Exactly what gets removed?',
+    a: 'From a JPEG: the APP1 EXIF block (which is where GPS coordinates live), APP1 XMP, APP0 JFIF, APP13 Photoshop/IPTC, every other APPn segment, and COM comments. From a PNG: tEXt, iTXt, zTXt, eXIf, and tIME chunks. Two things are deliberately kept, see the next question.',
+  },
+  {
+    q: 'Why is the colour profile kept by default?',
+    a: 'An ICC profile (APP2 in a JPEG, iCCP in a PNG) carries no personal information, and removing it can visibly shift colours on a wide-gamut image. There is a checkbox to remove it if you want to. The JPEG APP14 "Adobe" segment is always kept, because it tells decoders how to read Adobe CMYK colour data and removing it can change how the file looks.',
+  },
+  {
+    q: 'What can the inspector not tell me?',
+    a: 'It reports which metadata categories are present, plus the camera make and model and the capture date when EXIF stores them as plain text. It does not decode every tag, and it does not show you your actual GPS coordinates. It detects whether a GPS block exists, which is what matters before you share a photo.',
+  },
+  {
+    q: 'Which formats are supported?',
+    a: 'JPEG and PNG only. Those are the two formats this tool can rebuild without re-encoding. Any other format is rejected with an error rather than quietly re-compressed, which would cost you quality.',
+  },
+  {
+    q: 'Why does the file barely get smaller?',
+    a: 'Metadata is usually a few kilobytes against a multi-megabyte image. Size reduction is a side effect here, not the goal. If you want a smaller file, compress it instead.',
+  },
+];
+---
+
+<Layout
+  title="Remove EXIF and Metadata From an Image, No Quality Loss | Kit-Bin"
+  description="Strip EXIF, GPS location, XMP, and comments from a JPEG or PNG without re-encoding it. Runs entirely in your browser. Your file is never uploaded to a server."
+>
+  <ToolSchema
+    name="Remove Image Metadata"
+    description="Strip EXIF, GPS location, XMP, and comments from a JPEG or PNG without re-encoding it. Runs entirely in your browser. Your file is never uploaded to a server."
+    faqs={faqs}
+  />
+
+  <ToolHeader title="Remove Metadata and EXIF From an Image" />
+
+  <div class="max-w-2xl mx-auto px-4">
+    <div
+      id="dropzone"
+      role="button"
+      tabindex="0"
+      class="group relative cursor-pointer overflow-hidden rounded-2xl border-2 border-dashed border-border-soft dark:border-slate-700 bg-surface dark:bg-slate-900/60 px-6 py-12 text-center transition-all duration-200 hover:border-primary/50 hover:bg-primary-tint/40 dark:hover:border-blue-500/50 dark:hover:bg-slate-900 hover:shadow-[0_10px_30px_rgba(16,24,47,0.08)] data-[dragging=true]:border-primary data-[dragging=true]:bg-primary-tint/60 data-[dragging=true]:scale-[1.01] dark:data-[dragging=true]:bg-blue-950/30"
+    >
+      <div
+        class="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/[0.06] via-transparent to-violet-500/[0.06] opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-data-[dragging=true]:opacity-100"
+        aria-hidden="true"
+      >
+      </div>
+
+      <div class="relative">
+        <span class="relative mx-auto grid h-14 w-14 place-items-center">
+          <span
+            class="absolute inset-0 rounded-full bg-primary/20 opacity-0 group-data-[dragging=true]:opacity-100 group-data-[dragging=true]:animate-pulse-ring"
+            aria-hidden="true"></span>
+          <span
+            class="relative grid h-14 w-14 place-items-center rounded-2xl bg-gradient-to-br from-primary to-violet-500 text-white shadow-lg shadow-primary/25 transition-transform duration-200 group-hover:scale-105 group-hover:-rotate-3 group-data-[dragging=true]:scale-110"
+          >
+            <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 16V4" />
+              <path d="M8 8l4-4 4 4" />
+              <path d="M4 15v3a2 2 0 002 2h12a2 2 0 002-2v-3" />
+            </svg>
+          </span>
+        </span>
+
+        <p class="mt-4 text-lg font-semibold text-ink dark:text-slate-100">Drop a JPEG or PNG here or click to browse</p>
+        <p class="mt-1 text-xs text-muted dark:text-slate-500">Processed on your device. Nothing is uploaded.</p>
+        <p id="file-info" class="mt-2 text-sm font-medium text-primary dark:text-blue-400"></p>
+        <input id="file-input" type="file" accept="image/jpeg,image/png" class="hidden" />
+      </div>
+    </div>
+
+    <div id="inspect-panel" class="hidden mt-4 rounded-2xl border border-border-soft dark:border-slate-800 bg-surface dark:bg-slate-900 p-5">
+      <p id="inspect-heading" class="font-semibold text-ink dark:text-slate-100"></p>
+      <div id="gps-warning" class="hidden mt-3 rounded-lg border border-amber-400/60 bg-amber-50 dark:bg-amber-950/40 dark:border-amber-500/40 px-4 py-3 text-sm text-amber-900 dark:text-amber-200">
+        <p class="font-medium">This image contains GPS location data.</p>
+        <p class="mt-1">The EXIF block has a GPS section, so this file records where the photo was taken. Removing it below deletes that section from the file.</p>
+      </div>
+      <ul id="metadata-list" class="mt-3 space-y-3 text-sm"></ul>
+      <p id="camera-line" class="hidden mt-3 text-sm text-muted dark:text-slate-400"></p>
+
+      <label class="mt-4 flex items-start gap-2 rounded-lg border border-border-soft dark:border-slate-700 bg-app-bg dark:bg-slate-950/40 px-3 py-2 text-sm text-muted dark:text-slate-400 transition-colors hover:border-primary/50">
+        <input id="remove-icc" type="checkbox" class="mt-1 accent-[color:var(--color-primary)]" />
+        <span>Also remove the colour profile (ICC). Off by default, because removing it can shift colours on wide-gamut images.</span>
+      </label>
+
+      <button id="strip-button" class="mt-4 rounded-xl bg-gradient-to-r from-primary to-violet-500 px-6 py-3 font-medium text-white shadow-lg shadow-primary/25 transition-all duration-200 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98]">
+        Remove metadata
+      </button>
+    </div>
+
+    <div id="status" class="hidden mt-4" role="status" aria-live="polite">
+      <div class="rounded-xl border border-border-soft dark:border-slate-800 bg-surface dark:bg-slate-900 px-4 py-3">
+        <p data-status-text class="text-center text-sm font-medium text-ink dark:text-slate-200"></p>
+        <div data-status-bar class="mt-2.5 h-1 overflow-hidden rounded-full bg-app-bg dark:bg-slate-800">
+          <div class="h-full w-full animate-shimmer rounded-full" aria-hidden="true"></div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      id="result"
+      class="hidden mt-4 overflow-hidden rounded-2xl border border-emerald-300/70 dark:border-emerald-500/25 bg-gradient-to-br from-emerald-50 to-surface dark:from-emerald-950/25 dark:to-slate-900 p-6 text-center"
+    >
+      <span class="mx-auto grid h-11 w-11 place-items-center rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400">
+        <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <path class="animate-draw-check" d="M5 12.5l4.5 4.5L19 7.5" />
+        </svg>
+      </span>
+      <p class="mt-2.5 font-semibold text-ink dark:text-slate-100">Done</p>
+      <p data-result-note class="mt-0.5 text-sm text-muted dark:text-slate-400"></p>
+
+      <a
+        id="download-link"
+        class="mt-4 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-primary to-violet-500 px-6 py-3 font-medium text-white shadow-lg shadow-primary/25 transition-all duration-200 hover:shadow-xl hover:shadow-primary/30 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98]"
+      >
+        <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 4v12" />
+          <path d="M8 12l4 4 4-4" />
+          <path d="M4 20h16" />
+        </svg>
+        Download result
+      </a>
+
+      <button id="reset-button" class="mt-4 block w-full text-sm text-muted dark:text-slate-400 underline decoration-dotted underline-offset-2 transition-colors hover:text-ink dark:hover:text-slate-200">
+        Process another file
+      </button>
+    </div>
+  </div>
+
+  <AdUnit />
+
+  <div class="max-w-2xl mx-auto px-4 py-12 text-ink dark:text-slate-300 space-y-6">
+    <p>
+      This tool removes the metadata embedded in a JPEG or PNG: EXIF, GPS coordinates, XMP, IPTC
+      fields, and text comments. Drop a file, read what it found, then remove it and download the
+      cleaned copy. The download gets a <code class="text-sm">-clean</code> suffix so it never
+      overwrites your original.
+    </p>
+
+    <div>
+      <h2 class="font-semibold text-lg">Nothing is re-encoded</h2>
+      <p class="text-muted dark:text-slate-400">
+        Most metadata removers decode the image and encode it again, which costs quality on a JPEG
+        every single time. This one does not. A JPEG is treated as a list of marker segments: the
+        metadata segments are dropped and the rest of the file, including all of the compressed
+        image scan data, is copied through byte for byte. A PNG is treated as a list of chunks, and
+        the retained chunks keep their original bytes and their original CRCs. Same pixels, same
+        quality, smaller file.
+      </p>
+    </div>
+
+    <div>
+      <h2 class="font-semibold text-lg">What is removed, precisely</h2>
+      <p class="text-muted dark:text-slate-400">
+        From a JPEG: the EXIF APP1 segment, the XMP APP1 segment, the JFIF APP0 segment, the
+        Photoshop/IPTC APP13 segment, all other APPn segments, and COM comment segments. From a
+        PNG: tEXt, iTXt, zTXt, eXIf, and tIME chunks. IHDR, PLTE, IDAT, IEND and the JPEG SOF, DQT,
+        DHT and SOS structures are untouched.
+      </p>
+    </div>
+
+    <div>
+      <h2 class="font-semibold text-lg">Two deliberate exceptions</h2>
+      <p class="text-muted dark:text-slate-400">
+        The ICC colour profile is kept unless you tick the box, since dropping it can change how
+        colours render and it holds no personal data. The JPEG APP14 "Adobe" segment is always kept,
+        because it describes how Adobe CMYK and YCCK colour data should be interpreted and removing
+        it can change the decoded image. Removing the JFIF APP0 segment does discard the stored DPI
+        value; the pixels are unaffected.
+      </p>
+    </div>
+
+    <div>
+      <h2 class="font-semibold text-lg">What the inspector can and cannot see</h2>
+      <p class="text-muted dark:text-slate-400">
+        The inspector reads the file structure to report which metadata categories exist, and it
+        checks the EXIF block specifically for a GPS section, because location is the part that
+        matters most before sharing a photo. It reads the camera make, model, and capture date when
+        those are stored as plain text. It is not a full EXIF tag viewer and it does not display your
+        coordinates. Data held anywhere after the start of the image scan, such as a second image
+        appended by some phone cameras, is left alone.
+      </p>
+    </div>
+
+    <p class="text-sm">
+      Need the file smaller too? Run it through{' '}
+      <a href="/image/compress" class="text-primary dark:text-blue-400 hover:underline">Compress Image</a>{' '}
+      or{' '}
+      <a href="/image/compress-to-size" class="text-primary dark:text-blue-400 hover:underline">Compress to Target Size</a>{' '}
+      afterwards. Those tools re-encode, so run them second if you care about the metadata being gone.
+    </p>
+    <p class="text-sm">
+      Cropping or resizing also drops metadata as a side effect, because both re-encode the image.
+      See{' '}
+      <a href="/image/crop" class="text-primary dark:text-blue-400 hover:underline">Crop Image</a>{' '}
+      and{' '}
+      <a href="/image/resize" class="text-primary dark:text-blue-400 hover:underline">Resize Image</a>.
+    </p>
+
+    <div>
+      <h2 class="font-semibold text-lg pt-2">FAQ</h2>
+      <div class="mt-3">
+        <FaqAccordion faqs={faqs} />
+      </div>
+    </div>
+  </div>
+
+  <script>
+    import { readExifSummary, stripMetadata, cleanFilename, type ExifSummary } from '../../lib/image/stripMetadata';
+
+    function formatBytes(bytes: number): string {
+      if (bytes < 1024) return `${bytes} B`;
+      if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+      return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+    }
+
+    const dropzone = document.querySelector<HTMLElement>('#dropzone')!;
+    const fileInput = document.querySelector<HTMLInputElement>('#file-input')!;
+    const fileInfo = document.querySelector<HTMLElement>('#file-info')!;
+    const inspectPanel = document.querySelector<HTMLElement>('#inspect-panel')!;
+    const inspectHeading = document.querySelector<HTMLElement>('#inspect-heading')!;
+    const gpsWarning = document.querySelector<HTMLElement>('#gps-warning')!;
+    const metadataList = document.querySelector<HTMLUListElement>('#metadata-list')!;
+    const cameraLine = document.querySelector<HTMLElement>('#camera-line')!;
+    const removeIcc = document.querySelector<HTMLInputElement>('#remove-icc')!;
+    const stripButton = document.querySelector<HTMLButtonElement>('#strip-button')!;
+    const status = document.querySelector<HTMLElement>('#status')!;
+    const result = document.querySelector<HTMLElement>('#result')!;
+    const resultNote = document.querySelector<HTMLElement>('[data-result-note]')!;
+    const downloadLink = document.querySelector<HTMLAnchorElement>('#download-link')!;
+    const resetButton = document.querySelector<HTMLButtonElement>('#reset-button')!;
+
+    let currentFile: File | null = null;
+    let currentSummary: ExifSummary | null = null;
+    let objectUrl: string | null = null;
+
+    const statusText = status.querySelector<HTMLElement>('[data-status-text]')!;
+    const statusBar = status.querySelector<HTMLElement>('[data-status-bar]')!;
+
+    function setStatus(message: string | null, isError = false) {
+      statusText.textContent = message ?? '';
+      status.classList.toggle('hidden', !message);
+      statusBar.classList.toggle('hidden', isError);
+      statusText.classList.toggle('text-red-600', isError);
+      statusText.classList.toggle('dark:text-red-400', isError);
+    }
+
+    function renderSummary(file: File, summary: ExifSummary) {
+      const formatName = summary.format === 'jpeg' ? 'JPEG' : 'PNG';
+      const unit = summary.format === 'jpeg' ? 'segment' : 'chunk';
+      // The ICC profile only counts as removable when the checkbox is ticked.
+      const willRemove = (item: ExifSummary['items'][number]) => item.removed || (item.isIcc && removeIcc.checked);
+      const removable = summary.items.filter(willRemove);
+      const removableBytes = removable.reduce((sum, item) => sum + item.bytes, 0);
+
+      inspectHeading.textContent = removable.length
+        ? `${file.name}, ${formatName}: ${removable.length} metadata ${removable.length === 1 ? unit : `${unit}s`} found (${formatBytes(removableBytes)})`
+        : `${file.name}, ${formatName}: no removable metadata found`;
+
+      gpsWarning.classList.toggle('hidden', !summary.hasGps);
+
+      metadataList.innerHTML = '';
+      if (!summary.items.length) {
+        const li = document.createElement('li');
+        li.className = 'text-muted dark:text-slate-400';
+        li.textContent = 'This file has no EXIF, XMP, IPTC, comment, or text metadata to remove.';
+        metadataList.appendChild(li);
+      }
+      for (const item of summary.items) {
+        const li = document.createElement('li');
+        li.className = 'flex gap-3';
+        const badge = document.createElement('span');
+        badge.className = willRemove(item)
+          ? 'shrink-0 rounded-md bg-slate-100 dark:bg-slate-800 px-2 py-0.5 font-mono text-xs text-ink dark:text-slate-200'
+          : 'shrink-0 rounded-md border border-border-soft dark:border-slate-700 px-2 py-0.5 font-mono text-xs text-muted dark:text-slate-400';
+        badge.textContent = item.label;
+        const text = document.createElement('span');
+        text.className = item.sensitive ? 'text-amber-800 dark:text-amber-300' : 'text-muted dark:text-slate-400';
+        const detail = item.isIcc && removeIcc.checked ? 'Colour profile.' : item.detail;
+        text.textContent = `${detail} ${formatBytes(item.bytes)}. ${willRemove(item) ? 'Will be removed.' : 'Kept.'}`;
+        li.append(badge, text);
+        metadataList.appendChild(li);
+      }
+
+      const facts: string[] = [];
+      if (summary.camera) facts.push(`Camera recorded as ${summary.camera}.`);
+      if (summary.dateTaken) facts.push(`Capture date recorded as ${summary.dateTaken}.`);
+      if (summary.hasThumbnail) facts.push('The EXIF block also holds an embedded thumbnail image.');
+      cameraLine.textContent = facts.join(' ');
+      cameraLine.classList.toggle('hidden', facts.length === 0);
+
+      removeIcc.disabled = !summary.hasIccProfile;
+      stripButton.disabled = removable.length === 0;
+      stripButton.classList.toggle('opacity-50', stripButton.disabled);
+
+      fileInfo.textContent = `${file.name} (${formatBytes(file.size)})`;
+      inspectPanel.classList.remove('hidden');
+      dropzone.classList.add('hidden');
+    }
+
+    async function handleFile(file: File) {
+      setStatus('Reading file structure…');
+      try {
+        const summary = await readExifSummary(file);
+        currentFile = file;
+        currentSummary = summary;
+        setStatus(null);
+        renderSummary(file, summary);
+      } catch (err) {
+        setStatus(err instanceof Error ? err.message : 'This file could not be read.', true);
+      }
+    }
+
+    removeIcc.addEventListener('change', () => {
+      if (currentFile && currentSummary) renderSummary(currentFile, currentSummary);
+    });
+
+    dropzone.addEventListener('click', () => fileInput.click());
+    dropzone.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        fileInput.click();
+      }
+    });
+    dropzone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropzone.dataset.dragging = 'true';
+    });
+    dropzone.addEventListener('dragleave', () => {
+      dropzone.dataset.dragging = 'false';
+    });
+    dropzone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropzone.dataset.dragging = 'false';
+      const file = e.dataTransfer?.files?.[0];
+      if (file) handleFile(file);
+    });
+    fileInput.addEventListener('change', () => {
+      const file = fileInput.files?.[0];
+      if (file) handleFile(file);
+    });
+
+    stripButton.addEventListener('click', async () => {
+      if (!currentFile) return;
+      setStatus('Rebuilding the file without its metadata…');
+      try {
+        const blob = await stripMetadata(currentFile, { removeIccProfile: removeIcc.checked });
+        setStatus(null);
+        if (objectUrl) URL.revokeObjectURL(objectUrl);
+        objectUrl = URL.createObjectURL(blob);
+        downloadLink.href = objectUrl;
+        downloadLink.download = cleanFilename(currentFile.name);
+        const saved = currentFile.size - blob.size;
+        resultNote.textContent = `${formatBytes(currentFile.size)} → ${formatBytes(blob.size)}, ${formatBytes(saved)} of metadata removed. Pixels unchanged.`;
+        result.classList.remove('hidden');
+        result.classList.remove('animate-pop-in');
+        void result.offsetWidth;
+        result.classList.add('animate-pop-in');
+        inspectPanel.classList.add('hidden');
+      } catch (err) {
+        setStatus(err instanceof Error ? err.message : 'Something went wrong.', true);
+      }
+    });
+
+    resetButton.addEventListener('click', () => {
+      currentFile = null;
+      currentSummary = null;
+      if (objectUrl) URL.revokeObjectURL(objectUrl);
+      objectUrl = null;
+      result.classList.add('hidden');
+      inspectPanel.classList.add('hidden');
+      dropzone.classList.remove('hidden');
+      fileInfo.textContent = '';
+      fileInput.value = '';
+      removeIcc.checked = false;
+      setStatus(null);
+    });
+  </script>
+</Layout>

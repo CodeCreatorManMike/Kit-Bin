@@ -1,0 +1,309 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import FaqAccordion from '../../components/FaqAccordion.astro';
+import ToolSchema from '../../components/ToolSchema.astro';
+import AdUnit from '../../components/AdUnit.astro';
+
+const faqs = [
+  {
+    q: 'Do I have to upload a file?',
+    a: 'No. Paste your JSON straight into the box and use the buttons. Dropping a .json file in is only a shortcut that fills the box for you, and even then the file is read locally and never sent anywhere.',
+  },
+  {
+    q: 'Does it tell me where the error is?',
+    a: 'Yes. When parsing fails, the tool reports the line and column of the character the parser choked on, plus the reason. Browsers report the failure position differently, so the tool maps it back onto your text itself rather than passing the raw browser message through.',
+  },
+  {
+    q: 'Does formatting change my data?',
+    a: 'It changes only whitespace and key order is preserved as written, with two exceptions worth knowing. Duplicate keys collapse to the last one, because that is what JSON.parse does. And very large integers beyond about 9 quadrillion, or numbers with more precision than a double can hold, get rounded, since JSON numbers are parsed as JavaScript doubles.',
+  },
+  {
+    q: 'Will it accept JSON with comments or trailing commas?',
+    a: 'No. Comments, trailing commas, single-quoted strings, and unquoted keys are all invalid JSON, and the validator flags them rather than silently accepting them. If you need those, you are writing JSON5 or JSONC, which is a different format.',
+  },
+  {
+    q: 'Is there a size limit?',
+    a: 'There is no fixed limit, but everything runs in your browser tab, so a very large document (tens of megabytes) can make the tab slow or unresponsive while it parses and re-renders. For files that big, prefer a command line tool.',
+  },
+];
+---
+
+<Layout
+  title="JSON Formatter and Validator, Free & Nothing Uploaded | Kit-Bin"
+  description="Paste JSON to format, minify, or validate it. Invalid JSON gets a real line and column number. Runs entirely in your browser, nothing is uploaded."
+>
+  <ToolSchema
+    name="JSON Formatter and Validator"
+    description="Paste JSON to format, minify, or validate it. Invalid JSON gets a real line and column number. Runs entirely in your browser, nothing is uploaded."
+    faqs={faqs}
+  />
+
+  <div class="max-w-3xl mx-auto px-4 pt-10 pb-4 text-center">
+    <h1 class="text-3xl font-bold text-ink dark:text-slate-100">JSON Formatter and Validator</h1>
+    <p class="mt-2 text-muted dark:text-slate-400"><a href="/guides/how-kit-bin-works" class="hover:underline decoration-dotted underline-offset-2">Processed entirely in your browser. Nothing you paste is uploaded to a server.</a></p>
+  </div>
+
+  <div class="max-w-3xl mx-auto px-4">
+    <div id="drop-target" class="rounded-xl border border-border-soft dark:border-slate-700 p-4">
+      <label for="json-input" class="block text-sm font-medium">Paste your JSON here</label>
+      <textarea
+        id="json-input"
+        rows="14"
+        spellcheck="false"
+        placeholder={'{"name": "Ada", "tags": ["engineer", "mathematician"]}'}
+        class="mt-2 w-full resize-y rounded-lg border border-border-soft dark:border-slate-700 bg-transparent p-3 font-mono text-sm text-ink dark:text-slate-100 focus:border-primary focus:outline-none"
+      ></textarea>
+
+      <div class="mt-3 flex flex-wrap items-center gap-2">
+        <button
+          id="format-button"
+          class="rounded-lg bg-primary dark:bg-blue-500 px-5 py-2.5 text-white font-medium hover:bg-primary-hover dark:hover:bg-blue-600"
+        >
+          Format
+        </button>
+        <button
+          id="minify-button"
+          class="rounded-lg border border-border-soft dark:border-slate-700 px-5 py-2.5 font-medium hover:border-primary dark:hover:border-slate-500"
+        >
+          Minify
+        </button>
+        <button
+          id="validate-button"
+          class="rounded-lg border border-border-soft dark:border-slate-700 px-5 py-2.5 font-medium hover:border-primary dark:hover:border-slate-500"
+        >
+          Validate
+        </button>
+
+        <label for="indent-select" class="ml-auto text-sm text-muted dark:text-slate-400">Indent</label>
+        <select
+          id="indent-select"
+          class="rounded-lg border border-border-soft dark:border-slate-700 bg-transparent px-3 py-2 text-sm text-ink dark:text-slate-100"
+        >
+          <option value="2" selected>2 spaces</option>
+          <option value="4">4 spaces</option>
+          <option value="tab">Tab</option>
+        </select>
+      </div>
+
+      <div class="mt-3 flex flex-wrap items-center gap-4 text-sm">
+        <button id="copy-button" class="text-primary dark:text-blue-400 underline hover:no-underline">Copy to clipboard</button>
+        <a id="download-link" href="#" class="text-primary dark:text-blue-400 underline hover:no-underline">Download as .json</a>
+        <button id="clear-button" class="text-muted dark:text-slate-400 underline hover:text-ink dark:hover:text-slate-200">Clear</button>
+        <label for="file-input" class="cursor-pointer text-muted dark:text-slate-400 underline hover:text-ink dark:hover:text-slate-200">
+          Or open a .json file
+        </label>
+        <input id="file-input" type="file" accept="application/json,.json" class="hidden" />
+      </div>
+
+      <p id="message" class="hidden mt-3 rounded-lg px-3 py-2 text-sm"></p>
+    </div>
+    <p class="mt-2 text-xs text-muted dark:text-slate-400">
+      You can also drop a .json file anywhere on the box above to load it.
+    </p>
+  </div>
+
+  <AdUnit />
+
+  <div class="max-w-3xl mx-auto px-4 py-12 text-ink dark:text-slate-300 space-y-6">
+    <p>
+      This tool re-indents JSON so it is readable, strips whitespace when you need it compact, and
+      tells you exactly where a broken document breaks. Paste your JSON in the box, then use Format,
+      Minify, or Validate. Nothing is sent anywhere, the parsing happens in this tab.
+    </p>
+
+    <div>
+      <h2 class="font-semibold text-lg">What each button does</h2>
+      <ul class="list-disc list-inside mt-2 space-y-1 text-muted dark:text-slate-400">
+        <li><strong>Format</strong> parses the JSON and rewrites it with the indent you picked, one property per line.</li>
+        <li><strong>Minify</strong> parses it and writes it back with all optional whitespace removed, which is what you want before putting JSON in a config value or a request body.</li>
+        <li><strong>Validate</strong> parses without changing your text, and reports the line and column of the first problem it finds.</li>
+      </ul>
+    </div>
+
+    <div>
+      <h2 class="font-semibold text-lg">Reading the error message</h2>
+      <p class="text-muted dark:text-slate-400">
+        A parse error names the character position where the document stopped making sense, which is
+        not always where the mistake is. A missing closing bracket, for example, is usually reported
+        at the next token, one or more lines later. Start at the reported line and column, then look
+        upward for the unclosed bracket, brace, or quote.
+      </p>
+      <p class="mt-2 text-muted dark:text-slate-400">
+        The three most common causes are a trailing comma before a closing brace or bracket, a
+        missing comma between two entries, and single quotes where JSON requires double quotes.
+      </p>
+    </div>
+
+    <div>
+      <h2 class="font-semibold text-lg">Two things formatting can quietly change</h2>
+      <p class="text-muted dark:text-slate-400">
+        Formatting round-trips your document through a real parser, so it is not purely cosmetic.
+        Duplicate keys in the same object collapse to the last one that appears. And numbers are
+        parsed as doubles, so an integer larger than roughly 9 quadrillion, or a decimal with more
+        significant digits than a double holds, comes back rounded. If either applies to your data,
+        validate rather than format.
+      </p>
+    </div>
+
+    <div>
+      <h2 class="font-semibold text-lg pt-2">FAQ</h2>
+      <div class="mt-3">
+        <FaqAccordion faqs={faqs} />
+      </div>
+    </div>
+
+    <p class="text-sm">
+      Need this JSON as a table? Use{' '}
+      <a href="/json/to-csv" class="text-primary dark:text-blue-400 hover:underline">JSON to CSV</a>. Coming
+      from a spreadsheet instead? Use{' '}
+      <a href="/data/excel-to-json" class="text-primary dark:text-blue-400 hover:underline">Excel to JSON</a>{' '}
+      or{' '}
+      <a href="/csv/to-json" class="text-primary dark:text-blue-400 hover:underline">CSV to JSON</a>.
+    </p>
+    <p class="text-sm">
+      Deciding which format to store your data in? Read{' '}
+      <a href="/guides/csv-vs-json" class="text-primary dark:text-blue-400 hover:underline">CSV vs JSON: Which One Do You Need?</a>
+    </p>
+  </div>
+
+  <script>
+    import { formatJson, minifyJson, validateJson, type Indent } from '../../lib/data/json';
+
+    const input = document.querySelector<HTMLTextAreaElement>('#json-input')!;
+    const dropTarget = document.querySelector<HTMLElement>('#drop-target')!;
+    const formatButton = document.querySelector<HTMLButtonElement>('#format-button')!;
+    const minifyButton = document.querySelector<HTMLButtonElement>('#minify-button')!;
+    const validateButton = document.querySelector<HTMLButtonElement>('#validate-button')!;
+    const indentSelect = document.querySelector<HTMLSelectElement>('#indent-select')!;
+    const copyButton = document.querySelector<HTMLButtonElement>('#copy-button')!;
+    const downloadLink = document.querySelector<HTMLAnchorElement>('#download-link')!;
+    const clearButton = document.querySelector<HTMLButtonElement>('#clear-button')!;
+    const fileInput = document.querySelector<HTMLInputElement>('#file-input')!;
+    const message = document.querySelector<HTMLElement>('#message')!;
+
+    const OK_CLASSES = ['bg-green-50', 'dark:bg-green-950/40', 'text-green-800', 'dark:text-green-300'];
+    const ERROR_CLASSES = ['bg-red-50', 'dark:bg-red-950/40', 'text-red-800', 'dark:text-red-300'];
+
+    let objectUrl: string | null = null;
+
+    function clearMessage() {
+      message.textContent = '';
+      message.classList.add('hidden');
+      message.classList.remove(...OK_CLASSES, ...ERROR_CLASSES);
+    }
+
+    function showMessage(text: string, kind: 'ok' | 'error') {
+      message.textContent = text;
+      message.classList.remove('hidden', ...OK_CLASSES, ...ERROR_CLASSES);
+      message.classList.add(...(kind === 'ok' ? OK_CLASSES : ERROR_CLASSES));
+    }
+
+    /** Moves the caret to a 1-based line/column so the browser scrolls there. */
+    function focusAt(line: number, column: number) {
+      const lines = input.value.split('\n');
+      let offset = 0;
+      for (let i = 0; i < line - 1 && i < lines.length; i++) offset += lines[i]!.length + 1;
+      offset += column - 1;
+      input.focus();
+      input.setSelectionRange(offset, offset);
+    }
+
+    /** Reports the problem and returns false when the text will not parse. */
+    function checkValid(): boolean {
+      const result = validateJson(input.value);
+      if (result.valid) return true;
+      showMessage(`Invalid JSON at line ${result.line}, column ${result.column}: ${result.message}.`, 'error');
+      focusAt(result.line, result.column);
+      return false;
+    }
+
+    function currentIndent(): Indent {
+      const value = indentSelect.value;
+      if (value === 'tab') return 'tab';
+      return value === '4' ? 4 : 2;
+    }
+
+    formatButton.addEventListener('click', () => {
+      clearMessage();
+      if (!checkValid()) return;
+      input.value = formatJson(input.value, currentIndent());
+      showMessage('Valid JSON, formatted.', 'ok');
+    });
+
+    minifyButton.addEventListener('click', () => {
+      clearMessage();
+      if (!checkValid()) return;
+      const before = input.value.length;
+      input.value = minifyJson(input.value);
+      showMessage(`Valid JSON, minified from ${before} to ${input.value.length} characters.`, 'ok');
+    });
+
+    validateButton.addEventListener('click', () => {
+      clearMessage();
+      if (checkValid()) showMessage('Valid JSON.', 'ok');
+    });
+
+    copyButton.addEventListener('click', async () => {
+      if (input.value === '') {
+        showMessage('Nothing to copy, the box is empty.', 'error');
+        return;
+      }
+      try {
+        await navigator.clipboard.writeText(input.value);
+        showMessage('Copied to clipboard.', 'ok');
+      } catch {
+        input.select();
+        showMessage('Your browser blocked clipboard access. The text is selected, press Ctrl+C or Cmd+C.', 'error');
+      }
+    });
+
+    downloadLink.addEventListener('click', (e) => {
+      clearMessage();
+      if (input.value.trim() === '') {
+        e.preventDefault();
+        showMessage('Nothing to download, the box is empty.', 'error');
+        return;
+      }
+      if (!checkValid()) {
+        e.preventDefault();
+        return;
+      }
+      if (objectUrl) URL.revokeObjectURL(objectUrl);
+      objectUrl = URL.createObjectURL(new Blob([input.value], { type: 'application/json' }));
+      downloadLink.href = objectUrl;
+      downloadLink.download = 'data.json';
+    });
+
+    clearButton.addEventListener('click', () => {
+      input.value = '';
+      clearMessage();
+      input.focus();
+    });
+
+    async function loadFile(file: File) {
+      clearMessage();
+      input.value = await file.text();
+      if (checkValid()) showMessage(`Loaded ${file.name}. Valid JSON.`, 'ok');
+    }
+
+    fileInput.addEventListener('change', () => {
+      const file = fileInput.files?.[0];
+      if (file) loadFile(file);
+      fileInput.value = '';
+    });
+
+    dropTarget.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropTarget.classList.add('border-primary');
+    });
+    dropTarget.addEventListener('dragleave', () => dropTarget.classList.remove('border-primary'));
+    dropTarget.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropTarget.classList.remove('border-primary');
+      const file = e.dataTransfer?.files?.[0];
+      if (file) loadFile(file);
+    });
+
+    input.addEventListener('input', clearMessage);
+  </script>
+</Layout>

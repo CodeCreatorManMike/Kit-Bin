@@ -1,0 +1,141 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ToolHeader from '../../components/ToolHeader.astro';
+import FaqAccordion from '../../components/FaqAccordion.astro';
+import ToolSchema from '../../components/ToolSchema.astro';
+import ToolWidget from '../../components/ToolWidget.astro';
+import AdUnit from '../../components/AdUnit.astro';
+
+const faqs = [
+  {
+    q: 'What happens if my files have different columns?',
+    a: 'Nothing is dropped. The output has one column for every header seen in any of the files, and a file that lacked a column simply gets a blank cell there. The result summary tells you when the headers did not match, so you know blanks were introduced rather than finding out later.',
+  },
+  {
+    q: 'Does the column order have to match?',
+    a: 'No. Columns are matched by header name, not by position. If one file has id, name and another has name, id, the values still land in the right columns.',
+  },
+  {
+    q: 'Is this a join on a key, like a VLOOKUP?',
+    a: 'No. This is a vertical merge: it stacks the rows of every file under one header row. If the same id appears in two files, you get two rows, not one combined row. Joining records on a shared key is a different operation and this tool does not do it.',
+  },
+  {
+    q: 'What order do the rows come out in?',
+    a: 'File order, then original row order within each file. Rows are not sorted, deduplicated, or reordered. The files are processed in the order your browser hands them over, which for a multi-select is normally the order shown in the file picker.',
+  },
+  {
+    q: 'Does header matching care about case and spaces?',
+    a: 'Yes, matching is exact. "Email" and "email" are treated as two separate columns, as are "name" and "name " with a trailing space. If your files came from different exports, check the header spelling first, or clean each file before merging.',
+  },
+  {
+    q: 'How many files can I merge?',
+    a: 'At least two, with no fixed upper limit. Everything is held in your browser tab’s memory, so merging a large number of big files can make the tab slow. If it struggles, merge in a few batches and then merge the batches.',
+  },
+];
+---
+
+<Layout
+  title="Merge CSV Files Online, Free & No Upload Required | Kit-Bin"
+  description="Combine several CSV files into one, keeping every column from every file. Runs entirely in your browser, your files are never uploaded."
+>
+  <ToolSchema
+    name="Merge CSV Files"
+    description="Combine several CSV files into one, keeping every column from every file. Runs entirely in your browser, your files are never uploaded."
+    faqs={faqs}
+  />
+
+  <ToolHeader title="Merge Multiple CSV Files Into One" />
+
+  <ToolWidget
+    accept=".csv,text/csv"
+    multiple
+    dropLabel="Drop two or more CSV files here or click to browse"
+  />
+
+  <AdUnit />
+
+  <div class="max-w-2xl mx-auto px-4 py-12 text-ink dark:text-slate-300 space-y-6">
+    <p>
+      This tool stacks the rows of several CSV files into one file, under a single header row. Select
+      two or more CSVs above, or drop them in together. The merged file downloads once it is ready.
+    </p>
+
+    <div>
+      <h2 class="font-semibold text-lg">This is a vertical merge, not a join</h2>
+      <p class="text-muted dark:text-slate-400">
+        The rows of every file are appended one after another, in file order. The tool does not match
+        records on a shared key, so if customer 42 appears in two files you get two rows for customer
+        42 rather than one merged row. That kind of key-based lookup is a join, which needs to know
+        which column is the key and what to do when values conflict, and this tool deliberately does
+        not guess at either.
+      </p>
+    </div>
+
+    <div>
+      <h2 class="font-semibold text-lg">Columns are unioned, never dropped</h2>
+      <p class="text-muted dark:text-slate-400">
+        Files exported at different times often do not share the same columns. Rather than keeping
+        only the columns every file has in common, the output includes every header found in any
+        file. Where a file did not have a column, its rows get a blank cell there. The summary after
+        the merge reports the file count, total rows, and column count, and it says so explicitly
+        when headers did not match, so you know where the blanks came from.
+      </p>
+    </div>
+
+    <div>
+      <h2 class="font-semibold text-lg">Before you merge</h2>
+      <ul class="list-disc list-inside mt-2 space-y-1 text-muted dark:text-slate-400">
+        <li>Header matching is exact, so "Email" and "email" become two different columns.</li>
+        <li>Every file needs a header row. The first row of each file is read as its headers.</li>
+        <li>Files must be comma-delimited. A semicolon or tab delimited file parses as one column.</li>
+        <li>Duplicate rows are kept. The merge does not deduplicate anything.</li>
+        <li>Fully blank rows are skipped while reading, so they do not pad the output.</li>
+      </ul>
+      <p class="mt-2 text-muted dark:text-slate-400">
+        If your files came from different systems, running each one through{' '}
+        <a href="/data/csv-cleaner" class="text-primary dark:text-blue-400 hover:underline">CSV Cleaner</a>{' '}
+        first will trim stray whitespace out of the headers and cut down on accidental duplicate
+        columns.
+      </p>
+    </div>
+
+    <div>
+      <h2 class="font-semibold text-lg pt-2">FAQ</h2>
+      <div class="mt-3">
+        <FaqAccordion faqs={faqs} />
+      </div>
+    </div>
+
+    <p class="text-sm">
+      Once merged, convert the result with{' '}
+      <a href="/csv/to-excel" class="text-primary dark:text-blue-400 hover:underline">CSV to Excel</a>{' '}
+      or{' '}
+      <a href="/csv/to-json" class="text-primary dark:text-blue-400 hover:underline">CSV to JSON</a>. Merging
+      sheets out of one workbook instead? Start with{' '}
+      <a href="/data/excel-to-csv" class="text-primary dark:text-blue-400 hover:underline">Excel to CSV</a>, which
+      can export every sheet as its own CSV.
+    </p>
+    <p class="text-sm">
+      If the merged file gets rejected by whatever you import it into, read{' '}
+      <a href="/guides/why-csv-imports-fail" class="text-primary dark:text-blue-400 hover:underline">why CSV imports fail</a>.
+    </p>
+  </div>
+
+  <script>
+    import { mergeCsvFiles } from '../../lib/data/csvMerge';
+    import { getToolElements, wireTool } from '../../lib/ui';
+
+    const els = getToolElements();
+    wireTool(els, {
+      accept: '.csv,text/csv',
+      multiple: true,
+      validate: (files) => {
+        if (files.length < 2) return 'Pick at least two CSV files to merge.';
+        const bad = files.find((f) => !f.name.toLowerCase().endsWith('.csv'));
+        if (bad) return `This tool needs CSV files. "${bad.name}" is not a .csv file.`;
+        return null;
+      },
+      run: (files, reportProgress) => mergeCsvFiles(files, reportProgress),
+    });
+  </script>
+</Layout>

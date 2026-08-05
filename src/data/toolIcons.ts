@@ -216,6 +216,68 @@ export const toolIcons: Record<string, IconPrimitive[]> = {
     { t: 'path', d: 'M20.5 17.5l-3 3' },
   ],
 
+  '/pdf/extract-pages': [
+    ...page,
+    { t: 'path', d: 'M9 12h6' },
+    { t: 'path', d: 'M12.5 9.5L15 12l-2.5 2.5' },
+  ],
+  '/pdf/images-to-pdf': [
+    { t: 'rect', x: 3, y: 5, w: 11, h: 9, rx: 1.2 },
+    { t: 'circle', cx: 6.5, cy: 8.5, r: 1.1 },
+    { t: 'path', d: 'M3 12l3-2.5 3 2.5' },
+    { t: 'path', d: 'M11 10h8a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1h-7' },
+    { t: 'path', d: 'M14 14h3' },
+  ],
+  '/pdf/page-numbers': [
+    ...page,
+    { t: 'path', d: 'M9.5 18.5h5' },
+    { t: 'path', d: 'M12 16.5v4' },
+  ],
+  '/pdf/remove-metadata': [
+    ...page,
+    { t: 'path', d: 'M9 11h6M9 14h4' },
+    { t: 'path', d: 'M14.5 17.5l4 4M18.5 17.5l-4 4' },
+  ],
+  '/image/compress-to-size': [
+    { t: 'rect', x: 3, y: 4, w: 18, h: 16, rx: 1.5 },
+    { t: 'path', d: 'M8 9.5h8M8 12.5h8' },
+    { t: 'path', d: 'M9.5 15.5l2.5 2.5 2.5-2.5' },
+  ],
+  '/image/remove-metadata': [
+    { t: 'rect', x: 3, y: 5, w: 18, h: 14, rx: 1.5 },
+    { t: 'circle', cx: 8, cy: 10, r: 1.5 },
+    { t: 'path', d: 'M3 16l4.5-4 3 3' },
+    { t: 'path', d: 'M14.5 13.5l5 5M19.5 13.5l-5 5' },
+  ],
+  '/image/rotate': [
+    { t: 'rect', x: 4, y: 8, w: 12, h: 12, rx: 1.3 },
+    { t: 'path', d: 'M14 5.5A6 6 0 0 1 20 11' },
+    { t: 'path', d: 'M17 3l3 2.5-3 2.5' },
+  ],
+  '/data/excel-to-csv': [
+    { t: 'rect', x: 3, y: 4, w: 8, h: 16, rx: 1.2 },
+    { t: 'path', d: 'M3 9h8M7 4v16' },
+    { t: 'path', d: 'M14 12h7' },
+    { t: 'path', d: 'M18.5 9.5L21 12l-2.5 2.5' },
+  ],
+  '/data/excel-to-json': [
+    { t: 'rect', x: 2.5, y: 4, w: 8, h: 16, rx: 1.2 },
+    { t: 'path', d: 'M2.5 9h8M6.5 4v16' },
+    { t: 'path', d: 'M14.5 7.5c2 0 2 1.8 2 4.5s0 4.5-2 4.5' },
+    { t: 'path', d: 'M21 7.5c-2 0-2 1.8-2 4.5s0 4.5 2 4.5' },
+  ],
+  '/data/json-formatter': [
+    { t: 'path', d: 'M8.5 4.5c-2.5 0-2.5 2.8-2.5 7.5s0 7.5 2.5 7.5' },
+    { t: 'path', d: 'M15.5 4.5c2.5 0 2.5 2.8 2.5 7.5s0 7.5-2.5 7.5' },
+    { t: 'path', d: 'M10 12l1.6 1.6L15 10' },
+  ],
+  '/data/csv-merge': [
+    { t: 'rect', x: 2.5, y: 3.5, w: 7, h: 7, rx: 1 },
+    { t: 'rect', x: 2.5, y: 13.5, w: 7, h: 7, rx: 1 },
+    { t: 'rect', x: 14.5, y: 8.5, w: 7, h: 7, rx: 1 },
+    { t: 'path', d: 'M9.5 7h2.5v5h2.5M9.5 17h2.5v-5' },
+  ],
+
   // Guides
   '/guides/how-kit-bin-works': [
     { t: 'path', d: 'M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3z' },

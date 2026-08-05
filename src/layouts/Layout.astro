@@ -31,6 +31,9 @@ const { title, description } = Astro.props;
         const dark = stored ? stored === 'dark' : true;
         document.documentElement.classList.toggle('dark', dark);
       } catch {}
+      // Gates the scroll-reveal CSS so a no-JS visitor is never left with
+      // permanently invisible content.
+      document.documentElement.classList.add('js');
     </script>
   </head>
   <body class="min-h-screen bg-app-bg text-ink antialiased dark:bg-slate-950 dark:text-slate-100 flex">
@@ -42,5 +45,31 @@ const { title, description } = Astro.props;
       </main>
       <Footer />
     </div>
+
+    <script>
+      // Reveal-on-scroll for anything marked [data-reveal]. Uses one shared
+      // observer and unobserves after reveal, so it costs nothing once done.
+      const targets = document.querySelectorAll<HTMLElement>('[data-reveal]');
+      if (targets.length > 0) {
+        const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (reduced || !('IntersectionObserver' in window)) {
+          targets.forEach((el) => el.classList.add('is-visible'));
+        } else {
+          const io = new IntersectionObserver(
+            (entries) => {
+              entries.forEach((entry) => {
+                if (!entry.isIntersecting) return;
+                const el = entry.target as HTMLElement;
+                const delay = Number(el.dataset.revealDelay ?? 0);
+                window.setTimeout(() => el.classList.add('is-visible'), delay);
+                io.unobserve(el);
+              });
+            },
+            { rootMargin: '0px 0px -8% 0px', threshold: 0.05 },
+          );
+          targets.forEach((el) => io.observe(el));
+        }
+      }
+    </script>
   </body>
 </html>

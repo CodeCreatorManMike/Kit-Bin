@@ -1,0 +1,51 @@
+---
+/** Tool page header: gradient category icon badge, H1, and the privacy line.
+ *
+ * Category and icon are derived from the pathname against src/data/tools.ts, so
+ * a tool page never has to restate which category it belongs to. */
+import ToolIcon from './ToolIcon.astro';
+import { tools } from '../data/tools';
+
+interface Props {
+  title: string;
+  /** Overrides the sub-line. Defaults to the privacy statement. */
+  subtitle?: string;
+}
+
+const { title, subtitle } = Astro.props;
+
+const path = Astro.url.pathname.replace(/\/$/, '');
+const tool = tools.find((t) => t.slug === path);
+---
+
+<div class="relative overflow-hidden">
+  <div
+    class="animate-blob pointer-events-none absolute -top-20 left-1/2 h-52 w-52 -translate-x-1/2 rounded-full bg-gradient-to-br from-primary/15 via-violet-400/10 to-transparent blur-3xl"
+    aria-hidden="true"
+  >
+  </div>
+
+  <div class="relative max-w-2xl mx-auto px-4 pt-10 pb-5 text-center animate-fade-in-up">
+    {tool && (
+      <div class="mb-3 flex justify-center">
+        <div class="animate-float">
+          <ToolIcon slug={tool.slug} category={tool.category} />
+        </div>
+      </div>
+    )}
+    <h1 class="text-3xl sm:text-4xl font-bold tracking-tight text-ink dark:text-slate-100">{title}</h1>
+    <p class="mt-2.5 text-sm text-muted dark:text-slate-400">
+      {subtitle ?? (
+        <a
+          href="/guides/how-kit-bin-works"
+          class="inline-flex items-center gap-1.5 rounded-full border border-border-soft dark:border-slate-800 bg-surface dark:bg-slate-900 px-3 py-1.5 transition-colors hover:border-primary/30 hover:text-ink dark:hover:text-slate-200"
+        >
+          <svg viewBox="0 0 24 24" class="h-3.5 w-3.5 text-emerald-500" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3l7 3v5.5c0 4.3-3 7.6-7 9-4-1.4-7-4.7-7-9V6l7-3z" />
+          </svg>
+          Processed on your device. Never uploaded.
+        </a>
+      )}
+    </p>
+  </div>
+</div>

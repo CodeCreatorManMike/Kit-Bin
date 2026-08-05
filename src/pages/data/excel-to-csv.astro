@@ -1,0 +1,263 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ToolHeader from '../../components/ToolHeader.astro';
+import FaqAccordion from '../../components/FaqAccordion.astro';
+import ToolSchema from '../../components/ToolSchema.astro';
+import AdUnit from '../../components/AdUnit.astro';
+
+const faqs = [
+  {
+    q: 'What happens to my formulas?',
+    a: 'You get the computed value, not the formula text. A cell containing =B2*C2 that shows 7.50 in Excel becomes 7.5 in the CSV. The formula itself is not written to the file, because CSV has no concept of a formula. If a formula was never calculated by the spreadsheet app, that cell can come out blank.',
+  },
+  {
+    q: 'What about my formatting, colours, and charts?',
+    a: 'None of it survives. CSV is plain text with commas, so it stores values only. Fonts, cell colours, borders, column widths, conditional formatting, charts, pivot tables, images, comments, and data validation rules are all dropped. Number formatting is applied as text where it can be, but the styling behind it is gone.',
+  },
+  {
+    q: 'My workbook has several sheets. What do I get?',
+    a: 'CSV holds exactly one table, so a multi-sheet workbook cannot become a single CSV. Pick one sheet from the dropdown to get one .csv file, or choose the all-sheets option to get a ZIP containing one .csv per sheet. Merged cells that spanned sheets or rows are not reconstructed.',
+  },
+  {
+    q: 'Will my dates come out right?',
+    a: 'Usually, but check them. Excel stores dates as numbers with a display format attached. This tool writes the date as the spreadsheet displayed it, so a cell shown as 03/04/2025 stays that ambiguous text in the CSV, and whatever imports it next may read it as 3 April or 4 March. If dates matter, reformat the column to an unambiguous format like YYYY-MM-DD in Excel before converting.',
+  },
+  {
+    q: 'Are .xls and .xlsm files supported?',
+    a: 'Yes. The tool reads .xlsx, the older .xls binary format, and macro-enabled .xlsm files. Macros are not run and not carried over, only the cell values are read.',
+  },
+  {
+    q: 'Is my file uploaded anywhere?',
+    a: 'No. The workbook is parsed by JavaScript inside your own browser tab and the CSV is generated there. Nothing is sent to a server.',
+  },
+];
+---
+
+<Layout
+  title="Convert Excel to CSV Online, Free & No Upload Required | Kit-Bin"
+  description="Convert an .xlsx, .xls, or .xlsm sheet to CSV, or export every sheet at once as a ZIP. Runs entirely in your browser, your file is never uploaded."
+>
+  <ToolSchema
+    name="Convert Excel to CSV"
+    description="Convert an .xlsx, .xls, or .xlsm sheet to CSV, or export every sheet at once as a ZIP. Runs entirely in your browser, your file is never uploaded."
+    faqs={faqs}
+  />
+
+  <ToolHeader title="Convert an Excel File to CSV" />
+
+  <div class="max-w-2xl mx-auto px-4">
+    <div
+      id="dropzone"
+      class="cursor-pointer border-2 border-dashed border-border-soft dark:border-slate-700 rounded-xl p-12 text-center hover:border-primary/40 dark:hover:border-slate-500 transition-colors"
+    >
+      <p class="text-lg font-medium">Drop an Excel file here or click to browse</p>
+      <p class="mt-1 text-sm text-muted dark:text-slate-400">.xlsx, .xls, or .xlsm</p>
+      <p id="file-info" class="mt-2 text-sm text-muted dark:text-slate-400"></p>
+      <input id="file-input" type="file" accept=".xlsx,.xls,.xlsm" class="hidden" />
+    </div>
+
+    <div id="sheet-panel" class="hidden mt-4 rounded-xl border border-border-soft dark:border-slate-700 p-6">
+      <label for="sheet-select" class="block text-sm font-medium">Which sheet do you want?</label>
+      <select
+        id="sheet-select"
+        class="mt-2 w-full rounded-lg border border-border-soft dark:border-slate-700 bg-transparent px-3 py-2 text-ink dark:text-slate-100"
+      ></select>
+      <p id="sheet-hint" class="mt-2 text-sm text-muted dark:text-slate-400"></p>
+      <button
+        id="convert-button"
+        class="mt-4 rounded-lg bg-primary dark:bg-blue-500 px-6 py-3 text-white font-medium hover:bg-primary-hover dark:hover:bg-blue-600"
+      >
+        Convert to CSV
+      </button>
+    </div>
+
+    <p id="status" class="hidden mt-4 text-center text-sm text-muted dark:text-slate-400"></p>
+
+    <div id="result" class="hidden mt-4 rounded-xl border border-border-soft dark:border-slate-700 p-6 text-center">
+      <a
+        id="download-link"
+        class="inline-block rounded-lg bg-primary dark:bg-blue-500 px-6 py-3 text-white font-medium hover:bg-primary-hover dark:hover:bg-blue-600"
+        >Download result</a
+      >
+      <p data-result-note class="mt-2 text-sm text-muted dark:text-slate-400"></p>
+      <button id="reset-button" class="mt-4 text-sm text-muted dark:text-slate-400 underline hover:text-ink dark:hover:text-slate-200">
+        Process another file
+      </button>
+    </div>
+  </div>
+
+  <AdUnit />
+
+  <div class="max-w-2xl mx-auto px-4 py-12 text-ink dark:text-slate-300 space-y-6">
+    <p>
+      This tool reads an Excel workbook and writes the cell values of a sheet out as comma-separated
+      text. Drop your file above, pick the sheet you want from the dropdown, then click convert. If
+      you pick the all-sheets option, you get a ZIP with one .csv file per sheet.
+    </p>
+
+    <div>
+      <h2 class="font-semibold text-lg">What does not survive the conversion</h2>
+      <p class="text-muted dark:text-slate-400">
+        CSV is a plain text format that stores one flat table of values. Everything a spreadsheet
+        adds on top of that is lost, and it is worth knowing which parts before you convert:
+      </p>
+      <ul class="list-disc list-inside mt-2 space-y-1 text-muted dark:text-slate-400">
+        <li><strong>Formulas</strong> become their computed values. The formula text is not kept.</li>
+        <li><strong>Formatting</strong> (fonts, colours, borders, column widths, conditional formatting) is dropped.</li>
+        <li><strong>Merged cells</strong> are flattened. The value lands in the top-left cell of the range and the rest of the range is empty.</li>
+        <li><strong>Charts, images, pivot tables, comments, and data validation</strong> are not written to CSV at all.</li>
+        <li><strong>Multiple sheets</strong> cannot share one CSV, which is why you choose a sheet or get a ZIP.</li>
+        <li><strong>Macros</strong> in an .xlsm file are ignored and not carried over.</li>
+      </ul>
+    </div>
+
+    <div>
+      <h2 class="font-semibold text-lg">Check your dates</h2>
+      <p class="text-muted dark:text-slate-400">
+        A date in Excel is a number with a display format attached to it. The CSV gets the displayed
+        text, so a cell showing 03/04/2025 stays 03/04/2025, and the next program to read that file
+        has to guess whether that is 3 April or 4 March. Reformat date columns to YYYY-MM-DD in Excel
+        before converting if the values are going into a database or another import.
+      </p>
+    </div>
+
+    <div>
+      <h2 class="font-semibold text-lg pt-2">FAQ</h2>
+      <div class="mt-3">
+        <FaqAccordion faqs={faqs} />
+      </div>
+    </div>
+
+    <p class="text-sm">
+      Going the other direction? Use{' '}
+      <a href="/csv/to-excel" class="text-primary dark:text-blue-400 hover:underline">CSV to Excel</a>. Need
+      objects instead of rows? Use{' '}
+      <a href="/data/excel-to-json" class="text-primary dark:text-blue-400 hover:underline">Excel to JSON</a>.
+    </p>
+    <p class="text-sm">
+      Before importing the CSV somewhere else, it is worth running it through{' '}
+      <a href="/data/csv-cleaner" class="text-primary dark:text-blue-400 hover:underline">CSV Cleaner</a>{' '}
+      and reading{' '}
+      <a href="/guides/why-csv-imports-fail" class="text-primary dark:text-blue-400 hover:underline">why CSV imports fail</a>.
+    </p>
+  </div>
+
+  <script>
+    import { excelToCsv, listSheets, isExcelFile } from '../../lib/data/excel';
+
+    const dropzone = document.querySelector<HTMLElement>('#dropzone')!;
+    const fileInput = document.querySelector<HTMLInputElement>('#file-input')!;
+    const fileInfo = document.querySelector<HTMLElement>('#file-info')!;
+    const sheetPanel = document.querySelector<HTMLElement>('#sheet-panel')!;
+    const sheetSelect = document.querySelector<HTMLSelectElement>('#sheet-select')!;
+    const sheetHint = document.querySelector<HTMLElement>('#sheet-hint')!;
+    const convertButton = document.querySelector<HTMLButtonElement>('#convert-button')!;
+    const status = document.querySelector<HTMLElement>('#status')!;
+    const result = document.querySelector<HTMLElement>('#result')!;
+    const downloadLink = document.querySelector<HTMLAnchorElement>('#download-link')!;
+    const resultNote = result.querySelector<HTMLElement>('[data-result-note]')!;
+    const resetButton = document.querySelector<HTMLButtonElement>('#reset-button')!;
+
+    const ALL_SHEETS = ' all';
+    let currentFile: File | null = null;
+
+    function setStatus(msg: string | null) {
+      status.textContent = msg ?? '';
+      status.classList.toggle('hidden', !msg);
+    }
+
+    async function handleFile(file: File) {
+      if (!isExcelFile(file.name)) {
+        setStatus('This tool needs an Excel file (.xlsx, .xls, or .xlsm).');
+        return;
+      }
+      currentFile = file;
+      fileInfo.textContent = file.name;
+      setStatus('Reading workbook…');
+
+      try {
+        const sheets = await listSheets(file);
+        if (sheets.length === 0) {
+          setStatus('This workbook has no sheets.');
+          return;
+        }
+        setStatus(null);
+
+        sheetSelect.innerHTML = '';
+        for (const name of sheets) {
+          const option = document.createElement('option');
+          option.value = name;
+          option.textContent = name;
+          sheetSelect.appendChild(option);
+        }
+        if (sheets.length > 1) {
+          const option = document.createElement('option');
+          option.value = ALL_SHEETS;
+          option.textContent = 'All sheets (one CSV each, in a ZIP)';
+          sheetSelect.appendChild(option);
+          sheetHint.textContent = `${sheets.length} sheets found. A CSV holds one table, so each sheet becomes its own file.`;
+        } else {
+          sheetHint.textContent = 'This workbook has one sheet.';
+        }
+
+        dropzone.classList.add('hidden');
+        sheetPanel.classList.remove('hidden');
+      } catch (err) {
+        console.error(err);
+        setStatus(
+          `Could not read that workbook: ${err instanceof Error ? err.message : 'unknown error'}. Check the file opens in Excel first.`,
+        );
+      }
+    }
+
+    convertButton.addEventListener('click', async () => {
+      if (!currentFile) return;
+      const choice = sheetSelect.value;
+      setStatus('Converting…');
+      try {
+        const { blob, filename } = await excelToCsv(
+          currentFile,
+          choice === ALL_SHEETS ? undefined : choice,
+        );
+        setStatus(null);
+        downloadLink.href = URL.createObjectURL(blob);
+        downloadLink.download = filename;
+        resultNote.textContent = filename;
+        sheetPanel.classList.add('hidden');
+        result.classList.remove('hidden');
+      } catch (err) {
+        console.error(err);
+        setStatus(
+          `Something went wrong: ${err instanceof Error ? err.message : 'unknown error'}. Try a different file.`,
+        );
+      }
+    });
+
+    dropzone.addEventListener('click', () => fileInput.click());
+    dropzone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropzone.classList.add('border-primary');
+    });
+    dropzone.addEventListener('dragleave', () => dropzone.classList.remove('border-primary'));
+    dropzone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropzone.classList.remove('border-primary');
+      const file = e.dataTransfer?.files?.[0];
+      if (file) handleFile(file);
+    });
+    fileInput.addEventListener('change', () => {
+      const file = fileInput.files?.[0];
+      if (file) handleFile(file);
+    });
+
+    resetButton.addEventListener('click', () => {
+      currentFile = null;
+      result.classList.add('hidden');
+      sheetPanel.classList.add('hidden');
+      dropzone.classList.remove('hidden');
+      fileInfo.textContent = '';
+      fileInput.value = '';
+      setStatus(null);
+    });
+  </script>
+</Layout>

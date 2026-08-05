@@ -1,8 +1,25 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import ToolHeader from '../../components/ToolHeader.astro';
+import FaqAccordion from '../../components/FaqAccordion.astro';
 import ToolSchema from '../../components/ToolSchema.astro';
 import ToolWidget from '../../components/ToolWidget.astro';
 import AdUnit from '../../components/AdUnit.astro';
+
+const faqs = [
+  {
+    q: 'Does it keep the aspect ratio?',
+    a: 'Yes, height is calculated from your target width automatically.',
+  },
+  {
+    q: 'Can I set an exact height, or only width?',
+    a: 'Only width, currently. Height always scales proportionally to keep the image from distorting.',
+  },
+  {
+    q: 'Can resizing make a small image bigger without losing quality?',
+    a: 'It can make the file dimensions bigger, but it cannot add detail that was never captured. Enlarging a low-resolution image just makes the existing pixels bigger and softer, not sharper.',
+  },
+];
 ---
 
 <Layout
@@ -12,26 +29,10 @@ import AdUnit from '../../components/AdUnit.astro';
   <ToolSchema
     name="Resize Image"
     description="Resize an image to a target width in seconds. Runs entirely in your browser. Your file is never uploaded to a server."
-    faqs={[
-    {
-      "q": "Does it keep the aspect ratio?",
-      "a": "Yes, height is calculated from your target width automatically."
-    },
-    {
-      "q": "Can I set an exact height, or only width?",
-      "a": "Only width, currently. Height always scales proportionally to keep the image from distorting."
-    },
-    {
-      "q": "Can resizing make a small image bigger without losing quality?",
-      "a": "It can make the file dimensions bigger, but it cannot add detail that was never captured. Enlarging a low-resolution image just makes the existing pixels bigger and softer, not sharper."
-    }
-  ]}
+    faqs={faqs}
   />
 
-  <div class="max-w-2xl mx-auto px-4 pt-10 pb-4 text-center">
-    <h1 class="text-3xl font-bold text-ink dark:text-slate-100">Resize Image, Free</h1>
-    <p class="mt-2 text-muted dark:text-slate-400"><a href="/guides/how-kit-bin-works" class="hover:underline decoration-dotted underline-offset-2">Processed entirely in your browser. Your file is never uploaded to a server.</a></p>
-  </div>
+  <ToolHeader title="Resize Image, Free" />
 
   <div class="max-w-2xl mx-auto px-4 mb-4 flex items-center justify-center gap-2 text-sm">
     <label for="target-width">Target width (px):</label>
@@ -52,18 +53,11 @@ import AdUnit from '../../components/AdUnit.astro';
   <div class="max-w-2xl mx-auto px-4 py-12 text-ink dark:text-slate-300 space-y-4">
     <p>This tool resizes an image to a target width, scaling the height to match automatically so the image never distorts.</p>
     <p>Set your target width, then drop your image above. The resized file downloads automatically once ready.</p>
-    <h2 class="font-semibold text-lg pt-2">FAQ</h2>
     <div>
-      <p class="font-medium">Does it keep the aspect ratio?</p>
-      <p class="text-muted dark:text-slate-400">Yes, height is calculated from your target width automatically.</p>
-    </div>
-    <div>
-      <p class="font-medium">Can I set an exact height, or only width?</p>
-      <p class="text-muted dark:text-slate-400">Only width, currently. Height always scales proportionally to keep the image from distorting.</p>
-    </div>
-    <div>
-      <p class="font-medium">Can resizing make a small image bigger without losing quality?</p>
-      <p class="text-muted dark:text-slate-400">It can make the file dimensions bigger, but it cannot add detail that was never captured. Enlarging a low-resolution image just makes the existing pixels bigger and softer, not sharper.</p>
+      <h2 class="font-semibold text-lg pt-2">FAQ</h2>
+      <div class="mt-3">
+        <FaqAccordion faqs={faqs} />
+      </div>
     </div>
     <p class="text-sm">
       Trying to shrink a file rather than change its dimensions? Read{' '}

@@ -35,22 +35,46 @@ function formatBytes(bytes: number): string {
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
-export function setStatus(els: ToolElements, message: string | null) {
-  els.status.textContent = message ?? '';
+/** Shows progress or an error. `isError` swaps the progress bar for red text,
+ * so a failure never looks like work still in flight. ToolWidget renders the
+ * text into [data-status-text]; older hand-rolled pages that use a bare
+ * element still work via the textContent fallback. */
+export function setStatus(els: ToolElements, message: string | null, isError = false) {
+  const textEl = els.status.querySelector<HTMLElement>('[data-status-text]') ?? els.status;
+  textEl.textContent = message ?? '';
   els.status.classList.toggle('hidden', !message);
+
+  const bar = els.status.querySelector<HTMLElement>('[data-status-bar]');
+  if (bar) bar.classList.toggle('hidden', isError);
+  textEl.classList.toggle('text-red-600', isError);
+  textEl.classList.toggle('dark:text-red-400', isError);
 }
 
+/** Tracks the object URL handed to the download link so it can be revoked when
+ * the user processes another file, rather than leaking one blob per run. */
+let activeObjectUrl: string | null = null;
+
 export function showResult(els: ToolElements, blob: Blob, filename: string, note?: string) {
-  const url = URL.createObjectURL(blob);
-  els.downloadLink.href = url;
+  if (activeObjectUrl) URL.revokeObjectURL(activeObjectUrl);
+  activeObjectUrl = URL.createObjectURL(blob);
+
+  els.downloadLink.href = activeObjectUrl;
   els.downloadLink.download = filename;
   const noteEl = els.result.querySelector('[data-result-note]');
   if (noteEl) noteEl.textContent = note ?? formatBytes(blob.size);
   els.result.classList.remove('hidden');
+  // Re-trigger the entry animation on every run, not just the first.
+  els.result.classList.remove('animate-pop-in');
+  void els.result.offsetWidth;
+  els.result.classList.add('animate-pop-in');
   els.dropzone.classList.add('hidden');
 }
 
 export function reset(els: ToolElements) {
+  if (activeObjectUrl) {
+    URL.revokeObjectURL(activeObjectUrl);
+    activeObjectUrl = null;
+  }
   els.result.classList.add('hidden');
   els.dropzone.classList.remove('hidden');
   els.fileInfo.textContent = '';
@@ -80,7 +104,7 @@ export function wireTool(els: ToolElements, opts: WireOptions) {
 
     const invalid = opts.validate?.(files);
     if (invalid) {
-      setStatus(els, invalid);
+      setStatus(els, invalid, true);
       return;
     }
 
@@ -93,21 +117,34 @@ export function wireTool(els: ToolElements, opts: WireOptions) {
       showResult(els, blob, filename, note);
     } catch (err) {
       console.error(err);
-      setStatus(els, `Something went wrong: ${err instanceof Error ? err.message : 'unknown error'}. Try a different file.`);
+      setStatus(
+        els,
+        `Something went wrong: ${err instanceof Error ? err.message : 'unknown error'}. Try a different file.`,
+        true,
+      );
     }
   };
 
+  const setDragging = (on: boolean) => {
+    els.dropzone.dataset.dragging = String(on);
+  };
+
   els.dropzone.addEventListener('click', () => els.fileInput.click());
+  // The dropzone is a role="button", so it must also respond to keyboard.
+  els.dropzone.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      els.fileInput.click();
+    }
+  });
   els.dropzone.addEventListener('dragover', (e) => {
     e.preventDefault();
-    els.dropzone.classList.add('border-blue-500');
+    setDragging(true);
   });
-  els.dropzone.addEventListener('dragleave', () => {
-    els.dropzone.classList.remove('border-blue-500');
-  });
+  els.dropzone.addEventListener('dragleave', () => setDragging(false));
   els.dropzone.addEventListener('drop', (e) => {
     e.preventDefault();
-    els.dropzone.classList.remove('border-blue-500');
+    setDragging(false);
     if (e.dataTransfer?.files) handleFiles(e.dataTransfer.files);
   });
   els.fileInput.addEventListener('change', () => {

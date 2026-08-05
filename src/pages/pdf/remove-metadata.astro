@@ -1,0 +1,478 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ToolHeader from '../../components/ToolHeader.astro';
+import FaqAccordion from '../../components/FaqAccordion.astro';
+import ToolSchema from '../../components/ToolSchema.astro';
+import AdUnit from '../../components/AdUnit.astro';
+
+const faqs = [
+  {
+    q: 'What exactly gets removed?',
+    a: 'The document information fields: title, author, subject, keywords, creator, and producer, plus the XMP metadata stream if the file has one. Optionally the creation and modification dates as well. Nothing else.',
+  },
+  {
+    q: 'Does this make the PDF anonymous?',
+    a: 'No, and it would be wrong to describe it that way. This tool only clears document-level metadata. It does not touch anything inside the pages, so visible text, comments, annotations, form field values, hidden or non-printing layers, embedded attachments, and identifying detail inside images all remain exactly as they were. A name in the letterhead is still a name in the letterhead.',
+  },
+  {
+    q: 'Is my file uploaded anywhere?',
+    a: 'No. The PDF is read and rewritten in your browser. It is never uploaded, which also means the metadata you are trying to get rid of is never sent to a server on the way to being removed.',
+  },
+  {
+    q: 'Are the fields deleted or emptied?',
+    a: 'The six text fields are written as empty values, so a PDF reader shows blank properties rather than the old values. If you choose to clear the dates, those two entries are deleted from the file outright, because writing a substitute date would mean inventing information.',
+  },
+  {
+    q: 'Why does the output still list a producer in some readers?',
+    a: 'It should not. This tool explicitly writes an empty producer and stops the PDF library from stamping its own name in on save. If a reader shows something, it is reading a value from elsewhere in the file, such as a per-page or embedded-file entry that document-level metadata editing does not reach.',
+  },
+  {
+    q: 'Does it work on password-protected PDFs?',
+    a: 'It can read the metadata of an encrypted PDF, but it will not rewrite one. Removing the password first is a separate step that this tool does not do.',
+  },
+  {
+    q: 'Are the pages changed at all?',
+    a: 'No. Page content is copied through untouched, so text stays selectable and image quality is unchanged. Only the metadata dictionary is rewritten.',
+  },
+];
+---
+
+<Layout
+  title="Remove PDF Metadata, Clear Author and Title Fields | Kit-Bin"
+  description="See the metadata in a PDF, then clear the title, author, and other document fields. Runs entirely in your browser. Your file is never uploaded."
+>
+  <ToolSchema
+    name="Remove PDF Metadata"
+    description="See the metadata in a PDF, then clear the title, author, and other document fields. Runs entirely in your browser. Your file is never uploaded."
+    faqs={faqs}
+  />
+
+  <ToolHeader title="Remove PDF Metadata" />
+
+  <div class="max-w-2xl mx-auto px-4 mb-6">
+    <div class="rounded-xl border border-amber-300 dark:border-amber-700/60 bg-amber-50 dark:bg-amber-950/30 p-4 text-sm text-ink dark:text-slate-200">
+      <p class="font-semibold">Read this before you rely on it</p>
+      <p class="mt-1">
+        This clears document metadata only: the title, author, subject, keywords, creator, and
+        producer fields, the XMP metadata stream, and optionally the dates. It does{' '}
+        <strong>not</strong> remove anything contained in the pages themselves. Visible text,
+        comments, annotations, form field values, hidden layers, and embedded attachments are all
+        left in place. The output is a PDF with empty properties, not an anonymous document.
+      </p>
+    </div>
+  </div>
+
+  <div class="max-w-2xl mx-auto px-4">
+    <div
+      id="dropzone"
+      role="button"
+      tabindex="0"
+      class="group relative cursor-pointer overflow-hidden rounded-2xl border-2 border-dashed border-border-soft dark:border-slate-700 bg-surface dark:bg-slate-900/60 px-6 py-12 text-center transition-all duration-200 hover:border-primary/50 hover:bg-primary-tint/40 dark:hover:border-blue-500/50 dark:hover:bg-slate-900 hover:shadow-[0_10px_30px_rgba(16,24,47,0.08)] data-[dragging=true]:border-primary data-[dragging=true]:bg-primary-tint/60 data-[dragging=true]:scale-[1.01] dark:data-[dragging=true]:bg-blue-950/30"
+    >
+      <div
+        class="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/[0.06] via-transparent to-violet-500/[0.06] opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-data-[dragging=true]:opacity-100"
+        aria-hidden="true"
+      >
+      </div>
+
+      <div class="relative">
+        <span class="relative mx-auto grid h-14 w-14 place-items-center">
+          <span
+            class="absolute inset-0 rounded-full bg-primary/20 opacity-0 group-data-[dragging=true]:opacity-100 group-data-[dragging=true]:animate-pulse-ring"
+            aria-hidden="true"></span>
+          <span
+            class="relative grid h-14 w-14 place-items-center rounded-2xl bg-gradient-to-br from-primary to-violet-500 text-white shadow-lg shadow-primary/25 transition-transform duration-200 group-hover:scale-105 group-hover:-rotate-3 group-data-[dragging=true]:scale-110"
+          >
+            <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 16V4" />
+              <path d="M8 8l4-4 4 4" />
+              <path d="M4 15v3a2 2 0 002 2h12a2 2 0 002-2v-3" />
+            </svg>
+          </span>
+        </span>
+
+        <p class="mt-4 text-lg font-semibold text-ink dark:text-slate-100">Drop a PDF here or click to browse</p>
+        <p class="mt-1 text-xs text-muted dark:text-slate-500">Processed on your device. Nothing is uploaded.</p>
+        <p id="file-info" class="mt-2 text-sm font-medium text-primary dark:text-blue-400"></p>
+        <input id="file-input" type="file" accept="application/pdf" class="hidden" />
+      </div>
+    </div>
+
+    <div id="inspect-panel" class="hidden mt-4 rounded-2xl border border-border-soft dark:border-slate-800 bg-surface dark:bg-slate-900 p-6">
+      <h2 class="font-semibold text-lg">Metadata found in this file</h2>
+      <p id="encrypted-warning" class="hidden mt-2 text-sm text-amber-700 dark:text-amber-400"></p>
+      <dl id="before-list" class="mt-3 text-sm space-y-1"></dl>
+
+      <div class="mt-5 space-y-3 rounded-xl border border-border-soft dark:border-slate-700 bg-app-bg dark:bg-slate-950/40 p-4 text-sm">
+        <div>
+          <label for="replacement-title" class="block text-muted dark:text-slate-400">Replacement title (optional, leave blank to clear)</label>
+          <input
+            id="replacement-title"
+            type="text"
+            class="mt-1 w-full rounded-lg border border-border-soft dark:border-slate-700 bg-surface dark:bg-slate-900 text-ink dark:text-slate-100 px-3 py-2 transition-colors focus:border-primary/50"
+          />
+        </div>
+        <div>
+          <label for="replacement-author" class="block text-muted dark:text-slate-400">Replacement author (optional, leave blank to clear)</label>
+          <input
+            id="replacement-author"
+            type="text"
+            class="mt-1 w-full rounded-lg border border-border-soft dark:border-slate-700 bg-surface dark:bg-slate-900 text-ink dark:text-slate-100 px-3 py-2 transition-colors focus:border-primary/50"
+          />
+        </div>
+        <label class="flex items-center gap-2">
+          <input id="clear-dates" type="checkbox" checked class="accent-[color:var(--color-primary)]" />
+          <span>Also remove the creation and modification dates</span>
+        </label>
+      </div>
+
+      <button id="strip-button" class="mt-5 rounded-xl bg-gradient-to-r from-primary to-violet-500 px-6 py-3 font-medium text-white shadow-lg shadow-primary/25 transition-all duration-200 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98]">
+        Remove metadata
+      </button>
+    </div>
+
+    <div id="status" class="hidden mt-4" role="status" aria-live="polite">
+      <div class="rounded-xl border border-border-soft dark:border-slate-800 bg-surface dark:bg-slate-900 px-4 py-3">
+        <p data-status-text class="text-center text-sm font-medium text-ink dark:text-slate-200"></p>
+        <div data-status-bar class="mt-2.5 h-1 overflow-hidden rounded-full bg-app-bg dark:bg-slate-800">
+          <div class="h-full w-full animate-shimmer rounded-full" aria-hidden="true"></div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      id="result"
+      class="hidden mt-4 overflow-hidden rounded-2xl border border-emerald-300/70 dark:border-emerald-500/25 bg-gradient-to-br from-emerald-50 to-surface dark:from-emerald-950/25 dark:to-slate-900 p-6"
+    >
+      <div class="text-center">
+        <span class="mx-auto grid h-11 w-11 place-items-center rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400">
+          <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <path class="animate-draw-check" d="M5 12.5l4.5 4.5L19 7.5" />
+          </svg>
+        </span>
+        <p class="mt-2.5 font-semibold text-ink dark:text-slate-100">Done</p>
+      </div>
+
+      <h2 class="mt-5 font-semibold text-lg">Before and after</h2>
+      <p class="mt-1 text-sm text-muted dark:text-slate-400">
+        The right column is read back out of the file you are about to download, not predicted.
+      </p>
+      <div class="mt-3 overflow-x-auto">
+        <table class="w-full text-sm text-left">
+          <thead>
+            <tr class="text-muted dark:text-slate-400">
+              <th class="py-1 pr-3 font-medium">Field</th>
+              <th class="py-1 pr-3 font-medium">Before</th>
+              <th class="py-1 font-medium">After</th>
+            </tr>
+          </thead>
+          <tbody id="diff-body"></tbody>
+        </table>
+      </div>
+      <p id="page-note" class="mt-3 text-sm text-muted dark:text-slate-400"></p>
+      <div class="mt-5 text-center">
+        <a
+          id="download-link"
+          class="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-primary to-violet-500 px-6 py-3 font-medium text-white shadow-lg shadow-primary/25 transition-all duration-200 hover:shadow-xl hover:shadow-primary/30 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98]"
+        >
+          <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 4v12" />
+            <path d="M8 12l4 4 4-4" />
+            <path d="M4 20h16" />
+          </svg>
+          Download cleaned PDF
+        </a>
+        <p data-result-note class="mt-2 text-sm text-muted dark:text-slate-400"></p>
+        <button id="reset-button" class="mt-4 block w-full text-sm text-muted dark:text-slate-400 underline decoration-dotted underline-offset-2 transition-colors hover:text-ink dark:hover:text-slate-200">
+          Process another file
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <AdUnit />
+
+  <div class="max-w-2xl mx-auto px-4 py-12 text-ink dark:text-slate-300 space-y-6">
+    <p>
+      Drop a PDF above and the tool lists the document metadata it actually contains. Adjust the
+      options if you want a replacement title or author, then click remove. You get a before and
+      after comparison, with the after column read back out of the finished file.
+    </p>
+
+    <div>
+      <h2 class="font-semibold text-lg">Where PDF metadata lives, and what this reaches</h2>
+      <p class="text-muted dark:text-slate-400">
+        Document metadata sits in two places in a PDF: an information dictionary holding the title,
+        author, subject, keywords, creator, producer, and dates, and sometimes a separate XMP
+        metadata stream carrying a second copy of much of the same thing. Some tools read one and
+        some read the other, so clearing only one leaves the information findable. This tool writes
+        the six text fields as empty values and deletes the XMP stream. The two date entries are
+        deleted if you ask for that.
+      </p>
+    </div>
+
+    <div>
+      <h2 class="font-semibold text-lg pt-2">What stays in the file</h2>
+      <p class="text-muted dark:text-slate-400">
+        Everything that is part of a page. That means the visible text and images, comments and
+        other annotations, values typed into form fields, optional content groups (layers) that are
+        hidden or set not to print, files attached to the document, and any identifying information
+        inside an embedded image, such as a photo's own EXIF data. Metadata removal is a
+        properties-level change. Treat it as one step of redaction, not as redaction.
+      </p>
+    </div>
+
+    <div>
+      <h2 class="font-semibold text-lg pt-2">FAQ</h2>
+      <div class="mt-3">
+        <FaqAccordion faqs={faqs} />
+      </div>
+    </div>
+
+    <p class="text-sm">
+      Stripping metadata before sharing a document? You may also want{' '}
+      <a href="/pdf/compress" class="text-primary dark:text-blue-400 hover:underline">Compress PDF</a>{' '}
+      to cut the file size, or{' '}
+      <a href="/pdf/merge" class="text-primary dark:text-blue-400 hover:underline">Merge PDF</a>{' '}
+      to combine documents first. Metadata in images is a separate matter, handled by{' '}
+      <a href="/image/compress" class="text-primary dark:text-blue-400 hover:underline">Compress Image</a>,
+      which re-encodes the pixels and does not carry EXIF across.
+    </p>
+  </div>
+
+  <script>
+    import { readPdfMetadata, removePdfMetadata } from '../../lib/pdf/metadata';
+    import type { PdfMetadata } from '../../lib/pdf/metadata';
+
+    const dropzone = document.querySelector<HTMLElement>('#dropzone')!;
+    const fileInput = document.querySelector<HTMLInputElement>('#file-input')!;
+    const fileInfo = document.querySelector<HTMLElement>('#file-info')!;
+    const inspectPanel = document.querySelector<HTMLElement>('#inspect-panel')!;
+    const encryptedWarning = document.querySelector<HTMLElement>('#encrypted-warning')!;
+    const beforeList = document.querySelector<HTMLElement>('#before-list')!;
+    const replacementTitle = document.querySelector<HTMLInputElement>('#replacement-title')!;
+    const replacementAuthor = document.querySelector<HTMLInputElement>('#replacement-author')!;
+    const clearDates = document.querySelector<HTMLInputElement>('#clear-dates')!;
+    const stripButton = document.querySelector<HTMLButtonElement>('#strip-button')!;
+    const status = document.querySelector<HTMLElement>('#status')!;
+    const result = document.querySelector<HTMLElement>('#result')!;
+    const diffBody = document.querySelector<HTMLElement>('#diff-body')!;
+    const pageNote = document.querySelector<HTMLElement>('#page-note')!;
+    const downloadLink = document.querySelector<HTMLAnchorElement>('#download-link')!;
+    const resultNote = document.querySelector<HTMLElement>('[data-result-note]')!;
+    const resetButton = document.querySelector<HTMLButtonElement>('#reset-button')!;
+
+    type FieldKey = 'title' | 'author' | 'subject' | 'keywords' | 'creator' | 'producer' | 'creationDate' | 'modificationDate';
+
+    const FIELDS: { key: FieldKey; label: string }[] = [
+      { key: 'title', label: 'Title' },
+      { key: 'author', label: 'Author' },
+      { key: 'subject', label: 'Subject' },
+      { key: 'keywords', label: 'Keywords' },
+      { key: 'creator', label: 'Creator' },
+      { key: 'producer', label: 'Producer' },
+      { key: 'creationDate', label: 'Created' },
+      { key: 'modificationDate', label: 'Modified' },
+    ];
+
+    let currentFile: File | null = null;
+    let before: PdfMetadata | null = null;
+    let objectUrl: string | null = null;
+
+    const statusText = status.querySelector<HTMLElement>('[data-status-text]')!;
+    const statusBar = status.querySelector<HTMLElement>('[data-status-bar]')!;
+
+    function setStatus(msg: string | null, isError = false) {
+      statusText.textContent = msg ?? '';
+      status.classList.toggle('hidden', !msg);
+      statusBar.classList.toggle('hidden', isError);
+      statusText.classList.toggle('text-red-600', isError);
+      statusText.classList.toggle('dark:text-red-400', isError);
+    }
+
+    function formatBytes(bytes: number) {
+      if (bytes < 1024) return `${bytes} B`;
+      if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+      return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+    }
+
+    function display(meta: PdfMetadata, key: FieldKey): string | null {
+      const value = meta[key];
+      if (value === undefined) return null;
+      return value instanceof Date ? value.toLocaleString() : value;
+    }
+
+    async function handleFile(file: File) {
+      if (file.type && file.type !== 'application/pdf') {
+        setStatus('This tool needs a PDF file.', true);
+        return;
+      }
+      setStatus('Reading metadata…');
+      try {
+        before = await readPdfMetadata(file);
+      } catch (err) {
+        setStatus(`This PDF could not be read: ${err instanceof Error ? err.message : 'unknown error'}. Try a different file.`, true);
+        return;
+      }
+      currentFile = file;
+      fileInfo.textContent = file.name;
+      setStatus(null);
+
+      beforeList.innerHTML = '';
+      let found = 0;
+      for (const { key, label } of FIELDS) {
+        const value = display(before, key);
+        const row = document.createElement('div');
+        row.className = 'flex gap-2';
+        const dt = document.createElement('dt');
+        dt.className = 'w-28 shrink-0 text-muted dark:text-slate-400';
+        dt.textContent = label;
+        const dd = document.createElement('dd');
+        if (value === null) {
+          dd.className = 'text-muted dark:text-slate-500 italic';
+          dd.textContent = 'not set';
+        } else {
+          dd.className = 'break-all';
+          dd.textContent = value;
+          found++;
+        }
+        row.append(dt, dd);
+        beforeList.append(row);
+      }
+
+      const summary = document.createElement('p');
+      summary.className = 'pt-2 text-muted dark:text-slate-400';
+      const xmp = before.hasXmpMetadata
+        ? ' This file also carries an XMP metadata stream, which will be deleted.'
+        : ' This file has no XMP metadata stream.';
+      summary.textContent =
+        found === 0
+          ? `No document metadata fields are set in this file, across ${before.pageCount} ${before.pageCount === 1 ? 'page' : 'pages'}.${xmp}`
+          : `${found} of ${FIELDS.length} fields are set, across ${before.pageCount} ${before.pageCount === 1 ? 'page' : 'pages'}.${xmp}`;
+      beforeList.append(summary);
+
+      if (before.encrypted) {
+        encryptedWarning.textContent =
+          'This PDF is encrypted. Its metadata can be read but not rewritten, so removal will fail. Remove the password first.';
+        encryptedWarning.classList.remove('hidden');
+      } else {
+        encryptedWarning.classList.add('hidden');
+      }
+
+      inspectPanel.classList.remove('hidden');
+      dropzone.classList.add('hidden');
+    }
+
+    dropzone.addEventListener('click', () => fileInput.click());
+    dropzone.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        fileInput.click();
+      }
+    });
+    dropzone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropzone.dataset.dragging = 'true';
+    });
+    dropzone.addEventListener('dragleave', () => {
+      dropzone.dataset.dragging = 'false';
+    });
+    dropzone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropzone.dataset.dragging = 'false';
+      const file = e.dataTransfer?.files?.[0];
+      if (file) handleFile(file);
+    });
+    fileInput.addEventListener('change', () => {
+      const file = fileInput.files?.[0];
+      if (file) handleFile(file);
+    });
+
+    stripButton.addEventListener('click', async () => {
+      if (!currentFile || !before) return;
+      setStatus('Rewriting metadata…');
+      try {
+        const blob = await removePdfMetadata(currentFile, {
+          replacementTitle: replacementTitle.value.trim() || undefined,
+          replacementAuthor: replacementAuthor.value.trim() || undefined,
+          clearDates: clearDates.checked,
+        });
+
+        // Read the output back so the "after" column reports what is really in
+        // the downloadable file rather than what the options asked for.
+        const outFile = new File([blob], 'cleaned.pdf', { type: 'application/pdf' });
+        const after = await readPdfMetadata(outFile);
+
+        diffBody.innerHTML = '';
+        for (const { key, label } of FIELDS) {
+          const b = display(before, key);
+          const a = display(after, key);
+          const tr = document.createElement('tr');
+          tr.className = 'border-t border-border-soft dark:border-slate-700 align-top';
+
+          const th = document.createElement('td');
+          th.className = 'py-1 pr-3 text-muted dark:text-slate-400';
+          th.textContent = label;
+
+          const bd = document.createElement('td');
+          bd.className = b === null ? 'py-1 pr-3 text-muted dark:text-slate-500 italic' : 'py-1 pr-3 break-all';
+          bd.textContent = b === null ? 'not set' : b;
+
+          const ad = document.createElement('td');
+          if (a === null) {
+            ad.className = b === null ? 'py-1 text-muted dark:text-slate-500 italic' : 'py-1 text-emerald-700 dark:text-emerald-400';
+            ad.textContent = b === null ? 'still not set' : 'cleared';
+          } else {
+            ad.className = 'py-1 break-all';
+            ad.textContent = a;
+          }
+
+          tr.append(th, bd, ad);
+          diffBody.append(tr);
+        }
+
+        const xmpNote = before.hasXmpMetadata
+          ? after.hasXmpMetadata
+            ? ' The XMP metadata stream is still present.'
+            : ' The XMP metadata stream was deleted.'
+          : '';
+        pageNote.textContent =
+          `${after.pageCount} ${after.pageCount === 1 ? 'page' : 'pages'} carried through unchanged. Page content, including text, annotations, and attachments, was not modified.${xmpNote}`;
+
+        if (objectUrl) URL.revokeObjectURL(objectUrl);
+        objectUrl = URL.createObjectURL(blob);
+        downloadLink.href = objectUrl;
+        downloadLink.download = currentFile.name.replace(/\.pdf$/i, '') + '-no-metadata.pdf';
+        resultNote.textContent = formatBytes(blob.size);
+
+        setStatus(null);
+        inspectPanel.classList.add('hidden');
+        result.classList.remove('hidden');
+        result.classList.remove('animate-pop-in');
+        void result.offsetWidth;
+        result.classList.add('animate-pop-in');
+      } catch (err) {
+        setStatus(`Something went wrong: ${err instanceof Error ? err.message : 'unknown error'}`, true);
+      }
+    });
+
+    resetButton.addEventListener('click', () => {
+      if (objectUrl) URL.revokeObjectURL(objectUrl);
+      objectUrl = null;
+      currentFile = null;
+      before = null;
+      beforeList.innerHTML = '';
+      diffBody.innerHTML = '';
+      replacementTitle.value = '';
+      replacementAuthor.value = '';
+      clearDates.checked = true;
+      result.classList.add('hidden');
+      inspectPanel.classList.add('hidden');
+      encryptedWarning.classList.add('hidden');
+      dropzone.classList.remove('hidden');
+      fileInfo.textContent = '';
+      fileInput.value = '';
+      setStatus(null);
+    });
+  </script>
+</Layout>

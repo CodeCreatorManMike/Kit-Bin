@@ -1,33 +1,98 @@
 ---
+/** Shared drop/process/result widget.
+ *
+ * Element ids are load-bearing: src/lib/ui.ts resolves them by id via
+ * getToolElements(). Do not rename #dropzone, #file-input, #file-info, #status,
+ * #result, #download-link or #reset-button without updating that module. The
+ * status text lives in [data-status-text] so the bar can sit alongside it. */
 interface Props {
   accept: string;
   multiple?: boolean;
   dropLabel?: string;
+  hint?: string;
 }
 
-const { accept, multiple = false, dropLabel = 'Drop file here or click to browse' } = Astro.props;
+const {
+  accept,
+  multiple = false,
+  dropLabel = 'Drop file here or click to browse',
+  hint = 'Processed on your device. Nothing is uploaded.',
+} = Astro.props;
 ---
 
 <div class="max-w-2xl mx-auto px-4">
   <div
     id="dropzone"
-    class="cursor-pointer border-2 border-dashed border-border-soft dark:border-slate-700 rounded-xl p-12 text-center hover:border-primary/40 dark:hover:border-slate-500 transition-colors"
+    role="button"
+    tabindex="0"
+    class="group relative cursor-pointer overflow-hidden rounded-2xl border-2 border-dashed border-border-soft dark:border-slate-700 bg-surface dark:bg-slate-900/60 px-6 py-12 text-center transition-all duration-200 hover:border-primary/50 hover:bg-primary-tint/40 dark:hover:border-blue-500/50 dark:hover:bg-slate-900 hover:shadow-[0_10px_30px_rgba(16,24,47,0.08)] data-[dragging=true]:border-primary data-[dragging=true]:bg-primary-tint/60 data-[dragging=true]:scale-[1.01] dark:data-[dragging=true]:bg-blue-950/30"
   >
-    <p class="text-lg font-medium">{dropLabel}</p>
-    <p id="file-info" class="mt-2 text-sm text-muted dark:text-slate-400"></p>
-    <input id="file-input" type="file" accept={accept} multiple={multiple} class="hidden" />
+    <div
+      class="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/[0.06] via-transparent to-violet-500/[0.06] opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-data-[dragging=true]:opacity-100"
+      aria-hidden="true"
+    >
+    </div>
+
+    <div class="relative">
+      <span class="relative mx-auto grid h-14 w-14 place-items-center">
+        <span
+          class="absolute inset-0 rounded-full bg-primary/20 opacity-0 group-data-[dragging=true]:opacity-100 group-data-[dragging=true]:animate-pulse-ring"
+          aria-hidden="true"></span>
+        <span
+          class="relative grid h-14 w-14 place-items-center rounded-2xl bg-gradient-to-br from-primary to-violet-500 text-white shadow-lg shadow-primary/25 transition-transform duration-200 group-hover:scale-105 group-hover:-rotate-3 group-data-[dragging=true]:scale-110"
+        >
+          <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 16V4" />
+            <path d="M8 8l4-4 4 4" />
+            <path d="M4 15v3a2 2 0 002 2h12a2 2 0 002-2v-3" />
+          </svg>
+        </span>
+      </span>
+
+      <p class="mt-4 text-lg font-semibold text-ink dark:text-slate-100">{dropLabel}</p>
+      <p class="mt-1 text-xs text-muted dark:text-slate-500">{hint}</p>
+      <p id="file-info" class="mt-2 text-sm font-medium text-primary dark:text-blue-400"></p>
+      <input id="file-input" type="file" accept={accept} multiple={multiple} class="hidden" />
+    </div>
   </div>
 
-  <p id="status" class="hidden mt-4 text-center text-sm text-muted dark:text-slate-400"></p>
+  <div id="status" class="hidden mt-4" role="status" aria-live="polite">
+    <div class="rounded-xl border border-border-soft dark:border-slate-800 bg-surface dark:bg-slate-900 px-4 py-3">
+      <p data-status-text class="text-center text-sm font-medium text-ink dark:text-slate-200"></p>
+      <div data-status-bar class="mt-2.5 h-1 overflow-hidden rounded-full bg-app-bg dark:bg-slate-800">
+        <div class="h-full w-full animate-shimmer rounded-full" aria-hidden="true"></div>
+      </div>
+    </div>
+  </div>
 
-  <div id="result" class="hidden mt-4 rounded-xl border border-border-soft dark:border-slate-700 p-6 text-center">
+  <div
+    id="result"
+    class="hidden mt-4 overflow-hidden rounded-2xl border border-emerald-300/70 dark:border-emerald-500/25 bg-gradient-to-br from-emerald-50 to-surface dark:from-emerald-950/25 dark:to-slate-900 p-6 text-center"
+  >
+    <span class="mx-auto grid h-11 w-11 place-items-center rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400">
+      <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+        <path class="animate-draw-check" d="M5 12.5l4.5 4.5L19 7.5" />
+      </svg>
+    </span>
+    <p class="mt-2.5 font-semibold text-ink dark:text-slate-100">Done</p>
+    <p data-result-note class="mt-0.5 text-sm text-muted dark:text-slate-400"></p>
+
     <a
       id="download-link"
-      class="inline-block rounded-lg bg-primary dark:bg-blue-500 px-6 py-3 text-white font-medium hover:bg-primary-hover dark:hover:bg-blue-600"
-      >Download result</a
+      class="mt-4 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-primary to-violet-500 px-6 py-3 font-medium text-white shadow-lg shadow-primary/25 transition-all duration-200 hover:shadow-xl hover:shadow-primary/30 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98]"
     >
-    <p data-result-note class="mt-2 text-sm text-muted dark:text-slate-400"></p>
-    <button id="reset-button" class="mt-4 text-sm text-muted dark:text-slate-400 underline hover:text-ink dark:hover:text-slate-200">
+      <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 4v12" />
+        <path d="M8 12l4 4 4-4" />
+        <path d="M4 20h16" />
+      </svg>
+      Download result
+    </a>
+
+    <button
+      id="reset-button"
+      class="mt-4 block w-full text-sm text-muted dark:text-slate-400 underline decoration-dotted underline-offset-2 transition-colors hover:text-ink dark:hover:text-slate-200"
+    >
       Process another file
     </button>
   </div>

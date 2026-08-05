@@ -1,0 +1,142 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ToolHeader from '../../components/ToolHeader.astro';
+import FaqAccordion from '../../components/FaqAccordion.astro';
+import ToolSchema from '../../components/ToolSchema.astro';
+import ToolWidget from '../../components/ToolWidget.astro';
+import AdUnit from '../../components/AdUnit.astro';
+
+const faqs = [
+  {
+    q: 'Are my images uploaded anywhere?',
+    a: 'No. The PDF is built in your browser and handed straight to your downloads. Your images never leave your device.',
+  },
+  {
+    q: 'What order do the pages come out in?',
+    a: 'The order you selected the files in, one image per page. If you pick files from a folder, most browsers hand them over in the order the folder is sorted, so sort by name first if the filenames set the order you want.',
+  },
+  {
+    q: 'Will my images be stretched or cropped?',
+    a: 'No. Aspect ratio is preserved in both page-size modes. Fit to image gives each page the image\'s own dimensions, so nothing is scaled at all. A4 scales the whole image by a single factor to fit inside the margins and centres it, which leaves blank space on two sides when the image shape does not match A4.',
+  },
+  {
+    q: 'Which image formats work?',
+    a: 'JPEG and PNG are embedded directly, because those are the two formats PDF itself supports. Other formats, WebP for example, are decoded and re-encoded as PNG first, then embedded. That extra step is lossless, but it takes a moment longer per image and can make the PDF larger than the original files.',
+  },
+  {
+    q: 'Does this compress my images?',
+    a: 'No. JPEGs are embedded byte for byte, so the PDF is roughly the size of the images that went into it. Run the result through Compress PDF if the file is too large.',
+  },
+  {
+    q: 'Can I turn a PDF back into images?',
+    a: 'Yes, PDF to PNG does the reverse. Note that a round trip is not lossless in the other direction: rendering a PDF page to PNG turns text into pixels.',
+  },
+  {
+    q: 'Is there a limit on how many images I can add?',
+    a: 'Kit-Bin sets no artificial limit, because nothing is uploaded. The practical limit is your device\'s memory. Every image is held in memory while the PDF is assembled, so a few hundred large photos may be slow or run out of memory, especially on a phone.',
+  },
+];
+---
+
+<Layout
+  title="Images to PDF Converter, JPG and PNG to PDF | Kit-Bin"
+  description="Combine JPG, PNG, and WebP images into one PDF, one image per page. Runs entirely in your browser. Your files are never uploaded to a server."
+>
+  <ToolSchema
+    name="Images to PDF"
+    description="Combine JPG, PNG, and WebP images into one PDF, one image per page. Runs entirely in your browser. Your files are never uploaded to a server."
+    faqs={faqs}
+  />
+
+  <ToolHeader title="Convert Images to a PDF" />
+
+  <div class="max-w-2xl mx-auto px-4 mb-4 flex items-center justify-center gap-2 text-sm">
+    <label for="page-size">Page size:</label>
+    <select id="page-size" class="rounded border border-border-soft dark:border-slate-700 bg-surface dark:bg-slate-900 text-ink dark:text-slate-100 px-2 py-1">
+      <option value="fit-to-image">Fit to image (page matches each image)</option>
+      <option value="a4">A4 (image centred, aspect ratio kept)</option>
+    </select>
+  </div>
+
+  <ToolWidget accept="image/*" multiple dropLabel="Drop images here or click to browse" />
+
+  <AdUnit />
+
+  <div class="max-w-2xl mx-auto px-4 py-12 text-ink dark:text-slate-300 space-y-6">
+    <p>
+      This tool puts each image on its own PDF page, in the order you select the files. It is the
+      natural reverse of{' '}
+      <a href="/pdf/to-images" class="text-primary dark:text-blue-400 hover:underline">PDF to PNG</a>,
+      which takes a PDF apart into one image per page. Pick a page size, drop your images above,
+      then download the PDF.
+    </p>
+
+    <div>
+      <h2 class="font-semibold text-lg">The two page-size modes</h2>
+      <p class="text-muted dark:text-slate-400">
+        <strong>Fit to image</strong> gives every page the same dimensions as the image on it, so
+        the image fills the page edge to edge and is not scaled at all. Pages can end up different
+        sizes from each other, which is fine on screen but awkward to print. <strong>A4</strong>{' '}
+        puts every image on a uniform A4 page with a half-inch margin, choosing portrait or
+        landscape per image based on which way round the image is. The image is scaled by a single
+        factor so its aspect ratio is preserved exactly, then centred. Images are never stretched
+        to fill the page in either mode.
+      </p>
+    </div>
+
+    <div>
+      <h2 class="font-semibold text-lg pt-2">How each format is handled</h2>
+      <p class="text-muted dark:text-slate-400">
+        PDF supports JPEG and PNG image data directly, so files in those two formats are embedded
+        as-is, with no re-encoding and no quality loss. Any other format your browser can read,
+        WebP and GIF for example, is decoded and re-encoded to PNG first, then embedded. The PDF
+        holds the same pixels either way, but a converted image can take up more space in the PDF
+        than the original file did on disk. If a file cannot be decoded at all, the tool stops and
+        names the file rather than skipping it silently.
+      </p>
+    </div>
+
+    <div>
+      <h2 class="font-semibold text-lg pt-2">FAQ</h2>
+      <div class="mt-3">
+        <FaqAccordion faqs={faqs} />
+      </div>
+    </div>
+
+    <p class="text-sm">
+      Result larger than you want? Try{' '}
+      <a href="/pdf/compress" class="text-primary dark:text-blue-400 hover:underline">Compress PDF</a>, or{' '}
+      <a href="/image/compress" class="text-primary dark:text-blue-400 hover:underline">Compress Image</a>{' '}
+      on the source images first. To add pages from an existing document afterwards, use{' '}
+      <a href="/pdf/merge" class="text-primary dark:text-blue-400 hover:underline">Merge PDF</a>.
+    </p>
+  </div>
+
+  <script>
+    import { imagesToPdf } from '../../lib/pdf/imagesToPdf';
+    import type { PageSize } from '../../lib/pdf/imagesToPdf';
+    import { getToolElements, wireTool } from '../../lib/ui';
+
+    const pageSizeSelect = document.querySelector<HTMLSelectElement>('#page-size')!;
+
+    const els = getToolElements();
+    wireTool(els, {
+      accept: 'image/*',
+      multiple: true,
+      validate: (files) => {
+        if (files.length === 0) return 'Select at least one image.';
+        if (files.some((f) => f.type && !f.type.startsWith('image/'))) return 'This tool needs image files.';
+        return null;
+      },
+      run: async (files, reportProgress) => {
+        const blob = await imagesToPdf(
+          files,
+          { pageSize: pageSizeSelect.value as PageSize, orientation: 'auto' },
+          reportProgress,
+        );
+        const note = `${files.length} ${files.length === 1 ? 'image' : 'images'}, ${files.length} ${files.length === 1 ? 'page' : 'pages'}`;
+        return { blob, filename: 'images.pdf', note };
+      },
+    });
+  </script>
+</Layout>

@@ -1,8 +1,25 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import ToolHeader from '../../components/ToolHeader.astro';
+import FaqAccordion from '../../components/FaqAccordion.astro';
 import ToolSchema from '../../components/ToolSchema.astro';
 import ToolWidget from '../../components/ToolWidget.astro';
 import AdUnit from '../../components/AdUnit.astro';
+
+const faqs = [
+  {
+    q: 'What format is the output?',
+    a: 'WAV, regardless of the input format.',
+  },
+  {
+    q: 'Does this even out quiet and loud sections within the recording?',
+    a: 'No. This tool raises or lowers the complete signal so its highest peak reaches the target level. It does not compress the difference between quiet and loud passages. A recording with one loud moment and long quiet stretches will still have that same gap after normalizing; only the overall level shifts.',
+  },
+  {
+    q: 'Is this the same as loudness (LUFS) normalization?',
+    a: 'No, this is peak normalization, which looks only at the single loudest sample in the file. Loudness normalization measures perceived volume across the whole recording and is a different calculation entirely.',
+  },
+];
 ---
 
 <Layout
@@ -12,26 +29,10 @@ import AdUnit from '../../components/AdUnit.astro';
   <ToolSchema
     name="Normalize Audio Volume"
     description="Normalize an audio file's volume to a consistent peak level. Runs entirely in your browser. Your file is never uploaded to a server."
-    faqs={[
-    {
-      "q": "What format is the output?",
-      "a": "WAV, regardless of the input format."
-    },
-    {
-      "q": "Does this even out quiet and loud sections within the recording?",
-      "a": "No. This tool raises or lowers the complete signal so its highest peak reaches the target level. It does not compress the difference between quiet and loud passages. A recording with one loud moment and long quiet stretches will still have that same gap after normalizing; only the overall level shifts."
-    },
-    {
-      "q": "Is this the same as loudness (LUFS) normalization?",
-      "a": "No, this is peak normalization, which looks only at the single loudest sample in the file. Loudness normalization measures perceived volume across the whole recording and is a different calculation entirely."
-    }
-  ]}
+    faqs={faqs}
   />
 
-  <div class="max-w-2xl mx-auto px-4 pt-10 pb-4 text-center">
-    <h1 class="text-3xl font-bold text-ink dark:text-slate-100">Normalize an Audio File's Peak Volume</h1>
-    <p class="mt-2 text-muted dark:text-slate-400"><a href="/guides/how-kit-bin-works" class="hover:underline decoration-dotted underline-offset-2">Processed entirely in your browser. Your file is never uploaded to a server.</a></p>
-  </div>
+  <ToolHeader title="Normalize an Audio File's Peak Volume" />
 
   <ToolWidget accept="audio/*" dropLabel="Drop an audio file here or click to browse" />
 
@@ -42,19 +43,8 @@ import AdUnit from '../../components/AdUnit.astro';
     <p>Drop your audio file above. The normalized file downloads automatically once ready.</p>
     <div>
       <h2 class="font-semibold text-lg pt-2">FAQ</h2>
-      <div class="space-y-4 mt-2">
-        <div>
-          <p class="font-medium">What format is the output?</p>
-          <p class="text-muted dark:text-slate-400">WAV, regardless of the input format.</p>
-        </div>
-        <div>
-          <p class="font-medium">Does this even out quiet and loud sections within the recording?</p>
-          <p class="text-muted dark:text-slate-400">No. This tool raises or lowers the complete signal so its highest peak reaches the target level. It does not compress the difference between quiet and loud passages. A recording with one loud moment and long quiet stretches will still have that same gap after normalizing; only the overall level shifts.</p>
-        </div>
-        <div>
-          <p class="font-medium">Is this the same as loudness (LUFS) normalization?</p>
-          <p class="text-muted dark:text-slate-400">No, this is peak normalization, which looks only at the single loudest sample in the file. Loudness normalization measures perceived volume across the whole recording and is a different calculation entirely.</p>
-        </div>
+      <div class="mt-3">
+        <FaqAccordion faqs={faqs} />
       </div>
     </div>
     <p class="text-sm">Wondering why a file can normalize and still sound quiet? <a href="/guides/why-audio-sounds-quiet" class="text-primary dark:text-blue-400 hover:underline">Read the guide</a></p>
