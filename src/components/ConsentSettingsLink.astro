@@ -1,0 +1,26 @@
+---
+import { ADSENSE_CMP_CONFIGURED } from '../data/site-config';
+---
+
+{ADSENSE_CMP_CONFIGURED && (
+  <>
+    <button
+      id="consent-settings"
+      type="button"
+      class="text-muted dark:text-slate-400 hover:text-primary dark:hover:text-blue-400 transition-colors"
+    >
+      Privacy and cookie settings
+    </button>
+    <script>
+      const consentSettings = document.querySelector<HTMLButtonElement>('#consent-settings');
+      consentSettings?.addEventListener('click', () => {
+        const googlefc = (window as typeof window & {
+          googlefc?: { callbackQueue?: Array<unknown>; showRevocationMessage?: unknown };
+        }).googlefc;
+        if (googlefc?.callbackQueue && googlefc.showRevocationMessage) {
+          googlefc.callbackQueue.push(googlefc.showRevocationMessage);
+        }
+      });
+    </script>
+  </>
+)}

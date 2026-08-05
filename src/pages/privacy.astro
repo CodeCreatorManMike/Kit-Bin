@@ -1,11 +1,19 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { CONTACT_EMAIL } from '../data/site-config';
+import {
+  ADSENSE_CMP_CONFIGURED,
+  ADSENSE_CONFIGURED,
+  CONTACT_EMAIL,
+} from '../data/site-config';
+
+const privacyDescription = ADSENSE_CONFIGURED
+  ? 'What happens to the files you process on Kit-Bin, what data is collected, and how Google AdSense advertising and consent choices work.'
+  : "What happens to the files you process on Kit-Bin, what data is and isn't collected, and what will change before any advertising is enabled.";
 ---
 
 <Layout
   title="Privacy Policy | Kit-Bin"
-  description="What happens to the files you process on Kit-Bin, what data is and isn't collected, and what will change before any advertising is enabled."
+  description={privacyDescription}
 >
   <div class="max-w-2xl mx-auto px-4 py-16 space-y-6 text-ink dark:text-slate-300">
     <h1 class="text-3xl font-bold text-ink dark:text-slate-100">Privacy Policy</h1>
@@ -42,21 +50,38 @@ import { CONTACT_EMAIL } from '../data/site-config';
       </p>
     </section>
 
-    <section>
+    <section id="advertising">
       <h2 class="text-xl font-semibold text-ink dark:text-slate-100 mb-2">Advertising</h2>
-      <p>
-        No advertising is currently running on this site, and no advertising or ad-personalization
-        cookies are being set. Kit-Bin may display advertising in the future to help cover hosting
-        and development costs.
-      </p>
-      <p class="mt-3">
-        This policy will be updated before advertising or any related tracking technology is
-        activated. At that point it will name the advertising provider, state whether personalized
-        or non-personalized ads are used, describe the cookie categories involved, explain how to
-        change your consent, and link to the provider's own data-use information. Visitors in the
-        UK, EEA, and Switzerland will be asked for consent through a certified consent-management
-        platform before any personalized advertising is served.
-      </p>
+      {ADSENSE_CONFIGURED ? (
+        <>
+          <p>
+            Kit-Bin uses Google AdSense to display advertising. Google may process information such
+            as the page URL, IP address, browser information, and advertising identifiers to serve,
+            measure, and protect advertising. See{' '}
+            <a href="https://policies.google.com/technologies/partner-sites" class="underline">
+              how Google uses information from sites that use its services
+            </a>.
+          </p>
+          <p class="mt-3">
+            {ADSENSE_CMP_CONFIGURED
+              ? 'Privacy and cookie choices are presented through the configured Google CMP. You can reopen those choices using the Privacy and cookie settings link in the footer.'
+              : 'Advertising is configured, but the Google CMP is not configured yet. Do not serve personalized advertising until a Google-certified CMP integrated with the IAB TCF is enabled for UK, EEA, and Swiss visitors.'}
+          </p>
+        </>
+      ) : (
+        <>
+          <p>
+            No advertising is currently running on this site, and no advertising or ad-personalization
+            cookies are being set. Kit-Bin may display advertising in the future to help cover hosting
+            and development costs.
+          </p>
+          <p class="mt-3">
+            This policy will be updated before advertising or any related tracking technology is
+            activated. Visitors in the UK, EEA, and Switzerland will be asked for consent through a
+            Google-certified consent-management platform before personalized advertising is served.
+          </p>
+        </>
+      )}
     </section>
 
     <section>

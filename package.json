@@ -10,6 +10,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "typecheck": "astro check",
+    "adsense:check": "node scripts/check-adsense.mjs",
     "astro": "astro"
   },
   "dependencies": {

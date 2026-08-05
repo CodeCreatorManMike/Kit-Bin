@@ -3,6 +3,7 @@ import '../styles/global.css';
 import Footer from '../components/Footer.astro';
 import Sidebar from '../components/Sidebar.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
+import AdSenseScript from '../components/AdSenseScript.astro';
 
 interface Props {
   title: string;
@@ -21,7 +22,7 @@ const { title, description } = Astro.props;
     <link rel="icon" type="image/x-icon" href="/favicon.ico" sizes="32x32" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <title>{title}</title>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5446651960329896" crossorigin="anonymous"></script>
+    <AdSenseScript />
     <script is:inline>
       // Set the theme class before first paint to avoid a flash of the wrong theme.
       // Defaults to dark for first-time visitors; an explicit toggle choice

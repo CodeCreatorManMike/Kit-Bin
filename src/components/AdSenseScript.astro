@@ -1,0 +1,21 @@
+---
+import {
+  ADSENSE_CMP_CONFIGURED,
+  ADSENSE_CMP_SCRIPT_URL,
+  ADSENSE_PUBLISHER_CONFIGURED,
+  ADSENSE_PUBLISHER_ID,
+} from '../data/site-config';
+---
+
+{ADSENSE_PUBLISHER_CONFIGURED && ADSENSE_CMP_CONFIGURED && (
+  <script is:inline async src={ADSENSE_CMP_SCRIPT_URL} data-overlays="bottom-left" />
+)}
+
+{ADSENSE_PUBLISHER_CONFIGURED && (
+  <script
+    is:inline
+    async
+    src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_PUBLISHER_ID}`}
+    crossorigin="anonymous"
+  />
+)}

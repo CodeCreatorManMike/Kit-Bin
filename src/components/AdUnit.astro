@@ -1,5 +1,5 @@
 ---
-import { ADSENSE_PUBLISHER_ID, ADSENSE_AD_SLOT } from '../data/site-config';
+import { ADSENSE_AD_SLOT, ADSENSE_CMP_CONFIGURED, ADSENSE_CONFIGURED, ADSENSE_PUBLISHER_ID } from '../data/site-config';
 
 interface Props {
   slot?: string;
@@ -7,11 +7,7 @@ interface Props {
 
 const { slot = ADSENSE_AD_SLOT } = Astro.props;
 
-// Render nothing until a real publisher ID exists. Shipping <ins> tags with
-// placeholder IDs puts dead ad markup on every tool page, which is both useless
-// to visitors and a bad signal during AdSense review.
-const isConfigured =
-  !ADSENSE_PUBLISHER_ID.startsWith('REPLACE_WITH') && !slot.startsWith('REPLACE_WITH');
+const isConfigured = ADSENSE_CONFIGURED && ADSENSE_CMP_CONFIGURED && /^\d+$/.test(slot);
 ---
 
 {isConfigured && (
