@@ -2,12 +2,10 @@
 import Layout from '../layouts/Layout.astro';
 import ToolCard from '../components/ToolCard.astro';
 import ToolIcon from '../components/ToolIcon.astro';
-import ComplianceIcon from '../components/ComplianceIcon.astro';
 import FaqAccordion from '../components/FaqAccordion.astro';
 import { tools, categories } from '../data/tools';
 import { guides } from '../data/guides';
 import { categoryColors, categoryIconPaths } from '../data/toolIcons';
-import { frameworks } from '../data/compliance';
 import { siteFaqs } from '../data/faqs';
 
 const popularSlugs = ['/pdf/merge', '/pdf/split', '/pdf/compress', '/image/heic-to-jpg'];
@@ -209,53 +207,6 @@ const siteSchema = {
           </div>
         );
       })}
-    </div>
-  </div>
-
-  <!-- Data privacy and compliance -->
-  <div class="relative overflow-hidden border-y border-border-soft dark:border-slate-800 bg-app-bg/60 dark:bg-slate-900/30">
-    <div
-      class="animate-blob pointer-events-none absolute -bottom-24 left-1/4 h-64 w-64 rounded-full bg-gradient-to-tr from-primary/15 via-emerald-400/10 to-transparent blur-3xl"
-      aria-hidden="true"
-    ></div>
-    <div class="relative max-w-5xl mx-auto px-6 py-14">
-      <div class="max-w-2xl">
-        <h2 class="text-2xl font-bold tracking-tight text-ink dark:text-slate-100">
-          Data privacy and compliance
-        </h2>
-        <p class="mt-2 text-muted dark:text-slate-400">
-          Your files are processed in your browser and never uploaded, so there is no server copy to
-          retain, disclose, or erase. Here is how that maps onto the frameworks people ask about.
-        </p>
-      </div>
-
-      <div class="mt-8 grid gap-4 sm:grid-cols-3">
-        {frameworks.map((fw) => (
-          <a
-            href={`/compliance#${fw.id}`}
-            class="group relative overflow-hidden rounded-2xl border border-border-soft dark:border-slate-800 bg-surface dark:bg-slate-900 p-5 shadow-[0_1px_2px_rgba(16,24,47,0.04)] transition-all duration-200 hover:border-primary/25 hover:shadow-[0_10px_24px_rgba(16,24,47,0.10)] hover:-translate-y-1"
-          >
-            <span class={`absolute inset-x-0 top-0 h-1 scale-x-0 bg-gradient-to-r ${fw.accent} origin-left transition-transform duration-300 group-hover:scale-x-100`} aria-hidden="true"></span>
-            <span class={`inline-grid h-11 w-11 place-items-center rounded-xl bg-gradient-to-br ${fw.accent} text-white shadow-lg shadow-black/10 transition-transform duration-200 group-hover:scale-110 group-hover:-rotate-3`}>
-              <ComplianceIcon icon={fw.icon} class="h-5.5 w-5.5" />
-            </span>
-            <p class="mt-3 font-semibold text-ink dark:text-slate-100">{fw.short}</p>
-            <p class="mt-1 text-xs text-muted dark:text-slate-400 leading-relaxed">{fw.summary}</p>
-            <span class="mt-3 inline-flex items-center gap-1 text-xs font-medium text-primary dark:text-blue-400">
-              How this applies
-              <svg viewBox="0 0 24 24" class="h-3 w-3 transition-transform duration-200 group-hover:translate-x-0.5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M5 12h14M13 6l6 6-6 6" />
-              </svg>
-            </span>
-          </a>
-        ))}
-      </div>
-
-      <p class="mt-5 text-xs text-muted dark:text-slate-500 max-w-2xl leading-relaxed">
-        These are explanations of how the site is built, not certifications. No official GDPR or CCPA
-        compliance logo exists, and there is no such thing as HIPAA certification.{' '}
-        <a href="/compliance" class="text-primary dark:text-blue-400 hover:underline">Read the full detail</a>.
-      </p>
     </div>
   </div>
 

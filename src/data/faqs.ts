@@ -44,10 +44,6 @@ export const siteFaqs: Faq[] = [
     a: 'No. There is no database of user files, no upload directory, and no logging of file names or contents. The tools that read metadata, such as the EXIF and PDF property inspectors, display it to you in your own browser and send it nowhere.',
   },
   {
-    q: 'Is Kit-Bin GDPR, CCPA, or HIPAA compliant?',
-    a: 'Because your files are never transmitted, Kit-Bin holds no file data to disclose, retain, or erase, which is a strong position under GDPR and the CCPA. HIPAA is different: Kit-Bin is not a covered entity or business associate and does not sign Business Associate Agreements, and no vendor can hold a genuine "HIPAA certification" because none exists. The compliance page explains exactly how the architecture maps to each framework, and where your own obligations still apply.',
-  },
-  {
     q: 'How does Kit-Bin make money if everything is free?',
     a: 'It does not yet. There are no ads running and no subscription. Advertising may be added later to cover hosting costs, and if that happens the privacy policy will be updated before any advertising or tracking technology is switched on. There is also a voluntary donation link in the footer.',
   },
