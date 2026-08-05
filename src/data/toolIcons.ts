@@ -7,15 +7,81 @@ export type IconPrimitive =
   | { t: 'line'; x1: number; y1: number; x2: number; y2: number }
   | { t: 'circle'; cx: number; cy: number; r: number }
   | { t: 'path'; d: string }
-  | { t: 'polyline'; points: string };
+  | { t: 'polyline'; points: string }
+  /** Duotone underlay: filled, no stroke, drawn *behind* the line work at low
+   * opacity. This is what stops the set reading as generic hairline clip-art. */
+  | { t: 'fill'; d: string };
 
-export const categoryColors: Record<string, { bg: string; text: string; dot: string; gradient: string }> = {
-  pdf: { bg: 'bg-red-50 dark:bg-red-950/40', text: 'text-red-600 dark:text-red-400', dot: 'bg-red-400', gradient: 'bg-gradient-to-br from-red-400 to-orange-400' },
-  image: { bg: 'bg-emerald-50 dark:bg-emerald-950/40', text: 'text-emerald-600 dark:text-emerald-400', dot: 'bg-emerald-400', gradient: 'bg-gradient-to-br from-emerald-400 to-teal-400' },
-  audio: { bg: 'bg-amber-50 dark:bg-amber-950/40', text: 'text-amber-600 dark:text-amber-400', dot: 'bg-amber-400', gradient: 'bg-gradient-to-br from-amber-400 to-orange-400' },
-  video: { bg: 'bg-violet-50 dark:bg-violet-950/40', text: 'text-violet-600 dark:text-violet-400', dot: 'bg-violet-400', gradient: 'bg-gradient-to-br from-violet-400 to-fuchsia-400' },
-  data: { bg: 'bg-cyan-50 dark:bg-cyan-950/40', text: 'text-cyan-600 dark:text-cyan-400', dot: 'bg-cyan-400', gradient: 'bg-gradient-to-br from-cyan-400 to-blue-400' },
-  guides: { bg: 'bg-indigo-50 dark:bg-indigo-950/40', text: 'text-indigo-600 dark:text-indigo-400', dot: 'bg-indigo-400', gradient: 'bg-gradient-to-br from-indigo-400 to-violet-400' },
+export interface CategoryColor {
+  /** Flat tint, kept for small/inline contexts. */
+  bg: string;
+  text: string;
+  dot: string;
+  /** Saturated gradient, for solid-fill treatments (hero chips, headers). */
+  gradient: string;
+  /** Soft gradient tile used behind tool icons. */
+  tile: string;
+  /** Inset hairline that gives the tile a lit top edge. */
+  ring: string;
+  /** Coloured ambient shadow so tiles sit on the card instead of floating flat. */
+  glow: string;
+}
+
+export const categoryColors: Record<string, CategoryColor> = {
+  pdf: {
+    bg: 'bg-red-50 dark:bg-red-950/40',
+    text: 'text-red-600 dark:text-red-400',
+    dot: 'bg-red-400',
+    gradient: 'bg-gradient-to-br from-red-400 to-orange-400',
+    tile: 'bg-gradient-to-br from-red-100 via-red-50 to-orange-50 dark:from-red-500/25 dark:via-red-500/10 dark:to-orange-500/10',
+    ring: 'ring-red-500/15 dark:ring-red-400/25',
+    glow: 'group-hover:shadow-red-500/25',
+  },
+  image: {
+    bg: 'bg-emerald-50 dark:bg-emerald-950/40',
+    text: 'text-emerald-600 dark:text-emerald-400',
+    dot: 'bg-emerald-400',
+    gradient: 'bg-gradient-to-br from-emerald-400 to-teal-400',
+    tile: 'bg-gradient-to-br from-emerald-100 via-emerald-50 to-teal-50 dark:from-emerald-500/25 dark:via-emerald-500/10 dark:to-teal-500/10',
+    ring: 'ring-emerald-500/15 dark:ring-emerald-400/25',
+    glow: 'group-hover:shadow-emerald-500/25',
+  },
+  audio: {
+    bg: 'bg-amber-50 dark:bg-amber-950/40',
+    text: 'text-amber-600 dark:text-amber-400',
+    dot: 'bg-amber-400',
+    gradient: 'bg-gradient-to-br from-amber-400 to-orange-400',
+    tile: 'bg-gradient-to-br from-amber-100 via-amber-50 to-orange-50 dark:from-amber-500/25 dark:via-amber-500/10 dark:to-orange-500/10',
+    ring: 'ring-amber-500/15 dark:ring-amber-400/25',
+    glow: 'group-hover:shadow-amber-500/25',
+  },
+  video: {
+    bg: 'bg-violet-50 dark:bg-violet-950/40',
+    text: 'text-violet-600 dark:text-violet-400',
+    dot: 'bg-violet-400',
+    gradient: 'bg-gradient-to-br from-violet-400 to-fuchsia-400',
+    tile: 'bg-gradient-to-br from-violet-100 via-violet-50 to-fuchsia-50 dark:from-violet-500/25 dark:via-violet-500/10 dark:to-fuchsia-500/10',
+    ring: 'ring-violet-500/15 dark:ring-violet-400/25',
+    glow: 'group-hover:shadow-violet-500/25',
+  },
+  data: {
+    bg: 'bg-cyan-50 dark:bg-cyan-950/40',
+    text: 'text-cyan-600 dark:text-cyan-400',
+    dot: 'bg-cyan-400',
+    gradient: 'bg-gradient-to-br from-cyan-400 to-blue-400',
+    tile: 'bg-gradient-to-br from-cyan-100 via-cyan-50 to-blue-50 dark:from-cyan-500/25 dark:via-cyan-500/10 dark:to-blue-500/10',
+    ring: 'ring-cyan-500/15 dark:ring-cyan-400/25',
+    glow: 'group-hover:shadow-cyan-500/25',
+  },
+  guides: {
+    bg: 'bg-indigo-50 dark:bg-indigo-950/40',
+    text: 'text-indigo-600 dark:text-indigo-400',
+    dot: 'bg-indigo-400',
+    gradient: 'bg-gradient-to-br from-indigo-400 to-violet-400',
+    tile: 'bg-gradient-to-br from-indigo-100 via-indigo-50 to-violet-50 dark:from-indigo-500/25 dark:via-indigo-500/10 dark:to-violet-500/10',
+    ring: 'ring-indigo-500/15 dark:ring-indigo-400/25',
+    glow: 'group-hover:shadow-indigo-500/25',
+  },
 };
 
 /** Single-path category glyphs, used by the sidebar nav and category hub page headers. */
@@ -28,53 +94,99 @@ export const categoryIconPaths: Record<string, string> = {
   guides: 'M4 5c2-1 6-1 8 0v14c-2-1-6-1-8 0V5zM20 5c-2-1-6-1-8 0v14c2-1 6-1 8 0V5z',
 };
 
-const page: IconPrimitive[] = [{ t: 'path', d: 'M6 3h8l4 4v14a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z' }, { t: 'path', d: 'M14 3v4h4' }];
+/** Shared document silhouette (duotone body + outline + folded corner). */
+const page: IconPrimitive[] = [
+  { t: 'fill', d: 'M6 3h8l4 4v14a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z' },
+  { t: 'path', d: 'M6 3h8l4 4v14a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z' },
+  { t: 'path', d: 'M14 3v4h4' },
+];
 
 export const toolIcons: Record<string, IconPrimitive[]> = {
   // PDF
+  // Silhouettes below are deliberately different from one another: within a
+  // category every icon shares one colour, so shape is the only thing telling
+  // them apart at 20px. Put the distinguishing idea in the outline, not in a
+  // small detail stuck on a shared document body.
+
+  /** Two sheets collapsing into one. */
   '/pdf/merge': [
-    { t: 'path', d: 'M4 5h6a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z' },
-    { t: 'path', d: 'M14 5h6a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z' },
-    { t: 'path', d: 'M9 12h6' },
-    { t: 'path', d: 'M12.5 9.5 15 12l-2.5 2.5' },
+    { t: 'fill', d: 'M2 3.5h7v7H2zM2 13.5h7v7H2z' },
+    { t: 'rect', x: 2, y: 3.5, w: 7, h: 7, rx: 1.5 },
+    { t: 'rect', x: 2, y: 13.5, w: 7, h: 7, rx: 1.5 },
+    { t: 'path', d: 'M10.5 12h4.5' },
+    { t: 'path', d: 'M13 9.5 15.5 12 13 14.5' },
+    { t: 'rect', x: 16.5, y: 8, w: 5.5, h: 8, rx: 1.5 },
   ],
+  /** One sheet fanning out into two: the mirror of merge. */
   '/pdf/split': [
-    ...page,
-    { t: 'path', d: 'M5 12h5' },
-    { t: 'path', d: 'M15 12h5' },
-    { t: 'path', d: 'M8 9.5 5.5 12 8 14.5' },
-    { t: 'path', d: 'M17 9.5 19.5 12 17 14.5' },
+    { t: 'fill', d: 'M2 8h5.5v8H2z' },
+    { t: 'rect', x: 2, y: 8, w: 5.5, h: 8, rx: 1.5 },
+    { t: 'path', d: 'M9 12h4.5' },
+    { t: 'path', d: 'M11.5 9.5 14 12l-2.5 2.5' },
+    { t: 'rect', x: 15, y: 3.5, w: 7, h: 7, rx: 1.5 },
+    { t: 'rect', x: 15, y: 13.5, w: 7, h: 7, rx: 1.5 },
   ],
+  /** Squeezed from top and bottom. */
   '/pdf/compress': [
-    ...page,
-    { t: 'path', d: 'M9 11l3 3 3-3' },
-    { t: 'path', d: 'M12 8v6' },
+    { t: 'path', d: 'M12 2v3.4' },
+    { t: 'path', d: 'M9.6 3.8 12 6.2l2.4-2.4' },
+    { t: 'fill', d: 'M4 8.5h16v7H4z' },
+    { t: 'rect', x: 4, y: 8.5, w: 16, h: 7, rx: 1.5 },
+    { t: 'path', d: 'M12 22v-3.4' },
+    { t: 'path', d: 'M9.6 20.2 12 17.8l2.4 2.4' },
   ],
+  /** Big orbit ring so rotation reads before the page does. */
   '/pdf/rotate': [
-    ...page,
-    { t: 'path', d: 'M11 14a4 4 0 1 0 1.5-3.1' },
-    { t: 'path', d: 'M12.5 9.5H10v-2.5' },
+    { t: 'fill', d: 'M9 9h6v6H9z' },
+    { t: 'rect', x: 9, y: 9, w: 6, h: 6, rx: 1.2 },
+    { t: 'path', d: 'M20.5 12a8.5 8.5 0 1 1-2.6-6.1' },
+    { t: 'path', d: 'M20.8 2.6v4.2h-4.2' },
   ],
+  /** Page on the left, photo on the right. */
   '/pdf/to-images': [
-    { t: 'path', d: 'M4 3h9l4 4v14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z' },
-    { t: 'path', d: 'M13 3v4h4' },
-    { t: 'circle', cx: 8.5, cy: 13, r: 1.2 },
-    { t: 'path', d: 'M5 19l3.5-3.5a1 1 0 0 1 1.4 0L12 17.5l2-2a1 1 0 0 1 1.4 0L19 19' },
+    { t: 'fill', d: 'M2 4h7.5v12H2z' },
+    { t: 'rect', x: 2, y: 4, w: 7.5, h: 12, rx: 1.4 },
+    { t: 'path', d: 'M11 11h3' },
+    { t: 'path', d: 'M12.5 9 14.5 11l-2 2' },
+    { t: 'rect', x: 15.5, y: 6.5, w: 7, h: 7.5, rx: 1.4 },
+    { t: 'circle', cx: 17.9, cy: 9.4, r: 0.9 },
+    { t: 'path', d: 'M15.5 13.2l2.2-2.1 1.6 1.4 1.4-1.2 1.8 1.6' },
   ],
+  /** Diagonal stamp band across the page. */
   '/pdf/watermark': [
     ...page,
-    { t: 'circle', cx: 12, cy: 13, r: 3.5 },
-    { t: 'path', d: 'M10.5 13l1 1 2-2' },
+    { t: 'path', d: 'M7 16.5 14.5 8.5' },
+    { t: 'path', d: 'M10 19 17.5 11' },
   ],
+  /** A single page lifted clear of the stack. */
+  '/pdf/extract-pages': [
+    { t: 'fill', d: 'M3 3h8l3.5 3.5V16H3z' },
+    { t: 'path', d: 'M3 3h8l3.5 3.5V16a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z' },
+    { t: 'path', d: 'M11 3v3.5h3.5' },
+    { t: 'path', d: 'M15.5 12.5h5.5a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1h-6a1 1 0 0 1-1-1v-2' },
+  ],
+  /** Hash mark: the page-number idea, big enough to read. */
+  '/pdf/page-numbers': [
+    ...page,
+    { t: 'path', d: 'M8.8 16.5h6.4' },
+    { t: 'path', d: 'M8.8 20h6.4' },
+    { t: 'path', d: 'M11.3 14.8v6.8' },
+    { t: 'path', d: 'M14 14.8v6.8' },
+  ],
+  /** Two sheets trading places. */
   '/pdf/reorder-pages': [
-    { t: 'rect', x: 4, y: 4, w: 9, h: 11, rx: 1 },
-    { t: 'rect', x: 11, y: 9, w: 9, h: 11, rx: 1 },
-    { t: 'path', d: 'M15.5 13v4' },
-    { t: 'path', d: 'M13.8 14.7l1.7-1.7 1.7 1.7' },
+    { t: 'fill', d: 'M2.5 3.5h7.5v10.5H2.5z' },
+    { t: 'rect', x: 2.5, y: 3.5, w: 7.5, h: 10.5, rx: 1.4 },
+    { t: 'rect', x: 14, y: 10, w: 7.5, h: 10.5, rx: 1.4 },
+    { t: 'path', d: 'M12.2 6.5h5.6' },
+    { t: 'path', d: 'M15.6 4.3 17.8 6.5l-2.2 2.2' },
+    { t: 'path', d: 'M11.8 17.5H6.2' },
+    { t: 'path', d: 'M8.4 15.3 6.2 17.5l2.2 2.2' },
   ],
 
   // Image
   '/image/heic-to-jpg': [
+    { t: 'fill', d: 'M3 5h14a0 0 0 0 1 0 0v14a0 0 0 0 1 0 0H3a0 0 0 0 1 0 0V5a0 0 0 0 1 0 0z' },
     { t: 'rect', x: 3, y: 5, w: 14, h: 14, rx: 1.5 },
     { t: 'circle', cx: 7.5, cy: 9.5, r: 1.3 },
     { t: 'path', d: 'M3 16l3.5-3.5a1 1 0 0 1 1.4 0L11 15.5' },
@@ -82,28 +194,38 @@ export const toolIcons: Record<string, IconPrimitive[]> = {
     { t: 'path', d: 'M20 11h-4' },
   ],
   '/image/compress': [
+    { t: 'fill', d: 'M3 4h16a0 0 0 0 1 0 0v13a0 0 0 0 1 0 0H3a0 0 0 0 1 0 0V4a0 0 0 0 1 0 0z' },
     { t: 'rect', x: 3, y: 4, w: 16, h: 13, rx: 1.5 },
     { t: 'path', d: 'M8 20h8' },
     { t: 'path', d: 'M9 9l2 2 2-2' },
     { t: 'path', d: 'M11 7v4' },
   ],
   '/image/resize': [
+    { t: 'fill', d: 'M3 3h18v18H3z' },
     { t: 'rect', x: 3, y: 3, w: 18, h: 18, rx: 2 },
     { t: 'path', d: 'M9 15l6-6' },
     { t: 'path', d: 'M9 11V9h2' },
     { t: 'path', d: 'M15 13v2h-2' },
   ],
+  /** Photo tile on the left, flat tile on the right: reads left-to-right. */
   '/image/webp-to-png': [
-    { t: 'rect', x: 2.5, y: 5, w: 8, h: 8, rx: 1 },
-    { t: 'rect', x: 13.5, y: 11, w: 8, h: 8, rx: 1 },
-    { t: 'path', d: 'M11.5 9l2.5 2.5' },
-    { t: 'path', d: 'M11.8 6.3l2.2 2.2-2.2 2.2' },
+    { t: 'fill', d: 'M2 6h8.5v9H2z' },
+    { t: 'rect', x: 2, y: 6, w: 8.5, h: 9, rx: 1.4 },
+    { t: 'circle', cx: 4.7, cy: 9, r: 0.85 },
+    { t: 'path', d: 'M2 13.4l2.4-2.2 1.6 1.4 1.5-1.3 3 2.6' },
+    { t: 'path', d: 'M12 10.5h2.8' },
+    { t: 'path', d: 'M13.4 8.7l1.8 1.8-1.8 1.8' },
+    { t: 'rect', x: 16.5, y: 6, w: 5.5, h: 9, rx: 1.4 },
   ],
+  /** Exact mirror of the above, so the two are never mistaken for each other. */
   '/image/png-to-webp': [
-    { t: 'rect', x: 2.5, y: 5, w: 8, h: 8, rx: 1 },
-    { t: 'rect', x: 13.5, y: 11, w: 8, h: 8, rx: 1 },
-    { t: 'path', d: 'M9.5 12.5L12 15' },
-    { t: 'path', d: 'M9.2 17.7l-2.2-2.2 2.2-2.2' },
+    { t: 'fill', d: 'M2 6h5.5v9H2z' },
+    { t: 'rect', x: 2, y: 6, w: 5.5, h: 9, rx: 1.4 },
+    { t: 'path', d: 'M9 10.5h2.8' },
+    { t: 'path', d: 'M10.4 8.7l1.8 1.8-1.8 1.8' },
+    { t: 'rect', x: 13.5, y: 6, w: 8.5, h: 9, rx: 1.4 },
+    { t: 'circle', cx: 16.2, cy: 9, r: 0.85 },
+    { t: 'path', d: 'M13.5 13.4l2.4-2.2 1.6 1.4 1.5-1.3 3 2.6' },
   ],
   '/image/svg-to-png': [
     { t: 'circle', cx: 6, cy: 7, r: 1.6 },
@@ -152,12 +274,14 @@ export const toolIcons: Record<string, IconPrimitive[]> = {
 
   // Video
   '/video/mp4-to-webm': [
+    { t: 'fill', d: 'M2.5 5h12a0 0 0 0 1 0 0v10a0 0 0 0 1 0 0h-12a0 0 0 0 1 0 0V5a0 0 0 0 1 0 0z' },
     { t: 'rect', x: 2.5, y: 5, w: 12, h: 10, rx: 1.3 },
     { t: 'path', d: 'M7.5 8.5l4 3-4 3z' },
     { t: 'path', d: 'M18 8l3 3-3 3' },
     { t: 'path', d: 'M21 11h-4' },
   ],
   '/video/compress': [
+    { t: 'fill', d: 'M3 5h14a0 0 0 0 1 0 0v12a0 0 0 0 1 0 0H3a0 0 0 0 1 0 0V5a0 0 0 0 1 0 0z' },
     { t: 'rect', x: 3, y: 5, w: 14, h: 12, rx: 1.3 },
     { t: 'path', d: 'M7.5 8.5l4 3-4 3z' },
     { t: 'path', d: 'M20 8l-3 3 3 3' },
@@ -175,12 +299,14 @@ export const toolIcons: Record<string, IconPrimitive[]> = {
     { t: 'path', d: 'M21 9l-5 6' },
   ],
   '/video/extract-audio': [
+    { t: 'fill', d: 'M2.5 4h12a0 0 0 0 1 0 0v12a0 0 0 0 1 0 0h-12a0 0 0 0 1 0 0V4a0 0 0 0 1 0 0z' },
     { t: 'rect', x: 2.5, y: 4, w: 12, h: 12, rx: 1.3 },
     { t: 'path', d: 'M6.5 7.5l4 2.5-4 2.5z' },
     { t: 'circle', cx: 18, cy: 17, r: 2 },
     { t: 'path', d: 'M20 17V8l1.5-.5' },
   ],
   '/video/gif-from-video': [
+    { t: 'fill', d: 'M3 5h13a0 0 0 0 1 0 0v11a0 0 0 0 1 0 0H3a0 0 0 0 1 0 0V5a0 0 0 0 1 0 0z' },
     { t: 'rect', x: 3, y: 5, w: 13, h: 11, rx: 1.3 },
     { t: 'path', d: 'M7.5 8.5l4 3-4 3z' },
     { t: 'path', d: 'M19 9a3 3 0 1 0 0 5' },
@@ -189,6 +315,7 @@ export const toolIcons: Record<string, IconPrimitive[]> = {
 
   // Data
   '/csv/to-json': [
+    { t: 'fill', d: 'M2.5 5h8a0 0 0 0 1 0 0v13a0 0 0 0 1 0 0h-8a0 0 0 0 1 0 0V5a0 0 0 0 1 0 0z' },
     { t: 'rect', x: 2.5, y: 5, w: 8, h: 13, rx: 1 },
     { t: 'path', d: 'M6.5 8.5h4' },
     { t: 'path', d: 'M6.5 12h4' },
@@ -196,6 +323,7 @@ export const toolIcons: Record<string, IconPrimitive[]> = {
     { t: 'path', d: 'M16.5 6c-1.5 0-2 .8-2 2v2.5c0 .8-.5 1.5-1.5 1.5.9 0 1.5.7 1.5 1.5V16c0 1.2.5 2 2 2' },
   ],
   '/json/to-csv': [
+    { t: 'fill', d: 'M13.5 5h8a0 0 0 0 1 0 0v13a0 0 0 0 1 0 0h-8a0 0 0 0 1 0 0V5a0 0 0 0 1 0 0z' },
     { t: 'path', d: 'M8.5 6c-1.5 0-2 .8-2 2v2.5c0 .8-.5 1.5-1.5 1.5.9 0 1.5.7 1.5 1.5V16c0 1.2.5 2 2 2' },
     { t: 'rect', x: 13.5, y: 5, w: 8, h: 13, rx: 1 },
     { t: 'path', d: 'M16 8.5h4' },
@@ -203,12 +331,14 @@ export const toolIcons: Record<string, IconPrimitive[]> = {
     { t: 'path', d: 'M16 15.5h2.5' },
   ],
   '/csv/to-excel': [
+    { t: 'fill', d: 'M4 3h9l4 4v14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z' },
     { t: 'path', d: 'M4 3h9l4 4v14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z' },
     { t: 'path', d: 'M13 3v4h4' },
     { t: 'path', d: 'M7.5 12l4.2 6' },
     { t: 'path', d: 'M11.7 12l-4.2 6' },
   ],
   '/data/csv-cleaner': [
+    { t: 'fill', d: 'M3 5h14a0 0 0 0 1 0 0v10a0 0 0 0 1 0 0H3a0 0 0 0 1 0 0V5a0 0 0 0 1 0 0z' },
     { t: 'rect', x: 3, y: 5, w: 14, h: 10, rx: 1.3 },
     { t: 'path', d: 'M3 9h14' },
     { t: 'path', d: 'M8.5 5v10' },
@@ -216,27 +346,23 @@ export const toolIcons: Record<string, IconPrimitive[]> = {
     { t: 'path', d: 'M20.5 17.5l-3 3' },
   ],
 
-  '/pdf/extract-pages': [
-    ...page,
-    { t: 'path', d: 'M9 12h6' },
-    { t: 'path', d: 'M12.5 9.5L15 12l-2.5 2.5' },
-  ],
+  /** Photos on the left feeding into a page: the mirror of PDF-to-images. */
   '/pdf/images-to-pdf': [
-    { t: 'rect', x: 3, y: 5, w: 11, h: 9, rx: 1.2 },
-    { t: 'circle', cx: 6.5, cy: 8.5, r: 1.1 },
-    { t: 'path', d: 'M3 12l3-2.5 3 2.5' },
-    { t: 'path', d: 'M11 10h8a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1h-7' },
-    { t: 'path', d: 'M14 14h3' },
+    { t: 'fill', d: 'M2 5h9v9H2z' },
+    { t: 'rect', x: 2, y: 5, w: 9, h: 9, rx: 1.4 },
+    { t: 'circle', cx: 4.9, cy: 8, r: 0.9 },
+    { t: 'path', d: 'M2 12.2l2.6-2.3 1.7 1.5 1.6-1.4 3.1 2.7' },
+    { t: 'path', d: 'M12.5 15h3' },
+    { t: 'path', d: 'M14 13l2 2-2 2' },
+    { t: 'rect', x: 16.5, y: 9, w: 5.5, h: 12, rx: 1.4 },
   ],
-  '/pdf/page-numbers': [
-    ...page,
-    { t: 'path', d: 'M9.5 18.5h5' },
-    { t: 'path', d: 'M12 16.5v4' },
-  ],
+  /** Tag being struck through: metadata removed, not the page. */
   '/pdf/remove-metadata': [
     ...page,
-    { t: 'path', d: 'M9 11h6M9 14h4' },
-    { t: 'path', d: 'M14.5 17.5l4 4M18.5 17.5l-4 4' },
+    { t: 'path', d: 'M8.5 11h7' },
+    { t: 'path', d: 'M8.5 14h4' },
+    { t: 'path', d: 'M13.6 16.6l6 6' },
+    { t: 'path', d: 'M19.6 16.6l-6 6' },
   ],
   '/image/compress-to-size': [
     { t: 'rect', x: 3, y: 4, w: 18, h: 16, rx: 1.5 },

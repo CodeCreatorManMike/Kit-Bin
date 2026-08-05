@@ -20,7 +20,7 @@ import GuideReferences from '../../components/GuideReferences.astro';
       about the difference between a file's <em>peak</em> and how loud it <em>sounds</em>.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Peak is not the same thing as loudness</h2>
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Peak is not the same thing as loudness</h2>
     <p>
       The peak of an audio file is just its single loudest moment, the tallest spike in the waveform,
       measured as a technical value. A recording of quiet, sparse acoustic guitar with one sharp pluck
@@ -36,7 +36,7 @@ import GuideReferences from '../../components/GuideReferences.astro';
       actually sound."
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">What LUFS actually measures</h2>
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">What LUFS actually measures</h2>
     <p>
       The fix is a measurement called LUFS (Loudness Units Full Scale), based on a broadcast standard
       that applies psychoacoustic weighting. It accounts for the fact that human hearing is more
@@ -47,7 +47,7 @@ import GuideReferences from '../../components/GuideReferences.astro';
       The platform is normalizing to a consistent <em>perceived</em> loudness, not a consistent peak.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">What "normalize volume" actually does, then</h2>
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">What "normalize volume" actually does, then</h2>
     <p>
       A volume normalization tool measures a file's actual perceived loudness (not just its peak) and
       applies a single, uniform gain adjustment across the whole file to bring it to a target level.
@@ -61,14 +61,14 @@ import GuideReferences from '../../components/GuideReferences.astro';
       can very slightly alter the tonal balance for no benefit. Normalize once.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Normalizing</h2>
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Normalizing</h2>
     <p>
       <a href="/audio/volume-normalize" class="text-primary dark:text-blue-400 hover:underline">Normalize Volume</a>{' '}
       measures the actual perceived loudness of your file and adjusts it to a consistent target,
       entirely in your browser.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Related tools</h2>
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Related tools</h2>
     <p>
       If the actual problem is that one section of a longer recording is quiet relative to the rest of
       the <em>same</em> file (rather than the whole file being quiet relative to other files), normalization

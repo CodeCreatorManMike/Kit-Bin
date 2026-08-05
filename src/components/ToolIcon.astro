@@ -4,24 +4,41 @@ import { toolIcons, categoryColors, type IconPrimitive } from '../data/toolIcons
 interface Props {
   slug: string;
   category: string;
-  size?: 'sm' | 'md';
+  size?: 'sm' | 'md' | 'lg';
 }
 
 const { slug, category, size = 'md' } = Astro.props;
 const primitives: IconPrimitive[] = toolIcons[slug] ?? [];
-const colors = categoryColors[category] ?? categoryColors.pdf;
-const box = size === 'sm' ? 'h-8 w-8' : 'h-10 w-10';
-const svgSize = size === 'sm' ? 'h-4.5 w-4.5' : 'h-5.5 w-5.5';
+const c = categoryColors[category] ?? categoryColors.pdf;
+
+// Duotone underlay is drawn first so the line work always sits on top of it.
+const fills = primitives.filter((p) => p.t === 'fill');
+const strokes = primitives.filter((p) => p.t !== 'fill');
+
+const box = { sm: 'h-10 w-10 rounded-[0.7rem]', md: 'h-12 w-12 rounded-xl', lg: 'h-14 w-14 rounded-2xl' }[size];
+const glyph = { sm: 'h-5 w-5', md: 'h-6 w-6', lg: 'h-7 w-7' }[size];
 ---
 
-<span class={`inline-flex items-center justify-center rounded-xl ${box} ${colors.bg} ${colors.text} transition-transform`}>
-  <svg viewBox="0 0 24 24" class={svgSize} fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-    {primitives.map((p) => {
+<span
+  class={`relative inline-flex shrink-0 items-center justify-center ${box} ${c.tile} ${c.text} ring-1 ring-inset ${c.ring} shadow-sm ${c.glow} transition-shadow duration-200`}
+>
+  <svg
+    viewBox="0 0 24 24"
+    class={`${glyph} relative`}
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    {fills.map((p) => (p.t === 'fill' ? <path d={p.d} fill="currentColor" stroke="none" opacity="0.16" /> : null))}
+    {strokes.map((p) => {
       if (p.t === 'rect') return <rect x={p.x} y={p.y} width={p.w} height={p.h} rx={p.rx ?? 0} />;
       if (p.t === 'line') return <line x1={p.x1} y1={p.y1} x2={p.x2} y2={p.y2} />;
       if (p.t === 'circle') return <circle cx={p.cx} cy={p.cy} r={p.r} />;
       if (p.t === 'polyline') return <polyline points={p.points} />;
-      return <path d={p.d} />;
+      if (p.t === 'path') return <path d={p.d} />;
+      return null;
     })}
   </svg>
 </span>

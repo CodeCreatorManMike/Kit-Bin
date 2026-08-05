@@ -18,7 +18,7 @@ import GuideReferences from '../../components/GuideReferences.astro';
       sometimes several times larger. That's expected behavior, not a broken conversion.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Two different compression approaches</h2>
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Two different compression approaches</h2>
     <p>
       WebP's lossless mode and lossy mode both use more modern, more efficient compression
       techniques than PNG. WebP was designed specifically to beat PNG and JPEG at their own
@@ -27,7 +27,7 @@ import GuideReferences from '../../components/GuideReferences.astro';
       when both are storing the image losslessly with zero quality loss.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">If the source was lossy WebP</h2>
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">If the source was lossy WebP</h2>
     <p>
       If the original WebP was saved in lossy mode (common for photos), converting to PNG doesn't
       just re-pack the same data more loosely. It takes the already-decoded pixels and stores all
@@ -36,14 +36,14 @@ import GuideReferences from '../../components/GuideReferences.astro';
       uncompressed-relative-to-WebP, which naturally takes more space.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">So why convert at all?</h2>
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">So why convert at all?</h2>
     <p>
       Not every tool or platform accepts WebP. Older image editors, some CMS upload systems, and
       certain print workflows still expect PNG or JPEG specifically. The size increase is the
       cost of that compatibility, the same tradeoff as HEIC-to-JPG conversion for photos.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">If file size matters more than compatibility</h2>
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">If file size matters more than compatibility</h2>
     <p>
       If you don't specifically need PNG, keeping the file as WebP (or converting a photo to JPEG
       instead, which also compresses more efficiently than PNG for photographic content) will

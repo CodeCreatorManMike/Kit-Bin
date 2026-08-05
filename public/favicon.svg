@@ -1,10 +1,24 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <rect x="1" y="1" width="30" height="30" rx="8" fill="#3157e8" />
-  <g fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-    <rect x="13" y="6.5" width="6" height="2.5" rx="0.8" />
-    <path d="M7.5 11h17" />
-    <path d="M9.5 11l1.3 13a2 2 0 0 0 2 1.8h6.4a2 2 0 0 0 2-1.8L22.5 11" />
-    <path d="M14 14.5v7" />
-    <path d="M18 14.5v7" />
+  <defs>
+    <linearGradient id="kbTile" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#4A6EF0" />
+      <stop offset="1" stop-color="#2646C9" />
+    </linearGradient>
+  </defs>
+
+  <rect x="1" y="1" width="30" height="30" rx="8.5" fill="url(#kbTile)" />
+  <path d="M9.5 1.6h13A7.9 7.9 0 0 1 30.4 9.5v1.2A8.4 8.4 0 0 0 22 3.4H10A8.4 8.4 0 0 0 1.6 10.7V9.5A7.9 7.9 0 0 1 9.5 1.6z" fill="#ffffff" opacity="0.28" />
+
+  <g stroke-linecap="round">
+    <path d="M12.4 12.2 10.9 6.4" stroke="#FFC94A" stroke-width="2.6" />
+    <path d="M19.7 12.2 21.2 7.1" stroke="#7BE0B0" stroke-width="2.6" />
+    <path d="M16 12V5.9" stroke="#ffffff" stroke-width="2.6" opacity="0.95" />
+  </g>
+
+  <path d="M8.6 13.6h14.8l-1.5 11.2a2.4 2.4 0 0 1-2.4 2.1h-7a2.4 2.4 0 0 1-2.4-2.1L8.6 13.6z" fill="#ffffff" />
+  <rect x="6.6" y="11.6" width="18.8" height="3.6" rx="1.8" fill="#ffffff" />
+  <g stroke="#2646C9" stroke-width="1.5" stroke-linecap="round" opacity="0.5">
+    <path d="M13.4 17.6v6" />
+    <path d="M18.6 17.6v6" />
   </g>
 </svg>

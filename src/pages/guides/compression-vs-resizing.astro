@@ -19,7 +19,7 @@ import GuideReferences from '../../components/GuideReferences.astro';
       picking the wrong one either wastes effort or damages the image more than necessary.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Compression changes how efficiently the same pixels are stored</h2>
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Compression changes how efficiently the same pixels are stored</h2>
     <p>
       An image compressor keeps the same pixel grid, the same width and height, and changes how
       that pixel data is encoded. Lossy compression (JPG, lossy WebP) throws away some visual
@@ -29,7 +29,7 @@ import GuideReferences from '../../components/GuideReferences.astro';
       encoded more efficiently, or with a bit of blur/artifacting at high compression.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Resizing changes the actual pixel grid</h2>
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Resizing changes the actual pixel grid</h2>
     <p>
       Resizing reduces the number of pixels the image actually contains. A 3000×2000 photo
       resized to 1200×800 has genuinely fewer pixels to store, which is usually a much bigger
@@ -38,7 +38,7 @@ import GuideReferences from '../../components/GuideReferences.astro';
       doesn't need to be print-resolution).
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Why resizing usually wins for file size</h2>
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Why resizing usually wins for file size</h2>
     <p>
       Pixel count scales with the square of the dimension. Halving both width and height doesn't
       cut the pixel count in half, it cuts it to a quarter. That's why resizing a huge photo down
@@ -47,7 +47,7 @@ import GuideReferences from '../../components/GuideReferences.astro';
       artifacts that heavy compression can leave behind.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">When compression is still the right tool</h2>
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">When compression is still the right tool</h2>
     <p>
       If you need to keep the image at its original dimensions, a print-resolution photo, a
       design asset someone else will resize later, an image where you genuinely don't know the
@@ -55,7 +55,7 @@ import GuideReferences from '../../components/GuideReferences.astro';
       permanently discarding resolution you might need later.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">The practical order</h2>
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">The practical order</h2>
     <p>
       If a large file needs to be small and you know roughly how it'll be displayed: resize first
       to the dimensions you actually need, then compress the result if it still needs to be
@@ -63,7 +63,7 @@ import GuideReferences from '../../components/GuideReferences.astro';
       compression pass, since resizing recalculates the pixel data anyway.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Tools</h2>
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Tools</h2>
     <p>
       <a href="/image/resize" class="text-primary dark:text-blue-400 hover:underline">Resize Image</a>{' '}
       to change dimensions, then{' '}

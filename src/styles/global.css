@@ -94,6 +94,25 @@
   transform: none;
 }
 
+/* Tool-page prose headings. A short brand-gradient bar sits to the left of each
+ * h2 so long explainer sections read as distinct blocks instead of a wall of
+ * text. Applied via .tool-h2 rather than a bare `h2` selector so it never leaks
+ * into the homepage/guide headings, which have their own treatments. */
+.tool-h2 {
+  position: relative;
+  padding-left: 0.85rem;
+}
+.tool-h2::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.15em;
+  bottom: 0.15em;
+  width: 3px;
+  border-radius: 999px;
+  background-image: linear-gradient(to bottom, var(--color-primary), #8b5cf6);
+}
+
 /* Nicer focus ring site-wide for keyboard users, without the default outline. */
 :focus-visible {
   outline: 2px solid var(--color-primary);

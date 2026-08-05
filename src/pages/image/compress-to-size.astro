@@ -94,7 +94,7 @@ const faqs = [
     </p>
 
     <div>
-      <h2 class="font-semibold text-lg">How it decides</h2>
+      <h2 class="tool-h2 font-semibold text-lg">How it decides</h2>
       <p class="text-muted dark:text-slate-400">
         First it checks whether the file already fits. If it does, you get your original bytes back
         with no re-encoding at all. Otherwise it binary-searches encoder quality between 10 and 95,
@@ -106,7 +106,7 @@ const faqs = [
     </div>
 
     <div>
-      <h2 class="font-semibold text-lg">Formats and transparency</h2>
+      <h2 class="tool-h2 font-semibold text-lg">Formats and transparency</h2>
       <p class="text-muted dark:text-slate-400">
         A JPG stays a JPG. A PNG or WebP is encoded as WebP, because PNG has no quality setting to
         search against. If the image contains transparent pixels, the output is WebP, which keeps
@@ -116,7 +116,7 @@ const faqs = [
     </div>
 
     <div>
-      <h2 class="font-semibold text-lg">When the target cannot be met</h2>
+      <h2 class="tool-h2 font-semibold text-lg">When the target cannot be met</h2>
       <p class="text-muted dark:text-slate-400">
         Some combinations are not achievable, for example a 50-megapixel photo squeezed into 20 KB
         at full resolution. In that case you still get a file: the smallest one the tool produced,
@@ -137,7 +137,7 @@ const faqs = [
     </p>
 
     <div>
-      <h2 class="font-semibold text-lg pt-2">FAQ</h2>
+      <h2 class="tool-h2 font-semibold text-lg pt-2">FAQ</h2>
       <div class="mt-3">
         <FaqAccordion faqs={faqs} />
       </div>

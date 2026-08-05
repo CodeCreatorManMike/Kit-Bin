@@ -19,7 +19,7 @@ import GuideReferences from '../../components/GuideReferences.astro';
       match the original image's proportions.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">What aspect ratio actually is</h2>
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">What aspect ratio actually is</h2>
     <p>
       Aspect ratio is just the relationship between an image's width and height, expressed as a
       ratio. A 4000×3000 photo has a 4:3 ratio, meaning for every 4 units of width there are 3
@@ -29,7 +29,7 @@ import GuideReferences from '../../components/GuideReferences.astro';
       the original.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">The math</h2>
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">The math</h2>
     <p>
       To resize proportionally, pick one dimension and calculate the other:
       <code class="rounded bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5">new height = original height × (new width ÷ original width)</code>.
@@ -37,7 +37,7 @@ import GuideReferences from '../../components/GuideReferences.astro';
       3000 × (1200 ÷ 4000) = 900px, so 1200×900, not 1200×anything-else.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Why some tools distort by default</h2>
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Why some tools distort by default</h2>
     <p>
       Tools that expose separate width and height fields without linking them let you type in any
       combination, including ones that don't match the source ratio. The tool doesn't guess your
@@ -46,7 +46,7 @@ import GuideReferences from '../../components/GuideReferences.astro';
       possible by construction.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Where this site's Resize Image tool fits</h2>
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Where this site's Resize Image tool fits</h2>
     <p>
       <a href="/image/resize" class="text-primary dark:text-blue-400 hover:underline">Resize Image</a>{' '}
       on this site takes a target width and scales the height to match automatically, so the
@@ -54,7 +54,7 @@ import GuideReferences from '../../components/GuideReferences.astro';
       independent height field or a percentage-based resize.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Upscaling is a separate issue</h2>
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Upscaling is a separate issue</h2>
     <p>
       Keeping the correct ratio prevents distortion, but it doesn't add detail. Scaling a small
       image up to a larger size just stretches the existing pixels across more space and can't

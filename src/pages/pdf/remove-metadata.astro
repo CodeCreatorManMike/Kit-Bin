@@ -99,7 +99,7 @@ const faqs = [
     </div>
 
     <div id="inspect-panel" class="hidden mt-4 rounded-2xl border border-border-soft dark:border-slate-800 bg-surface dark:bg-slate-900 p-6">
-      <h2 class="font-semibold text-lg">Metadata found in this file</h2>
+      <h2 class="tool-h2 font-semibold text-lg">Metadata found in this file</h2>
       <p id="encrypted-warning" class="hidden mt-2 text-sm text-amber-700 dark:text-amber-400"></p>
       <dl id="before-list" class="mt-3 text-sm space-y-1"></dl>
 
@@ -153,7 +153,7 @@ const faqs = [
         <p class="mt-2.5 font-semibold text-ink dark:text-slate-100">Done</p>
       </div>
 
-      <h2 class="mt-5 font-semibold text-lg">Before and after</h2>
+      <h2 class="tool-h2 mt-5 font-semibold text-lg">Before and after</h2>
       <p class="mt-1 text-sm text-muted dark:text-slate-400">
         The right column is read back out of the file you are about to download, not predicted.
       </p>
@@ -200,7 +200,7 @@ const faqs = [
     </p>
 
     <div>
-      <h2 class="font-semibold text-lg">Where PDF metadata lives, and what this reaches</h2>
+      <h2 class="tool-h2 font-semibold text-lg">Where PDF metadata lives, and what this reaches</h2>
       <p class="text-muted dark:text-slate-400">
         Document metadata sits in two places in a PDF: an information dictionary holding the title,
         author, subject, keywords, creator, producer, and dates, and sometimes a separate XMP
@@ -212,7 +212,7 @@ const faqs = [
     </div>
 
     <div>
-      <h2 class="font-semibold text-lg pt-2">What stays in the file</h2>
+      <h2 class="tool-h2 font-semibold text-lg pt-2">What stays in the file</h2>
       <p class="text-muted dark:text-slate-400">
         Everything that is part of a page. That means the visible text and images, comments and
         other annotations, values typed into form fields, optional content groups (layers) that are
@@ -223,7 +223,7 @@ const faqs = [
     </div>
 
     <div>
-      <h2 class="font-semibold text-lg pt-2">FAQ</h2>
+      <h2 class="tool-h2 font-semibold text-lg pt-2">FAQ</h2>
       <div class="mt-3">
         <FaqAccordion faqs={faqs} />
       </div>

@@ -54,7 +54,7 @@ const faqs = [
     </div>
 
     <div>
-      <h2 class="font-semibold text-lg">What this tool actually does, in order</h2>
+      <h2 class="tool-h2 font-semibold text-lg">What this tool actually does, in order</h2>
       <ol class="list-decimal list-inside mt-2 space-y-1 text-muted dark:text-slate-400">
         <li>Trims leading and trailing whitespace from every cell.</li>
         <li>Drops any column that is empty in every single row.</li>
@@ -64,7 +64,7 @@ const faqs = [
     </div>
 
     <div>
-      <h2 class="font-semibold text-lg">What it will not do</h2>
+      <h2 class="tool-h2 font-semibold text-lg">What it will not do</h2>
       <p class="text-muted dark:text-slate-400">
         It won't detect or convert delimiters (comma vs. semicolon vs. tab), fix rows with the
         wrong column count, normalize date formats, fix character-encoding problems, or catch
@@ -78,7 +78,7 @@ const faqs = [
     </div>
 
     <div>
-      <h2 class="font-semibold text-lg">Troubleshooting</h2>
+      <h2 class="tool-h2 font-semibold text-lg">Troubleshooting</h2>
       <p class="text-muted dark:text-slate-400">
         <strong>Rows → rows count didn't change:</strong> your file had no fully-empty rows/columns
         and no exact duplicates, nothing to clean.
@@ -95,7 +95,7 @@ const faqs = [
     </div>
 
     <div>
-      <h2 class="font-semibold text-lg pt-2">FAQ</h2>
+      <h2 class="tool-h2 font-semibold text-lg pt-2">FAQ</h2>
       <div class="mt-3">
         <FaqAccordion faqs={faqs} />
       </div>

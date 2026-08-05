@@ -20,7 +20,7 @@ import GuideReferences from '../../components/GuideReferences.astro';
       run one.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">The usual suspects</h2>
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">The usual suspects</h2>
     <p>
       <strong>High-resolution embedded images.</strong> This is the single biggest driver of PDF size by far. A
       single photo straight from a modern phone camera can be 4-8MB on its own. Include a few of
@@ -39,7 +39,7 @@ import GuideReferences from '../../components/GuideReferences.astro';
       accumulate redundant data from earlier versions that never gets cleaned up automatically.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">What compression actually does</h2>
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">What compression actually does</h2>
     <p>
       A PDF compressor isn't doing one thing. It's usually doing three, and they have very different
       trade-offs:
@@ -60,7 +60,7 @@ import GuideReferences from '../../components/GuideReferences.astro';
     </p>
     <p><strong>Object cleanup</strong> strips out redundant data left over from previous edits. Also fully lossless.</p>
 
-    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Why compressing twice doesn't help much</h2>
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Why compressing twice doesn't help much</h2>
     <p>
       The first compression pass gets most of the available savings. Running a second pass on an
       already-compressed file typically only saves another few percent, because there's very little
@@ -70,7 +70,7 @@ import GuideReferences from '../../components/GuideReferences.astro';
       an already-compressed one.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">When not to compress</h2>
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">When not to compress</h2>
     <p>
       If your PDF needs to look right when printed, or contains a design/photography portfolio where
       image fidelity matters more than file size, aggressive compression can introduce visible
@@ -78,14 +78,14 @@ import GuideReferences from '../../components/GuideReferences.astro';
       compress a print-ready file down to screen resolution and then send it to a printer.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Compressing</h2>
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Compressing</h2>
     <p>
       <a href="/pdf/compress" class="text-primary dark:text-blue-400 hover:underline">Compress PDF</a>{' '}
       runs in your browser, and shows you the size before and after so you can judge the trade-off
       yourself before downloading.
     </p>
 
-    <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Related tools</h2>
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Related tools</h2>
     <p>
       If the size problem is specifically about images inside a PDF you're about to create (rather
       than one you already have), converting your source images with{' '}
