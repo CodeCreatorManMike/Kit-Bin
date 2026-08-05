@@ -1,22 +1,13 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-
-const schema = {
-  '@context': 'https://schema.org',
-  '@type': 'Article',
-  headline: 'Why PDF Compression Sometimes Makes Almost No Difference',
-  datePublished: '2026-08-04',
-  author: { '@type': 'Organization', name: 'Kit-Bin' },
-  description:
-    'PDF compressors mostly work by re-encoding embedded JPEG images. A PDF built from text, vectors, or PNG images has almost nothing for that process to shrink.',
-};
+import GuideMeta from '../../components/GuideMeta.astro';
+import GuideReferences from '../../components/GuideReferences.astro';
 ---
 
 <Layout
   title="Why PDF Compression Sometimes Makes Almost No Difference | Kit-Bin"
   description="PDF compressors mostly re-encode embedded JPEG images. A PDF with none has almost nothing to shrink."
 >
-  <script type="application/ld+json" set:html={JSON.stringify(schema)} is:inline />
 
   <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-ink dark:text-slate-300 space-y-4">
     <p class="text-sm"><a href="/guides/" class="text-primary dark:text-blue-400 hover:underline">← All guides</a></p>
@@ -57,7 +48,7 @@ const schema = {
     </ul>
 
     <p>
-      This site's <a href="/pdf/compress" class="text-primary dark:text-blue-400 hover:underline">Compress PDF</a>
+      This site's <a href="/pdf/compress" class="text-primary dark:text-blue-400 hover:underline">Compress PDF</a>{' '}
       tool follows exactly this approach: it finds embedded JPEG images and re-encodes them at a
       lower quality, leaving text, fonts, and vector content untouched, which is why the result
       you get tracks directly with how image-heavy your original file was.
@@ -65,8 +56,16 @@ const schema = {
 
     <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Related</h2>
     <p>
-      <a href="/guides/why-pdfs-get-large" class="text-primary dark:text-blue-400 hover:underline">Why is my PDF so big?</a>
+      <a href="/guides/why-pdfs-get-large" class="text-primary dark:text-blue-400 hover:underline">Why is my PDF so big?</a>{' '}
       covers the other side of this, what actually causes a large file size in the first place.
     </p>
+    <GuideReferences keys={['pdfSpec', 'mdnImageTypes']} />
+
+    <GuideMeta
+      headline={'Why PDF Compression Sometimes Makes Almost No Difference'}
+      description={'PDF compressors mostly work by re-encoding embedded JPEG images. A PDF built from text, vectors, or PNG images has almost nothing for that process to shrink.'}
+      published="2026-08-04"
+      reviewed="2026-08-05"
+    />
   </article>
 </Layout>

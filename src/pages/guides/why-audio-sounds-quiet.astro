@@ -1,22 +1,13 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-
-const schema = {
-  '@context': 'https://schema.org',
-  '@type': 'Article',
-  headline: 'Why Does My Audio Sound Quiet Even at Full Volume?',
-  datePublished: '2026-08-04',
-  author: { '@type': 'Organization', name: 'Kit-Bin' },
-  description:
-    'The difference between peak volume and perceived loudness (LUFS), why turning the volume up doesn\'t fix a quiet-sounding recording, and what normalization actually does.',
-};
+import GuideMeta from '../../components/GuideMeta.astro';
+import GuideReferences from '../../components/GuideReferences.astro';
 ---
 
 <Layout
   title="Why Does My Audio Sound Quiet Even at Full Volume? | Kit-Bin"
   description="The difference between peak volume and perceived loudness (LUFS), why turning the volume up doesn't fix a quiet-sounding recording, and what normalization actually does."
 >
-  <script type="application/ld+json" set:html={JSON.stringify(schema)} is:inline />
 
   <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-ink dark:text-slate-300 space-y-4">
     <p class="text-sm"><a href="/guides/" class="text-primary dark:text-blue-400 hover:underline">← All guides</a></p>
@@ -72,7 +63,7 @@ const schema = {
 
     <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Normalizing</h2>
     <p>
-      <a href="/audio/volume-normalize" class="text-primary dark:text-blue-400 hover:underline">Normalize Volume</a>
+      <a href="/audio/volume-normalize" class="text-primary dark:text-blue-400 hover:underline">Normalize Volume</a>{' '}
       measures the actual perceived loudness of your file and adjusts it to a consistent target,
       entirely in your browser.
     </p>
@@ -84,5 +75,13 @@ const schema = {
       won't fix that. That's a job for actual audio editing software, not a volume adjustment across
       the whole file.
     </p>
+    <GuideReferences keys={['mdnAudioCodecs']} />
+
+    <GuideMeta
+      headline={'Why Does My Audio Sound Quiet Even at Full Volume?'}
+      description={'The difference between peak volume and perceived loudness (LUFS), why turning the volume up doesn\'t fix a quiet-sounding recording, and what normalization actually does.'}
+      published="2026-08-04"
+      reviewed="2026-08-05"
+    />
   </article>
 </Layout>

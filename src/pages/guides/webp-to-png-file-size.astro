@@ -1,22 +1,13 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-
-const schema = {
-  '@context': 'https://schema.org',
-  '@type': 'Article',
-  headline: 'Why Converting WebP to PNG Creates a Larger File',
-  datePublished: '2026-08-04',
-  author: { '@type': 'Organization', name: 'Kit-Bin' },
-  description:
-    'PNG and WebP compress images in fundamentally different ways. A larger file after converting WebP to PNG is expected, not a bug.',
-};
+import GuideMeta from '../../components/GuideMeta.astro';
+import GuideReferences from '../../components/GuideReferences.astro';
 ---
 
 <Layout
   title="Why Converting WebP to PNG Creates a Larger File | Kit-Bin"
   description="It is not a bug. PNG and WebP compress images in fundamentally different ways."
 >
-  <script type="application/ld+json" set:html={JSON.stringify(schema)} is:inline />
 
   <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-ink dark:text-slate-300 space-y-4">
     <p class="text-sm"><a href="/guides/" class="text-primary dark:text-blue-400 hover:underline">← All guides</a></p>
@@ -60,9 +51,17 @@ const schema = {
     </p>
 
     <p>
-      <a href="/image/webp-to-png" class="text-primary dark:text-blue-400 hover:underline">Convert WebP to PNG</a>
-      and <a href="/guides/webp-vs-png-jpg" class="text-primary dark:text-blue-400 hover:underline">read the full WebP vs PNG vs JPG comparison</a>
+      <a href="/image/webp-to-png" class="text-primary dark:text-blue-400 hover:underline">Convert WebP to PNG</a>{' '}
+      and <a href="/guides/webp-vs-png-jpg" class="text-primary dark:text-blue-400 hover:underline">read the full WebP vs PNG vs JPG comparison</a>{' '}
       for when each format actually wins.
     </p>
+    <GuideReferences keys={['webp', 'pngSpec', 'mdnImageTypes']} />
+
+    <GuideMeta
+      headline={'Why Converting WebP to PNG Creates a Larger File'}
+      description={'PNG and WebP compress images in fundamentally different ways. A larger file after converting WebP to PNG is expected, not a bug.'}
+      published="2026-08-04"
+      reviewed="2026-08-05"
+    />
   </article>
 </Layout>

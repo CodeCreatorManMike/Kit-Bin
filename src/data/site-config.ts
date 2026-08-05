@@ -1,3 +1,6 @@
+export const SITE_URL = 'https://kit-bin.com';
+export const PUBLISHER_NAME = 'Kit-Bin';
+
 export const KOFI_URL = 'https://ko-fi.com/michaeljones22017';
 
 export const ADSENSE_PUBLISHER_ID = 'REPLACE_WITH_PUBLISHER_ID'; // human provides this

@@ -1,22 +1,13 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-
-const schema = {
-  '@context': 'https://schema.org',
-  '@type': 'Article',
-  headline: 'MP4 vs WebM: Which Video Format Should You Actually Use?',
-  datePublished: '2026-08-04',
-  author: { '@type': 'Organization', name: 'Kit-Bin' },
-  description:
-    'MP4 and WebM compared, the codecs inside each container, licensing differences, file size, and a straight answer for which one you need.',
-};
+import GuideMeta from '../../components/GuideMeta.astro';
+import GuideReferences from '../../components/GuideReferences.astro';
 ---
 
 <Layout
   title="MP4 vs WebM: Which Video Format Should You Actually Use? | Kit-Bin"
   description="MP4 and WebM compared, the codecs inside each container, licensing differences, file size, and a straight answer for which one you need."
 >
-  <script type="application/ld+json" set:html={JSON.stringify(schema)} is:inline />
 
   <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-ink dark:text-slate-300 space-y-4">
     <p class="text-sm"><a href="/guides/" class="text-primary dark:text-blue-400 hover:underline">← All guides</a></p>
@@ -83,16 +74,24 @@ const schema = {
 
     <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Converting</h2>
     <p>
-      <a href="/video/mp4-to-webm" class="text-primary dark:text-blue-400 hover:underline">MP4 to WebM</a>
+      <a href="/video/mp4-to-webm" class="text-primary dark:text-blue-400 hover:underline">MP4 to WebM</a>{' '}
       runs entirely in your browser using the same remux-where-possible approach that makes
       container conversions fast rather than a full slow re-encode when the underlying codecs allow it.
     </p>
 
     <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Related tools</h2>
     <p>
-      If you actually just need a smaller file rather than a specific different format, try
-      <a href="/video/compress" class="text-primary dark:text-blue-400 hover:underline">Compress Video</a>
+      If you actually just need a smaller file rather than a specific different format, try{' '}
+      <a href="/video/compress" class="text-primary dark:text-blue-400 hover:underline">Compress Video</a>{' '}
       first. It may get you the size reduction you're after without needing to change format at all.
     </p>
+    <GuideReferences keys={['mdnContainers', 'mdnVideoCodecs', 'mdnAudioCodecs']} />
+
+    <GuideMeta
+      headline={'MP4 vs WebM: Which Video Format Should You Actually Use?'}
+      description={'MP4 and WebM compared, the codecs inside each container, licensing differences, file size, and a straight answer for which one you need.'}
+      published="2026-08-04"
+      reviewed="2026-08-05"
+    />
   </article>
 </Layout>

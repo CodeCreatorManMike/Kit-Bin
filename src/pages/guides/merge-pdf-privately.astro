@@ -1,33 +1,24 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-
-const schema = {
-  '@context': 'https://schema.org',
-  '@type': 'Article',
-  headline: 'How to Merge PDF Files Without Uploading Private Documents',
-  datePublished: '2026-08-04',
-  author: { '@type': 'Organization', name: 'Kit-Bin' },
-  description:
-    'Why many free PDF merger sites require a server upload, what that means for sensitive documents, and how to combine PDFs without your files ever leaving your device.',
-};
+import GuideMeta from '../../components/GuideMeta.astro';
+import GuideReferences from '../../components/GuideReferences.astro';
 ---
 
 <Layout
   title="How to Merge PDF Files Without Uploading Private Documents | Kit-Bin"
   description="Why many free PDF merger sites require a server upload, and how to combine PDFs without your files ever leaving your device."
 >
-  <script type="application/ld+json" set:html={JSON.stringify(schema)} is:inline />
 
   <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-ink dark:text-slate-300 space-y-4">
     <p class="text-sm"><a href="/guides/" class="text-primary dark:text-blue-400 hover:underline">← All guides</a></p>
     <h1 class="text-3xl font-bold text-ink dark:text-slate-100">Merging PDFs Without Uploading Them</h1>
 
     <p>
-      Most "merge PDF" sites work the same way: you upload your files to their server, a script
-      combines them there, and you download the result. For a school handout that's harmless. For
-      a signed contract, a medical record, a tax document, or anything with names, addresses, or
-      account numbers on it, that upload is a real exposure. The file sits on someone else's
-      server, even briefly, outside your control.
+      Many online PDF tools process uploaded files on a remote server: you upload your files, a
+      script combines them there, and you download the result. For a school handout that's
+      harmless. For a signed contract, a medical record, a tax document, or anything with names,
+      addresses, or account numbers on it, that upload is a real exposure. The file sits on someone
+      else's server, even briefly, outside your control.
     </p>
 
     <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">What "uploaded" actually means</h2>
@@ -47,9 +38,9 @@ const schema = {
       to you as a download; nothing is ever sent anywhere.
     </p>
     <p>
-      <a href="/pdf/merge" class="text-primary dark:text-blue-400 hover:underline">Merge PDF</a>
-      on this site works this way. Read
-      <a href="/guides/how-kit-bin-works" class="text-primary dark:text-blue-400 hover:underline">how Kit-Bin works</a>
+      <a href="/pdf/merge" class="text-primary dark:text-blue-400 hover:underline">Merge PDF</a>{' '}
+      on this site works this way. Read{' '}
+      <a href="/guides/how-kit-bin-works" class="text-primary dark:text-blue-400 hover:underline">how Kit-Bin works</a>{' '}
       for the technical detail on why that's verifiable rather than just a claim.
     </p>
 
@@ -62,10 +53,18 @@ const schema = {
 
     <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Related tools</h2>
     <p>
-      Already merged and need to reorder pages first? Try
+      Already merged and need to reorder pages first? Try{' '}
       <a href="/pdf/reorder-pages" class="text-primary dark:text-blue-400 hover:underline">Reorder PDF Pages</a>.
-      Need the opposite operation? See
+      Need the opposite operation? See{' '}
       <a href="/guides/split-vs-extract-pdf" class="text-primary dark:text-blue-400 hover:underline">Split vs Extract PDF Pages</a>.
     </p>
+    <GuideReferences keys={['pdfSpec', 'chromeNetworkPanel', 'mdnWasm']} />
+
+    <GuideMeta
+      headline={'How to Merge PDF Files Without Uploading Private Documents'}
+      description={'Why many free PDF merger sites require a server upload, what that means for sensitive documents, and how to combine PDFs without your files ever leaving your device.'}
+      published="2026-08-04"
+      reviewed="2026-08-05"
+    />
   </article>
 </Layout>

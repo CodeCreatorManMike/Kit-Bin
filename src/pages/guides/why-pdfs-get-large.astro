@@ -1,22 +1,13 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-
-const schema = {
-  '@context': 'https://schema.org',
-  '@type': 'Article',
-  headline: 'Why Is My PDF So Big?',
-  datePublished: '2026-08-04',
-  author: { '@type': 'Organization', name: 'Kit-Bin' },
-  description:
-    'The real reasons PDFs balloon in size, embedded images, fonts, and scan resolution, and what a PDF compressor is actually changing when you run one.',
-};
+import GuideMeta from '../../components/GuideMeta.astro';
+import GuideReferences from '../../components/GuideReferences.astro';
 ---
 
 <Layout
   title="Why Is My PDF So Big? What Compression Actually Does | Kit-Bin"
   description="The real reasons PDFs balloon in size, embedded images, fonts, and scan resolution, and what a PDF compressor is actually changing when you run one."
 >
-  <script type="application/ld+json" set:html={JSON.stringify(schema)} is:inline />
 
   <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-ink dark:text-slate-300 space-y-4">
     <p class="text-sm"><a href="/guides/" class="text-primary dark:text-blue-400 hover:underline">← All guides</a></p>
@@ -89,7 +80,7 @@ const schema = {
 
     <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Compressing</h2>
     <p>
-      <a href="/pdf/compress" class="text-primary dark:text-blue-400 hover:underline">Compress PDF</a>
+      <a href="/pdf/compress" class="text-primary dark:text-blue-400 hover:underline">Compress PDF</a>{' '}
       runs in your browser, and shows you the size before and after so you can judge the trade-off
       yourself before downloading.
     </p>
@@ -97,9 +88,17 @@ const schema = {
     <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Related tools</h2>
     <p>
       If the size problem is specifically about images inside a PDF you're about to create (rather
-      than one you already have), converting your source images with
-      <a href="/image/compress" class="text-primary dark:text-blue-400 hover:underline">Compress Image</a>
+      than one you already have), converting your source images with{' '}
+      <a href="/image/compress" class="text-primary dark:text-blue-400 hover:underline">Compress Image</a>{' '}
       before building the PDF avoids the problem entirely.
     </p>
+    <GuideReferences keys={['pdfSpec', 'mdnImageTypes']} />
+
+    <GuideMeta
+      headline={'Why Is My PDF So Big?'}
+      description={'The real reasons PDFs balloon in size, embedded images, fonts, and scan resolution, and what a PDF compressor is actually changing when you run one.'}
+      published="2026-08-04"
+      reviewed="2026-08-05"
+    />
   </article>
 </Layout>

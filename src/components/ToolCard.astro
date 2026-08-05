@@ -17,6 +17,7 @@ const accent = (categoryColors[tool.category] ?? categoryColors.pdf).dot;
   data-slug={tool.slug}
   data-name={tool.name.toLowerCase()}
   data-description={tool.description.toLowerCase()}
+  data-aliases={(tool.aliases ?? []).join(' ').toLowerCase()}
   class="group relative flex flex-col overflow-hidden rounded-xl border border-border-soft dark:border-slate-800 p-3.5 bg-surface dark:bg-slate-900 shadow-[0_1px_2px_rgba(16,24,47,0.04)] transition-all duration-150 hover:border-primary/25 hover:shadow-[0_6px_16px_rgba(16,24,47,0.08)] hover:-translate-y-0.5 active:translate-y-0 active:shadow-[0_1px_2px_rgba(16,24,47,0.04)] active:scale-[0.98]"
 >
   <span class={`absolute inset-x-0 top-0 h-0.5 scale-x-0 ${accent} transition-transform duration-200 origin-left group-hover:scale-x-100`} aria-hidden="true"></span>

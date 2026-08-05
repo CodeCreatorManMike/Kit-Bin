@@ -1,22 +1,13 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-
-const schema = {
-  '@context': 'https://schema.org',
-  '@type': 'Article',
-  headline: 'Image Compression vs Resizing: Which One Makes a File Smaller?',
-  datePublished: '2026-08-04',
-  author: { '@type': 'Organization', name: 'Kit-Bin' },
-  description:
-    'Compression and resizing both shrink a file, but they change completely different things. Here\'s how to pick the right one instead of guessing.',
-};
+import GuideMeta from '../../components/GuideMeta.astro';
+import GuideReferences from '../../components/GuideReferences.astro';
 ---
 
 <Layout
   title="Image Compression vs Resizing: Which One Makes a File Smaller? | Kit-Bin"
   description="Compression and resizing both shrink a file, but they change completely different things, how to pick the right one instead of guessing."
 >
-  <script type="application/ld+json" set:html={JSON.stringify(schema)} is:inline />
 
   <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-ink dark:text-slate-300 space-y-4">
     <p class="text-sm"><a href="/guides/" class="text-primary dark:text-blue-400 hover:underline">← All guides</a></p>
@@ -74,10 +65,18 @@ const schema = {
 
     <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Tools</h2>
     <p>
-      <a href="/image/resize" class="text-primary dark:text-blue-400 hover:underline">Resize Image</a>
-      to change dimensions, then
-      <a href="/image/compress" class="text-primary dark:text-blue-400 hover:underline">Compress Image</a>
+      <a href="/image/resize" class="text-primary dark:text-blue-400 hover:underline">Resize Image</a>{' '}
+      to change dimensions, then{' '}
+      <a href="/image/compress" class="text-primary dark:text-blue-400 hover:underline">Compress Image</a>{' '}
       if the resized file still needs to be smaller, both run entirely in your browser.
     </p>
+    <GuideReferences keys={['mdnImageTypes', 'mdnCanvas']} />
+
+    <GuideMeta
+      headline={'Image Compression vs Resizing: Which One Makes a File Smaller?'}
+      description={'Compression and resizing both shrink a file, but they change completely different things. Here\'s how to pick the right one instead of guessing.'}
+      published="2026-08-04"
+      reviewed="2026-08-05"
+    />
   </article>
 </Layout>

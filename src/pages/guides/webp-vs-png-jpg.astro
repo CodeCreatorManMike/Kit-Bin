@@ -1,22 +1,13 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-
-const schema = {
-  '@context': 'https://schema.org',
-  '@type': 'Article',
-  headline: 'WebP vs PNG vs JPG: Which One Should You Actually Use?',
-  datePublished: '2026-08-04',
-  author: { '@type': 'Organization', name: 'Kit-Bin' },
-  description:
-    'A real technical comparison of WebP, PNG, and JPG, compression method, transparency, browser support, and which format actually wins for each use case.',
-};
+import GuideMeta from '../../components/GuideMeta.astro';
+import GuideReferences from '../../components/GuideReferences.astro';
 ---
 
 <Layout
   title="WebP vs PNG vs JPG: Which One Should You Actually Use? | Kit-Bin"
   description="A real technical comparison of WebP, PNG, and JPG, compression method, transparency, browser support, and which format actually wins for each use case."
 >
-  <script type="application/ld+json" set:html={JSON.stringify(schema)} is:inline />
 
   <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-ink dark:text-slate-300 space-y-4">
     <p class="text-sm"><a href="/guides/" class="text-primary dark:text-blue-400 hover:underline">← All guides</a></p>
@@ -83,9 +74,17 @@ const schema = {
     <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Related guide</h2>
     <p>
       If the image in question is a photo straight off an iPhone, it's probably HEIC, not JPG or PNG
-      in the first place. See
-      <a href="/guides/heic-explained" class="text-primary dark:text-blue-400 hover:underline">Why Won't My iPhone Photos Open on Windows?</a>
+      in the first place. See{' '}
+      <a href="/guides/heic-explained" class="text-primary dark:text-blue-400 hover:underline">Why Won't My iPhone Photos Open on Windows?</a>{' '}
       for that specific case.
     </p>
+    <GuideReferences keys={['webp', 'pngSpec', 'mdnImageTypes']} />
+
+    <GuideMeta
+      headline={'WebP vs PNG vs JPG: Which One Should You Actually Use?'}
+      description={'A real technical comparison of WebP, PNG, and JPG, compression method, transparency, browser support, and which format actually wins for each use case.'}
+      published="2026-08-04"
+      reviewed="2026-08-05"
+    />
   </article>
 </Layout>

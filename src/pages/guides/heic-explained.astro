@@ -1,22 +1,13 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-
-const schema = {
-  '@context': 'https://schema.org',
-  '@type': 'Article',
-  headline: "Why Won't My iPhone Photos Open on Windows?",
-  datePublished: '2026-08-04',
-  author: { '@type': 'Organization', name: 'Kit-Bin' },
-  description:
-    "Why iPhones save photos as HEIC, why Windows can't open them by default, and when you actually need to convert to JPG.",
-};
+import GuideMeta from '../../components/GuideMeta.astro';
+import GuideReferences from '../../components/GuideReferences.astro';
 ---
 
 <Layout
   title="Why Won't My iPhone Photos Open on Windows? HEIC Explained | Kit-Bin"
   description="Why iPhones save photos as HEIC, why Windows can't open them by default, and when you actually need to convert to JPG."
 >
-  <script type="application/ld+json" set:html={JSON.stringify(schema)} is:inline />
 
   <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-ink dark:text-slate-300 space-y-4">
     <p class="text-sm"><a href="/guides/" class="text-primary dark:text-blue-400 hover:underline">← All guides</a></p>
@@ -81,9 +72,17 @@ const schema = {
     <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Related guide</h2>
     <p>
       If you're choosing a format for a website rather than for sharing photos, HEIC isn't actually
-      the right comparison. See
-      <a href="/guides/webp-vs-png-jpg" class="text-primary dark:text-blue-400 hover:underline">WebP vs PNG vs JPG</a>
+      the right comparison. See{' '}
+      <a href="/guides/webp-vs-png-jpg" class="text-primary dark:text-blue-400 hover:underline">WebP vs PNG vs JPG</a>{' '}
       for that decision instead.
     </p>
+    <GuideReferences keys={['heif', 'mdnImageTypes']} />
+
+    <GuideMeta
+      headline={"Why Won't My iPhone Photos Open on Windows?"}
+      description={"Why iPhones save photos as HEIC, why Windows can't open them by default, and when you actually need to convert to JPG."}
+      published="2026-08-04"
+      reviewed="2026-08-05"
+    />
   </article>
 </Layout>

@@ -1,21 +1,106 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { CONTACT_EMAIL } from '../data/site-config';
+
+const reportTemplate = `Tool:
+Browser and version:
+Operating system:
+Approximate input file size:
+Input format:
+What you expected:
+What happened:
+Error message (if any):
+Can it be reproduced with a non-sensitive sample file?`;
+
+const limitations = [
+  {
+    title: 'Device memory sets the real size limit',
+    body: 'Files are processed in your browser, so very large files can be slow or run out of memory. Phones and tablets hit this sooner than desktops, and video is the most demanding category.',
+  },
+  {
+    title: 'Encrypted or password-protected PDFs',
+    body: 'PDFs that are locked with a password cannot be read by the PDF tools. Remove the password in the application that created the file first.',
+  },
+  {
+    title: 'Metadata is not guaranteed to survive a conversion',
+    body: "Camera, location, and timestamp metadata may not carry across a format conversion. If that data matters, check the output before deleting your original. Individual tool pages say more where it's relevant.",
+  },
+  {
+    title: 'Lossy operations cannot be undone',
+    body: 'Compression and format conversion discard some data by design. Keep your original file until you have confirmed the output is good enough.',
+  },
+  {
+    title: 'Unusual codecs may not be supported',
+    body: 'Audio and video work depends on what your browser can decode. An uncommon codec inside an otherwise familiar container (.mp4, .mov) can still fail.',
+  },
+  {
+    title: 'Some tools are deliberately limited',
+    body: 'Where a tool does less than you might expect, its own page says so directly rather than failing quietly. Split PDF always splits every page, Rotate PDF rotates all pages by the same amount, Resize Image takes a width only, and Compress PDF only re-encodes embedded JPEG images.',
+  },
+];
 ---
 
 <Layout
-  title="Contact Kit-Bin | Free Browser-Based File Tools"
-  description="Questions, bug reports, or feedback about Kit-Bin's file tools, get in touch by email."
+  title="Contact and Report a Problem | Kit-Bin"
+  description="Report a bug in a Kit-Bin tool, ask a question, or read the known limitations of browser-based file processing."
 >
-  <div class="max-w-2xl mx-auto px-4 py-16">
-    <h1 class="text-3xl font-bold mb-6 text-ink dark:text-slate-100">Contact</h1>
-    <p class="text-ink dark:text-slate-300">
-      For questions, bug reports, or anything else:
-      <a href={`mailto:${CONTACT_EMAIL}`} class="text-primary dark:text-blue-400 hover:underline">{CONTACT_EMAIL}</a>
-    </p>
-    <p class="mt-4 text-ink dark:text-slate-300">
-      If a tool produced an unexpected result, it helps to mention which tool, your browser, and
-      roughly how large the file was. That's usually enough to reproduce the issue.
-    </p>
+  <div class="max-w-2xl mx-auto px-4 py-16 text-ink dark:text-slate-300 space-y-10">
+    <div>
+      <h1 class="text-3xl font-bold mb-4 text-ink dark:text-slate-100">Contact and Report a Problem</h1>
+      <p>
+        Questions, bug reports, corrections to a guide, or anything else:{' '}
+        <a href={`mailto:${CONTACT_EMAIL}`} class="text-primary dark:text-blue-400 hover:underline">{CONTACT_EMAIL}</a>
+      </p>
+    </div>
+
+    <section>
+      <h2 class="text-xl font-semibold text-ink dark:text-slate-100 mb-2">Report a tool problem</h2>
+      <p>
+        A bug is much faster to fix when it can be reproduced. Copying this template into your
+        email covers almost everything needed:
+      </p>
+      <pre class="mt-3 overflow-x-auto rounded-xl border border-border-soft dark:border-slate-800 bg-app-bg dark:bg-slate-900 p-4 text-xs leading-relaxed text-ink dark:text-slate-300"><code>{reportTemplate}</code></pre>
+      <div class="mt-4 rounded-xl border border-amber-300/60 dark:border-amber-500/30 bg-amber-50 dark:bg-amber-950/30 p-4">
+        <p class="text-sm font-semibold text-ink dark:text-amber-200">Please do not email sensitive documents</p>
+        <p class="mt-1 text-sm text-muted dark:text-amber-100/80">
+          Kit-Bin never receives your files during normal use, and a bug report should not be the
+          exception. Where possible, reproduce the problem with a file that contains nothing
+          confidential and send that instead. A description of the failure is more useful than the
+          original document.
+        </p>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="text-xl font-semibold text-ink dark:text-slate-100 mb-2">Browser support</h2>
+      <p>
+        Kit-Bin targets current versions of Chrome, Edge, Firefox, and Safari, on desktop and
+        mobile. Everything relies on standard browser APIs and WebAssembly rather than anything
+        browser-specific.
+      </p>
+      <p class="mt-3">
+        A per-browser, per-tool tested matrix is not published yet, because it would only be worth
+        trusting once it is generated by an automated test suite rather than assembled by hand. If
+        a tool fails in a specific browser, that is worth reporting, and it is the fastest way for
+        that gap to get filled.
+      </p>
+    </section>
+
+    <section>
+      <h2 class="text-xl font-semibold text-ink dark:text-slate-100 mb-3">Known limitations</h2>
+      <div class="space-y-4">
+        {limitations.map((l) => (
+          <div>
+            <p class="font-medium text-ink dark:text-slate-200">{l.title}</p>
+            <p class="mt-0.5 text-sm text-muted dark:text-slate-400">{l.body}</p>
+          </div>
+        ))}
+      </div>
+      <p class="mt-4 text-sm">
+        For the architecture behind all of this, and how to verify that no file is being uploaded,
+        read{' '}
+        <a href="/guides/how-kit-bin-works" class="text-primary dark:text-blue-400 hover:underline">How Kit-Bin Works</a>.
+      </p>
+    </section>
   </div>
 </Layout>

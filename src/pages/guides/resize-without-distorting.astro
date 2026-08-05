@@ -1,22 +1,13 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-
-const schema = {
-  '@context': 'https://schema.org',
-  '@type': 'Article',
-  headline: 'How to Resize an Image Without Distorting Its Aspect Ratio',
-  datePublished: '2026-08-04',
-  author: { '@type': 'Organization', name: 'Kit-Bin' },
-  description:
-    'The math behind aspect ratio, and why setting width and height independently is what actually causes a stretched or squashed image.',
-};
+import GuideMeta from '../../components/GuideMeta.astro';
+import GuideReferences from '../../components/GuideReferences.astro';
 ---
 
 <Layout
   title="How to Resize an Image Without Distorting Its Aspect Ratio | Kit-Bin"
   description="The math behind aspect ratio, and why typing in both width and height independently usually breaks it."
 >
-  <script type="application/ld+json" set:html={JSON.stringify(schema)} is:inline />
 
   <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-ink dark:text-slate-300 space-y-4">
     <p class="text-sm"><a href="/guides/" class="text-primary dark:text-blue-400 hover:underline">← All guides</a></p>
@@ -57,7 +48,7 @@ const schema = {
 
     <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Where this site's Resize Image tool fits</h2>
     <p>
-      <a href="/image/resize" class="text-primary dark:text-blue-400 hover:underline">Resize Image</a>
+      <a href="/image/resize" class="text-primary dark:text-blue-400 hover:underline">Resize Image</a>{' '}
       on this site takes a target width and scales the height to match automatically, so the
       aspect ratio can't be broken through the tool itself. It doesn't currently expose an
       independent height field or a percentage-based resize.
@@ -67,9 +58,17 @@ const schema = {
     <p>
       Keeping the correct ratio prevents distortion, but it doesn't add detail. Scaling a small
       image up to a larger size just stretches the existing pixels across more space and can't
-      recover detail that was never captured. See
-      <a href="/guides/compression-vs-resizing" class="text-primary dark:text-blue-400 hover:underline">compression vs resizing</a>
+      recover detail that was never captured. See{' '}
+      <a href="/guides/compression-vs-resizing" class="text-primary dark:text-blue-400 hover:underline">compression vs resizing</a>{' '}
       for more on what resizing can and can't do.
     </p>
+    <GuideReferences keys={['mdnCanvas', 'mdnImageTypes']} />
+
+    <GuideMeta
+      headline={'How to Resize an Image Without Distorting Its Aspect Ratio'}
+      description={'The math behind aspect ratio, and why setting width and height independently is what actually causes a stretched or squashed image.'}
+      published="2026-08-04"
+      reviewed="2026-08-05"
+    />
   </article>
 </Layout>

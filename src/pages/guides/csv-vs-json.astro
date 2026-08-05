@@ -1,22 +1,13 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-
-const schema = {
-  '@context': 'https://schema.org',
-  '@type': 'Article',
-  headline: 'CSV vs JSON: Which Format Should You Use?',
-  datePublished: '2026-08-04',
-  author: { '@type': 'Organization', name: 'Kit-Bin' },
-  description:
-    'Flat tables versus nested structure, a practical comparison of CSV and JSON and when each one is the right choice.',
-};
+import GuideMeta from '../../components/GuideMeta.astro';
+import GuideReferences from '../../components/GuideReferences.astro';
 ---
 
 <Layout
   title="CSV vs JSON: Which Format Should You Use? | Kit-Bin"
   description="Flat tables versus nested structure, a practical answer, not just a feature list."
 >
-  <script type="application/ld+json" set:html={JSON.stringify(schema)} is:inline />
 
   <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-ink dark:text-slate-300 space-y-4">
     <p class="text-sm"><a href="/guides/" class="text-primary dark:text-blue-400 hover:underline">← All guides</a></p>
@@ -65,9 +56,17 @@ const schema = {
     </p>
 
     <p>
-      <a href="/csv/to-json" class="text-primary dark:text-blue-400 hover:underline">Convert CSV to JSON</a>
+      <a href="/csv/to-json" class="text-primary dark:text-blue-400 hover:underline">Convert CSV to JSON</a>{' '}
       or <a href="/json/to-csv" class="text-primary dark:text-blue-400 hover:underline">Convert JSON to CSV</a>,
       both run entirely in your browser.
     </p>
+    <GuideReferences keys={['rfc4180', 'mdnMimeTypes']} />
+
+    <GuideMeta
+      headline={'CSV vs JSON: Which Format Should You Use?'}
+      description={'Flat tables versus nested structure, a practical comparison of CSV and JSON and when each one is the right choice.'}
+      published="2026-08-04"
+      reviewed="2026-08-05"
+    />
   </article>
 </Layout>

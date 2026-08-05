@@ -1,22 +1,13 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-
-const schema = {
-  '@context': 'https://schema.org',
-  '@type': 'Article',
-  headline: 'HEIC vs JPG: Quality, Size, Metadata and Compatibility',
-  datePublished: '2026-08-04',
-  author: { '@type': 'Organization', name: 'Kit-Bin' },
-  description:
-    'A real technical comparison of HEIC and JPG, what you gain and lose converting an iPhone photo between the two.',
-};
+import GuideMeta from '../../components/GuideMeta.astro';
+import GuideReferences from '../../components/GuideReferences.astro';
 ---
 
 <Layout
   title="HEIC vs JPG: Quality, Size, Metadata and Compatibility | Kit-Bin"
   description="What you actually gain and lose converting an iPhone photo from HEIC to JPG."
 >
-  <script type="application/ld+json" set:html={JSON.stringify(schema)} is:inline />
 
   <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-ink dark:text-slate-300 space-y-4">
     <p class="text-sm"><a href="/guides/" class="text-primary dark:text-blue-400 hover:underline">← All guides</a></p>
@@ -76,10 +67,18 @@ const schema = {
     </p>
 
     <p>
-      <a href="/image/heic-to-jpg" class="text-primary dark:text-blue-400 hover:underline">Convert HEIC to JPG</a>
-      on this site runs entirely in your browser. See
-      <a href="/guides/heic-explained" class="text-primary dark:text-blue-400 hover:underline">why HEIC exists in the first place</a>
+      <a href="/image/heic-to-jpg" class="text-primary dark:text-blue-400 hover:underline">Convert HEIC to JPG</a>{' '}
+      on this site runs entirely in your browser. See{' '}
+      <a href="/guides/heic-explained" class="text-primary dark:text-blue-400 hover:underline">why HEIC exists in the first place</a>{' '}
       for the fuller background.
     </p>
+    <GuideReferences keys={['heif', 'mdnImageTypes']} />
+
+    <GuideMeta
+      headline={'HEIC vs JPG: Quality, Size, Metadata and Compatibility'}
+      description={'A real technical comparison of HEIC and JPG, what you gain and lose converting an iPhone photo between the two.'}
+      published="2026-08-04"
+      reviewed="2026-08-05"
+    />
   </article>
 </Layout>

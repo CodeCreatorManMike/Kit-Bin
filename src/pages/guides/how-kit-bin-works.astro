@@ -1,22 +1,13 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-
-const schema = {
-  '@context': 'https://schema.org',
-  '@type': 'Article',
-  headline: 'How Kit-Bin Works',
-  datePublished: '2026-08-04',
-  author: { '@type': 'Organization', name: 'Kit-Bin' },
-  description:
-    'A real technical explanation of client-side file processing, what WebAssembly does, why it means your files genuinely can\'t be uploaded, and how that\'s different from a privacy promise.',
-};
+import GuideMeta from '../../components/GuideMeta.astro';
+import GuideReferences from '../../components/GuideReferences.astro';
 ---
 
 <Layout
   title="How Kit-Bin Works. Why Your Files Never Leave Your Device | Kit-Bin"
   description="A real technical explanation of client-side file processing, what WebAssembly does, why it means your files genuinely can't be uploaded, and how that's different from a privacy promise."
 >
-  <script type="application/ld+json" set:html={JSON.stringify(schema)} is:inline />
 
   <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-ink dark:text-slate-300 space-y-4">
     <p class="text-sm"><a href="/guides/" class="text-primary dark:text-blue-400 hover:underline">← All guides</a></p>
@@ -74,8 +65,8 @@ const schema = {
     <p>
       Kit-Bin's model removes the question entirely rather than answering it well. There's no server
       in the file's path to have a policy about. This is a structural fact about how the site is
-      built, not a promise about how it's operated. See the
-      <a href="/privacy" class="text-primary dark:text-blue-400 hover:underline">Privacy Policy</a>
+      built, not a promise about how it's operated. See the{' '}
+      <a href="/privacy" class="text-primary dark:text-blue-400 hover:underline">Privacy Policy</a>{' '}
       for the exact, current wording of what that means for each tool.
     </p>
 
@@ -92,11 +83,19 @@ const schema = {
 
     <h2 class="font-semibold text-lg pt-2 text-ink dark:text-slate-100">Related tools</h2>
     <p>
-      Every tool currently on this site works exactly as described above. Browse the full list on the
-      <a href="/" class="text-primary dark:text-blue-400 hover:underline">homepage</a>, or start with one of the most-used ones:
-      <a href="/pdf/merge" class="text-primary dark:text-blue-400 hover:underline">Merge PDF</a>,
-      <a href="/image/compress" class="text-primary dark:text-blue-400 hover:underline">Compress Image</a>,
+      Every tool currently on this site works exactly as described above. Browse the full list on the{' '}
+      <a href="/" class="text-primary dark:text-blue-400 hover:underline">homepage</a>, or start with one of the most-used ones:{' '}
+      <a href="/pdf/merge" class="text-primary dark:text-blue-400 hover:underline">Merge PDF</a>,{' '}
+      <a href="/image/compress" class="text-primary dark:text-blue-400 hover:underline">Compress Image</a>,{' '}
       <a href="/audio/trim" class="text-primary dark:text-blue-400 hover:underline">Trim Audio</a>.
     </p>
+    <GuideReferences keys={['mdnWasm', 'mdnFileApi', 'chromeNetworkPanel']} />
+
+    <GuideMeta
+      headline={'How Kit-Bin Works'}
+      description={'A real technical explanation of client-side file processing, what WebAssembly does, why it means your files genuinely can\'t be uploaded, and how that\'s different from a privacy promise.'}
+      published="2026-08-04"
+      reviewed="2026-08-05"
+    />
   </article>
 </Layout>

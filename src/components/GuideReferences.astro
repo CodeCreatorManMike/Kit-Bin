@@ -1,0 +1,33 @@
+---
+/** "Further reading" block for guides.
+ *
+ * Only genuinely authoritative sources belong here: browser/platform docs,
+ * format specifications, and standards bodies. Every URL in `src/data/references.ts`
+ * has been checked to resolve; do not add one that has not been. */
+import { references, type ReferenceKey } from '../data/references';
+
+interface Props {
+  keys: ReferenceKey[];
+}
+
+const { keys } = Astro.props;
+const items = keys.map((k) => references[k]).filter(Boolean);
+---
+
+{items.length > 0 && (
+  <section class="mt-8">
+    <h2 class="font-semibold text-lg text-ink dark:text-slate-100">Further reading</h2>
+    <ul class="mt-2 space-y-1.5 text-sm">
+      {items.map((r) => (
+        <li>
+          <a
+            href={r.url}
+            rel="noopener nofollow"
+            target="_blank"
+            class="text-primary dark:text-blue-400 hover:underline">{r.title}</a>
+          <span class="text-muted dark:text-slate-500"> &mdash; {r.publisher}</span>
+        </li>
+      ))}
+    </ul>
+  </section>
+)}

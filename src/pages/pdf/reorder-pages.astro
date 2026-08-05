@@ -14,11 +14,11 @@ import AdUnit from '../../components/AdUnit.astro';
     faqs={[
     {
       "q": "Do I need to include every page?",
-      "a": "Yes, the new order must list every original page number exactly once."
+      "a": "Yes. The order you type must list every original page number exactly once. If a page is missing or repeated, the tool reports an error instead of guessing what you meant."
     },
     {
       "q": "Can I delete a page instead of just reordering?",
-      "a": "Only by leaving it out of the order you type, but then every remaining page must still be listed exactly once, so this works more like picking which pages to keep and in what order."
+      "a": "No. This tool only changes the sequence of pages, and leaving a page out is rejected rather than treated as a delete. To drop pages, use Split PDF to separate every page into its own file and keep only the ones you want."
     },
     {
       "q": "Does this change the page content itself?",
@@ -77,11 +77,11 @@ import AdUnit from '../../components/AdUnit.astro';
       <div class="space-y-4 mt-2">
         <div>
           <p class="font-medium">Do I need to include every page?</p>
-          <p class="text-muted dark:text-slate-400">Yes, the new order must list every original page number exactly once.</p>
+          <p class="text-muted dark:text-slate-400">Yes. The order you type must list every original page number exactly once. If a page is missing or repeated, the tool reports an error instead of guessing what you meant.</p>
         </div>
         <div>
           <p class="font-medium">Can I delete a page instead of just reordering?</p>
-          <p class="text-muted dark:text-slate-400">Only by leaving it out of the order you type, but then every remaining page must still be listed exactly once, so this works more like picking which pages to keep and in what order.</p>
+          <p class="text-muted dark:text-slate-400">No. This tool only changes the sequence of pages, and leaving a page out is rejected rather than treated as a delete. To drop pages, use <a href="/pdf/split" class="text-primary dark:text-blue-400 hover:underline">Split PDF</a> to separate every page into its own file and keep only the ones you want.</p>
         </div>
         <div>
           <p class="font-medium">Does this change the page content itself?</p>

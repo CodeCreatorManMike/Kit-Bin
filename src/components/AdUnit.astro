@@ -6,17 +6,25 @@ interface Props {
 }
 
 const { slot = ADSENSE_AD_SLOT } = Astro.props;
+
+// Render nothing until a real publisher ID exists. Shipping <ins> tags with
+// placeholder IDs puts dead ad markup on every tool page, which is both useless
+// to visitors and a bad signal during AdSense review.
+const isConfigured =
+  !ADSENSE_PUBLISHER_ID.startsWith('REPLACE_WITH') && !slot.startsWith('REPLACE_WITH');
 ---
 
-<div class="max-w-2xl mx-auto px-4 my-6">
-  <ins
-    class="adsbygoogle"
-    style="display:block"
-    data-ad-client={ADSENSE_PUBLISHER_ID}
-    data-ad-slot={slot}
-    data-ad-format="auto"
-    data-full-width-responsive="true"></ins>
-  <script>
-    ((window as unknown as { adsbygoogle: unknown[] }).adsbygoogle ||= []).push({});
-  </script>
-</div>
+{isConfigured && (
+  <div class="max-w-2xl mx-auto px-4 my-6">
+    <ins
+      class="adsbygoogle"
+      style="display:block"
+      data-ad-client={ADSENSE_PUBLISHER_ID}
+      data-ad-slot={slot}
+      data-ad-format="auto"
+      data-full-width-responsive="true"></ins>
+    <script>
+      ((window as unknown as { adsbygoogle: unknown[] }).adsbygoogle ||= []).push({});
+    </script>
+  </div>
+)}

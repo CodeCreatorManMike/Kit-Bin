@@ -68,11 +68,9 @@ const siteSchema = {
         <h1 class="text-3xl sm:text-5xl font-bold tracking-tight text-ink dark:text-slate-100">
           Powerful tools.<br /><span class="bg-gradient-to-r from-primary via-violet-500 to-cyan-500 dark:from-blue-400 dark:via-violet-400 dark:to-cyan-300 bg-clip-text text-transparent">Simplified.</span>
         </h1>
-        <p class="mt-2 sm:mt-3 text-sm sm:text-lg font-medium text-ink dark:text-slate-200 max-w-lg">
-          Free private file tools for PDF, images, audio, video, and data.
-        </p>
-        <p class="mt-2 sm:mt-3 text-sm sm:text-lg text-muted dark:text-slate-400 max-w-md">
-          Merge, compress, convert, resize, and edit files directly in your browser.
+        <p class="mt-2 sm:mt-3 text-sm sm:text-lg text-muted dark:text-slate-400 max-w-xl">
+          Free tools to merge, compress, convert, resize and edit PDF, image, audio, video and
+          data files directly in your browser.
         </p>
         <p class="mt-2 text-xs sm:text-sm text-muted dark:text-slate-500">
           <a href="/guides/how-kit-bin-works" class="hover:underline decoration-dotted underline-offset-2"
@@ -218,7 +216,8 @@ const siteSchema = {
           const matchesQuery =
             query.length === 0 ||
             (card.dataset.name ?? '').includes(query) ||
-            (card.dataset.description ?? '').includes(query);
+            (card.dataset.description ?? '').includes(query) ||
+            (card.dataset.aliases ?? '').includes(query);
           const matchesTab = activeTab === 'all' || favorites.includes(card.dataset.slug ?? '');
           const visible = matchesQuery && matchesTab;
           card.classList.toggle('hidden', !visible);

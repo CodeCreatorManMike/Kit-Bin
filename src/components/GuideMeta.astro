@@ -1,0 +1,69 @@
+---
+/** Guide authorship, dates, and Article structured data.
+ *
+ * One component so the visible byline and the JSON-LD can never drift apart,
+ * and so `dateModified` is a single edit per guide rather than two.
+ *
+ * Deliberately attributes to the Kit-Bin editorial identity rather than
+ * inventing a named author or a technical reviewer that does not exist. */
+import { SITE_URL, PUBLISHER_NAME } from '../data/site-config';
+
+interface Props {
+  headline: string;
+  description: string;
+  /** ISO date, e.g. '2026-08-04' */
+  published: string;
+  /** ISO date of the last substantive review. Omit if never revised. */
+  reviewed?: string;
+}
+
+const { headline, description, published, reviewed } = Astro.props;
+
+const url = new URL(Astro.url.pathname, SITE_URL).href;
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'TechArticle',
+  headline,
+  description,
+  url,
+  mainEntityOfPage: { '@type': 'WebPage', '@id': url },
+  datePublished: published,
+  dateModified: reviewed ?? published,
+  author: { '@type': 'Organization', name: PUBLISHER_NAME, url: SITE_URL },
+  publisher: {
+    '@type': 'Organization',
+    name: PUBLISHER_NAME,
+    url: SITE_URL,
+    logo: { '@type': 'ImageObject', url: new URL('/brand/mark.svg', SITE_URL).href },
+  },
+};
+
+const fmt = (iso: string) =>
+  new Date(`${iso}T00:00:00Z`).toLocaleDateString('en-GB', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    timeZone: 'UTC',
+  });
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(schema)} is:inline />
+
+<div class="mt-6 flex flex-wrap items-center gap-x-2 gap-y-1 border-t border-border-soft dark:border-slate-800 pt-4 text-xs text-muted dark:text-slate-500">
+  <span>
+    Written by the <a href="/about" class="text-primary dark:text-blue-400 hover:underline">Kit-Bin team</a>
+  </span>
+  <span aria-hidden="true">&middot;</span>
+  <span>Published <time datetime={published}>{fmt(published)}</time></span>
+  {reviewed && reviewed !== published && (
+    <>
+      <span aria-hidden="true">&middot;</span>
+      <span>Last reviewed <time datetime={reviewed}>{fmt(reviewed)}</time></span>
+    </>
+  )}
+  <span aria-hidden="true">&middot;</span>
+  <span>
+    Spotted an error? <a href="/contact" class="text-primary dark:text-blue-400 hover:underline">Tell us</a>
+  </span>
+</div>
