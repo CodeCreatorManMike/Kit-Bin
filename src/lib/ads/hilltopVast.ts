@@ -129,7 +129,16 @@ export async function playVastAd(
   video.disablePictureInPicture = true;
   video.autoplay = true;
   video.controls = false;
-  video.style.cssText = 'width:100%;height:100%;object-fit:contain;background:#000;';
+  // Intrinsic sizing (auto width/height, capped by max-width/max-height)
+  // instead of forcing width:100%;height:100% of a fixed-aspect container.
+  // HilltopAds serves creatives in whatever aspect ratio the advertiser
+  // uploaded — portrait ones letterboxed into a forced 16:9 box read as
+  // "broken"/oversized black bars either side. Sizing the video to its own
+  // real dimensions (the container has no fixed aspect ratio either, see
+  // downloadGate.ts) means the frame always exactly matches the creative,
+  // landscape or portrait, on any viewport, with nothing cropped or barred.
+  video.style.cssText =
+    'display:block;width:auto;height:auto;max-width:100%;max-height:min(70vh,480px);background:#000;';
 
   const firedQuartiles = new Set<string>();
   let impressionFired = false;

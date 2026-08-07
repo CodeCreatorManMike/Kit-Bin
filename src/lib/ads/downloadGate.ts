@@ -78,11 +78,11 @@ export function maybeGateDownload(resultEl: HTMLElement): void {
     <p class="max-w-xs text-sm text-muted dark:text-slate-500">
       Kit-Bin is free to use. Watching this short ad is how we keep it that way.
     </p>
-    <div class="mx-auto w-full max-w-[400px]">
+    <div class="mx-auto w-full max-w-[480px]">
       <p class="mb-1.5 text-[11px] font-semibold uppercase tracking-widest text-muted/70 dark:text-slate-500">Advertisement</p>
-      <div data-video-ad-frame class="relative mx-auto aspect-video w-full overflow-hidden rounded-xl border border-border-soft/70 dark:border-slate-800/70 bg-black"></div>
+      <div data-video-ad-frame class="relative mx-auto flex min-h-[140px] w-full items-center justify-center overflow-hidden rounded-xl border border-border-soft/70 dark:border-slate-800/70 bg-black"></div>
     </div>
-    <div class="mt-1 w-full max-w-[400px]">
+    <div class="mt-1 w-full max-w-[480px]">
       <div class="h-1.5 overflow-hidden rounded-full bg-app-bg dark:bg-slate-800">
         <div data-gate-bar class="h-full rounded-full bg-gradient-to-r from-primary to-violet-500${reduceMotion ? '' : ' transition-[width] duration-1000 ease-linear'}" style="width:0%"></div>
       </div>
