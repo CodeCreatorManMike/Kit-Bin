@@ -5,44 +5,21 @@
  * banner loaded via `src/lib/ads/adsterra.ts`. This module is unrelated to
  * that one and is only ever used from `downloadGate.ts`.
  *
- * Uses Google's IMA SDK (official, Google-hosted, the standard way to play
- * any VAST-compliant tag regardless of who sold the ad) to render a real
- * video ad and report genuine playback progress, so the download gate can
- * be tied to actual watched time instead of a bare UI timer running next to
- * nothing. The tag itself is a HilltopAds VAST zone (#7298041, "file ad",
- * plain VAST — not the Google Ad Manager/IMA variant, which wraps for GAM's
- * own ad server that this site doesn't run).
- */
-
-const IMA_SDK_URL = 'https://imasdk.googleapis.com/js/sdkloader/ima3.js';
+ * The tag is a HilltopAds VAST zone (#7298041, "file ad", plain VAST — not
+ * the Google Ad Manager/IMA variant). This does NOT use Google's IMA SDK:
+ * IMA validates VAST responses far more strictly than this network's output
+ * satisfies (confirmed directly — IMA rejects this exact, genuinely valid
+ * tag with "AdError 1009: The response does not contain any valid ads.",
+ * even though the XML is well-formed, has a real <MediaFiles> block, and
+ * every media URL and tracking pixel resolves correctly over HTTPS). IMA is
+ * tuned for Google Ad Manager's own output; plenty of smaller VAST networks
+ * don't satisfy its stricter-than-spec checks. Instead this parses the VAST
+ * XML directly and plays the best MediaFile in a plain <video> element,
+ * firing the standard Impression/tracking pixels itself so HilltopAds still
+ * gets paid correctly. */
 
 const VAST_TAG_URL =
   'https://unfolded-uncle.com/dwm.FHzTdLGpNnvGZ/GUUP/geImi9zufZmUpl/k/PDTOcqyCO/TYgswrNqDWE/tvNiz/Ir5eOCDMA/0eN_Qo';
-
-declare global {
-  interface Window {
-    google?: { ima?: any };
-  }
-}
-
-let sdkLoadPromise: Promise<void> | null = null;
-
-function loadImaSdk(): Promise<void> {
-  if (sdkLoadPromise) return sdkLoadPromise;
-  sdkLoadPromise = new Promise((resolve, reject) => {
-    if (window.google?.ima) {
-      resolve();
-      return;
-    }
-    const script = document.createElement('script');
-    script.src = IMA_SDK_URL;
-    script.async = true;
-    script.onload = () => resolve();
-    script.onerror = () => reject(new Error('Ad SDK failed to load.'));
-    document.head.appendChild(script);
-  });
-  return sdkLoadPromise;
-}
 
 export interface VastPlaybackHandle {
   destroy(): void;
@@ -51,76 +28,145 @@ export interface VastPlaybackHandle {
 export interface VastPlaybackOptions {
   /** Called repeatedly with seconds of actual ad playback elapsed so far. */
   onProgress(secondsWatched: number): void;
-  /** Called once, whether the ad completes normally, errors, or has no fill —
-   * the caller treats all three the same way (nothing left to show). */
+  /** Called once, whether the ad completes normally, errors, or has no
+   * playable media — the caller treats all three the same way (nothing
+   * left to show). */
   onDone(): void;
 }
 
-/** Mounts a real VAST video ad inside `container` (must already have a
- * concrete pixel width/height, e.g. via CSS) and starts it muted — browsers
- * block unmuted autoplay outside a direct user gesture, and the IMA SDK
- * renders its own visible mute/unmute control over the video. */
+interface ParsedAd {
+  mediaUrl: string;
+  impressions: string[];
+  tracking: Partial<Record<'start' | 'firstQuartile' | 'midpoint' | 'thirdQuartile' | 'complete', string[]>>;
+}
+
+function pickMediaFile(doc: Document): string | null {
+  const probe = document.createElement('video');
+  const files = Array.from(doc.querySelectorAll('MediaFile'));
+  // Prefer whatever the browser reports strongest support for; MP4/H.264 is
+  // the closest thing to universally supported, so it naturally sorts first.
+  const byPreference = [...files].sort((a, b) => {
+    const rank = (type: string | null) => {
+      if (!type) return 0;
+      const support = probe.canPlayType(type);
+      if (support === 'probably') return 2;
+      if (support === 'maybe') return 1;
+      return 0;
+    };
+    return rank(b.getAttribute('type')) - rank(a.getAttribute('type'));
+  });
+  const best = byPreference.find((f) => (f.getAttribute('type') ?? '').startsWith('video/') && f.textContent?.trim());
+  return best?.textContent?.trim() ?? null;
+}
+
+function textOfAll(doc: Document, selector: string): string[] {
+  return Array.from(doc.querySelectorAll(selector))
+    .map((el) => el.textContent?.trim())
+    .filter((v): v is string => !!v);
+}
+
+async function fetchAndParseAd(): Promise<ParsedAd | null> {
+  const res = await fetch(VAST_TAG_URL);
+  if (!res.ok) return null;
+  const xml = await res.text();
+  const doc = new DOMParser().parseFromString(xml, 'text/xml');
+  if (doc.querySelector('parsererror')) return null;
+
+  const mediaUrl = pickMediaFile(doc);
+  if (!mediaUrl) return null;
+
+  const tracking: ParsedAd['tracking'] = {};
+  for (const el of Array.from(doc.querySelectorAll('Tracking'))) {
+    const event = el.getAttribute('event');
+    const url = el.textContent?.trim();
+    if (!event || !url) continue;
+    const key = event as keyof ParsedAd['tracking'];
+    (tracking[key] ??= []).push(url);
+  }
+
+  return {
+    mediaUrl,
+    impressions: textOfAll(doc, 'Impression'),
+    tracking,
+  };
+}
+
+/** Fire-and-forget tracking beacon — ad tracking pixels are one-way, no
+ * response handling needed, and a failed beacon must never affect playback. */
+function fireBeacons(urls: string[] | undefined): void {
+  for (const url of urls ?? []) {
+    fetch(url, { mode: 'no-cors', keepalive: true }).catch(() => {});
+  }
+}
+
+/** Mounts a real video ad inside `container` (must already have a concrete
+ * pixel width/height, e.g. via CSS) and starts it muted — browsers block
+ * unmuted autoplay outside a direct user gesture. */
 export async function playVastAd(
   container: HTMLElement,
   opts: VastPlaybackOptions,
 ): Promise<VastPlaybackHandle> {
-  await loadImaSdk();
-  const ima = window.google!.ima;
-
-  const adDisplayContainer = new ima.AdDisplayContainer(container);
-  adDisplayContainer.initialize();
-
-  const adsLoader = new ima.AdsLoader(adDisplayContainer);
-  let adsManager: any = null;
-  let progressTimer: number | null = null;
   let done = false;
-
   const finish = () => {
     if (done) return;
     done = true;
-    if (progressTimer !== null) window.clearInterval(progressTimer);
     opts.onDone();
   };
 
-  adsLoader.addEventListener(ima.AdErrorEvent.Type.AD_ERROR, finish);
+  const ad = await fetchAndParseAd().catch(() => null);
+  if (!ad) {
+    finish();
+    return { destroy() {} };
+  }
 
-  adsLoader.addEventListener(
-    ima.AdsManagerLoadedEvent.Type.ADS_MANAGER_LOADED,
-    (event: any) => {
-      adsManager = event.getAdsManager({});
-      adsManager.addEventListener(ima.AdEvent.Type.ALL_ADS_COMPLETED, finish);
-      adsManager.addEventListener(ima.AdErrorEvent.Type.AD_ERROR, finish);
-      adsManager.addEventListener(ima.AdEvent.Type.STARTED, () => {
-        const startedAt = Date.now();
-        progressTimer = window.setInterval(() => {
-          opts.onProgress((Date.now() - startedAt) / 1000);
-        }, 250);
-      });
+  const video = document.createElement('video');
+  video.src = ad.mediaUrl;
+  video.muted = true;
+  video.playsInline = true;
+  video.autoplay = true;
+  video.controls = false;
+  video.style.cssText = 'width:100%;height:100%;object-fit:contain;background:#000;';
 
-      try {
-        adsManager.init(container.clientWidth, container.clientHeight, ima.ViewMode.NORMAL);
-        adsManager.setVolume(0);
-        adsManager.start();
-      } catch {
-        finish();
+  const firedQuartiles = new Set<string>();
+  let impressionFired = false;
+
+  video.addEventListener('playing', () => {
+    if (impressionFired) return;
+    impressionFired = true;
+    fireBeacons(ad.impressions);
+    fireBeacons(ad.tracking.start);
+  });
+
+  video.addEventListener('timeupdate', () => {
+    if (!video.duration || Number.isNaN(video.duration)) return;
+    opts.onProgress(video.currentTime);
+    const pct = video.currentTime / video.duration;
+    const mark = (name: keyof ParsedAd['tracking'], threshold: number) => {
+      if (pct >= threshold && !firedQuartiles.has(name)) {
+        firedQuartiles.add(name);
+        fireBeacons(ad.tracking[name]);
       }
-    },
-  );
+    };
+    mark('firstQuartile', 0.25);
+    mark('midpoint', 0.5);
+    mark('thirdQuartile', 0.75);
+  });
 
-  const adsRequest = new ima.AdsRequest();
-  adsRequest.adTagUrl = VAST_TAG_URL;
-  adsRequest.linearAdSlotWidth = container.clientWidth;
-  adsRequest.linearAdSlotHeight = container.clientHeight;
-  adsLoader.requestAds(adsRequest);
+  video.addEventListener('ended', () => {
+    fireBeacons(ad.tracking.complete);
+    finish();
+  });
+  video.addEventListener('error', finish);
+
+  container.innerHTML = '';
+  container.appendChild(video);
+  video.play().catch(finish);
 
   return {
     destroy() {
-      if (progressTimer !== null) window.clearInterval(progressTimer);
-      try {
-        adsManager?.destroy();
-      } catch {
-        // already torn down
-      }
+      video.pause();
+      video.removeAttribute('src');
+      video.load();
     },
   };
 }
