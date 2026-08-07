@@ -6,12 +6,13 @@
  * allowed to click the download button, by a fixed 15 seconds, with a
  * visible countdown and a plain-language reason why.
  *
- * The ad shown here is a real HilltopAds VAST video ad (see
- * `hilltopVast.ts`), played via Google's IMA SDK — this is a deliberate,
- * separate choice from the Adsterra static banners used everywhere else on
- * the site (homepage/hub/tool-page banners, the processing-state overlay).
- * Do not reuse `attachAdSlot`/Adsterra here, and do not reuse `playVastAd`
- * anywhere else — the two ad systems are intentionally kept apart.
+ * The ad shown here is a real HilltopAds VAST video ad, played directly (see
+ * `hilltopVast.ts` for why — Google's IMA SDK rejects this network's VAST
+ * output) — this is a deliberate, separate choice from the Adsterra static
+ * banners used everywhere else on the site (homepage/hub/tool-page banners,
+ * the processing-state overlay). Do not reuse `attachAdSlot`/Adsterra here,
+ * and do not reuse `playVastAd` anywhere else — the two ad systems are
+ * intentionally kept apart.
  *
  * What it does NOT do: delay the file itself. `run()` in ui.ts has already
  * completed and the blob/filename/note are already set on the download link
@@ -63,15 +64,22 @@ export function maybeGateDownload(resultEl: HTMLElement): void {
   resultEl.classList.add('relative');
 
   const overlay = document.createElement('div');
+  // Not `inset-0`: that clamps the overlay to resultEl's own natural height
+  // (the small "Done" card underneath), clipping anything taller — this
+  // content (heading + video + progress bar) reliably exceeds that height,
+  // especially on mobile. Positioning from the top with an intrinsic height
+  // instead means the overlay is exactly as tall as it needs to be, and
+  // z-10 still keeps it covering the shorter content (and the download
+  // button) beneath it the whole time it's showing.
   overlay.className =
-    'absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 rounded-2xl bg-surface dark:bg-slate-900 p-6 text-center';
+    'absolute inset-x-0 top-0 z-10 flex flex-col items-center gap-3 rounded-2xl bg-surface dark:bg-slate-900 p-5 sm:p-6 text-center';
   overlay.innerHTML = `
     <p class="font-semibold text-ink dark:text-slate-100">Your file is ready</p>
-    <p class="max-w-xs text-xs text-muted dark:text-slate-500">
+    <p class="max-w-xs text-sm text-muted dark:text-slate-500">
       Kit-Bin is free to use. Watching this short ad is how we keep it that way.
     </p>
     <div class="mx-auto w-full max-w-[400px]">
-      <p class="mb-1.5 text-[10px] font-semibold uppercase tracking-widest text-muted/70 dark:text-slate-500">Advertisement</p>
+      <p class="mb-1.5 text-[11px] font-semibold uppercase tracking-widest text-muted/70 dark:text-slate-500">Advertisement</p>
       <div data-video-ad-frame class="relative mx-auto aspect-video w-full overflow-hidden rounded-xl border border-border-soft/70 dark:border-slate-800/70 bg-black"></div>
     </div>
     <div class="mt-1 w-full max-w-[400px]">

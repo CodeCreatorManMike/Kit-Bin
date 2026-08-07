@@ -122,7 +122,11 @@ export async function playVastAd(
   const video = document.createElement('video');
   video.src = ad.mediaUrl;
   video.muted = true;
+  video.defaultMuted = true;
   video.playsInline = true;
+  video.setAttribute('webkit-playsinline', 'true');
+  video.setAttribute('disableRemotePlayback', 'true');
+  video.disablePictureInPicture = true;
   video.autoplay = true;
   video.controls = false;
   video.style.cssText = 'width:100%;height:100%;object-fit:contain;background:#000;';
@@ -160,10 +164,41 @@ export async function playVastAd(
 
   container.innerHTML = '';
   container.appendChild(video);
-  video.play().catch(finish);
+
+  // Muted autoplay works on most desktop browsers but mobile Safari/Chrome
+  // frequently reject it anyway (stricter gesture requirements, especially
+  // right after an async chain rather than directly inside a click handler,
+  // which is exactly how this gets triggered — after processing finishes).
+  // Rather than treat that rejection as failure, fall back to a visible tap
+  // target: calling play() from inside its own click handler is a genuine
+  // user gesture and reliably succeeds everywhere.
+  let playButton: HTMLButtonElement | null = null;
+  const removePlayButton = () => {
+    playButton?.remove();
+    playButton = null;
+  };
+
+  const showPlayButtonFallback = () => {
+    if (playButton || done) return;
+    playButton = document.createElement('button');
+    playButton.type = 'button';
+    playButton.setAttribute('aria-label', 'Play advertisement');
+    playButton.style.cssText =
+      'position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:transparent;border:0;cursor:pointer;';
+    playButton.innerHTML =
+      '<span style="display:grid;place-items:center;width:56px;height:56px;border-radius:9999px;background:rgba(255,255,255,0.92);"><svg viewBox="0 0 24 24" width="24" height="24" fill="#111"><path d="M8 5v14l11-7z"/></svg></span>';
+    playButton.addEventListener('click', () => {
+      video.play().then(removePlayButton).catch(() => {});
+    });
+    container.appendChild(playButton);
+  };
+
+  video.play().catch(showPlayButtonFallback);
+  video.addEventListener('playing', removePlayButton);
 
   return {
     destroy() {
+      removePlayButton();
       video.pause();
       video.removeAttribute('src');
       video.load();
