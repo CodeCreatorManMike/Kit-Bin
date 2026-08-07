@@ -1,0 +1,42 @@
+---
+/** Reusable Adsterra placement. Renders hidden until consent is granted, so
+ * a visitor who hasn't consented sees no gap and no request ever fires.
+ *
+ * `placement` is a stable string used only for the accessible label and the
+ * iframe title (there is no per-placement analytics call, since Kit-Bin
+ * doesn't run analytics), e.g. "homepage-directory", "pdf-category",
+ * "tool-page:pdf-merge". */
+interface Props {
+  placement: string;
+  class?: string;
+}
+
+const { placement, class: className = '' } = Astro.props;
+---
+
+<div
+  class={`ad-slot mx-auto max-w-2xl text-center ${className}`}
+  data-ad-placement={placement}
+  role="complementary"
+  aria-label="Advertisement"
+  hidden
+>
+  <p class="mb-1.5 text-[10px] font-semibold uppercase tracking-widest text-muted/70 dark:text-slate-500">
+    Advertisement
+  </p>
+  <div
+    data-ad-frame
+    class="mx-auto flex min-h-[50px] sm:min-h-[90px] w-full max-w-[728px] items-center justify-center overflow-hidden rounded-xl border border-border-soft/70 dark:border-slate-800/70 bg-app-bg/40 dark:bg-slate-900/30"
+  >
+  </div>
+</div>
+
+<script>
+  import { attachAdSlot } from '../lib/ads/adsterra';
+
+  const slots = document.querySelectorAll<HTMLElement>('[data-ad-placement]:not([data-ad-bound])');
+  slots.forEach((el) => {
+    el.dataset.adBound = 'true';
+    attachAdSlot(el, el.dataset.adPlacement ?? 'unknown', { lazy: true });
+  });
+</script>

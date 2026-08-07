@@ -1,0 +1,57 @@
+---
+/** First-party advertising-consent banner. Mounted once in Layout.astro.
+ * Appears only when no choice has been stored yet; rejecting or accepting
+ * never blocks or delays any tool, it only decides whether AdsterraBanner
+ * slots (and, later, AdSense once configured) are allowed to load. */
+---
+
+<div
+  id="consent-banner"
+  class="fixed inset-x-3 bottom-3 z-50 mx-auto max-w-md rounded-2xl border border-border-soft dark:border-slate-800 bg-surface dark:bg-slate-900 p-4 shadow-[0_10px_30px_rgba(16,24,47,0.12)] hidden"
+  role="region"
+  aria-label="Cookie and advertising consent"
+>
+  <p class="text-sm font-semibold text-ink dark:text-slate-100">A quick note on cookies</p>
+  <p class="mt-1.5 text-xs leading-relaxed text-muted dark:text-slate-400">
+    Kit-Bin's tools never upload your files, that part needs no consent. Showing advertising does
+    use cookies from our ad partner. You can accept or decline, either way every tool keeps
+    working exactly the same.
+  </p>
+  <div class="mt-3 flex flex-wrap items-center gap-2">
+    <button
+      id="consent-accept"
+      type="button"
+      class="rounded-lg bg-gradient-to-r from-primary to-violet-500 px-4 py-2 text-xs font-medium text-white shadow-sm transition-all hover:shadow-md active:scale-[0.98]"
+    >
+      Accept advertising cookies
+    </button>
+    <button
+      id="consent-reject"
+      type="button"
+      class="rounded-lg border border-border-soft dark:border-slate-700 px-4 py-2 text-xs font-medium text-ink dark:text-slate-200 transition-colors hover:bg-app-bg dark:hover:bg-slate-800"
+    >
+      Decline
+    </button>
+    <a href="/privacy" class="ml-auto text-xs text-muted dark:text-slate-500 underline decoration-dotted underline-offset-2 hover:text-ink dark:hover:text-slate-300">
+      Details
+    </a>
+  </div>
+</div>
+
+<script>
+  import { getAdConsent, setAdConsent, onAdConsentChange } from '../lib/ads/consent';
+
+  const banner = document.querySelector<HTMLElement>('#consent-banner');
+  const acceptBtn = document.querySelector<HTMLButtonElement>('#consent-accept');
+  const rejectBtn = document.querySelector<HTMLButtonElement>('#consent-reject');
+
+  function sync() {
+    if (!banner) return;
+    banner.classList.toggle('hidden', getAdConsent() !== null);
+  }
+
+  acceptBtn?.addEventListener('click', () => setAdConsent('granted'));
+  rejectBtn?.addEventListener('click', () => setAdConsent('denied'));
+  onAdConsentChange(sync);
+  sync();
+</script>

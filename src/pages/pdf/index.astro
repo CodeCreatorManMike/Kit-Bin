@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import AdsterraBanner from '../../components/AdsterraBanner.astro';
 import CategorySchema from '../../components/CategorySchema.astro';
 import ToolCard from '../../components/ToolCard.astro';
 import { tools } from '../../data/tools';
@@ -30,7 +31,11 @@ const meta = categoryColors.pdf;
       it? Read <a href="/guides/why-pdfs-get-large" class="text-primary dark:text-blue-400 hover:underline">Why Is My PDF So Big?</a> for a breakdown of what makes PDFs grow and shrink.
     </p>
     <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {pdfTools.map((t) => <ToolCard tool={t} />)}
+      {pdfTools.slice(0, 4).map((t) => <ToolCard tool={t} />)}
+      <div class="col-span-full py-6 sm:py-8">
+        <AdsterraBanner placement="pdf-category" />
+      </div>
+      {pdfTools.slice(4).map((t) => <ToolCard tool={t} />)}
     </div>
   </div>
 </Layout>

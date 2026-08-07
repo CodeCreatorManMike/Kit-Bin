@@ -4,6 +4,7 @@ import Footer from '../components/Footer.astro';
 import Sidebar from '../components/Sidebar.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import AdSenseScript from '../components/AdSenseScript.astro';
+import ConsentBanner from '../components/ConsentBanner.astro';
 
 interface Props {
   title: string;
@@ -46,6 +47,8 @@ const { title, description } = Astro.props;
       </main>
       <Footer />
     </div>
+
+    <ConsentBanner />
 
     <script>
       // Reveal-on-scroll for anything marked [data-reveal]. Uses one shared

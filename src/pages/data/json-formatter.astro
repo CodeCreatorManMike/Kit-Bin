@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import AdsterraBanner from '../../components/AdsterraBanner.astro';
 import FaqAccordion from '../../components/FaqAccordion.astro';
 import ToolSchema from '../../components/ToolSchema.astro';
 import AdUnit from '../../components/AdUnit.astro';
@@ -164,6 +165,10 @@ const faqs = [
       Deciding which format to store your data in? Read{' '}
       <a href="/guides/csv-vs-json" class="text-primary dark:text-blue-400 hover:underline">CSV vs JSON: Which One Do You Need?</a>
     </p>
+  </div>
+
+  <div class="pt-8 sm:pt-12 pb-6 sm:pb-8">
+    <AdsterraBanner placement="tool-page:data/json-formatter" />
   </div>
 
   <script>

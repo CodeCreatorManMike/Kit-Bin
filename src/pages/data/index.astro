@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import AdsterraBanner from '../../components/AdsterraBanner.astro';
 import CategorySchema from '../../components/CategorySchema.astro';
 import ToolCard from '../../components/ToolCard.astro';
 import { tools } from '../../data/tools';
@@ -26,7 +27,11 @@ const meta = categoryColors.data;
       data file is never uploaded anywhere.
     </p>
     <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {dataTools.map((t) => <ToolCard tool={t} />)}
+      {dataTools.slice(0, 4).map((t) => <ToolCard tool={t} />)}
+      <div class="col-span-full py-6 sm:py-8">
+        <AdsterraBanner placement="data-category" />
+      </div>
+      {dataTools.slice(4).map((t) => <ToolCard tool={t} />)}
     </div>
   </div>
 </Layout>

@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import AdsterraBanner from '../../components/AdsterraBanner.astro';
 import CategorySchema from '../../components/CategorySchema.astro';
 import ToolCard from '../../components/ToolCard.astro';
 import { tools } from '../../data/tools';
@@ -32,6 +33,10 @@ const meta = categoryColors.video;
     </p>
     <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {videoTools.map((t) => <ToolCard tool={t} />)}
+    </div>
+
+    <div class="pt-10 pb-2 sm:pt-10 sm:pb-2">
+      <AdsterraBanner placement="video-category" />
     </div>
   </div>
 </Layout>

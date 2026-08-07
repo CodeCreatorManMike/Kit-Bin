@@ -2,6 +2,8 @@
  * result/download UI. Kept framework-free so it works inside a plain
  * <script type="module"> block on any Astro page. */
 
+import { beginProcessingUi } from './ads/processingOverlay';
+
 export interface ToolElements {
   dropzone: HTMLElement;
   fileInput: HTMLInputElement;
@@ -111,11 +113,21 @@ export function wireTool(els: ToolElements, opts: WireOptions) {
     els.fileInfo.textContent = files.map((f) => `${f.name} (${formatBytes(f.size)})`).join(', ');
     setStatus(els, 'Processing…');
 
+    // Real processing has already started by the time this exists; the
+    // overlay is purely a status display and, after ~300ms, an optional ad.
+    // It never gates or delays anything below it.
+    const processingUi = beginProcessingUi();
+
     try {
-      const { blob, filename, note } = await opts.run(files, (message) => setStatus(els, message));
+      const { blob, filename, note } = await opts.run(files, (message) => {
+        setStatus(els, message);
+        processingUi.setStatusText(message);
+      });
+      processingUi.finish();
       setStatus(els, null);
       showResult(els, blob, filename, note);
     } catch (err) {
+      processingUi.finish();
       console.error(err);
       setStatus(
         els,

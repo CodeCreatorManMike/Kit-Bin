@@ -3,6 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import ToolCard from '../components/ToolCard.astro';
 import ToolIcon from '../components/ToolIcon.astro';
 import FaqAccordion from '../components/FaqAccordion.astro';
+import AdsterraBanner from '../components/AdsterraBanner.astro';
 import { tools, categories } from '../data/tools';
 import { guides } from '../data/guides';
 import { categoryColors, categoryIconPaths } from '../data/toolIcons';
@@ -210,6 +211,11 @@ const siteSchema = {
         );
       })}
     </div>
+  </div>
+
+  <!-- Advertisement: after the complete All Tools directory, before FAQ -->
+  <div class="max-w-5xl mx-auto px-6 py-8 sm:py-12">
+    <AdsterraBanner placement="homepage-directory" />
   </div>
 
   <!-- FAQ -->

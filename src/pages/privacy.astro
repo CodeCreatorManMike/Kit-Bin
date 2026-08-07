@@ -6,9 +6,8 @@ import {
   CONTACT_EMAIL,
 } from '../data/site-config';
 
-const privacyDescription = ADSENSE_CONFIGURED
-  ? 'What happens to the files you process on Kit-Bin, what data is collected, and how Google AdSense advertising and consent choices work.'
-  : "What happens to the files you process on Kit-Bin, what data is and isn't collected, and what will change before any advertising is enabled.";
+const privacyDescription =
+  'What happens to the files you process on Kit-Bin, what data is and isn\'t collected, and how Adsterra advertising and consent choices work.';
 ---
 
 <Layout
@@ -52,36 +51,45 @@ const privacyDescription = ADSENSE_CONFIGURED
 
     <section id="advertising">
       <h2 class="text-xl font-semibold text-ink dark:text-slate-100 mb-2">Advertising</h2>
-      {ADSENSE_CONFIGURED ? (
-        <>
-          <p>
-            Kit-Bin uses Google AdSense to display advertising. Google may process information such
-            as the page URL, IP address, browser information, and advertising identifiers to serve,
-            measure, and protect advertising. See{' '}
+      <p>
+        Kit-Bin shows a small number of standard banner advertisements, served by Adsterra, to help
+        cover hosting and development costs. These are static banner ads, not video, not audio, and
+        not a full-screen interstitial. They never appear inside a file drop area, next to a download
+        button, or in a way that could be mistaken for part of a tool.
+      </p>
+      <p class="mt-3">
+        Adsterra's advertising resources are not requested at all until you accept the cookie banner
+        shown on your first visit. If you decline, or before you choose either way, no advertising
+        script or advertising cookie loads, and every tool continues to work exactly the same either
+        way. You can change your choice at any time using{' '}
+        <strong>Privacy and cookie settings</strong> in the footer, which also removes any advertising
+        already loaded on the page.
+      </p>
+      <p class="mt-3">
+        Once loaded, Adsterra and its advertising partners may use cookies, pixels, or similar
+        technologies for ad delivery, measurement, and fraud prevention, and where permitted,
+        limited personalization. This is entirely separate from how your files are handled: the
+        advertising code runs in an isolated frame and is never given a file's name, contents, or any
+        conversion setting. Kit-Bin does not pass any of that information to Adsterra, intentionally
+        or otherwise, because the advertising component has no access to the file-processing code at
+        all.
+      </p>
+      <p class="mt-3">
+        {ADSENSE_CONFIGURED ? (
+          <>
+            Kit-Bin also uses Google AdSense. Google may process information such as the page URL, IP
+            address, browser information, and advertising identifiers to serve, measure, and protect
+            advertising. See{' '}
             <a href="https://policies.google.com/technologies/partner-sites" class="underline">
               how Google uses information from sites that use its services
-            </a>.
-          </p>
-          <p class="mt-3">
-            {ADSENSE_CMP_CONFIGURED
-              ? 'Privacy and cookie choices are presented through the configured Google CMP. You can reopen those choices using the Privacy and cookie settings link in the footer.'
-              : 'Advertising is configured, but the Google CMP is not configured yet. Do not serve personalized advertising until a Google-certified CMP integrated with the IAB TCF is enabled for UK, EEA, and Swiss visitors.'}
-          </p>
-        </>
-      ) : (
-        <>
-          <p>
-            No advertising is currently running on this site, and no advertising or ad-personalization
-            cookies are being set. Kit-Bin may display advertising in the future to help cover hosting
-            and development costs.
-          </p>
-          <p class="mt-3">
-            This policy will be updated before advertising or any related tracking technology is
-            activated. Visitors in the UK, EEA, and Switzerland will be asked for consent through a
-            Google-certified consent-management platform before personalized advertising is served.
-          </p>
-        </>
-      )}
+            </a>. {ADSENSE_CMP_CONFIGURED
+              ? 'Privacy and cookie choices for AdSense are presented through the configured Google CMP.'
+              : 'AdSense is configured but its Google CMP is not yet enabled, so personalized AdSense advertising is not served to UK, EEA, or Swiss visitors until that is in place.'}
+          </>
+        ) : (
+          'Google AdSense is not active on Kit-Bin yet. This section will be updated with the details above before AdSense is enabled.'
+        )}
+      </p>
     </section>
 
     <section>

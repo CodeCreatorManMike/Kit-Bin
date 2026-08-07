@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import AdsterraBanner from '../../components/AdsterraBanner.astro';
 import ToolHeader from '../../components/ToolHeader.astro';
 import ToolSchema from '../../components/ToolSchema.astro';
 import FaqAccordion from '../../components/FaqAccordion.astro';
@@ -44,6 +45,10 @@ const faqs = [
     <div><h2 class="tool-h2 text-lg font-semibold">Privacy and limitations</h2><p class="mt-2 text-muted dark:text-slate-400">This page intentionally does not follow remote <code>$ref</code> links. That keeps the validation local, but means any referenced schema must be included in the schema box. Very complex schemas or regular expressions can still make a browser tab slow.</p></div>
     <div><h2 class="tool-h2 text-lg font-semibold">FAQ</h2><div class="mt-3"><FaqAccordion faqs={faqs} /></div></div>
     <p class="text-sm">Need to fix JSON syntax first? Try the <a class="text-primary hover:underline dark:text-blue-400" href="/data/json-formatter">JSON Formatter and Validator</a>. Need to compare two API payloads? Use <a class="text-primary hover:underline dark:text-blue-400" href="/dev/json-diff">JSON Diff</a>.</p>
+  </div>
+
+  <div class="pt-8 sm:pt-12 pb-6 sm:pb-8">
+    <AdsterraBanner placement="tool-page:dev/json-schema-validator" />
   </div>
 
   <script>

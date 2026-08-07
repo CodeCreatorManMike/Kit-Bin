@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import AdsterraBanner from '../../components/AdsterraBanner.astro';
 import ToolHeader from '../../components/ToolHeader.astro';
 import FaqAccordion from '../../components/FaqAccordion.astro';
 import ToolSchema from '../../components/ToolSchema.astro';
@@ -53,6 +54,10 @@ const faqs = [
     </div>
 
     <p class="text-sm">Not sure which format you actually need? <a href="/guides/webp-vs-png-jpg" class="text-primary dark:text-blue-400 hover:underline">Read the comparison</a></p>
+  </div>
+
+  <div class="pt-8 sm:pt-12 pb-6 sm:pb-8">
+    <AdsterraBanner placement="tool-page:image/png-to-webp" />
   </div>
 
   <script>

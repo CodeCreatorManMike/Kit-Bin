@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import AdsterraBanner from '../../components/AdsterraBanner.astro';
 import ToolHeader from '../../components/ToolHeader.astro';
 import FaqAccordion from '../../components/FaqAccordion.astro';
 import ToolSchema from '../../components/ToolSchema.astro';
@@ -86,6 +87,10 @@ const faqs = [
       Need to change the pixel dimensions instead of just the file size? Try{' '}
       <a href="/image/resize" class="text-primary dark:text-blue-400 hover:underline">Resize Image</a>.
     </p>
+  </div>
+
+  <div class="pt-8 sm:pt-12 pb-6 sm:pb-8">
+    <AdsterraBanner placement="tool-page:image/compress" />
   </div>
 
   <script>

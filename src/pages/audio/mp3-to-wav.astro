@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import AdsterraBanner from '../../components/AdsterraBanner.astro';
 import ToolHeader from '../../components/ToolHeader.astro';
 import FaqAccordion from '../../components/FaqAccordion.astro';
 import ToolSchema from '../../components/ToolSchema.astro';
@@ -61,6 +62,10 @@ const faqs = [
       <a href="/audio/trim" class="text-primary dark:text-blue-400 hover:underline">Trim Audio</a>{' '}
       or <a href="/audio/merge" class="text-primary dark:text-blue-400 hover:underline">Merge Audio</a>.
     </p>
+  </div>
+
+  <div class="pt-8 sm:pt-12 pb-6 sm:pb-8">
+    <AdsterraBanner placement="tool-page:audio/mp3-to-wav" />
   </div>
 
   <script>
