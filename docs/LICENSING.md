@@ -23,6 +23,7 @@ versions.
 | Mediabunny | Audio/video processing | Custom permissive license — explicitly allows commercial use in closed-source projects; redistribution obligations apply only if you fork/redistribute the library itself | Yes — preferred over ffmpeg.wasm for this reason |
 | `ffmpeg.wasm` / `@ffmpeg/ffmpeg` | Audio/video processing | Depends on compiled codecs — LGPL core is fine for closed-source with dynamic linking, but many builds bundle GPL components (e.g. libx264), which would obligate the whole product to GPL | **Verify the exact build's codec list before using; prefer Mediabunny where equivalent functionality exists** |
 | `PapaParse` | CSV parsing | MIT | Yes |
+| `ajv` | JSON Schema validation (`/dev/json-schema-validator`) | MIT | Yes |
 | SheetJS (`xlsx`, community edition) | Spreadsheet read/write | Apache-2.0 | Yes |
 | `fflate` | In-browser zipping | MIT | Yes |
 | `gifenc` | GIF encoding (`/video/gif-from-video`) | MIT | Yes — supersedes `gif.js`, faster with comparable quality; already in use |

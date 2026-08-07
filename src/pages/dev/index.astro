@@ -1,0 +1,36 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import AdsterraBanner from '../../components/AdsterraBanner.astro';
+import CategorySchema from '../../components/CategorySchema.astro';
+import ToolCard from '../../components/ToolCard.astro';
+import { tools } from '../../data/tools';
+import { categoryColors, categoryIconPaths } from '../../data/toolIcons';
+
+const devTools = tools.filter((tool) => tool.category === 'dev');
+const meta = categoryColors.dev;
+---
+
+<Layout title="Free Private Developer Tools, JSON, Base64 and SHA-256 | Kit-Bin" description="Validate JSON schemas, compare JSON, encode Base64, and create SHA-256 file hashes without uploading your code, text, or files.">
+  <CategorySchema categoryName="Developer Tools" />
+  <div class="max-w-5xl mx-auto px-6 py-10">
+    <div class="flex items-center gap-3">
+      <span class={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${meta.gradient} text-white shadow-lg shadow-black/10`}>
+        <svg viewBox="0 0 24 24" class="h-5.5 w-5.5" fill="none" stroke="currentColor" stroke-width="1.75">
+          <path d={categoryIconPaths.dev} stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </span>
+      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-ink dark:text-slate-100">Free Private Developer Tools</h1>
+    </div>
+    <p class="mt-3 max-w-2xl text-muted dark:text-slate-400">
+      Validate, compare, encode, and verify data without pasting sensitive values into a remote
+      service. These tools run in this browser tab. Nothing you enter or select is uploaded.
+    </p>
+    <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {devTools.map((tool) => <ToolCard tool={tool} />)}
+    </div>
+
+    <div class="pt-10 pb-2 sm:pt-10 sm:pb-2">
+      <AdsterraBanner placement="dev-category" />
+    </div>
+  </div>
+</Layout>

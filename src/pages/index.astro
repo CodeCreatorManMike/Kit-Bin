@@ -17,6 +17,7 @@ const categoryBlurbs: Record<string, string> = {
   audio: 'Convert, trim, join, and normalize MP3 and WAV audio.',
   video: 'Compress, trim, mute, convert, and extract audio from video files.',
   data: 'Convert and clean CSV, JSON, and Excel-compatible data.',
+  dev: 'Validate, compare, encode, and verify developer data without uploads.',
 };
 
 const categoryGradients: Record<string, string> = {
@@ -25,6 +26,7 @@ const categoryGradients: Record<string, string> = {
   audio: 'from-amber-500/10 via-amber-400/5',
   video: 'from-violet-500/10 via-violet-400/5',
   data: 'from-cyan-500/10 via-cyan-400/5',
+  dev: 'from-sky-500/10 via-indigo-400/5',
 };
 
 const siteSchema = {
@@ -36,21 +38,21 @@ const siteSchema = {
       alternateName: 'Kit-Bin, Private Browser-Based File Tools',
       url: 'https://kit-bin.com/',
       logo: 'https://kit-bin.com/brand/mark.svg',
-      description: 'Kit-Bin builds free, private, browser-based file tools for PDF, images, audio, video, and data. No uploads, no accounts.',
+      description: 'Kit-Bin builds free, private, browser-based tools for PDF, images, audio, video, data, and developer workflows. No uploads, no accounts.',
     },
     {
       '@type': 'WebSite',
       name: 'Kit-Bin',
       url: 'https://kit-bin.com/',
-      description: 'Free private file tools for PDF, images, audio, video, and data, processed entirely in your browser and never uploaded.',
+      description: 'Free private browser tools for PDF, images, audio, video, data, and developer workflows, processed entirely on your device.',
     },
   ],
 };
 ---
 
 <Layout
-  title="Free Online File Tools for PDF, Images, Audio, Video and Data | Kit-Bin"
-  description="Merge PDFs, convert images, trim audio, compress video, and clean CSV files with free browser-based tools. No software installation, and your files never leave your device."
+  title="Free Private File and Developer Tools | Kit-Bin"
+  description="Merge PDFs, convert images, trim audio, compress video, clean CSV files, validate JSON, and create file hashes with browser-based tools. Your data stays on your device."
 >
   <script type="application/ld+json" set:html={JSON.stringify(siteSchema)} is:inline />
 
@@ -72,7 +74,7 @@ const siteSchema = {
         </h1>
         <p class="mt-2 sm:mt-3 text-sm sm:text-lg text-muted dark:text-slate-400 max-w-xl">
           Free tools to merge, compress, convert, resize and edit PDF, image, audio, video and
-          data files directly in your browser.
+          data, and developer files directly in your browser.
         </p>
         <p class="mt-2 text-xs sm:text-sm text-muted dark:text-slate-500">
           <a href="/guides/how-kit-bin-works" class="hover:underline decoration-dotted underline-offset-2"
@@ -106,7 +108,7 @@ const siteSchema = {
   </div>
 
   <div class="max-w-5xl mx-auto px-6 pt-6 sm:pt-10">
-    <div class="grid gap-3 sm:gap-4 grid-cols-2 lg:grid-cols-5">
+    <div class="grid gap-3 sm:gap-4 grid-cols-2 lg:grid-cols-3">
       {categories.map((c, i) => {
         const cc = categoryColors[c.slug];
         return (

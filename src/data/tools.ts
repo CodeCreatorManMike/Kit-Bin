@@ -2,7 +2,7 @@ export interface Tool {
   slug: string;
   name: string;
   description: string;
-  category: 'pdf' | 'image' | 'audio' | 'video' | 'data';
+  category: 'pdf' | 'image' | 'audio' | 'video' | 'data' | 'dev';
   /** Extra search terms for the client-side tool search. These deliberately do
    * NOT get their own URLs; one strong page plus natural synonyms beats a set of
    * near-duplicate keyword pages. See docs/SEO.md. */
@@ -94,6 +94,15 @@ export const tools: Tool[] = [
     aliases: ['combine csv', 'join csv files', 'append csv', 'concatenate csv', 'multiple csv into one'] },
   { slug: '/data/csv-cleaner', name: 'CSV Cleaner', description: 'Trim, dedupe, and clean CSV data.', category: 'data',
     aliases: ['fix csv', 'repair csv', 'clean up spreadsheet', 'remove duplicate rows', 'dedupe csv', 'tidy csv'] },
+
+  { slug: '/dev/json-schema-validator', name: 'JSON Schema Validator', description: 'Check JSON data against a JSON Schema locally.', category: 'dev',
+    aliases: ['json schema checker', 'validate json schema', 'json schema validation', 'openapi schema validator'] },
+  { slug: '/dev/json-diff', name: 'JSON Diff', description: 'Compare two JSON documents and find every change.', category: 'dev',
+    aliases: ['json compare', 'json difference', 'compare json files', 'json diff checker'] },
+  { slug: '/dev/sha256', name: 'SHA-256 File Hash', description: 'Create a SHA-256 checksum for a file in your browser.', category: 'dev',
+    aliases: ['sha256 generator', 'file checksum', 'sha 256 hash', 'verify file hash', 'hash file locally'] },
+  { slug: '/dev/base64', name: 'Base64 Encoder & Decoder', description: 'Encode or decode text as Base64 without sending it anywhere.', category: 'dev',
+    aliases: ['base64 encode', 'base64 decode', 'base 64 converter', 'text to base64', 'decode base64 string'] },
 ];
 
 export const categories = [
@@ -102,4 +111,5 @@ export const categories = [
   { slug: 'audio', name: 'Audio Tools' },
   { slug: 'video', name: 'Video Tools' },
   { slug: 'data', name: 'Data Tools' },
+  { slug: 'dev', name: 'Developer Tools' },
 ] as const;

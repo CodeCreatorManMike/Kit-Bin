@@ -73,6 +73,15 @@ export const categoryColors: Record<string, CategoryColor> = {
     ring: 'ring-cyan-500/15 dark:ring-cyan-400/25',
     glow: 'group-hover:shadow-cyan-500/25',
   },
+  dev: {
+    bg: 'bg-sky-50 dark:bg-sky-950/40',
+    text: 'text-sky-600 dark:text-sky-400',
+    dot: 'bg-sky-400',
+    gradient: 'bg-gradient-to-br from-sky-400 to-indigo-400',
+    tile: 'bg-gradient-to-br from-sky-100 via-sky-50 to-indigo-50 dark:from-sky-500/25 dark:via-sky-500/10 dark:to-indigo-500/10',
+    ring: 'ring-sky-500/15 dark:ring-sky-400/25',
+    glow: 'group-hover:shadow-sky-500/25',
+  },
   guides: {
     bg: 'bg-indigo-50 dark:bg-indigo-950/40',
     text: 'text-indigo-600 dark:text-indigo-400',
@@ -91,6 +100,7 @@ export const categoryIconPaths: Record<string, string> = {
   audio: 'M9 18V5l11-2v13M9 18a3 3 0 11-6 0 3 3 0 016 0zM20 16a3 3 0 11-6 0 3 3 0 016 0z',
   video: 'M4 6a1 1 0 011-1h10a1 1 0 011 1v12a1 1 0 01-1 1H5a1 1 0 01-1-1V6zM16 10l5-3v10l-5-3',
   data: 'M4 5h16v4H4V5zM4 11h7v8H4v-8zM13 11h7v8h-7v-8z',
+  dev: 'M8 4H5a1 1 0 0 0-1 1v3m12-4h3a1 1 0 0 1 1 1v3M8 20H5a1 1 0 0 1-1-1v-3m12 4h3a1 1 0 0 0 1-1v-3M9 9l-3 3 3 3m6-6 3 3-3 3',
   guides: 'M4 5c2-1 6-1 8 0v14c-2-1-6-1-8 0V5zM20 5c-2-1-6-1-8 0v14c2-1 6-1 8 0V5z',
 };
 
@@ -402,6 +412,28 @@ export const toolIcons: Record<string, IconPrimitive[]> = {
     { t: 'rect', x: 2.5, y: 13.5, w: 7, h: 7, rx: 1 },
     { t: 'rect', x: 14.5, y: 8.5, w: 7, h: 7, rx: 1 },
     { t: 'path', d: 'M9.5 7h2.5v5h2.5M9.5 17h2.5v-5' },
+  ],
+
+  // Developer
+  '/dev/json-schema-validator': [
+    { t: 'path', d: 'M8.5 4.5c-2.5 0-2.5 2.8-2.5 7.5s0 7.5 2.5 7.5' },
+    { t: 'path', d: 'M15.5 4.5c2.5 0 2.5 2.8 2.5 7.5s0 7.5-2.5 7.5' },
+    { t: 'path', d: 'M10 12l1.6 1.6L15 10' },
+  ],
+  '/dev/json-diff': [
+    { t: 'rect', x: 3, y: 5, w: 7, h: 14, rx: 1.2 },
+    { t: 'rect', x: 14, y: 5, w: 7, h: 14, rx: 1.2 },
+    { t: 'path', d: 'M11 9h2M11 15h2' },
+  ],
+  '/dev/sha256': [
+    { t: 'fill', d: 'M6 3h8l4 4v14a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z' },
+    { t: 'path', d: 'M6 3h8l4 4v14a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z' },
+    { t: 'path', d: 'M14 3v4h4M8 11h8M8 15h6' },
+  ],
+  '/dev/base64': [
+    { t: 'path', d: 'M8.5 4.5c-2.5 0-2.5 2.8-2.5 7.5s0 7.5 2.5 7.5' },
+    { t: 'path', d: 'M15.5 4.5c2.5 0 2.5 2.8 2.5 7.5s0 7.5-2.5 7.5' },
+    { t: 'path', d: 'M10.5 9h3M10.5 15h3M12 7v10' },
   ],
 
   // Guides

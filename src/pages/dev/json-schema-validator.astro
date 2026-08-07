@@ -1,0 +1,99 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ToolHeader from '../../components/ToolHeader.astro';
+import ToolSchema from '../../components/ToolSchema.astro';
+import FaqAccordion from '../../components/FaqAccordion.astro';
+import AdUnit from '../../components/AdUnit.astro';
+
+const faqs = [
+  { q: 'Is my JSON uploaded?', a: 'No. Your JSON and schema are parsed and validated in this browser tab. Kit-Bin does not receive either document.' },
+  { q: 'Which JSON Schema drafts work?', a: 'The validator supports the JSON Schema draft selected in the menu. Start with draft 2020-12 for a new schema, or select draft-07 for older OpenAPI and API projects.' },
+  { q: 'Can it load remote $ref URLs?', a: 'No. Remote references are deliberately disabled, so validating a private document cannot make a network request. Paste every referenced schema into the schema field instead.' },
+  { q: 'Why does a valid JSON file still fail?', a: 'Valid JSON only means the syntax is correct. Schema validation also checks the required fields, types, patterns, ranges, and other rules in your schema.' },
+];
+---
+
+<Layout title="JSON Schema Validator, Private and Free | Kit-Bin" description="Validate JSON against JSON Schema in your browser. See every validation error without uploading API payloads, configuration, or customer data.">
+  <ToolSchema name="JSON Schema Validator" description="Validate JSON against JSON Schema entirely in your browser, with no uploads." faqs={faqs} />
+  <ToolHeader title="JSON Schema Validator" subtitle="Validate JSON and schemas in your browser. Nothing you paste is uploaded." />
+
+  <div class="max-w-5xl mx-auto px-4">
+    <div class="rounded-2xl border border-border-soft bg-surface p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+      <div class="mb-3 flex flex-wrap items-center gap-3">
+        <label for="draft" class="text-sm font-medium">Schema draft</label>
+        <select id="draft" class="rounded-lg border border-border-soft bg-transparent px-3 py-2 text-sm dark:border-slate-700">
+          <option value="2020">2020-12</option>
+          <option value="07">draft-07</option>
+        </select>
+        <button id="validate" class="ml-auto rounded-xl bg-gradient-to-r from-primary to-violet-500 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-primary/25 transition hover:-translate-y-0.5">Validate JSON</button>
+      </div>
+      <div class="grid gap-4 lg:grid-cols-2">
+        <label class="text-sm font-medium">JSON data<textarea id="data" rows="16" spellcheck="false" class="mt-2 block w-full resize-y rounded-xl border border-border-soft bg-transparent p-3 font-mono text-sm font-normal dark:border-slate-700" placeholder='{"email":"ada@example.com"}'></textarea></label>
+        <label class="text-sm font-medium">JSON Schema<textarea id="schema" rows="16" spellcheck="false" class="mt-2 block w-full resize-y rounded-xl border border-border-soft bg-transparent p-3 font-mono text-sm font-normal dark:border-slate-700" placeholder='{"type":"object","required":["email"]}'></textarea></label>
+      </div>
+      <div id="result" role="status" class="mt-4 hidden rounded-xl px-4 py-3 text-sm"></div>
+      <ul id="errors" class="mt-3 hidden space-y-2 text-sm"></ul>
+    </div>
+  </div>
+
+  <AdUnit />
+
+  <div class="max-w-3xl mx-auto space-y-6 px-4 py-12 text-ink dark:text-slate-300">
+    <p>JSON Schema validation checks structure, not just syntax. Use it before sending an API request, importing a configuration file, or accepting JSON from another system. The validator reports each failing path and rule locally.</p>
+    <div><h2 class="tool-h2 text-lg font-semibold">How to validate JSON against a schema</h2><ol class="mt-2 list-decimal space-y-1 pl-5 text-muted dark:text-slate-400"><li>Paste JSON data on the left.</li><li>Paste its JSON Schema on the right.</li><li>Select the schema draft your project uses.</li><li>Choose Validate JSON and fix the listed paths.</li></ol></div>
+    <div><h2 class="tool-h2 text-lg font-semibold">Privacy and limitations</h2><p class="mt-2 text-muted dark:text-slate-400">This page intentionally does not follow remote <code>$ref</code> links. That keeps the validation local, but means any referenced schema must be included in the schema box. Very complex schemas or regular expressions can still make a browser tab slow.</p></div>
+    <div><h2 class="tool-h2 text-lg font-semibold">FAQ</h2><div class="mt-3"><FaqAccordion faqs={faqs} /></div></div>
+    <p class="text-sm">Need to fix JSON syntax first? Try the <a class="text-primary hover:underline dark:text-blue-400" href="/data/json-formatter">JSON Formatter and Validator</a>. Need to compare two API payloads? Use <a class="text-primary hover:underline dark:text-blue-400" href="/dev/json-diff">JSON Diff</a>.</p>
+  </div>
+
+  <script>
+    import Ajv2020 from 'ajv/dist/2020';
+    import AjvDraft07 from 'ajv';
+    import type { AnySchema } from 'ajv';
+
+    const dataInput = document.querySelector<HTMLTextAreaElement>('#data')!;
+    const schemaInput = document.querySelector<HTMLTextAreaElement>('#schema')!;
+    const draft = document.querySelector<HTMLSelectElement>('#draft')!;
+    const validateButton = document.querySelector<HTMLButtonElement>('#validate')!;
+    const result = document.querySelector<HTMLElement>('#result')!;
+    const errors = document.querySelector<HTMLUListElement>('#errors')!;
+    const successClasses = ['bg-emerald-50', 'text-emerald-800', 'dark:bg-emerald-950/40', 'dark:text-emerald-300'];
+    const errorClasses = ['bg-red-50', 'text-red-800', 'dark:bg-red-950/40', 'dark:text-red-300'];
+
+    function showResult(message: string, valid: boolean) {
+      result.textContent = message;
+      result.classList.remove('hidden', ...successClasses, ...errorClasses);
+      result.classList.add(...(valid ? successClasses : errorClasses));
+    }
+
+    function parse(source: string, label: string): { ok: true; value: unknown } | { ok: false } {
+      try { return { ok: true, value: JSON.parse(source) }; }
+      catch (error) { showResult(`${label} is not valid JSON: ${error instanceof Error ? error.message : 'Unknown parsing error'}`, false); return { ok: false }; }
+    }
+
+    validateButton.addEventListener('click', () => {
+      errors.replaceChildren();
+      errors.classList.add('hidden');
+      const data = parse(dataInput.value, 'JSON data');
+      if (!data.ok) return;
+      const schema = parse(schemaInput.value, 'JSON Schema');
+      if (!schema.ok) return;
+      try {
+        const ajv = draft.value === '2020' ? new Ajv2020({ allErrors: true, strict: false }) : new AjvDraft07({ allErrors: true, strict: false });
+        const validate = ajv.compile(schema.value as AnySchema);
+        if (validate(data.value)) { showResult('Valid. The JSON matches this schema.', true); return; }
+        showResult(`Invalid. ${validate.errors?.length ?? 0} schema rule${validate.errors?.length === 1 ? '' : 's'} failed.`, false);
+        errors.classList.remove('hidden');
+        validate.errors?.forEach((error) => {
+          const item = document.createElement('li');
+          item.className = 'rounded-lg border border-red-200 bg-red-50 px-3 py-2 font-mono text-xs text-red-800 dark:border-red-900/60 dark:bg-red-950/30 dark:text-red-300';
+          const path = error.instancePath || '$';
+          item.textContent = `${path}: ${error.message ?? error.keyword}`;
+          errors.append(item);
+        });
+      } catch (error) {
+        showResult(`The schema could not be compiled: ${error instanceof Error ? error.message : 'Unknown schema error'}`, false);
+      }
+    });
+  </script>
+</Layout>

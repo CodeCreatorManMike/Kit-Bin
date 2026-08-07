@@ -1,0 +1,57 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ToolHeader from '../../components/ToolHeader.astro';
+import ToolSchema from '../../components/ToolSchema.astro';
+import FaqAccordion from '../../components/FaqAccordion.astro';
+import AdUnit from '../../components/AdUnit.astro';
+
+const faqs = [
+  { q: 'Is text uploaded when I encode Base64?', a: 'No. Encoding and decoding happen in this browser tab. Kit-Bin does not receive the text or Base64 value you enter.' },
+  { q: 'Is Base64 encryption?', a: 'No. Base64 is an encoding that makes bytes safe to put in text. Anyone can decode it, so never use it to protect passwords, tokens, or private information.' },
+  { q: 'Does this support emoji and non-English text?', a: 'Yes. The tool converts text with UTF-8 before Base64 encoding, so Unicode characters round-trip correctly.' },
+  { q: 'Why will some Base64 strings not decode?', a: 'The value may be URL-safe Base64, missing padding, or not Base64 at all. This tool accepts ordinary and URL-safe Base64, including values without trailing equals signs.' },
+];
+---
+
+<Layout title="Base64 Encoder and Decoder, Private and Free | Kit-Bin" description="Encode or decode UTF-8 text as Base64 in your browser. No uploads, no account, and no server sees your values.">
+  <ToolSchema name="Base64 Encoder and Decoder" description="Encode or decode UTF-8 text as Base64 entirely in your browser." faqs={faqs} />
+  <ToolHeader title="Base64 Encoder and Decoder" subtitle="Encode and decode locally. Nothing you paste is uploaded." />
+
+  <div class="max-w-4xl mx-auto px-4">
+    <div class="rounded-2xl border border-border-soft bg-surface p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+      <label for="input" class="text-sm font-medium">Text or Base64 value<textarea id="input" rows="8" spellcheck="false" class="mt-2 block w-full resize-y rounded-xl border border-border-soft bg-transparent p-3 font-mono text-sm font-normal dark:border-slate-700" placeholder="Paste plain text to encode, or Base64 to decode"></textarea></label>
+      <div class="mt-4 flex flex-wrap gap-3"><button id="encode" class="rounded-xl bg-gradient-to-r from-primary to-violet-500 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-primary/25 transition hover:-translate-y-0.5">Encode to Base64</button><button id="decode" class="rounded-lg border border-border-soft px-4 py-2 text-sm font-medium dark:border-slate-700">Decode Base64</button><button id="swap" class="rounded-lg border border-border-soft px-4 py-2 text-sm font-medium dark:border-slate-700">Use output as input</button></div>
+      <label for="output" class="mt-4 block text-sm font-medium">Result<textarea id="output" rows="8" readonly spellcheck="false" class="mt-2 block w-full resize-y rounded-xl border border-border-soft bg-app-bg p-3 font-mono text-sm font-normal dark:border-slate-700 dark:bg-slate-950"></textarea></label>
+      <div class="mt-3 flex flex-wrap gap-4 text-sm"><button id="copy" class="text-primary underline hover:no-underline dark:text-blue-400">Copy result</button><button id="clear" class="text-muted underline hover:no-underline dark:text-slate-400">Clear</button></div>
+      <p id="message" role="status" class="mt-4 hidden rounded-xl px-4 py-3 text-sm"></p>
+    </div>
+  </div>
+
+  <AdUnit />
+
+  <div class="max-w-3xl mx-auto space-y-6 px-4 py-12 text-ink dark:text-slate-300">
+    <p>Base64 represents bytes as plain text characters. It is useful for small data values in JSON, data URLs, and configuration, but it is not encryption and normally makes a value about one third larger.</p>
+    <div><h2 class="tool-h2 text-lg font-semibold">Encode and decode safely</h2><p class="mt-2 text-muted dark:text-slate-400">Paste ordinary text and choose Encode to Base64. To decode, paste a Base64 value and choose Decode Base64. This tool supports UTF-8 so names, accents, emoji, and non-Latin text are preserved.</p></div>
+    <div><h2 class="tool-h2 text-lg font-semibold">Base64 is not secret</h2><p class="mt-2 text-muted dark:text-slate-400">Encoding is reversible without a password. Do not treat Base64 as a way to secure a key, password, token, or customer information.</p></div>
+    <div><h2 class="tool-h2 text-lg font-semibold">FAQ</h2><div class="mt-3"><FaqAccordion faqs={faqs} /></div></div>
+    <p class="text-sm">Need to validate structured configuration? Try <a class="text-primary hover:underline dark:text-blue-400" href="/dev/json-schema-validator">JSON Schema Validator</a>.</p>
+  </div>
+
+  <script>
+    const input = document.querySelector<HTMLTextAreaElement>('#input')!;
+    const output = document.querySelector<HTMLTextAreaElement>('#output')!;
+    const message = document.querySelector<HTMLElement>('#message')!;
+    const successClasses = ['bg-emerald-50', 'text-emerald-800', 'dark:bg-emerald-950/40', 'dark:text-emerald-300'];
+    const errorClasses = ['bg-red-50', 'text-red-800', 'dark:bg-red-950/40', 'dark:text-red-300'];
+
+    function showMessage(text: string, valid: boolean) { message.textContent = text; message.classList.remove('hidden', ...successClasses, ...errorClasses); message.classList.add(...(valid ? successClasses : errorClasses)); }
+    function encode(text: string): string { const bytes = new TextEncoder().encode(text); let binary = ''; for (let index = 0; index < bytes.length; index += 0x8000) binary += String.fromCharCode(...bytes.subarray(index, index + 0x8000)); return btoa(binary); }
+    function decode(value: string): string { const normalized = value.trim().replace(/\s/g, '').replace(/-/g, '+').replace(/_/g, '/'); if (!/^[A-Za-z0-9+/]*={0,2}$/.test(normalized)) throw new Error('The value contains characters that are not valid Base64'); const padded = normalized.padEnd(Math.ceil(normalized.length / 4) * 4, '='); const binary = atob(padded); const bytes = Uint8Array.from(binary, (character) => character.charCodeAt(0)); return new TextDecoder('utf-8', { fatal: true }).decode(bytes); }
+
+    document.querySelector<HTMLButtonElement>('#encode')!.addEventListener('click', () => { output.value = encode(input.value); showMessage('Text encoded as Base64 locally.', true); });
+    document.querySelector<HTMLButtonElement>('#decode')!.addEventListener('click', () => { try { output.value = decode(input.value); showMessage('Base64 decoded as UTF-8 text locally.', true); } catch (error) { output.value = ''; showMessage(`Could not decode this value: ${error instanceof Error ? error.message : 'Unknown error'}`, false); } });
+    document.querySelector<HTMLButtonElement>('#swap')!.addEventListener('click', () => { input.value = output.value; output.value = ''; message.classList.add('hidden'); input.focus(); });
+    document.querySelector<HTMLButtonElement>('#clear')!.addEventListener('click', () => { input.value = ''; output.value = ''; message.classList.add('hidden'); input.focus(); });
+    document.querySelector<HTMLButtonElement>('#copy')!.addEventListener('click', async () => { if (!output.value) { showMessage('There is no result to copy.', false); return; } try { await navigator.clipboard.writeText(output.value); showMessage('Result copied to clipboard.', true); } catch { output.select(); showMessage('Clipboard access was blocked. The result is selected, press Ctrl+C or Cmd+C.', false); } });
+  </script>
+</Layout>

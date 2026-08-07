@@ -1,0 +1,98 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ToolHeader from '../../components/ToolHeader.astro';
+import ToolSchema from '../../components/ToolSchema.astro';
+import FaqAccordion from '../../components/FaqAccordion.astro';
+import AdUnit from '../../components/AdUnit.astro';
+
+const faqs = [
+  { q: 'Are my JSON files uploaded?', a: 'No. Both documents are parsed and compared in this browser tab. Kit-Bin never receives the JSON you paste or open.' },
+  { q: 'Does key order matter?', a: 'No. Object keys are compared by name, not the order in which they appear. Array order does matter because an array represents an ordered list.' },
+  { q: 'Can I compare nested JSON?', a: 'Yes. Every result includes a JSON-style path such as $.user.email or $.items[2], including nested objects and arrays.' },
+  { q: 'Does this merge JSON files?', a: 'No. It is a read-only comparison tool. It shows additions, removals, and changed values, but does not choose or write a merged result.' },
+];
+---
+
+<Layout title="JSON Diff Tool, Compare JSON Privately | Kit-Bin" description="Compare two JSON documents in your browser. Find added, removed, and changed values without uploading API payloads or configuration files.">
+  <ToolSchema name="JSON Diff" description="Compare two JSON documents locally and list added, removed, and changed values." faqs={faqs} />
+  <ToolHeader title="Compare JSON Files and Data" subtitle="Compare JSON in your browser. API payloads and configuration stay on your device." />
+
+  <div class="max-w-5xl mx-auto px-4">
+    <div class="rounded-2xl border border-border-soft bg-surface p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+      <div class="grid gap-4 lg:grid-cols-2">
+        <label class="text-sm font-medium">Before<textarea id="before" rows="15" spellcheck="false" class="mt-2 block w-full resize-y rounded-xl border border-border-soft bg-transparent p-3 font-mono text-sm font-normal dark:border-slate-700" placeholder='{"version":1,"enabled":true}'></textarea></label>
+        <label class="text-sm font-medium">After<textarea id="after" rows="15" spellcheck="false" class="mt-2 block w-full resize-y rounded-xl border border-border-soft bg-transparent p-3 font-mono text-sm font-normal dark:border-slate-700" placeholder='{"version":2,"enabled":true,"region":"eu"}'></textarea></label>
+      </div>
+      <div class="mt-4 flex flex-wrap gap-3"><button id="compare" class="rounded-xl bg-gradient-to-r from-primary to-violet-500 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-primary/25 transition hover:-translate-y-0.5">Compare JSON</button><button id="sample" class="rounded-lg border border-border-soft px-4 py-2 text-sm font-medium dark:border-slate-700">Load example</button></div>
+      <p id="message" role="status" class="mt-4 hidden rounded-xl px-4 py-3 text-sm"></p>
+      <div id="results" class="mt-4 hidden overflow-hidden rounded-xl border border-border-soft dark:border-slate-700"><div class="grid grid-cols-[7rem_minmax(0,1fr)] border-b border-border-soft bg-app-bg px-3 py-2 text-xs font-semibold uppercase tracking-wide text-muted dark:border-slate-700 dark:bg-slate-950"><span>Change</span><span>Path and value</span></div><ul id="difference-list" class="divide-y divide-border-soft dark:divide-slate-800"></ul></div>
+    </div>
+  </div>
+
+  <AdUnit />
+
+  <div class="max-w-3xl mx-auto space-y-6 px-4 py-12 text-ink dark:text-slate-300">
+    <p>Use JSON Diff to review API responses, environment configuration, localization files, or generated output. It compares object keys by name and arrays by position, then lists every addition, removal, and value change.</p>
+    <div><h2 class="tool-h2 text-lg font-semibold">How JSON comparison works</h2><p class="mt-2 text-muted dark:text-slate-400">Paste an earlier JSON document and a later one, then choose Compare JSON. The result path starts at <code>$</code>. A path like <code>$.items[2].name</code> means the third item in <code>items</code> has a changed <code>name</code> value.</p></div>
+    <div><h2 class="tool-h2 text-lg font-semibold">When array order matters</h2><p class="mt-2 text-muted dark:text-slate-400">Objects are unordered mappings, so key order does not create a difference. Arrays are ordered, so moving an item appears as changed positions. That is usually the right result for API payloads, but it is not a semantic, ID-based diff.</p></div>
+    <div><h2 class="tool-h2 text-lg font-semibold">FAQ</h2><div class="mt-3"><FaqAccordion faqs={faqs} /></div></div>
+    <p class="text-sm">Need to check structure rather than compare versions? Use <a class="text-primary hover:underline dark:text-blue-400" href="/dev/json-schema-validator">JSON Schema Validator</a>. Need to repair syntax? Use <a class="text-primary hover:underline dark:text-blue-400" href="/data/json-formatter">JSON Formatter and Validator</a>.</p>
+  </div>
+
+  <script>
+    import { findJsonDifferences, jsonPreview, type JsonValue } from '../../lib/dev/json-diff';
+
+    const beforeInput = document.querySelector<HTMLTextAreaElement>('#before')!;
+    const afterInput = document.querySelector<HTMLTextAreaElement>('#after')!;
+    const compareButton = document.querySelector<HTMLButtonElement>('#compare')!;
+    const sampleButton = document.querySelector<HTMLButtonElement>('#sample')!;
+    const message = document.querySelector<HTMLElement>('#message')!;
+    const results = document.querySelector<HTMLElement>('#results')!;
+    const list = document.querySelector<HTMLUListElement>('#difference-list')!;
+    const successClasses = ['bg-emerald-50', 'text-emerald-800', 'dark:bg-emerald-950/40', 'dark:text-emerald-300'];
+    const errorClasses = ['bg-red-50', 'text-red-800', 'dark:bg-red-950/40', 'dark:text-red-300'];
+
+    function showMessage(text: string, valid: boolean) {
+      message.textContent = text;
+      message.classList.remove('hidden', ...successClasses, ...errorClasses);
+      message.classList.add(...(valid ? successClasses : errorClasses));
+    }
+
+    function parse(text: string, label: string): { ok: true; value: JsonValue } | { ok: false } {
+      try { return { ok: true, value: JSON.parse(text) as JsonValue }; }
+      catch (error) { showMessage(`${label} is not valid JSON: ${error instanceof Error ? error.message : 'Unknown parsing error'}`, false); return { ok: false }; }
+    }
+
+    compareButton.addEventListener('click', () => {
+      results.classList.add('hidden');
+      list.replaceChildren();
+      const before = parse(beforeInput.value, 'Before');
+      if (!before.ok) return;
+      const after = parse(afterInput.value, 'After');
+      if (!after.ok) return;
+      const differences = findJsonDifferences(before.value, after.value);
+      if (differences.length === 0) { showMessage('No differences. The two JSON documents are equivalent.', true); return; }
+      showMessage(`${differences.length} difference${differences.length === 1 ? '' : 's'} found.`, true);
+      differences.forEach((difference) => {
+        const item = document.createElement('li');
+        item.className = 'grid grid-cols-[7rem_minmax(0,1fr)] gap-3 px-3 py-3 text-sm';
+        const badge = document.createElement('span');
+        badge.className = difference.kind === 'added' ? 'font-semibold text-emerald-600 dark:text-emerald-400' : difference.kind === 'removed' ? 'font-semibold text-red-600 dark:text-red-400' : 'font-semibold text-amber-600 dark:text-amber-400';
+        badge.textContent = difference.kind;
+        const detail = document.createElement('span');
+        detail.className = 'min-w-0 font-mono text-xs text-ink dark:text-slate-200';
+        detail.textContent = difference.kind === 'changed' ? `${difference.path}: ${jsonPreview(difference.before)} → ${jsonPreview(difference.after)}` : `${difference.path}: ${jsonPreview(difference.kind === 'added' ? difference.after : difference.before)}`;
+        item.append(badge, detail);
+        list.append(item);
+      });
+      results.classList.remove('hidden');
+    });
+
+    sampleButton.addEventListener('click', () => {
+      beforeInput.value = '{\n  "version": 1,\n  "user": { "name": "Ada", "role": "reader" },\n  "tags": ["math", "logic"]\n}';
+      afterInput.value = '{\n  "version": 2,\n  "user": { "name": "Ada", "role": "admin" },\n  "tags": ["math", "code"],\n  "active": true\n}';
+      message.classList.add('hidden');
+      results.classList.add('hidden');
+    });
+  </script>
+</Layout>

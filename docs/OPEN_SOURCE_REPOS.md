@@ -10,6 +10,20 @@ dependency (reference/inspiration only, if even that)
 
 ---
 
+## Developer tools
+
+### 🟢 Ajv — github.com/ajv-validator/ajv
+MIT. Browser-compatible JSON Schema validator used by `/dev/json-schema-validator`. The tool
+uses only locally pasted data and schemas. It never enables `loadSchema`, so a user-provided
+`$ref` cannot trigger a remote fetch. Keep remote references disabled unless the privacy model
+and CSP are deliberately revisited.
+
+### 🟢 Web Crypto API — browser standard
+The browser's built-in `crypto.subtle.digest` powers `/dev/sha256`; no third-party package is
+shipped for hashing. It receives file bytes only in the visitor's browser memory.
+
+---
+
 ## PDF
 
 ### 🟢 pdf-lib — github.com/Pdf-lib/pdf-lib
