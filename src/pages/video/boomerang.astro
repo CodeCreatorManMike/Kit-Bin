@@ -1,0 +1,102 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import AdsterraBanner from '../../components/AdsterraBanner.astro';
+import ToolHeader from '../../components/ToolHeader.astro';
+import FaqAccordion from '../../components/FaqAccordion.astro';
+import ToolSchema from '../../components/ToolSchema.astro';
+import ToolWidget from '../../components/ToolWidget.astro';
+import AdUnit from '../../components/AdUnit.astro';
+
+const faqs = [
+  {
+    q: 'Is there a length limit?',
+    a: "Yes — the first 5 seconds of the source clip. The output plays that forward and then backward, so it ends up close to 10 seconds either way. Reversing means holding every frame in memory before re-encoding, and a longer full-resolution clip would risk crashing the browser tab, especially on a phone.",
+  },
+  {
+    q: "How is this different from just reversing the video?",
+    a: 'Reverse Video plays the whole clip backward, once. This tool plays it forward, then plays the same clip backward right after, so it loops back to where it started — the effect Instagram popularized under the name "Boomerang."',
+  },
+  {
+    q: 'What happens to the audio?',
+    a: "It's removed. The output is a silent MP4 — reversing audio in sync with the reversed half of the video is a separate, more involved problem this tool doesn't attempt.",
+  },
+  {
+    q: 'What format is the output?',
+    a: 'MP4 (H.264), regardless of the input format.',
+  },
+];
+---
+
+<Layout
+  title="Boomerang Video Maker, Free & No Upload Required | Kit-Bin"
+  description="Turn a video clip into a forward-and-back loop in your browser. Runs entirely on your device — your file is never uploaded to a server."
+>
+  <ToolSchema
+    name="Boomerang Video"
+    description="Turn a video clip into a forward-and-back loop in your browser. Runs entirely on your device — your file is never uploaded to a server."
+    faqs={faqs}
+  />
+
+  <ToolHeader title="Make a Boomerang Video" />
+
+  <ToolWidget accept="video/*" dropLabel="Drop a video file here or click to browse" />
+
+  <AdUnit />
+
+  <div class="max-w-2xl mx-auto px-4 py-12 text-ink dark:text-slate-300 space-y-6">
+    <p>
+      Drop a short clip above and this tool plays it forward, then immediately backward, so it
+      loops smoothly back to where it started — the ping-pong effect made popular as "Boomerang."
+      Everything runs in your browser; nothing is uploaded.
+    </p>
+
+    <div>
+      <h2 class="tool-h2 font-semibold text-lg">Why there's a 5-second cap</h2>
+      <p class="text-muted dark:text-slate-400">
+        The output already doubles the frame count of whatever you drop in — forward, then the
+        same frames again in reverse — so the source clip is capped tighter than the plain Reverse
+        Video tool to keep the total processing time and memory usage reasonable. Boomerangs are a
+        short-form format anyway; a 5-second source becomes a roughly 10-second loop.
+      </p>
+    </div>
+
+    <div>
+      <h2 class="tool-h2 font-semibold text-lg pt-2">FAQ</h2>
+      <div class="mt-3">
+        <FaqAccordion faqs={faqs} />
+      </div>
+    </div>
+
+    <p class="text-sm">
+      Just want it played backward once, not looped? Try{' '}
+      <a href="/video/reverse" class="text-primary dark:text-blue-400 hover:underline">Reverse Video</a>.
+    </p>
+    <p class="text-sm">
+      Need to cut down to the right moment first? Use{' '}
+      <a href="/video/trim" class="text-primary dark:text-blue-400 hover:underline">Trim Video</a> before dropping your clip here.
+    </p>
+  </div>
+
+  <div class="pt-8 sm:pt-12 pb-6 sm:pb-8">
+    <AdsterraBanner placement="tool-page:video/boomerang" />
+  </div>
+
+  <script>
+    import { boomerangVideo } from '../../lib/video/boomerang';
+    import { getToolElements, wireTool } from '../../lib/ui';
+
+    const els = getToolElements();
+    wireTool(els, {
+      accept: 'video/*',
+      validate: (files) => (!files[0]?.type.startsWith('video/') ? 'This tool needs a video file.' : null),
+      run: async (files, reportProgress) => {
+        const { blob, truncated } = await boomerangVideo(files[0], reportProgress);
+        return {
+          blob,
+          filename: files[0].name.replace(/\.[^.]+$/, '-boomerang.mp4'),
+          note: truncated ? 'Used the first 5 seconds — the source clip was longer than that.' : undefined,
+        };
+      },
+    });
+  </script>
+</Layout>

@@ -369,6 +369,25 @@ export const toolIcons: Record<string, IconPrimitive[]> = {
     { t: 'path', d: 'M19 9a3 3 0 1 0 0 5' },
     { t: 'path', d: 'M19 11.3h2' },
   ],
+  /** A left-pointing play triangle inside the frame, plus a loop arrow
+   * running backward around it — reads as "playback going the wrong way". */
+  '/video/reverse': [
+    { t: 'fill', d: 'M3 5h18a0 0 0 0 1 0 0v14a0 0 0 0 1 0 0H3a0 0 0 0 1 0 0V5a0 0 0 0 1 0 0z' },
+    { t: 'rect', x: 3, y: 5, w: 18, h: 14, rx: 1.6 },
+    { t: 'path', d: 'M14.5 9l-4 3 4 3z' },
+    { t: 'path', d: 'M18 8.5a4.2 4.2 0 1 0 0 7' },
+    { t: 'path', d: 'M18.6 6.8l-.6 1.7-1.7-.4' },
+  ],
+  /** Two mirrored play triangles, arrows pointing at each other — reads as
+   * "plays out, then plays back". */
+  '/video/boomerang': [
+    { t: 'fill', d: 'M2.5 6h19a0 0 0 0 1 0 0v12a0 0 0 0 1 0 0h-19a0 0 0 0 1 0 0V6a0 0 0 0 1 0 0z' },
+    { t: 'rect', x: 2.5, y: 6, w: 19, h: 12, rx: 1.6 },
+    { t: 'path', d: 'M9 9.5l4 2.5-4 2.5z' },
+    { t: 'path', d: 'M15 9.5l-4 2.5 4 2.5z' },
+    { t: 'path', d: 'M6 8.5l-1.6 1' },
+    { t: 'path', d: 'M18 15.5l1.6-1' },
+  ],
 
   // Data
   '/csv/to-json': [
