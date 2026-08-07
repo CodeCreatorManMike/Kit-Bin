@@ -402,6 +402,16 @@ export const toolIcons: Record<string, IconPrimitive[]> = {
     { t: 'path', d: 'M8 9.5h8M8 12.5h8' },
     { t: 'path', d: 'M9.5 15.5l2.5 2.5 2.5-2.5' },
   ],
+  /** Subject kept solid, background dropped to a checkerboard: the transparency idea. */
+  '/image/remove-background': [
+    { t: 'path', d: 'M3 8.5V6a1.5 1.5 0 0 1 1.5-1.5H7' },
+    { t: 'path', d: 'M17 4.5h2.5A1.5 1.5 0 0 1 21 6v2.5' },
+    { t: 'path', d: 'M21 15.5V18a1.5 1.5 0 0 1-1.5 1.5H17' },
+    { t: 'path', d: 'M7 19.5H4.5A1.5 1.5 0 0 1 3 18v-2.5' },
+    { t: 'fill', d: 'M12 7.2a2.6 2.6 0 1 1 0 5.2 2.6 2.6 0 0 1 0-5.2z' },
+    { t: 'circle', cx: 12, cy: 9.8, r: 2.6 },
+    { t: 'path', d: 'M7.4 17.6a4.8 4.8 0 0 1 9.2 0' },
+  ],
   '/image/remove-metadata': [
     { t: 'rect', x: 3, y: 5, w: 18, h: 14, rx: 1.5 },
     { t: 'circle', cx: 8, cy: 10, r: 1.5 },

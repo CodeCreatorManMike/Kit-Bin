@@ -51,6 +51,8 @@ export const tools: Tool[] = [
     aliases: ['vector to raster', 'svg converter', 'export svg as image', 'rasterise svg', 'rasterize svg'] },
   { slug: '/image/compress-to-size', name: 'Compress Image to Size', description: 'Hit a target file size like 500 KB or 1 MB.', category: 'image',
     aliases: ['under 1mb', 'under 500kb', 'target file size', 'specific file size', 'exact size', 'compress to 100kb', 'email size limit'] },
+  { slug: '/image/remove-background', name: 'Remove Background', description: 'Cut a person out of a photo as a transparent PNG.', category: 'image',
+    aliases: ['background remover', 'remove bg', 'transparent background', 'cut out person', 'delete background', 'erase background', 'png with transparency', 'headshot cutout', 'portrait cutout'] },
   { slug: '/image/remove-metadata', name: 'Remove Image Metadata', description: 'Strip EXIF and GPS location from a photo.', category: 'image',
     aliases: ['exif', 'remove gps', 'remove location from photo', 'strip exif', 'photo privacy', 'clear camera data', 'geotag'] },
   { slug: '/image/rotate', name: 'Rotate Image', description: 'Rotate or flip an image.', category: 'image',

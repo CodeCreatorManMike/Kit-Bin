@@ -1,0 +1,140 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import AdsterraBanner from '../../components/AdsterraBanner.astro';
+import ToolHeader from '../../components/ToolHeader.astro';
+import FaqAccordion from '../../components/FaqAccordion.astro';
+import ToolSchema from '../../components/ToolSchema.astro';
+import ToolWidget from '../../components/ToolWidget.astro';
+import AdUnit from '../../components/AdUnit.astro';
+
+const faqs = [
+  {
+    q: 'Is my photo uploaded to a server?',
+    a: 'No. The model runs inside this browser tab and your photo never leaves your device. The one thing that is downloaded is the model itself, about 40 MB, fetched once from a public model host and then cached by your browser. That download is the same file for everyone and contains nothing about you or your image.',
+  },
+  {
+    q: 'Why is the first run slower than the rest?',
+    a: 'The first run downloads and compiles the model, which takes a few seconds. After that the model is cached, so subsequent images are much quicker. Nothing is re-downloaded per image.',
+  },
+  {
+    q: 'Why is the output a PNG?',
+    a: 'PNG is the common format that supports transparency losslessly. Saving a cutout as JPG would flatten the transparent area back onto a solid colour, usually white, which undoes the thing you just did. If you need a smaller file afterwards, run the PNG through Compress Image or PNG to WebP.',
+  },
+  {
+    q: 'What kind of photos does this work best on?',
+    a: 'Photos of people. The model was trained on human cutout data, so portraits, headshots, and full-body shots are what it is genuinely good at. It also handles a clearly defined object in the foreground reasonably often, but that is outside what it was trained for. On a scene with no obvious subject, such as a landscape, it will usually decide almost nothing is foreground and return a mostly transparent image. That is the model behaving as designed rather than failing.',
+  },
+  {
+    q: 'How well does it handle hair and fur?',
+    a: 'Reasonably, and better than most automatic cutouts, since hair is exactly what human matting models are tuned for. Fine strands against a busy background are still where you are most likely to see a soft or missing edge.',
+  },
+  {
+    q: 'Does it work on my phone?',
+    a: 'Yes, though it is slower than on a desktop. Where the browser supports WebGPU the model runs on the GPU; otherwise it falls back to WebAssembly on the CPU, which works everywhere but takes longer. Very large photos on an older phone can be slow or run out of memory, so try a smaller copy if a run fails.',
+  },
+  {
+    q: 'What happens to the background, can I put a new one behind it?',
+    a: 'The background is made fully transparent rather than replaced. You can drop the resulting PNG onto any colour or image in whatever editor or slide tool you already use.',
+  },
+];
+---
+
+<Layout
+  title="Remove Background From a Photo, Free & Nothing Uploaded | Kit-Bin"
+  description="Cut a person out of a photo and get a transparent PNG. The AI model runs entirely in your browser, so your image is never uploaded to a server."
+>
+  <ToolSchema
+    name="Remove Image Background"
+    description="Cut the background out of a photo and get a transparent PNG. The AI model runs entirely in your browser, so your image is never uploaded to a server."
+    faqs={faqs}
+  />
+
+  <ToolHeader title="Remove the Background From an Image" />
+
+  <ToolWidget
+    accept="image/*"
+    dropLabel="Drop a photo here or click to browse"
+    hint="The model runs on your device. The first run downloads it once, about 40 MB."
+  />
+
+  <AdUnit />
+
+  <div class="max-w-2xl mx-auto px-4 py-12 text-ink dark:text-slate-300 space-y-6">
+    <p>
+      Drop a photo above and this tool separates the subject from its background, then hands back a
+      PNG with the background fully transparent. It is trained on photos of people, so portraits
+      and full-body shots are what it does best. Unlike most background removers, the AI model runs
+      inside this tab rather than on a server, so the picture itself never gets uploaded anywhere.
+    </p>
+
+    <div>
+      <h2 class="tool-h2 font-semibold text-lg">What actually runs on your device</h2>
+      <p class="text-muted dark:text-slate-400">
+        The first time you use this tool your browser downloads a segmentation model, roughly 40 MB,
+        and caches it. From then on it is reused with no further downloads. The model looks at your
+        image and produces a mask marking which pixels belong to the subject; that mask becomes the
+        alpha channel of the PNG you get back. Where your browser supports WebGPU the work runs on
+        the graphics card, which is considerably faster; otherwise it falls back to WebAssembly on
+        the CPU.
+      </p>
+    </div>
+
+    <div>
+      <h2 class="tool-h2 font-semibold text-lg">When it works well, and when it struggles</h2>
+      <p class="text-muted dark:text-slate-400">
+        This model was trained to cut people out of photos, so portraits and full-body shots are
+        where it is strongest, including the hair edges that usually give automatic cutouts
+        trouble. A single well-defined object in the foreground often works too, though that is
+        outside what it was trained on.
+      </p>
+      <p class="mt-2 text-muted dark:text-slate-400">
+        Where it will not help is a photo with no clear subject at all. Give it a landscape and it
+        will generally conclude that almost nothing is foreground and hand back a mostly
+        transparent image. Transparent and reflective things like glass, and subjects that are
+        nearly the same colour as what sits behind them, are the other reliably hard cases. It is
+        worth checking the edges of the result before using it somewhere that matters.
+      </p>
+    </div>
+
+    <div>
+      <h2 class="tool-h2 font-semibold text-lg">FAQ</h2>
+      <div class="mt-3">
+        <FaqAccordion faqs={faqs} />
+      </div>
+    </div>
+
+    <p class="text-sm">
+      Want to shrink the cutout afterwards? Try{' '}
+      <a href="/image/compress" class="text-primary dark:text-blue-400 hover:underline">Compress Image</a>{' '}
+      or <a href="/image/png-to-webp" class="text-primary dark:text-blue-400 hover:underline">PNG to WebP</a>.
+    </p>
+    <p class="text-sm">
+      Need to strip location and camera data instead? Try{' '}
+      <a href="/image/remove-metadata" class="text-primary dark:text-blue-400 hover:underline">Remove Image Metadata</a>.
+    </p>
+  </div>
+
+  <div class="pt-8 sm:pt-12 pb-6 sm:pb-8">
+    <AdsterraBanner placement="tool-page:image/remove-background" />
+  </div>
+
+  <script>
+    import { removeBackground } from '../../lib/image/removeBackground';
+    import { getToolElements, wireTool } from '../../lib/ui';
+
+    const els = getToolElements();
+    wireTool(els, {
+      accept: 'image/*',
+      validate: (files) =>
+        !files[0]?.type.startsWith('image/') ? 'This tool needs an image file.' : null,
+      run: async (files, reportProgress) => {
+        const { blob, usedWebGPU } = await removeBackground(files[0], reportProgress);
+        return {
+          blob,
+          filename: files[0].name.replace(/\.[^.]+$/, '') + '-no-background.png',
+          note: usedWebGPU ? undefined : 'Ran on the CPU, since this browser has no WebGPU.',
+        };
+      },
+    });
+  </script>
+</Layout>

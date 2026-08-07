@@ -20,6 +20,9 @@ versions.
 | ~~`heic2any`~~ | ~~HEIC decode~~ | Claims MIT, but silently inlines a compiled `libheif` (LGPL-3.0) WASM/JS blob into its bundle with **no LGPL notice, no license file, and no separate/relinkable artifact** | **No — removed.** Verified by attempting to re-parse its own output and inspecting `dist/heic2any.js` directly: the LGPL component ships with zero attribution. Do not reintroduce. |
 | `icodec` | Image codecs incl. HEIC | Not evaluated further — same underlying `libheif`/HEVC characteristics as any HEIC decoder; `libheif-js` was chosen instead for its correct LGPL attribution | N/A |
 | `@imgly/background-removal` | Background removal | **AGPL-3.0** | **No — do not ship as-is.** Requires either a commercial license from IMG.LY or replacing with a self-integrated Apache-2.0 model via `onnxruntime-web` directly. |
+| `@huggingface/transformers` | ONNX inference runtime for `/image/remove-background` | Apache-2.0 | Yes |
+| `onnx-community/ormbg-ONNX` (model weights) | Background-removal model | Apache-2.0, and its base model `schirrmacher/ormbg` is also Apache-2.0 | Yes — this is the model actually shipped. See the note below. |
+| ~~`rembg-webgpu`~~ | ~~Background removal~~ | Wrapper is permissive ("RemBG Attribution License, MIT-Compatible", commercial use allowed with visible `www.rembg.com` credit) — **but it hardcodes `briaai/RMBG-1.4`**, which is Creative Commons **non-commercial**; commercial use needs a paid agreement with BRIA | **No — rejected.** Verified by unpacking the published tarball: `dist/init.js` calls `AutoModel.from_pretrained("briaai/RMBG-1.4")` with no override option, so the non-commercial model cannot be swapped out. Kit-Bin is ad-supported, i.e. commercial. Do not reintroduce. |
 | Mediabunny | Audio/video processing | Custom permissive license — explicitly allows commercial use in closed-source projects; redistribution obligations apply only if you fork/redistribute the library itself | Yes — preferred over ffmpeg.wasm for this reason |
 | `ffmpeg.wasm` / `@ffmpeg/ffmpeg` | Audio/video processing | Depends on compiled codecs — LGPL core is fine for closed-source with dynamic linking, but many builds bundle GPL components (e.g. libx264), which would obligate the whole product to GPL | **Verify the exact build's codec list before using; prefer Mediabunny where equivalent functionality exists** |
 | `PapaParse` | CSV parsing | MIT | Yes |
@@ -83,6 +86,31 @@ small site offering free decode-only conversion is known to exist, and effective
 consumer-facing "HEIC to JPG" web tool operates the same way. Revisit only if this project's
 traffic/revenue becomes large enough that the calculus meaningfully changes, or if evidence of
 actual enforcement in this space surfaces — not on a fixed schedule.
+
+## Background removal: why `ormbg` and not the obvious choices
+
+The two most-recommended browser background-removal options are both unusable here, for
+different reasons, and both look fine until you check one level deeper:
+
+- `@imgly/background-removal` is AGPL-3.0 (row above). Obvious once checked.
+- `rembg-webgpu` advertises a permissive, "MIT-compatible" licence, and its own licence really
+  is permissive. The problem is one level down: the **model weights** it downloads are
+  `briaai/RMBG-1.4`, which is non-commercial. A permissive wrapper around a non-commercial model
+  is still non-commercial for our purposes. This is the same shape of trap as the AGPL one, just
+  moved from the package to the checkpoint.
+
+The general rule this establishes: **for anything ML, the package licence and the model licence
+are two separate questions and both have to be checked.** A model card's declared licence also
+does not automatically bind the base model it was converted from, so check that too — which is
+why the table records `schirrmacher/ormbg` (the base) separately from `onnx-community/ormbg-ONNX`
+(the conversion we actually load).
+
+One honest caveat on `ormbg`: the author licenses the weights Apache-2.0 and describes the model
+as fully open source, but its training set includes academic datasets (P3M-10K, AIM-500, PPM-100)
+whose own terms are research-oriented. We are relying on the model author's Apache-2.0 grant on
+the weights, which is the same basis essentially every commercial user of open vision models
+relies on. Worth knowing; not a reason to block, and materially safer than a checkpoint whose
+own card says non-commercial.
 
 ## Practical rule for this project
 
