@@ -32,6 +32,10 @@ export const tools: Tool[] = [
     aliases: ['pdf privacy', 'strip pdf metadata', 'clear document properties', 'remove author from pdf', 'anonymise pdf', 'anonymize pdf'] },
   { slug: '/pdf/reorder-pages', name: 'Reorder PDF Pages', description: 'Change the order of pages in a PDF.', category: 'pdf',
     aliases: ['rearrange pdf', 'move pdf pages', 'organise pdf pages', 'organize pdf pages', 'sort pdf pages', 'page order'] },
+  { slug: '/pdf/delete-pages', name: 'Delete PDF Pages', description: 'Remove selected pages from a PDF.', category: 'pdf',
+    aliases: ['remove pages pdf', 'delete pages from pdf', 'pdf page remover', 'remove blank pages pdf', 'delete pdf pages'] },
+  { slug: '/pdf/to-text', name: 'PDF to Text', description: 'Extract selectable text from a PDF.', category: 'pdf',
+    aliases: ['extract text from pdf', 'pdf to txt', 'copy text from pdf', 'pdf text extractor', 'convert pdf to text'] },
 
   { slug: '/image/heic-to-jpg', name: 'HEIC to JPG', description: 'Convert iPhone photos to JPG.', category: 'image',
     aliases: ['iphone photo', 'heif', 'heic converter', 'apple photo to jpg', 'open iphone photo on windows', 'heic to jpeg'] },
@@ -53,6 +57,8 @@ export const tools: Tool[] = [
     aliases: ['flip image', 'turn photo', 'sideways photo', 'mirror image', 'fix photo orientation', 'rotate photo'] },
   { slug: '/image/crop', name: 'Crop Image', description: 'Crop an image to a custom selection.', category: 'image',
     aliases: ['cut image', 'trim photo', 'crop photo', 'cut out part of a picture'] },
+  { slug: '/image/optimize-svg', name: 'SVG Optimizer', description: 'Clean up and shrink an SVG file.', category: 'image',
+    aliases: ['compress svg', 'minify svg', 'svgo', 'reduce svg size', 'optimize svg online'] },
 
   { slug: '/audio/mp3-to-wav', name: 'MP3 to WAV', description: 'Convert MP3 audio to WAV.', category: 'audio',
     aliases: ['mp3 converter', 'uncompressed audio', 'pcm audio', 'wav converter'] },

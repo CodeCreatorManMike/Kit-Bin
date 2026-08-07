@@ -193,6 +193,19 @@ export const toolIcons: Record<string, IconPrimitive[]> = {
     { t: 'path', d: 'M11.8 17.5H6.2' },
     { t: 'path', d: 'M8.4 15.3 6.2 17.5l2.2 2.2' },
   ],
+  '/pdf/delete-pages': [
+    ...page,
+    { t: 'path', d: 'M8.5 15.5h7' },
+    { t: 'path', d: 'M8.5 19h7' },
+    { t: 'circle', cx: 18.5, cy: 18.5, r: 3.5 },
+    { t: 'path', d: 'M17 18.5h3' },
+  ],
+  '/pdf/to-text': [
+    ...page,
+    { t: 'path', d: 'M8 10h8' },
+    { t: 'path', d: 'M8 13.5h5.5' },
+    { t: 'path', d: 'M8 17h8' },
+  ],
 
   // Image
   '/image/heic-to-jpg': [
@@ -248,6 +261,16 @@ export const toolIcons: Record<string, IconPrimitive[]> = {
   '/image/crop': [
     { t: 'path', d: 'M6 2v13a2 2 0 0 0 2 2h13' },
     { t: 'path', d: 'M2 6h13a2 2 0 0 1 2 2v13' },
+  ],
+  '/image/optimize-svg': [
+    { t: 'circle', cx: 6, cy: 7, r: 1.5 },
+    { t: 'circle', cx: 17.5, cy: 6.5, r: 1.5 },
+    { t: 'circle', cx: 10, cy: 18, r: 1.5 },
+    { t: 'path', d: 'M7.3 7.1l8.7-.5' },
+    { t: 'path', d: 'M6.9 8.3l2.3 8.2' },
+    { t: 'path', d: 'M16.6 7.7l-5.4 9' },
+    { t: 'path', d: 'M19.5 14v5.5' },
+    { t: 'path', d: 'M17.2 16.3l2.3-2.3 2.3 2.3' },
   ],
 
   // Audio

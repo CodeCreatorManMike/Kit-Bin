@@ -1,0 +1,87 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ToolHeader from '../../components/ToolHeader.astro';
+import FaqAccordion from '../../components/FaqAccordion.astro';
+import ToolSchema from '../../components/ToolSchema.astro';
+import ToolWidget from '../../components/ToolWidget.astro';
+import AdUnit from '../../components/AdUnit.astro';
+
+const faqs = [
+  {
+    q: 'Is my SVG uploaded?',
+    a: 'No. The SVG is optimized in your browser. Kit-Bin does not upload the artwork or save a copy of it.',
+  },
+  {
+    q: 'What does SVG optimization change?',
+    a: 'It removes redundant markup and can simplify safe vector data to reduce file size. The output should look the same, but you should always check it before publishing a production asset.',
+  },
+  {
+    q: 'Will optimizing an SVG reduce visual quality?',
+    a: 'SVG is vector markup, not a fixed grid of pixels. Optimization normally reduces code rather than resolution. Some unusual filters, animation, or editor-specific data can behave differently, so review the downloaded file.',
+  },
+  {
+    q: 'Does this make an SVG safe to embed on a website?',
+    a: 'No. Optimization is not a security review or a guarantee that scripts, external references, or unsafe content are removed. Apply your own SVG sanitization policy before serving untrusted files.',
+  },
+  {
+    q: 'Why did the file barely get smaller?',
+    a: 'An SVG that has already been exported cleanly may have little redundant markup left. Detailed paths and embedded images also limit how much its file size can shrink.',
+  },
+];
+---
+
+<Layout
+  title="SVG Optimizer, Compress SVG Files Privately | Kit-Bin"
+  description="Optimize and compress SVG markup in your browser with no upload. Reduce vector file size while keeping control of your artwork."
+>
+  <ToolSchema
+    name="SVG Optimizer"
+    description="Optimize and compress SVG markup in your browser with no upload. Reduce vector file size while keeping control of your artwork."
+    faqs={faqs}
+  />
+
+  <ToolHeader title="Optimize and Compress SVG Files" />
+  <ToolWidget accept="image/svg+xml,.svg" dropLabel="Drop an SVG file here or click to browse" />
+  <AdUnit />
+
+  <div class="max-w-2xl mx-auto px-4 py-12 text-ink dark:text-slate-300 space-y-6">
+    <p>
+      Reduce the markup inside an SVG locally in your browser. The optimizer removes unnecessary
+      data and makes the file more compact, which can help icons, logos, and interface graphics
+      load faster without converting them into pixels.
+    </p>
+    <p class="text-muted dark:text-slate-400">
+      An SVG is code that describes shapes. Optimizing it is different from raster image
+      compression: it does not lower a pixel resolution, but it can simplify paths and remove
+      editor data. Check the optimized asset in the places where you will use it, especially if it
+      contains animation, filters, embedded fonts, or external references. To turn a vector into a
+      fixed image, use <a href="/image/svg-to-png" class="text-primary dark:text-blue-400 hover:underline">SVG to PNG</a>.
+    </p>
+    <div>
+      <h2 class="tool-h2 font-semibold text-lg pt-2">FAQ</h2>
+      <div class="mt-3"><FaqAccordion faqs={faqs} /></div>
+    </div>
+  </div>
+
+  <script>
+    import { optimizeSvg } from '../../lib/image/optimizeSvg';
+    import { getToolElements, wireTool } from '../../lib/ui';
+
+    const formatBytes = (bytes: number) => bytes < 1024 ? `${bytes} B` : `${(bytes / 1024).toFixed(1)} KB`;
+    const els = getToolElements();
+    wireTool(els, {
+      accept: 'image/svg+xml,.svg',
+      validate: (files) => (!files[0]?.name.toLowerCase().endsWith('.svg') ? 'This tool needs an SVG file.' : null),
+      run: async (files, reportProgress) => {
+        reportProgress('Optimizing SVG…');
+        const source = files[0];
+        const blob = await optimizeSvg(source);
+        const difference = source.size - blob.size;
+        const note = difference > 0
+          ? `Saved ${formatBytes(difference)}. ${formatBytes(source.size)} to ${formatBytes(blob.size)}.`
+          : `Optimized locally. ${formatBytes(source.size)} to ${formatBytes(blob.size)}.`;
+        return { blob, filename: source.name.replace(/\.svg$/i, '.optimized.svg'), note };
+      },
+    });
+  </script>
+</Layout>

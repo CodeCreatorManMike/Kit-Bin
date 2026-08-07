@@ -1,0 +1,105 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ToolHeader from '../../components/ToolHeader.astro';
+import FaqAccordion from '../../components/FaqAccordion.astro';
+import ToolSchema from '../../components/ToolSchema.astro';
+import ToolWidget from '../../components/ToolWidget.astro';
+import AdUnit from '../../components/AdUnit.astro';
+
+const faqs = [
+  {
+    q: 'Are my PDF pages uploaded?',
+    a: 'No. Your PDF is opened and rebuilt in your browser. Kit-Bin does not upload the file or keep a copy of it.',
+  },
+  {
+    q: 'How do I choose pages to delete?',
+    a: 'Enter single page numbers or ranges separated by commas, such as 2, 5-7, 11. Page numbers start at 1, and the tool checks them against your PDF before it changes anything.',
+  },
+  {
+    q: 'Will deleting pages lower PDF quality?',
+    a: 'No. The pages you keep are copied into a new PDF without being converted to images, so selectable text and embedded images keep their existing quality.',
+  },
+  {
+    q: 'Can I delete every page?',
+    a: 'No. A PDF needs at least one page. The tool stops and explains the issue if the selected pages would leave an empty document.',
+  },
+  {
+    q: 'Can I undo a deletion?',
+    a: 'Your original file is never changed. Keep it until you have checked the downloaded PDF, then simply run the tool again with a different page list if needed.',
+  },
+];
+---
+
+<Layout
+  title="Delete PDF Pages Online, Private PDF Page Remover | Kit-Bin"
+  description="Remove selected pages from a PDF directly in your browser. No upload, no account, and your original PDF stays unchanged."
+>
+  <ToolSchema
+    name="Delete PDF Pages"
+    description="Remove selected pages from a PDF directly in your browser. No upload, no account, and your original PDF stays unchanged."
+    faqs={faqs}
+  />
+
+  <ToolHeader title="Delete Pages from a PDF" />
+
+  <div class="max-w-2xl mx-auto px-4 mb-4 text-sm">
+    <label for="page-range" class="block mb-2 font-medium text-ink dark:text-slate-200">Pages to delete</label>
+    <input
+      id="page-range"
+      type="text"
+      value="1"
+      placeholder="For example: 2, 5-7, 11"
+      class="w-full rounded-xl border border-border-soft dark:border-slate-700 bg-surface dark:bg-slate-900 px-3 py-2 text-ink dark:text-slate-100 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+    />
+    <p class="mt-2 text-muted dark:text-slate-400">Use commas for separate pages and a range such as 5-7 for consecutive pages.</p>
+  </div>
+
+  <ToolWidget accept="application/pdf" dropLabel="Drop a PDF file here or click to browse" />
+
+  <AdUnit />
+
+  <div class="max-w-2xl mx-auto px-4 py-12 text-ink dark:text-slate-300 space-y-6">
+    <p>
+      Remove unwanted pages, blank pages, or an old cover from a PDF without sending the document
+      anywhere. Enter the pages to remove, drop in your file, and download a new PDF containing the
+      rest. The file you select is only read in your browser and is never modified.
+    </p>
+    <p class="text-muted dark:text-slate-400">
+      This is a page removal tool, not a PDF editor. It keeps the remaining pages in their original
+      order and copies them into a fresh document. If you need to keep a small selection instead,
+      use <a href="/pdf/extract-pages" class="text-primary dark:text-blue-400 hover:underline">Extract PDF Pages</a>.
+      To rearrange pages without removing them, use
+      <a href="/pdf/reorder-pages" class="text-primary dark:text-blue-400 hover:underline"> Reorder PDF Pages</a>.
+    </p>
+    <div>
+      <h2 class="tool-h2 font-semibold text-lg pt-2">FAQ</h2>
+      <div class="mt-3"><FaqAccordion faqs={faqs} /></div>
+    </div>
+  </div>
+
+  <script>
+    import { deletePdfPages } from '../../lib/pdf/deletePages';
+    import { getPageCount, parsePageRanges } from '../../lib/pdf/extractPages';
+    import { getToolElements, wireTool } from '../../lib/ui';
+
+    const rangeInput = document.querySelector<HTMLInputElement>('#page-range')!;
+    const els = getToolElements();
+    wireTool(els, {
+      accept: 'application/pdf',
+      validate: (files) => (files[0]?.type !== 'application/pdf' && !files[0]?.name.toLowerCase().endsWith('.pdf') ? 'This tool needs a PDF file.' : null),
+      run: async (files, reportProgress) => {
+        const file = files[0];
+        reportProgress('Reading PDF…');
+        const pageCount = await getPageCount(file);
+        const pagesToDelete = parsePageRanges(rangeInput.value, pageCount);
+        const result = await deletePdfPages(file, pagesToDelete, reportProgress);
+        const removedCount = pageCount - result.keptCount;
+        return {
+          blob: result.blob,
+          filename: result.filename,
+          note: `Removed ${removedCount} of ${pageCount} page${pageCount === 1 ? '' : 's'}. ${result.keptCount} remain.`,
+        };
+      },
+    });
+  </script>
+</Layout>

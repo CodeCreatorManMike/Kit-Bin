@@ -1,0 +1,83 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ToolHeader from '../../components/ToolHeader.astro';
+import FaqAccordion from '../../components/FaqAccordion.astro';
+import ToolSchema from '../../components/ToolSchema.astro';
+import ToolWidget from '../../components/ToolWidget.astro';
+import AdUnit from '../../components/AdUnit.astro';
+
+const faqs = [
+  {
+    q: 'Is my PDF uploaded to a server?',
+    a: 'No. Text extraction happens entirely in your browser. The PDF and the resulting text file stay on your device.',
+  },
+  {
+    q: 'Can this read scanned PDFs?',
+    a: 'Not yet. This tool extracts the selectable text already inside a PDF. A scan is usually just an image, so it needs OCR before text can be read from it.',
+  },
+  {
+    q: 'Will the TXT file keep the original layout?',
+    a: 'Plain text has no pages, columns, fonts, or positioned elements. The words are preserved where a text layer exists, but complex tables and multi-column layouts may need tidy-up afterwards.',
+  },
+  {
+    q: 'What file do I download?',
+    a: 'You get a UTF-8 .txt file. It opens in TextEdit, Notepad, VS Code, and most other text editors.',
+  },
+  {
+    q: 'Can I use this to copy text from a protected PDF?',
+    a: 'No. The tool only reads PDFs your browser can already open. It does not bypass passwords, permissions, or other document restrictions.',
+  },
+];
+---
+
+<Layout
+  title="PDF to Text Converter, Extract Text Without Uploading | Kit-Bin"
+  description="Extract selectable text from a PDF into a TXT file in your browser. Private, free, and no account required."
+>
+  <ToolSchema
+    name="PDF to Text"
+    description="Extract selectable text from a PDF into a TXT file in your browser. Private, free, and no account required."
+    faqs={faqs}
+  />
+
+  <ToolHeader title="Extract Text from a PDF" />
+  <ToolWidget accept="application/pdf" dropLabel="Drop a PDF file here or click to browse" />
+  <AdUnit />
+
+  <div class="max-w-2xl mx-auto px-4 py-12 text-ink dark:text-slate-300 space-y-6">
+    <p>
+      Turn a text based PDF into a simple TXT file without uploading the document. This is useful
+      when you need to search, quote, archive, or reuse copy from a report, invoice, or document
+      that already contains selectable text.
+    </p>
+    <p class="text-muted dark:text-slate-400">
+      The tool reads the PDF text layer page by page and combines it into one UTF-8 text file.
+      It does not perform OCR, so scanned pages with no selectable text will produce little or no
+      output. PDF layout is also not carried over exactly, particularly for columns and tables.
+      For images of pages, use <a href="/pdf/to-images" class="text-primary dark:text-blue-400 hover:underline">PDF to PNG</a> instead.
+    </p>
+    <div>
+      <h2 class="tool-h2 font-semibold text-lg pt-2">FAQ</h2>
+      <div class="mt-3"><FaqAccordion faqs={faqs} /></div>
+    </div>
+  </div>
+
+  <script>
+    import { pdfToText } from '../../lib/pdf/toText';
+    import { getToolElements, wireTool } from '../../lib/ui';
+
+    const els = getToolElements();
+    wireTool(els, {
+      accept: 'application/pdf',
+      validate: (files) => (files[0]?.type !== 'application/pdf' && !files[0]?.name.toLowerCase().endsWith('.pdf') ? 'This tool needs a PDF file.' : null),
+      run: async (files, reportProgress) => {
+        const result = await pdfToText(files[0], reportProgress);
+        return {
+          blob: result.blob,
+          filename: result.filename,
+          note: `Extracted ${result.characterCount.toLocaleString()} characters from ${result.pageCount} page${result.pageCount === 1 ? '' : 's'}.`,
+        };
+      },
+    });
+  </script>
+</Layout>
