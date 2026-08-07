@@ -61,9 +61,10 @@ function buildOverlay(): HTMLElement {
 
       <div data-kb-ad-wrap class="mt-4" hidden>
         <p class="mb-2 text-xs text-muted dark:text-slate-500">Kit-Bin is free to use. This advertisement helps keep the tools available.</p>
-        <div class="ad-slot text-center" data-ad-placement="processing" role="complementary" aria-label="Advertisement" hidden>
+        <div class="ad-slot mx-auto max-w-[300px] text-center" data-ad-placement="processing" role="complementary" aria-label="Advertisement" hidden>
           <p class="mb-1.5 text-[10px] font-semibold uppercase tracking-widest text-muted/70 dark:text-slate-500">Advertisement</p>
-          <div data-ad-frame class="mx-auto flex min-h-[50px] sm:min-h-[90px] w-full max-w-[728px] items-center justify-center overflow-hidden rounded-xl border border-border-soft/70 dark:border-slate-800/70 bg-app-bg/40 dark:bg-slate-900/30"></div>
+          <div data-ad-frame class="mx-auto flex min-h-[50px] sm:min-h-[250px] w-full max-w-[300px] items-center justify-center overflow-hidden rounded-xl border border-border-soft/70 dark:border-slate-800/70 bg-app-bg/40 dark:bg-slate-900/30"></div>
+          <p class="mt-1.5 text-[11px] text-muted/70 dark:text-slate-500">Ads help keep Kit-Bin free.</p>
         </div>
       </div>
     </div>

@@ -5,18 +5,33 @@
  * `placement` is a stable string used only for the accessible label and the
  * iframe title (there is no per-placement analytics call, since Kit-Bin
  * doesn't run analytics), e.g. "homepage-directory", "pdf-category",
- * "tool-page:pdf-merge". */
+ * "tool-page:pdf-merge".
+ *
+ * `variant` picks the ad size on desktop (mobile always gets 320x50):
+ *   - "leaderboard" (728x90): homepage and category hub top-of-page slots only
+ *   - "sidebar" (160x600): a real page sidebar, none exist on this site yet
+ *   - "auto" (300x250, default): everywhere else */
 interface Props {
   placement: string;
+  variant?: 'leaderboard' | 'sidebar' | 'auto';
   class?: string;
 }
 
-const { placement, class: className = '' } = Astro.props;
+const { placement, variant = 'auto', class: className = '' } = Astro.props;
+
+const maxWidth = variant === 'leaderboard' ? 'max-w-[728px]' : variant === 'sidebar' ? 'max-w-[160px]' : 'max-w-[300px]';
+const minHeight =
+  variant === 'leaderboard'
+    ? 'min-h-[50px] sm:min-h-[90px]'
+    : variant === 'sidebar'
+      ? 'min-h-[50px] sm:min-h-[600px]'
+      : 'min-h-[50px] sm:min-h-[250px]';
 ---
 
 <div
-  class={`ad-slot mx-auto max-w-2xl text-center ${className}`}
+  class={`ad-slot mx-auto text-center ${maxWidth} ${className}`}
   data-ad-placement={placement}
+  data-ad-variant={variant}
   role="complementary"
   aria-label="Advertisement"
   hidden
@@ -26,17 +41,20 @@ const { placement, class: className = '' } = Astro.props;
   </p>
   <div
     data-ad-frame
-    class="mx-auto flex min-h-[50px] sm:min-h-[90px] w-full max-w-[728px] items-center justify-center overflow-hidden rounded-xl border border-border-soft/70 dark:border-slate-800/70 bg-app-bg/40 dark:bg-slate-900/30"
+    class={`mx-auto flex ${minHeight} w-full ${maxWidth} items-center justify-center overflow-hidden rounded-xl border border-border-soft/70 dark:border-slate-800/70 bg-app-bg/40 dark:bg-slate-900/30`}
   >
   </div>
+  <p class="mt-1.5 text-[11px] text-muted/70 dark:text-slate-500">Ads help keep Kit-Bin free.</p>
 </div>
 
 <script>
   import { attachAdSlot } from '../lib/ads/adsterra';
+  import type { AdVariant } from '../lib/ads/adsterra';
 
   const slots = document.querySelectorAll<HTMLElement>('[data-ad-placement]:not([data-ad-bound])');
   slots.forEach((el) => {
     el.dataset.adBound = 'true';
-    attachAdSlot(el, el.dataset.adPlacement ?? 'unknown', { lazy: true });
+    const variant = (el.dataset.adVariant as AdVariant | undefined) ?? 'auto';
+    attachAdSlot(el, el.dataset.adPlacement ?? 'unknown', { lazy: true, variant });
   });
 </script>

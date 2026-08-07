@@ -33,7 +33,7 @@ const meta = categoryColors.pdf;
     <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {pdfTools.slice(0, 4).map((t) => <ToolCard tool={t} />)}
       <div class="col-span-full py-6 sm:py-8">
-        <AdsterraBanner placement="pdf-category" />
+        <AdsterraBanner placement="pdf-category" variant="leaderboard" />
       </div>
       {pdfTools.slice(4).map((t) => <ToolCard tool={t} />)}
     </div>

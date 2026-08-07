@@ -3,6 +3,7 @@
  * <script type="module"> block on any Astro page. */
 
 import { beginProcessingUi } from './ads/processingOverlay';
+import { maybeGateDownload, cancelActiveDownloadGate } from './ads/downloadGate';
 
 export interface ToolElements {
   dropzone: HTMLElement;
@@ -70,9 +71,17 @@ export function showResult(els: ToolElements, blob: Blob, filename: string, note
   void els.result.offsetWidth;
   els.result.classList.add('animate-pop-in');
   els.dropzone.classList.add('hidden');
+
+  // The file is already fully ready and the real download link above is
+  // already populated. This only paints a temporary overlay on top asking
+  // for a 15-second ad view before letting the user click it; it never
+  // delays the file itself, and it does nothing at all if ad consent was
+  // never granted.
+  maybeGateDownload(els.result);
 }
 
 export function reset(els: ToolElements) {
+  cancelActiveDownloadGate();
   if (activeObjectUrl) {
     URL.revokeObjectURL(activeObjectUrl);
     activeObjectUrl = null;

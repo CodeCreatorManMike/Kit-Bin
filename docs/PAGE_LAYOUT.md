@@ -198,15 +198,40 @@ This is the template that matters most — it's where 90%+ of organic traffic la
 
 ## Monetization placement (applies across all templates)
 
-- **One ad unit per tool page**, positioned either directly below the fold (after the upload
-  zone) or in a sidebar on wider viewports — never above or overlapping the upload zone, and
-  never as an interstitial that appears before/during/after processing.
-- Auto-ads (AdSense) are acceptable if configured with the same placement constraint; do not
-  rely on AdSense's automatic placement defaults without reviewing where it puts units relative
-  to the upload zone.
-- No pop-ups, no "click here to download" decoy ads anywhere on the page — this exact pattern is
-  what damaged trust across this entire tool category historically and is explicitly the
-  reputation risk this project is designed to avoid.
+**Updated — this section previously banned any pre-download ad interstitial outright ("never as
+an interstitial that appears before/during/after processing... this exact pattern is what
+damaged trust across this entire tool category historically"). The site owner has since made an
+explicit, informed decision to add exactly that pattern in a bounded form (below). That original
+concern was correct and is still worth reading before touching this code again: a mandatory
+ad-view step is a real UX/trust tradeoff, not a free win, and the implementation below exists
+specifically to keep the two things that concern actually stayed the same as before.**
+
+Live implementation, split across three distinct ad moments — do not conflate them:
+
+1. **Normal page banners** — one `<AdsterraBanner>` per page: after the complete tool list on
+   category hubs (`variant="leaderboard"`, 728x90 desktop / 320x50 mobile) and after
+   FAQ/related-content on every tool page (`variant="auto"`, 300x250 desktop / 320x50 mobile).
+   Purely passive, no interaction required. See `src/components/AdsterraBanner.astro` and
+   `src/lib/ads/adsterra.ts` for the size/variant system.
+2. **Processing-state ad** (`src/lib/ads/processingOverlay.ts`) — shown only after a real
+   operation has been running for 300ms+, purely opportunistic. **`run()` in `ui.ts` is never
+   gated by this** — the file finishes exactly when the underlying `lib/*` function resolves,
+   full stop, regardless of whether an ad loaded, and closing the overlay never cancels or
+   slows the operation.
+3. **Pre-download gate** (`src/lib/ads/downloadGate.ts`) — the actual policy change. Once a
+   result is ready and `showResult()` has already populated the real download link, a 15-second
+   countdown overlay (with an ad and a plain "Ads help keep Kit-Bin free" style explanation)
+   covers the result panel before the download button becomes reachable. The file is not
+   reprocessed or held back; only the moment the user is *allowed to click* is delayed.
+   **Consent is the escape hatch that keeps this from becoming coercive: if ad consent has not
+   been granted, this gate does not run at all and the download is available immediately.**
+   Declining the cookie banner must never cost someone their file — that guarantee predates this
+   gate and still applies.
+
+No pop-ups, no fake/decoy download buttons, no ads that could be mistaken for a tool control —
+that principle is unchanged. What changed is specifically: is a mandatory wait before the *real*
+button acceptable when it's disclosed on-screen and skipped entirely for anyone who declines ads.
+That's a judgment call for the site owner to keep revisiting, not a settled question.
 
 ## Mobile-specific layout notes
 
