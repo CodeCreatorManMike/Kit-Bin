@@ -1,0 +1,24 @@
+---
+/** Cloudflare Web Analytics beacon.
+ *
+ * Cookieless and collects no personal data, which is why it sits outside the
+ * ad consent gate — unlike the Adsterra/AdSense scripts it never stores or
+ * reads anything on the visitor's device. It only ever sees page URLs, never
+ * anything about the files a tool is processing.
+ *
+ * Renders nothing until a real token is set in site-config, so a fresh clone
+ * builds and runs without silently pointing analytics at someone else's site.
+ */
+import { CF_ANALYTICS_TOKEN, CF_ANALYTICS_CONFIGURED } from '../data/site-config';
+---
+
+{
+  CF_ANALYTICS_CONFIGURED && (
+    <script
+      is:inline
+      defer
+      src="https://static.cloudflareinsights.com/beacon.min.js"
+      data-cf-beacon={JSON.stringify({ token: CF_ANALYTICS_TOKEN })}
+    />
+  )
+}

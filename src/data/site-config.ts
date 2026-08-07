@@ -27,4 +27,14 @@ export const ADSENSE_CONFIGURED =
 export const ADSENSE_CMP_CONFIGURED =
   ADSENSE_CONFIGURED && ADSENSE_CMP_SCRIPT_URL.startsWith('https://');
 
+/**
+ * Cloudflare Web Analytics. Cookieless and privacy-preserving, so it does not
+ * need consent the way the ad scripts do. The beacon is only emitted once a
+ * real token is pasted here; until then the component renders nothing.
+ * Token comes from the Cloudflare dashboard (Web Analytics > your site).
+ */
+export const CF_ANALYTICS_TOKEN = 'REPLACE_WITH_CF_WEB_ANALYTICS_TOKEN';
+
+export const CF_ANALYTICS_CONFIGURED = /^[a-f0-9]{32}$/.test(CF_ANALYTICS_TOKEN);
+
 export const CONTACT_EMAIL = 'info@kit-bin.com';
