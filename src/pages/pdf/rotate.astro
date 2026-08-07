@@ -44,7 +44,7 @@ const faqs = [
     </select>
   </div>
 
-  <ToolWidget accept="application/pdf" dropLabel="Drop a PDF file here or click to browse" />
+  <ToolWidget accept="application/pdf" multiple dropLabel="Drop PDF files here or click to browse" />
 
   <AdUnit />
 
@@ -87,11 +87,14 @@ const faqs = [
     const els = getToolElements();
     wireTool(els, {
       accept: 'application/pdf',
-      validate: (files) => (files[0]?.type !== 'application/pdf' ? 'This tool needs a PDF file.' : null),
-      run: async (files) => {
+      multiple: true,
+      batchZipName: 'kit-bin-rotated-pdfs.zip',
+      validate: (files) =>
+        files.some((f) => f.type !== 'application/pdf') ? 'This tool only accepts PDF files.' : null,
+      runEach: async (file) => {
         const amount = parseInt(select.value, 10) as 90 | 180 | 270;
-        const blob = await rotatePdf(files[0], amount);
-        return { blob, filename: files[0].name.replace(/\.pdf$/i, '-rotated.pdf') };
+        const blob = await rotatePdf(file, amount);
+        return { blob, filename: file.name.replace(/\.pdf$/i, '-rotated.pdf') };
       },
     });
   </script>

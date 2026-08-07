@@ -47,7 +47,7 @@ const faqs = [
     <span class="text-muted dark:text-slate-400">Height scales automatically.</span>
   </div>
 
-  <ToolWidget accept="image/*" dropLabel="Drop an image here or click to browse" />
+  <ToolWidget accept="image/*" multiple dropLabel="Drop images here or click to browse" />
 
   <AdUnit />
 
@@ -83,17 +83,17 @@ const faqs = [
     const els = getToolElements();
     wireTool(els, {
       accept: 'image/*',
-      validate: (files) => (!files[0]?.type.startsWith('image/') ? 'This tool needs an image file.' : null),
-      run: async (files) => {
+      multiple: true,
+      batchZipName: 'kit-bin-resized-images.zip',
+      validate: (files) =>
+        files.some((f) => !f.type.startsWith('image/')) ? 'This tool only accepts image files.' : null,
+      runEach: async (file) => {
         const width = Math.max(1, parseInt(widthInput.value, 10) || 800);
-        const { blob, mimeType } = await resizeImage(files[0], width);
+        const { blob, mimeType } = await resizeImage(file, width);
         // Formats Canvas can't re-encode (GIF, BMP, ...) silently become PNG —
         // rename the output so the extension matches what's actually inside.
-        const originalName = files[0].name;
         const filename =
-          mimeType === files[0].type
-            ? originalName
-            : originalName.replace(/\.[^.]+$/, '') + '.png';
+          mimeType === file.type ? file.name : file.name.replace(/\.[^.]+$/, '') + '.png';
         return { blob, filename };
       },
     });

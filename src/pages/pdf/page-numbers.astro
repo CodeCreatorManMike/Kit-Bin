@@ -69,7 +69,7 @@ const faqs = [
     </div>
   </div>
 
-  <ToolWidget accept="application/pdf" dropLabel="Drop a PDF file here or click to browse" />
+  <ToolWidget accept="application/pdf" multiple dropLabel="Drop PDF files here or click to browse" />
 
   <AdUnit />
 
@@ -126,18 +126,21 @@ const faqs = [
 
     wireTool(els, {
       accept: 'application/pdf',
-      validate: (files) => (files[0]?.type !== 'application/pdf' ? 'This tool needs a PDF file.' : null),
-      run: async (files) => {
+      multiple: true,
+      batchZipName: 'kit-bin-numbered-pdfs.zip',
+      validate: (files) =>
+        files.some((f) => f.type !== 'application/pdf') ? 'This tool only accepts PDF files.' : null,
+      runEach: async (file) => {
         const parsed = parseInt(startInput.value, 10);
         if (!Number.isFinite(parsed) || parsed < 0) {
           throw new Error('The starting number needs to be 0 or higher.');
         }
-        const blob = await addPageNumbers(files[0], {
+        const blob = await addPageNumbers(file, {
           position: positionSelect.value as PageNumberPosition,
           startAt: parsed,
           skipFirstPage: skipFirst.checked,
         });
-        return { blob, filename: files[0].name.replace(/\.pdf$/i, '-numbered.pdf') };
+        return { blob, filename: file.name.replace(/\.pdf$/i, '-numbered.pdf') };
       },
     });
   </script>

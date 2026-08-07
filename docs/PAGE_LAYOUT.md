@@ -176,6 +176,31 @@ This is the template that matters most — it's where 90%+ of organic traffic la
 - For multi-file tools (merge, batch operations later), show a reorderable list of selected
   files, not just a count.
 
+### Batch processing (multiple files, one operation)
+
+Tools where the operation is per-file and document-agnostic accept a queue of files and return
+a single ZIP. This is handled centrally in `src/lib/ui.ts`, not per page: `wireTool` takes
+either `run(files, report)` (the tool consumes all files at once — merge, images-to-PDF) or
+`runEach(file, report)` + `batchZipName` (per-file, batched). A page opts in with `multiple` on
+`<ToolWidget>` plus `multiple: true` in the `wireTool` options, and its `validate` must check
+*every* file, not just `files[0]`.
+
+Batch semantics, all implemented in `runBatch`:
+
+- Files are processed **sequentially**, deliberately — parallel WASM decodes kill mobile tabs.
+- Status text is prefixed `File 2 of 5: …` so progress stays legible across the queue.
+- One file's failure does not fail the batch; failures are skipped and reported as
+  "N files skipped." Only an all-failed batch throws.
+- A batch that yields exactly one output returns that file **un-zipped**, under its own name —
+  a user who drops one file should never receive a ZIP.
+- Zipping uses `src/lib/zip.ts` at `level: 0` (stored). Outputs are already-compressed formats,
+  so deflating them costs CPU and saves nothing.
+
+Tools currently **not** batched, on purpose: page-range tools (`extract-pages`, `delete-pages` —
+a range from one document is meaningless against another), tools that already emit a ZIP
+(`split`, `to-images` — batching would nest archives), and many→one tools (`merge`,
+`images-to-pdf`).
+
 ### Processing state
 
 - Always show *something* moving (progress bar with real percentage where the library exposes
