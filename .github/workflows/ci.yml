@@ -1,0 +1,50 @@
+name: CI
+
+# Runs on every push and PR to main. The point is narrow: prove the site still
+# builds. `main` has shipped broken at least once — a committed import pointing
+# at a file that was never committed — and `astro build` catches that class of
+# mistake in seconds.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# A second push to the same branch cancels the first; no value in finishing a
+# run against superseded code.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          # Matches the >=22.12.0 engines constraint in package.json. Astro 7
+          # will not run on Node 20.
+          node-version: '22.12'
+          cache: npm
+
+      # `ci`, not `install` — installs exactly what package-lock.json pins and
+      # fails if the lockfile is out of sync with package.json, which is the
+      # signal we want rather than something to work around.
+      #
+      # --ignore-scripts because nothing in the build needs a postinstall to
+      # run: esbuild and sharp resolve their platform binaries through
+      # optionalDependencies, and onnxruntime-node's postinstall would pull a
+      # large native binary this site never uses (the browser runs
+      # onnxruntime-web). Verified from a clean clone. It's also one less
+      # place for a compromised transitive dependency to execute code.
+      - run: npm ci --ignore-scripts
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Build
+        run: npm run build
