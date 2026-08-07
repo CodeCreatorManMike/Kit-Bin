@@ -58,28 +58,36 @@ const privacyDescription =
         could be mistaken for part of a tool.
       </p>
       <p class="mt-3">
-        Your download is never gated behind an advertisement. The moment a tool finishes processing,
-        the download is available, whatever your cookie choice. If you have accepted advertising
-        cookies, a banner may appear alongside the progress indicator while the file is genuinely
-        being processed, and it disappears as soon as the file is ready. It never delays the file
-        and never sits between you and the download button.
+        After a tool finishes processing your file, and only if you have accepted advertising
+        cookies, the download button is covered by a short 15-second panel showing a countdown and
+        one video advertisement, served by HilltopAds, before the button becomes clickable. This is
+        the one place on the site a video ad is shown — everywhere else, ads are the static banners
+        described above. Your file is never reprocessed or held back during this wait; it was
+        already finished before the countdown started, and the 15-second wait itself runs on a
+        fixed timer independent of the video, so a slow or unavailable ad never extends it. If you
+        have declined advertising cookies, or have not yet chosen, this step does not happen at all
+        and the download button is available immediately.
       </p>
       <p class="mt-3">
-        Adsterra's advertising resources are not requested at all until you accept the cookie banner
-        shown on your first visit. If you decline, or before you choose either way, no advertising
-        script or advertising cookie loads, and every tool continues to work exactly the same either
+        Adsterra's and HilltopAds' advertising resources are not requested at all until you accept
+        the cookie banner shown on your first visit. If you decline, or before you choose either
+        way, no advertising script or advertising cookie loads, and every tool continues to work
+        exactly the same either
         way. You can change your choice at any time using{' '}
         <strong>Privacy and cookie settings</strong> in the footer, which also removes any advertising
         already loaded on the page.
       </p>
       <p class="mt-3">
-        Once loaded, Adsterra and its advertising partners may use cookies, pixels, or similar
-        technologies for ad delivery, measurement, and fraud prevention, and where permitted,
-        limited personalization. This is entirely separate from how your files are handled: the
-        advertising code runs in an isolated frame and is never given a file's name, contents, or any
-        conversion setting. Kit-Bin does not pass any of that information to Adsterra, intentionally
-        or otherwise, because the advertising component has no access to the file-processing code at
-        all.
+        Once loaded, Adsterra, HilltopAds, and their advertising partners may use cookies, pixels,
+        or similar technologies for ad delivery, measurement, and fraud prevention, and where
+        permitted, limited personalization. This is entirely separate from how your files are
+        handled: neither advertiser is ever given a file's name, contents, or any conversion
+        setting, because the advertising code has no access to the file-processing code at all.
+        Adsterra's banners run in an isolated frame. The download-gate video ad runs through
+        Google's IMA SDK (the standard library sites use to play video ads, regardless of who sold
+        the ad) rather than an isolated frame, since that SDK requires direct access to a video
+        element to work — it only ever requests and plays a video ad, and is never given anything
+        related to your file.
       </p>
       <p class="mt-3">
         {ADSENSE_CONFIGURED ? (

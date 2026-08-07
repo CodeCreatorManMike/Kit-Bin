@@ -220,9 +220,14 @@ Live implementation, split across three distinct ad moments — do not conflate 
    slows the operation.
 3. **Pre-download gate** (`src/lib/ads/downloadGate.ts`) — the actual policy change. Once a
    result is ready and `showResult()` has already populated the real download link, a 15-second
-   countdown overlay (with an ad and a plain "Ads help keep Kit-Bin free" style explanation)
-   covers the result panel before the download button becomes reachable. The file is not
-   reprocessed or held back; only the moment the user is *allowed to click* is delayed.
+   countdown overlay covers the result panel before the download button becomes reachable. Unlike
+   every other ad placement on the site, this one plays a real video ad — a HilltopAds VAST tag
+   played via Google's IMA SDK (`src/lib/ads/hilltopVast.ts`), not an Adsterra banner. Do not mix
+   the two systems: `attachAdSlot`/Adsterra is for banners/processing only, `playVastAd` is for
+   this gate only. The 15-second wall-clock timer is the sole unlock authority — it does not
+   extend or shorten based on whether the video actually finishes, errors, or fails to load, so a
+   broken ad response can never trap a user behind their own already-finished file. The file is
+   not reprocessed or held back; only the moment the user is *allowed to click* is delayed.
    **Consent is the escape hatch that keeps this from becoming coercive: if ad consent has not
    been granted, this gate does not run at all and the download is available immediately.**
    Declining the cookie banner must never cost someone their file — that guarantee predates this
