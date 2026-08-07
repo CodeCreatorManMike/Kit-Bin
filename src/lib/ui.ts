@@ -4,6 +4,7 @@
 
 import { beginProcessingUi } from './ads/processingOverlay';
 import { maybeGateDownload, cancelActiveDownloadGate } from './ads/downloadGate';
+import { zipOutputs, type NamedBlob } from './zip';
 
 export interface ToolElements {
   dropzone: HTMLElement;
@@ -95,14 +96,86 @@ export function reset(els: ToolElements) {
 
 export type ProgressReporter = (message: string) => void;
 
-interface WireOptions {
+export interface ToolOutput {
+  blob: Blob;
+  filename: string;
+  note?: string;
+}
+
+interface WireOptionsBase {
   accept: string;
   multiple?: boolean;
   validate?: (files: File[]) => string | null;
-  run: (
-    files: File[],
-    reportProgress: ProgressReporter,
-  ) => Promise<{ blob: Blob; filename: string; note?: string }>;
+}
+
+interface WireOptionsAll extends WireOptionsBase {
+  /** Handed every selected file at once, for tools whose whole point is
+   * combining them (merge, images-to-pdf). Mutually exclusive with runEach. */
+  run: (files: File[], reportProgress: ProgressReporter) => Promise<ToolOutput>;
+  runEach?: never;
+}
+
+interface WireOptionsEach extends WireOptionsBase {
+  run?: never;
+  /** Handed one file at a time. wireTool runs these in sequence, reports
+   * "file N of M", and zips the outputs when there is more than one, so an
+   * individual tool never has to know about batching or zipping.
+   *
+   * Sequential on purpose: these operations are CPU- and memory-heavy (WASM
+   * codecs, PDF documents, a segmentation model), and running them
+   * concurrently on a phone is a reliable way to get the tab killed. */
+  runEach: (file: File, reportProgress: ProgressReporter) => Promise<ToolOutput>;
+  /** Names the archive when a batch produces more than one file. */
+  batchZipName?: string;
+}
+
+type WireOptions = WireOptionsAll | WireOptionsEach;
+
+/** Run a per-file operation across a whole selection and package the result.
+ *
+ * One failure does not lose the rest of the batch: a file that throws is
+ * recorded and skipped, the run continues, and the note on the result says how
+ * many were skipped. Losing nine good conversions because the tenth file was
+ * corrupt is the worst possible outcome here. */
+async function runBatch(
+  files: File[],
+  opts: WireOptionsEach,
+  report: ProgressReporter,
+): Promise<ToolOutput> {
+  const outputs: NamedBlob[] = [];
+  const failed: string[] = [];
+
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+    const prefix = files.length > 1 ? `File ${i + 1} of ${files.length}: ` : '';
+    try {
+      const out = await opts.runEach(file, (message) => report(`${prefix}${message}`));
+      outputs.push({ blob: out.blob, filename: out.filename });
+    } catch (err) {
+      console.error(`Batch item failed: ${file.name}`, err);
+      failed.push(file.name);
+    }
+  }
+
+  if (outputs.length === 0) {
+    throw new Error(
+      files.length === 1
+        ? 'that file could not be processed'
+        : 'none of those files could be processed',
+    );
+  }
+
+  const skipped = failed.length > 0 ? ` ${failed.length} file${failed.length > 1 ? 's' : ''} skipped.` : '';
+
+  // A single output stays a single file. Wrapping one PNG in a zip just to be
+  // consistent would make the common case worse.
+  if (outputs.length === 1) {
+    return { ...outputs[0], note: skipped.trim() || undefined };
+  }
+
+  report('Packaging your files…');
+  const zipped = await zipOutputs(outputs, opts.batchZipName ?? 'kit-bin-files.zip');
+  return { ...zipped, note: `${outputs.length} files.${skipped}` };
 }
 
 /** Wires drag/drop + click-to-browse + processing + result for a single tool.
@@ -128,10 +201,14 @@ export function wireTool(els: ToolElements, opts: WireOptions) {
     const processingUi = beginProcessingUi();
 
     try {
-      const { blob, filename, note } = await opts.run(files, (message) => {
+      const report: ProgressReporter = (message) => {
         setStatus(els, message);
         processingUi.setStatusText(message);
-      });
+      };
+
+      const { blob, filename, note } = opts.runEach
+        ? await runBatch(files, opts, report)
+        : await opts.run(files, report);
       processingUi.finish();
       setStatus(els, null);
       showResult(els, blob, filename, note);

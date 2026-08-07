@@ -39,7 +39,7 @@ const faqs = [
 
   <ToolHeader title="Compress a PDF Without Uploading It" />
 
-  <ToolWidget accept="application/pdf" dropLabel="Drop a PDF file here or click to browse" />
+  <ToolWidget accept="application/pdf" multiple dropLabel="Drop PDF files here or click to browse" />
 
   <AdUnit />
 
@@ -111,12 +111,16 @@ const faqs = [
     const els = getToolElements();
     wireTool(els, {
       accept: 'application/pdf',
-      validate: (files) => (files[0]?.type !== 'application/pdf' ? 'This tool needs a PDF file.' : null),
-      run: async (files, reportProgress) => {
-        const { blob, originalSize, compressedSize } = await compressPdf(files[0], 60, reportProgress);
+      multiple: true,
+      batchZipName: 'kit-bin-compressed-pdfs.zip',
+      validate: (files) =>
+        files.some((f) => f.type !== 'application/pdf') ? 'This tool only accepts PDF files.' : null,
+      runEach: async (file, reportProgress) => {
+        const { blob, originalSize, compressedSize } = await compressPdf(file, 60, reportProgress);
         const pct = Math.round((1 - compressedSize / originalSize) * 100);
+        // Only surfaced for a single file; a batch shows a file count instead.
         const note = `${formatBytes(originalSize)} → ${formatBytes(compressedSize)}${pct > 0 ? ` (${pct}% smaller)` : ''}`;
-        return { blob, filename: files[0].name.replace(/\.pdf$/i, '-compressed.pdf'), note };
+        return { blob, filename: file.name.replace(/\.pdf$/i, '-compressed.pdf'), note };
       },
     });
   </script>

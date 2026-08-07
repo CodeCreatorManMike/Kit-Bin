@@ -40,7 +40,7 @@ const faqs = [
     <input id="watermark-text" type="text" value="CONFIDENTIAL" class="rounded border border-border-soft dark:border-slate-700 bg-surface dark:bg-slate-900 text-ink dark:text-slate-100 px-2 py-1" />
   </div>
 
-  <ToolWidget accept="application/pdf" dropLabel="Drop a PDF file here or click to browse" />
+  <ToolWidget accept="application/pdf" multiple dropLabel="Drop PDF files here or click to browse" />
 
   <AdUnit />
 
@@ -76,10 +76,13 @@ const faqs = [
     const els = getToolElements();
     wireTool(els, {
       accept: 'application/pdf',
-      validate: (files) => (files[0]?.type !== 'application/pdf' ? 'This tool needs a PDF file.' : null),
-      run: async (files) => {
-        const blob = await watermarkPdf(files[0], textInput.value || 'CONFIDENTIAL');
-        return { blob, filename: files[0].name.replace(/\.pdf$/i, '-watermarked.pdf') };
+      multiple: true,
+      batchZipName: 'kit-bin-watermarked-pdfs.zip',
+      validate: (files) =>
+        files.some((f) => f.type !== 'application/pdf') ? 'This tool only accepts PDF files.' : null,
+      runEach: async (file) => {
+        const blob = await watermarkPdf(file, textInput.value || 'CONFIDENTIAL');
+        return { blob, filename: file.name.replace(/\.pdf$/i, '-watermarked.pdf') };
       },
     });
   </script>

@@ -42,7 +42,7 @@ const faqs = [
   />
 
   <ToolHeader title="Extract Text from a PDF" />
-  <ToolWidget accept="application/pdf" dropLabel="Drop a PDF file here or click to browse" />
+  <ToolWidget accept="application/pdf" multiple dropLabel="Drop PDF files here or click to browse" />
   <AdUnit />
 
   <div class="max-w-2xl mx-auto px-4 py-12 text-ink dark:text-slate-300 space-y-6">
@@ -74,9 +74,14 @@ const faqs = [
     const els = getToolElements();
     wireTool(els, {
       accept: 'application/pdf',
-      validate: (files) => (files[0]?.type !== 'application/pdf' && !files[0]?.name.toLowerCase().endsWith('.pdf') ? 'This tool needs a PDF file.' : null),
-      run: async (files, reportProgress) => {
-        const result = await pdfToText(files[0], reportProgress);
+      multiple: true,
+      batchZipName: 'kit-bin-pdf-text.zip',
+      validate: (files) =>
+        files.some((f) => f.type !== 'application/pdf' && !f.name.toLowerCase().endsWith('.pdf'))
+          ? 'This tool only accepts PDF files.'
+          : null,
+      runEach: async (file, reportProgress) => {
+        const result = await pdfToText(file, reportProgress);
         return {
           blob: result.blob,
           filename: result.filename,

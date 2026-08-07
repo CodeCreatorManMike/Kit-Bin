@@ -11,7 +11,69 @@ import encodePng from '@jsquash/png/encode';
 import decodeWebp from '@jsquash/webp/decode';
 import encodeWebp from '@jsquash/webp/encode';
 
-export type SupportedMime = 'image/jpeg' | 'image/png' | 'image/webp';
+export type SupportedMime = 'image/jpeg' | 'image/png' | 'image/webp' | 'image/avif' | 'image/jxl' | 'image/qoi';
+
+/** AVIF/JXL/QOI are dynamically imported rather than statically, like the
+ * three above. Their encoder payloads are large (avif_enc is ~3.3MB, jxl_enc
+ * ~1.3MB) and most tools never touch them — a static import would drag that
+ * weight into the shared chunk every image page loads. */
+// Typed as the 8-bit path we actually use. The published declarations are
+// overloaded for 10/12/16-bit surfaces this site never touches, and pulling
+// `.default` out of a dynamic import collapses those overloads onto the
+// high-bit-depth one, which then rejects a plain ImageData.
+type Decode8 = (buffer: ArrayBuffer) => Promise<ImageData | null>;
+type Encode8 = (data: ImageData, options?: Record<string, unknown>) => Promise<ArrayBuffer>;
+
+const lazy = {
+  decodeAvif: () => import('@jsquash/avif/decode').then((m) => m.default as unknown as Decode8),
+  encodeAvif: () => import('@jsquash/avif/encode').then((m) => m.default as unknown as Encode8),
+  decodeJxl: () => import('@jsquash/jxl/decode').then((m) => m.default as unknown as Decode8),
+  encodeJxl: () => import('@jsquash/jxl/encode').then((m) => m.default as unknown as Encode8),
+  decodeQoi: () => import('@jsquash/qoi/decode').then((m) => m.default as unknown as Decode8),
+  encodeQoi: () => import('@jsquash/qoi/encode').then((m) => m.default as unknown as Encode8),
+};
+
+/** jSquash's AVIF/JXL decoders resolve to null rather than throwing on some
+ * malformed inputs; normalise that into the throw the caller expects. */
+async function required(result: ImageData | null): Promise<ImageData> {
+  if (!result) throw new Error('That image could not be decoded.');
+  return result;
+}
+
+/** QOI has no IANA-registered media type and browsers report an empty string
+ * for it, so type sniffing has to fall back to the extension. AVIF and JXL
+ * are registered, but Safari/Firefox still hand back '' for .jxl. */
+export function sniffMime(file: File | Blob): string {
+  if (file.type) return file.type;
+  const name = (file as File).name?.toLowerCase() ?? '';
+  if (name.endsWith('.qoi')) return 'image/qoi';
+  if (name.endsWith('.jxl')) return 'image/jxl';
+  if (name.endsWith('.avif')) return 'image/avif';
+  return '';
+}
+
+const EXTENSIONS: Record<string, string> = {
+  'image/jpeg': 'jpg',
+  'image/jpg': 'jpg',
+  'image/png': 'png',
+  'image/webp': 'webp',
+  'image/avif': 'avif',
+  'image/jxl': 'jxl',
+  'image/qoi': 'qoi',
+};
+
+/** Rewrites a filename's extension to match what the bytes actually are.
+ * Returns the name unchanged for mime types we have no mapping for. */
+export function renameToMime(filename: string, mimeType: string): string {
+  const ext = EXTENSIONS[mimeType];
+  if (!ext) return filename;
+  const current = filename.toLowerCase().match(/\.([^.]+)$/)?.[1];
+  // Leave a correct-but-differently-spelled extension alone (.jpeg stays
+  // .jpeg) — only rewrite when it actually disagrees with the bytes.
+  if (current && EXTENSIONS[`image/${current}`] === ext) return filename;
+  const base = filename.replace(/\.[^.]+$/, '');
+  return `${base}.${ext}`;
+}
 
 async function toArrayBuffer(file: File | Blob): Promise<ArrayBuffer> {
   return file.arrayBuffer();
@@ -60,7 +122,7 @@ async function decodeSvgViaImg(source: Blob): Promise<ImageData> {
 /** Decodes a raster image to ImageData using the matching jSquash codec.
  * Falls back to Canvas decode for formats jSquash doesn't cover (SVG). */
 export async function decodeImage(file: File | Blob): Promise<ImageData> {
-  const type = file.type;
+  const type = sniffMime(file);
 
   // JPEG/WebP may carry an EXIF orientation tag. jSquash's raw WASM decode
   // returns un-rotated pixels and ignores it; only createImageBitmap (used
@@ -84,11 +146,21 @@ export async function decodeImage(file: File | Blob): Promise<ImageData> {
     if (type === 'image/jpeg' || type === 'image/jpg') return await decodeJpeg(buffer);
     if (type === 'image/png') return await decodePng(buffer);
     if (type === 'image/webp') return await decodeWebp(buffer);
+    if (type === 'image/avif') return await required(await (await lazy.decodeAvif())(buffer));
+    if (type === 'image/jxl') return await required(await (await lazy.decodeJxl())(buffer));
+    if (type === 'image/qoi') return await required(await (await lazy.decodeQoi())(buffer));
   } catch {
     // Fall through to Canvas decode below — some real-world files are
     // mislabeled or use encoder quirks the WASM codec rejects.
   }
-  return decodeViaCanvas(file);
+  try {
+    return await decodeViaCanvas(file);
+  } catch {
+    // Canvas is a dead end for JXL and QOI (no browser decodes either), so a
+    // failure here means the file itself is bad, not that we picked the wrong
+    // path. Say that instead of surfacing a bare createImageBitmap error.
+    throw new Error("That file couldn't be decoded — it may be corrupt or not the format its extension claims.");
+  }
 }
 
 /** Encodes ImageData to the given format using the matching jSquash codec. */
@@ -99,6 +171,23 @@ export async function encodeImage(imageData: ImageData, targetMime: SupportedMim
   }
   if (targetMime === 'image/webp') {
     const buf = await encodeWebp(imageData, { quality });
+    return new Blob([buf], { type: targetMime });
+  }
+  if (targetMime === 'image/avif') {
+    // libavif takes a constant-quality level, not a quality percentage, and
+    // it runs backwards: 0 is lossless, 63 is worst. Map our 0-100 scale onto
+    // it so callers keep one consistent quality argument.
+    const cqLevel = Math.round((1 - quality / 100) * 63);
+    const buf = await (await lazy.encodeAvif())(imageData, { cqLevel });
+    return new Blob([buf], { type: targetMime });
+  }
+  if (targetMime === 'image/jxl') {
+    const buf = await (await lazy.encodeJxl())(imageData, { quality });
+    return new Blob([buf], { type: targetMime });
+  }
+  if (targetMime === 'image/qoi') {
+    // QOI is lossless by design — no quality knob exists.
+    const buf = await (await lazy.encodeQoi())(imageData);
     return new Blob([buf], { type: targetMime });
   }
   const buf = await encodePng(imageData);

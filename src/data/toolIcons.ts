@@ -250,6 +250,30 @@ export const toolIcons: Record<string, IconPrimitive[]> = {
     { t: 'circle', cx: 16.2, cy: 9, r: 0.85 },
     { t: 'path', d: 'M13.5 13.4l2.4-2.2 1.6 1.4 1.5-1.3 3 2.6' },
   ],
+  /** Small dense tile → large plain tile: AVIF's compactness unpacking to JPG. */
+  '/image/avif-to-jpg': [
+    { t: 'fill', d: 'M2 6h5.5v9H2z' },
+    { t: 'rect', x: 2, y: 6, w: 5.5, h: 9, rx: 1.4 },
+    { t: 'path', d: 'M3.3 9.2h2.9' },
+    { t: 'path', d: 'M3.3 11.4h2.9' },
+    { t: 'path', d: 'M9 10.5h2.8' },
+    { t: 'path', d: 'M10.4 8.7l1.8 1.8-1.8 1.8' },
+    { t: 'rect', x: 13.5, y: 6, w: 8.5, h: 9, rx: 1.4 },
+    { t: 'circle', cx: 16.2, cy: 9, r: 0.85 },
+    { t: 'path', d: 'M13.5 13.4l2.4-2.2 1.6 1.4 1.5-1.3 3 2.6' },
+  ],
+  /** Mirror of the above, so the pair can't be confused at card size. */
+  '/image/jpg-to-avif': [
+    { t: 'fill', d: 'M2 6h8.5v9H2z' },
+    { t: 'rect', x: 2, y: 6, w: 8.5, h: 9, rx: 1.4 },
+    { t: 'circle', cx: 4.7, cy: 9, r: 0.85 },
+    { t: 'path', d: 'M2 13.4l2.4-2.2 1.6 1.4 1.5-1.3 3 2.6' },
+    { t: 'path', d: 'M12 10.5h2.8' },
+    { t: 'path', d: 'M13.4 8.7l1.8 1.8-1.8 1.8' },
+    { t: 'rect', x: 16.5, y: 6, w: 5.5, h: 9, rx: 1.4 },
+    { t: 'path', d: 'M17.8 9.2h2.9' },
+    { t: 'path', d: 'M17.8 11.4h2.9' },
+  ],
   '/image/svg-to-png': [
     { t: 'circle', cx: 6, cy: 7, r: 1.6 },
     { t: 'circle', cx: 18, cy: 7, r: 1.6 },
@@ -401,6 +425,16 @@ export const toolIcons: Record<string, IconPrimitive[]> = {
     { t: 'rect', x: 3, y: 4, w: 18, h: 16, rx: 1.5 },
     { t: 'path', d: 'M8 9.5h8M8 12.5h8' },
     { t: 'path', d: 'M9.5 15.5l2.5 2.5 2.5-2.5' },
+  ],
+  /** Subject kept solid, background dropped to a checkerboard: the transparency idea. */
+  '/image/remove-background': [
+    { t: 'path', d: 'M3 8.5V6a1.5 1.5 0 0 1 1.5-1.5H7' },
+    { t: 'path', d: 'M17 4.5h2.5A1.5 1.5 0 0 1 21 6v2.5' },
+    { t: 'path', d: 'M21 15.5V18a1.5 1.5 0 0 1-1.5 1.5H17' },
+    { t: 'path', d: 'M7 19.5H4.5A1.5 1.5 0 0 1 3 18v-2.5' },
+    { t: 'fill', d: 'M12 7.2a2.6 2.6 0 1 1 0 5.2 2.6 2.6 0 0 1 0-5.2z' },
+    { t: 'circle', cx: 12, cy: 9.8, r: 2.6 },
+    { t: 'path', d: 'M7.4 17.6a4.8 4.8 0 0 1 9.2 0' },
   ],
   '/image/remove-metadata': [
     { t: 'rect', x: 3, y: 5, w: 18, h: 14, rx: 1.5 },

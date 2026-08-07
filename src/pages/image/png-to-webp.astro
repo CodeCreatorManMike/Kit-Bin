@@ -35,7 +35,7 @@ const faqs = [
 
   <ToolHeader title="Convert PNG Images to WebP" />
 
-  <ToolWidget accept="image/png" dropLabel="Drop a PNG image here or click to browse" />
+  <ToolWidget accept="image/png" multiple dropLabel="Drop PNG images here or click to browse" />
 
   <AdUnit />
 
@@ -67,10 +67,13 @@ const faqs = [
     const els = getToolElements();
     wireTool(els, {
       accept: 'image/png',
-      validate: (files) => (files[0]?.type !== 'image/png' ? 'This tool needs a PNG file.' : null),
-      run: async (files) => {
-        const blob = await convertImageFormat(files[0], 'image/webp');
-        return { blob, filename: files[0].name.replace(/\.png$/i, '.webp') };
+      multiple: true,
+      batchZipName: 'kit-bin-png-to-webp.zip',
+      validate: (files) =>
+        files.some((f) => f.type !== 'image/png') ? 'This tool only accepts PNG files.' : null,
+      runEach: async (file) => {
+        const blob = await convertImageFormat(file, 'image/webp');
+        return { blob, filename: file.name.replace(/\.png$/i, '.webp') };
       },
     });
   </script>
