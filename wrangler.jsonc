@@ -3,10 +3,17 @@
   // Worker that serves static assets directly. No Astro adapter, no SSR
   // runtime, no bindings: this site is 100% client-side by design (see
   // docs/ARCHITECTURE.md), so there is nothing here for `@astrojs/cloudflare`
-  // to adapt. Deploy command stays `npx wrangler deploy`; it just uploads
-  // whatever `npm run build` already produced in dist/.
+  // to adapt.
+  //
+  // The dashboard's "Build command" is set to None, so nothing else runs
+  // `npm run build` before `npx wrangler deploy`. The `build.command` below
+  // makes wrangler itself run it first, every time, regardless of dashboard
+  // settings, so this doesn't silently break again if that setting changes.
   "name": "toolkit",
   "compatibility_date": "2026-08-07",
+  "build": {
+    "command": "npm run build"
+  },
   "assets": {
     "directory": "./dist"
   }
