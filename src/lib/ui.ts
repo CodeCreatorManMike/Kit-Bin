@@ -75,7 +75,7 @@ export function showResult(els: ToolElements, blob: Blob, filename: string, note
 
   // The file is already fully ready and the real download link above is
   // already populated. This only paints a temporary overlay on top asking
-  // for a 15-second ad view before letting the user click it; it never
+  // for a 10-second ad view before letting the user click it; it never
   // delays the file itself, and it does nothing at all if ad consent was
   // never granted.
   maybeGateDownload(els.result);

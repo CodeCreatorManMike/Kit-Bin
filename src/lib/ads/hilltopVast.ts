@@ -138,7 +138,7 @@ export async function playVastAd(
   // downloadGate.ts) means the frame always exactly matches the creative,
   // landscape or portrait, on any viewport, with nothing cropped or barred.
   video.style.cssText =
-    'display:block;width:auto;height:auto;max-width:100%;max-height:min(70vh,480px);background:#000;';
+    'display:block;width:auto;height:auto;max-width:100%;max-height:min(80vh,720px);background:#000;';
 
   const firedQuartiles = new Set<string>();
   let impressionFired = false;
