@@ -89,6 +89,10 @@ export const tools: Tool[] = [
     aliases: ['video to audio', 'rip audio', 'get sound from video', 'separate audio from video', 'video to mp3'] },
   { slug: '/video/gif-from-video', name: 'Video to GIF', description: 'Turn a video clip into a GIF.', category: 'video',
     aliases: ['make a gif', 'gif maker', 'animated gif from video', 'mp4 to gif', 'convert clip to gif'] },
+  { slug: '/video/reverse', name: 'Reverse Video', description: 'Play a video clip backward.', category: 'video',
+    aliases: ['play video backwards', 'backwards video', 'reverse a clip', 'flip video playback', 'undo video effect'] },
+  { slug: '/video/boomerang', name: 'Boomerang Video', description: 'Turn a clip into a forward-and-back loop.', category: 'video',
+    aliases: ['boomerang maker', 'ping pong video', 'loop video back and forth', 'instagram boomerang effect', 'forward and reverse loop'] },
 
   { slug: '/csv/to-json', name: 'CSV to JSON', description: 'Convert a CSV file to JSON.', category: 'data',
     aliases: ['spreadsheet to json', 'csv converter', 'table to json', 'csv parser'] },

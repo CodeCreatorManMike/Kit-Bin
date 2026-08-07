@@ -224,6 +224,28 @@ JXL and QOI are supported at the codec layer — they work in compress/resize/co
 pages, per the "Programmatic scaling" rule in `docs/SEO.md`: format-pair pages get added when
 Search Console shows demand, not speculatively.
 
+### Video frame-reordering tools (Reverse, Boomerang)
+
+`/video/reverse` and `/video/boomerang` (`src/lib/video/frameOps.ts` +
+`reverse.ts`/`boomerang.ts`) are architecturally different from every other video tool: the rest
+route file→file through mediabunny's high-level `Conversion` API (`src/lib/video/convert.ts`),
+which streams and never holds a whole clip in memory. Reordering frames can't stream — the last
+frame has to be known before the first frame of the output is written — so these two decode a
+capped, downscaled set of frames into memory first (`CanvasSink`), reorder them, then re-encode
+(`CanvasSource` → MP4/AVC).
+
+That's why they're the only video tools with a hard duration cap (10s for reverse, 5s for
+boomerang — boomerang's output is roughly double its input in frame count, so its source cap is
+tighter) and a fixed downscale (`MAX_WIDTH = 360`) regardless of what other video tools allow.
+The caps were sized from a real measurement, not guessed: at 320×240 the encode path measured
+~130 fps and ~300KB per buffered frame; at full portrait-phone resolution (1080×1920) that's
+~8MB/frame, and an uncapped 30s clip would need several gigabytes in the tab. `gifFromVideo.ts`
+established this same pattern (fixed sample FPS, capped duration, capped width) for the same
+reason.
+
+Audio is dropped in both — reversing audio in sync with reversed video is separate work these
+tools don't attempt, and the pages say so rather than silently producing a mismatched track.
+
 ### Processing state
 
 - Always show *something* moving (progress bar with real percentage where the library exposes

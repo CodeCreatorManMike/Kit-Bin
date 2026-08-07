@@ -1,0 +1,104 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import AdsterraBanner from '../../components/AdsterraBanner.astro';
+import ToolHeader from '../../components/ToolHeader.astro';
+import FaqAccordion from '../../components/FaqAccordion.astro';
+import ToolSchema from '../../components/ToolSchema.astro';
+import ToolWidget from '../../components/ToolWidget.astro';
+import AdUnit from '../../components/AdUnit.astro';
+
+const faqs = [
+  {
+    q: 'Is there a length limit?',
+    a: "Yes, the first 10 seconds of the clip. Reversing works by decoding every frame into memory before re-encoding, and a full-length, full-resolution video would use several gigabytes of memory in the browser tab — enough to crash it, especially on a phone. If your video is longer than 10 seconds, trim it down first with Trim Video, then reverse the part you want.",
+  },
+  {
+    q: 'What happens to the audio?',
+    a: "It's removed. Reversing audio in sync with reversed video is a different, more involved problem, and this tool focuses on doing the video side well within its time limit. The output is a silent MP4.",
+  },
+  {
+    q: 'Why is the resolution lower than my original?',
+    a: 'The clip is downscaled during processing to keep memory usage manageable in the browser. This tool is built for short social-style clips, not preserving broadcast-quality footage.',
+  },
+  {
+    q: 'What format is the output?',
+    a: 'MP4 (H.264), regardless of the input format.',
+  },
+];
+---
+
+<Layout
+  title="Reverse a Video Online, Free & No Upload Required | Kit-Bin"
+  description="Play a video clip backward in your browser. Runs entirely on your device — your file is never uploaded to a server."
+>
+  <ToolSchema
+    name="Reverse Video"
+    description="Play a video clip backward in your browser. Runs entirely on your device — your file is never uploaded to a server."
+    faqs={faqs}
+  />
+
+  <ToolHeader title="Reverse a Video Clip" />
+
+  <ToolWidget accept="video/*" dropLabel="Drop a video file here or click to browse" />
+
+  <AdUnit />
+
+  <div class="max-w-2xl mx-auto px-4 py-12 text-ink dark:text-slate-300 space-y-6">
+    <p>
+      Drop a short video clip above and this tool plays it backward — the classic "someone jumps
+      out of the pool" effect. Processing happens entirely in your browser: every frame is decoded,
+      reversed, and re-encoded on your device.
+    </p>
+
+    <div>
+      <h2 class="tool-h2 font-semibold text-lg">Why there's a 10-second cap</h2>
+      <p class="text-muted dark:text-slate-400">
+        Reversing a video means holding every one of its frames in memory at once before writing
+        the output back out in reverse order — there's no way to stream a reversal the way most
+        conversions can. A short, downscaled clip is the difference between this running smoothly
+        on a phone and it running out of memory. If you need more than 10 seconds reversed, use{' '}
+        <a href="/video/trim" class="text-primary dark:text-blue-400 hover:underline">Trim Video</a>{' '}
+        first to cut down to the part you want.
+      </p>
+    </div>
+
+    <div>
+      <h2 class="tool-h2 font-semibold text-lg pt-2">FAQ</h2>
+      <div class="mt-3">
+        <FaqAccordion faqs={faqs} />
+      </div>
+    </div>
+
+    <p class="text-sm">
+      Want it to loop forward and back instead of just playing in reverse? Try{' '}
+      <a href="/video/boomerang" class="text-primary dark:text-blue-400 hover:underline">Boomerang Video</a>.
+    </p>
+    <p class="text-sm">
+      Need the audio too? <a href="/video/extract-audio" class="text-primary dark:text-blue-400 hover:underline">Extract Audio</a>{' '}
+      pulls the original track out separately.
+    </p>
+  </div>
+
+  <div class="pt-8 sm:pt-12 pb-6 sm:pb-8">
+    <AdsterraBanner placement="tool-page:video/reverse" />
+  </div>
+
+  <script>
+    import { reverseVideo } from '../../lib/video/reverse';
+    import { getToolElements, wireTool } from '../../lib/ui';
+
+    const els = getToolElements();
+    wireTool(els, {
+      accept: 'video/*',
+      validate: (files) => (!files[0]?.type.startsWith('video/') ? 'This tool needs a video file.' : null),
+      run: async (files, reportProgress) => {
+        const { blob, truncated } = await reverseVideo(files[0], reportProgress);
+        return {
+          blob,
+          filename: files[0].name.replace(/\.[^.]+$/, '-reversed.mp4'),
+          note: truncated ? 'Reversed the first 10 seconds — the source clip was longer than that.' : undefined,
+        };
+      },
+    });
+  </script>
+</Layout>
