@@ -61,6 +61,24 @@ async function decodeSvgViaImg(source: Blob): Promise<ImageData> {
  * Falls back to Canvas decode for formats jSquash doesn't cover (SVG). */
 export async function decodeImage(file: File | Blob): Promise<ImageData> {
   const type = file.type;
+
+  // JPEG/WebP may carry an EXIF orientation tag. jSquash's raw WASM decode
+  // returns un-rotated pixels and ignores it; only createImageBitmap (used
+  // by decodeViaCanvas) applies it, matching what every browser shows as
+  // the "upright" image. Decoding those two formats via Canvas keeps every
+  // tool (compress, resize, rotate, format conversion) consistent with what
+  // the user actually sees in a preview — otherwise a portrait phone photo
+  // comes out sideways from every tool except the ones already using
+  // createImageBitmap directly.
+  if (type === 'image/jpeg' || type === 'image/jpg' || type === 'image/webp') {
+    try {
+      return await decodeViaCanvas(file);
+    } catch {
+      // Some real-world files are mislabeled or use encoder quirks Canvas
+      // rejects — fall through to the raw jSquash decode below.
+    }
+  }
+
   const buffer = await toArrayBuffer(file);
   try {
     if (type === 'image/jpeg' || type === 'image/jpg') return await decodeJpeg(buffer);

@@ -15,8 +15,11 @@ backend for the core tool set — no server ever receives a user's file, no data
 anything, and hosting cost stays near-zero regardless of traffic because the visitor's own
 device does the processing work.
 
-Monetized via display ads (AdSense) and an optional donation link, both placed to never
-interfere with the actual tool UI.
+Monetized via Adsterra display ads and an optional donation link, both placed to never gate the
+actual file processing. Google AdSense is scaffolded and ready (publisher ID + `ads.txt`
+already committed) but stays disabled — `ADSENSE_ENABLED = false` in
+[`src/data/site-config.ts`](src/data/site-config.ts) — until the account is approved and the
+remaining slot ID / CMP values are filled in; see [`docs/ADSENSE_SETUP.md`](docs/ADSENSE_SETUP.md).
 
 ## Why client-side
 
@@ -35,9 +38,9 @@ deliberately out of scope or deferred until a server-fallback tier is built — 
 
 | Layer | Choice |
 |---|---|
-| Framework | Astro (static output, minimal per-page JS) |
-| Styling | Tailwind CSS |
-| Hosting / deploy | Cloudflare Pages, auto-deploys on every push to `main` (see Deployment below) |
+| Framework | Astro (static output, no adapter — `output: "static"`, minimal per-page JS) |
+| Styling | Tailwind CSS v4 (CSS-first config, `@theme` tokens in `global.css`) |
+| Hosting / deploy | Cloudflare Worker (`toolkit`) serving `dist/` as static assets via `wrangler.jsonc` — Git-connected, auto-builds on every push to `main` (see Deployment below). Not Cloudflare Pages. |
 | CI validation gate | Self-hosted GitLab CE, triggered by a GitHub webhook (see CI/CD Pipeline below) |
 | Processing | Per-tool WASM/JS modules, lazy-loaded per page — see [`docs/TOOL_SPECS.md`](docs/TOOL_SPECS.md) for the library behind each tool |
 | Analytics | Privacy-respecting, aggregate-only (Cloudflare Web Analytics) |
@@ -57,22 +60,29 @@ Open `http://localhost:4321` (Astro default — confirm against `package.json` i
 changed).
 
 ```bash
-npm run build      # static build → dist/
-npm run preview    # preview the production build locally
-npm run lint
-npm run typecheck
+npm run build          # static build → dist/
+npm run preview        # preview the production build locally
+npm run typecheck      # astro check
+npm run adsense:check  # validates AdSense config once ADSENSE_ENABLED is flipped on
 ```
+
+No lint script yet — add one (ESLint) when it's worth the setup cost, not before.
 
 ## Deployment
 
-Production deployment is **Cloudflare Pages**, connected directly to this GitHub repo:
+Production deployment is a **Cloudflare Worker** named `toolkit`, Git-connected directly to
+this GitHub repo — **not Cloudflare Pages**. `wrangler.jsonc` at the repo root points
+`assets.directory` at `dist/` and declares `build.command: "npm run build"`, so `wrangler
+deploy` always builds fresh before serving, regardless of the dashboard's own build-command
+setting.
 
-- Every push to `main` triggers an automatic build (`npm run build` → `dist/`) and deploy —
-  no manual step required.
-- Every pull request gets its own unique preview URL automatically.
-- Custom domain: `kit-bin.com`, attached via Cloudflare's dashboard with automatic SSL.
-- Full manual setup steps (for a fresh environment, or a new collaborator's reference):
-  [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) and [`docs/SETUP_CHECKLIST.md`](docs/SETUP_CHECKLIST.md).
+- Every push to `main` triggers an automatic `npm run build` + `wrangler deploy` — no manual
+  step required.
+- Custom domain: `kit-bin.com`, attached to the Worker via Cloudflare's dashboard with
+  automatic SSL.
+- No Astro adapter is used or needed — this site has no SSR/dynamic routes and no bindings, so
+  `@astrojs/cloudflare` (which unconditionally provisions Images + KV Sessions bindings) does
+  not belong here. Do not reintroduce it.
 
 ## CI/CD Pipeline (validation gate — not the deployment mechanism)
 
@@ -168,22 +178,23 @@ etc.) and update the webhook URL with the new one afterward.
 ```
 /src
   /pages
-    index.astro          # homepage
-    /pdf/                 # category hub + one .astro file per tool
-    /image/
-    /audio/
-    /video/
-    /csv/
-    /guides/               # explainer content layer — see docs/GUIDES.md
+    index.astro            # homepage
+    /pdf/  /image/  /audio/ /video/  /data/  /dev/   # category hub + one .astro file per tool
+    /csv/  /json/          # a few legacy tool routes predating the /data/ and /dev/ hubs
+    /guides/                # explainer content layer — see docs/GUIDES.md
     privacy.astro / about.astro / contact.astro / terms.astro
-  /components             # UploadZone, ProcessingState, ResultDownload, AdUnit, etc.
+  /components               # Sidebar, ToolWidget, AdsterraBanner, ConsentBanner, Footer, etc.
   /lib
-    /pdf/  /image/  /audio/  /video/   # one pure module per operation
+    /pdf/ /image/ /audio/ /video/ /data/ /dev/   # one pure module per operation
+    /ads/                   # Adsterra loader, consent, processing overlay, download gate
+    ui.ts                   # shared drop-zone/processing/result state machine for every tool
   /data
-    tool-metadata.ts       # single source of truth: title, keywords, related tools, schema
-    site-config.ts          # KOFI_URL and other project-wide constants
-/docs                      # full project documentation — see below
-CLAUDE.md                  # Claude Code project context (short, points into /docs)
+    tools.ts                # single source of truth: title, keywords, related tools, schema
+    toolIcons.ts             # hand-drawn SVG icon paths, keyed by tool slug
+    faqs.ts / guides.ts / references.ts
+    site-config.ts           # AdSense flags, Ko-fi URL, contact email, and other constants
+/docs                        # full project documentation — see below
+CLAUDE.md                    # Claude Code project context (short, points into /docs)
 ```
 
 ## Documentation
@@ -201,67 +212,36 @@ is. Read the relevant file before making changes in that area:
 | [`docs/SEO.md`](docs/SEO.md) | URL structure, schema markup, internal linking, content depth rules |
 | [`docs/GUIDES.md`](docs/GUIDES.md) | The `/guides/` explainer content layer: routing, internal linking, schema, how to add a new guide |
 | [`docs/LICENSING.md`](docs/LICENSING.md) | **Check before adding any dependency** — license compatibility table |
-| [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) | Hosting, domain, deploy pipeline, launch checklist, cost breakdown |
-| [`docs/SETUP_CHECKLIST.md`](docs/SETUP_CHECKLIST.md) | The literal step-by-step account setup checklist |
-| [`docs/MONETIZATION.md`](docs/MONETIZATION.md) | AdSense implementation detail (ads.txt, ad unit placement) and the donation link setup |
-| [`docs/MONETIZATION_BUILD_TASKS.md`](docs/MONETIZATION_BUILD_TASKS.md) | Direct build instructions for Claude Code: policy pages, donation link, AdSense scaffolding |
+| [`docs/ADSENSE_SETUP.md`](docs/ADSENSE_SETUP.md) | The guarded AdSense integration: what's already in place, what's still needed, the dashboard checklist to go live |
 | [`docs/ROADMAP.md`](docs/ROADMAP.md) | Current phase, tool build order, what's explicitly out of scope |
+
+Adsterra's own ad system (banners, the processing-state overlay, the pre-download countdown
+gate) is implemented in `src/lib/ads/` and documented inline plus in the "Monetization
+placement" section of `docs/PAGE_LAYOUT.md` — there is no separate `docs/MONETIZATION.md`.
 
 ## Current status
 
 See [`docs/ROADMAP.md`](docs/ROADMAP.md) for the authoritative, up-to-date phase and tool list.
 As of this writing:
 
-- **Domain live**: `kit-bin.com`, SSL confirmed working.
-- **27 of ~28 planned tools built and verified locally.**
-- **`/guides/` explainer content layer live** — hub page plus six guides, cross-linked from every
+- **Domain live**: `kit-bin.com`, SSL confirmed working, deployed and verified in production.
+- **47 tools live** across PDF, Image, Audio, Video, Data, and Dev categories.
+- **`/guides/` explainer content layer live** — hub page plus 16 guides, cross-linked from every
   relevant tool page, built to strengthen the AdSense editorial review (see `docs/GUIDES.md`).
-- **Deployment**: Cloudflare Pages connected to this repo, auto-deploy on push to `main`.
+- **Deployment**: Cloudflare Worker (`toolkit`), Git-connected to this repo, auto-deploys on
+  push to `main` (see Deployment above — not Cloudflare Pages).
 - **CI validation pipeline**: self-hosted GitLab CE configured and wired to a GitHub webhook
-  (see CI/CD Pipeline above) — confirm the webhook fires successfully on the next push if it
-  hasn't been end-to-end verified since the most recent Cloudflare Tunnel/domain changes.
-- **Monetization**: policy pages (Privacy, About, Contact, Terms) required before AdSense
-  application — confirm all four are live; donation link (Ko-fi) pending the actual page URL
-  being created and handed off for footer placement; AdSense not yet applied for.
+  (see CI/CD Pipeline above) — reachable at `https://gitlab.kit-bin.com`; re-confirm the webhook
+  still fires on the next push if it hasn't been checked recently.
+- **Monetization**: Adsterra ads (banners, processing-state, pre-download gate) are live and
+  consent-gated; policy pages (Privacy, About, Contact, Terms) are live and up to date; the
+  donation link (Ko-fi) is live in the footer; Google AdSense remains scaffolded but disabled
+  pending account approval (see `docs/ADSENSE_SETUP.md`).
 
-<!--
-Progress checklist — update as tools ship. Keep in sync with docs/ROADMAP.md.
-
-PDF:
-- [x] /pdf/merge, /pdf/split, /pdf/compress, /pdf/rotate, /pdf/watermark, /pdf/to-images,
-  /pdf/reorder-pages
-- [ ] /pdf/unlock — attempted, pulled (qpdf-wasm needs COOP/COEP + broken worker resolution
-  under Vite; see docs/TOOL_SPECS.md and docs/OPEN_SOURCE_REPOS.md for the qpdf-wasm maintainer
-  caveat — this may just need a different qpdf-wasm fork/version, revisit before writing this
-  off as unsolvable)
-
-Image:
-- [x] /image/heic-to-jpg, /image/compress, /image/resize, /image/webp-to-png,
-  /image/png-to-webp, /image/svg-to-png, /image/crop
-- [ ] /image/background-remove — Phase 3, not started (AGPL trap already documented, use an
-  Apache-2.0 model directly via onnxruntime-web when this is picked up)
-
-Audio:
-- [x] /audio/mp3-to-wav, /audio/wav-to-mp3, /audio/trim, /audio/merge, /audio/volume-normalize
-
-Video:
-- [x] /video/mp4-to-webm, /video/compress, /video/trim, /video/mute, /video/extract-audio,
-  /video/gif-from-video
-
-Data:
-- [x] /csv/to-json, /json/to-csv, /csv/to-excel, /data/csv-cleaner
-
-Site/infra:
-- [x] Homepage + category hubs live (PDF, Image, Audio, Video, Data)
-- [x] /guides/ content layer (hub + 6 guides) live, cross-linked from tool pages
-- [x] Deployed to Cloudflare Pages, custom domain attached
-- [x] Self-hosted GitLab CI validation pipeline configured (webhook + trigger)
-- [ ] Confirm CI pipeline fires successfully post-domain-change
-- [ ] Policy pages (Privacy/About/Contact/Terms) confirmed live
-- [ ] Ko-fi donation link created and placed in footer
-- [ ] Search Console connected
-- [ ] AdSense applied for / approved
--->
+A per-tool progress checklist previously lived here as an HTML comment; it drifted out of sync
+with reality repeatedly (undercounting tools, listing a defunct deploy target) and duplicated
+`docs/ROADMAP.md`, which is the single source of truth for phase/tool status — check that file
+instead of maintaining a second list here.
 
 ## Collaborators
 

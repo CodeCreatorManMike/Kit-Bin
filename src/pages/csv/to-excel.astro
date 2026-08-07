@@ -40,13 +40,31 @@ const faqs = [
   <AdUnit />
 
   <div class="max-w-2xl mx-auto px-4 py-12 text-ink dark:text-slate-300 space-y-6">
-    <p>This tool converts a CSV file into an Excel-compatible .xlsx file. Drop your CSV above. The .xlsx file downloads automatically once ready.</p>
+    <p>
+      This tool converts a CSV file into a real Excel workbook (.xlsx), not just a renamed text
+      file. Drop your CSV above and the .xlsx file downloads automatically once it's ready. Excel,
+      Google Sheets, and Numbers can all open the result directly, with the sheet grid, column
+      widths, and cell types already set up the way Excel expects.
+    </p>
+    <p>
+      CSV itself has no concept of a spreadsheet, no formulas, no cell formatting, no multiple
+      sheets, just rows of comma-separated text. Converting to .xlsx doesn't invent any of that,
+      but it does let each column's values be typed correctly (numbers as numbers, not text
+      strings with quote marks), which is often the actual reason a CSV import into a reporting
+      tool or an existing spreadsheet template goes wrong in the first place.
+    </p>
     <div>
       <h2 class="tool-h2 font-semibold text-lg pt-2">FAQ</h2>
       <div class="mt-3">
         <FaqAccordion faqs={faqs} />
       </div>
     </div>
+    <p class="text-sm">
+      Related tools:{' '}
+      <a href="/data/excel-to-csv" class="text-primary dark:text-blue-400 hover:underline">Excel to CSV</a>,{' '}
+      <a href="/csv/to-json" class="text-primary dark:text-blue-400 hover:underline">CSV to JSON</a>,{' '}
+      <a href="/data/csv-cleaner" class="text-primary dark:text-blue-400 hover:underline">CSV Cleaner</a>.
+    </p>
   </div>
 
   <div class="pt-8 sm:pt-12 pb-6 sm:pb-8">

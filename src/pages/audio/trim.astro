@@ -11,6 +11,18 @@ const faqs = [
     q: 'What format is the output?',
     a: 'WAV, regardless of the input format.',
   },
+  {
+    q: 'Does trimming re-encode the audio?',
+    a: 'The selected range is decoded and re-written as WAV. WAV is uncompressed, so there is no lossy re-encoding step the way there would be trimming straight to MP3 — the kept audio keeps its original quality.',
+  },
+  {
+    q: 'How precise is the start/end point?',
+    a: 'Drag the waveform region\'s edges to set the range visually; it snaps to the audio\'s actual decoded samples, so it is accurate to a fraction of a second rather than a rough estimate.',
+  },
+  {
+    q: 'Can I trim more than one section from the same file?',
+    a: 'Not in a single pass, this tool trims to one continuous region. To keep two separate sections, trim and download each one individually, then use Merge Audio to combine them if needed.',
+  },
 ];
 ---
 
@@ -56,7 +68,7 @@ const faqs = [
         </span>
 
         <p class="mt-4 text-lg font-semibold text-ink dark:text-slate-100">Drop an audio file here or click to browse</p>
-        <p class="mt-1 text-xs text-muted dark:text-slate-500">Processed on your device. Nothing is uploaded.</p>
+        <p class="mt-1 text-xs text-muted dark:text-slate-500">Processed entirely in your browser. Never uploaded to a server.</p>
         <p id="file-info" class="mt-2 text-sm font-medium text-primary dark:text-blue-400"></p>
         <input id="file-input" type="file" accept="audio/*" class="hidden" />
       </div>
@@ -113,14 +125,31 @@ const faqs = [
   <AdUnit />
 
   <div class="max-w-2xl mx-auto px-4 py-12 text-ink dark:text-slate-300 space-y-4">
-    <p>This tool cuts an audio file down to the time range you specify, using a visual waveform to pick the range.</p>
-    <p>Drop your audio file above, drag the region's edges to set start/end, then click trim.</p>
+    <p>
+      This tool cuts an audio file down to the exact time range you specify, using a visual
+      waveform so you can see what you're keeping instead of guessing at timestamps. Drop your
+      audio file above, drag the highlighted region's edges to set the start and end points, then
+      click trim. The waveform renders locally as soon as the file is decoded, so you get instant
+      visual feedback before committing to a cut.
+    </p>
+    <p>
+      This is a straight cut, not a re-render of the whole file: only the audio inside your
+      selected region is kept, decoded once and written back out as WAV. There's no format
+      conversion happening beyond that, so if your source file wasn't already WAV, this
+      effectively also converts it as a side effect of trimming.
+    </p>
     <div>
       <h2 class="tool-h2 font-semibold text-lg pt-2">FAQ</h2>
       <div class="mt-3">
         <FaqAccordion faqs={faqs} />
       </div>
     </div>
+    <p class="text-sm">
+      Related tools:{' '}
+      <a href="/audio/merge" class="text-primary dark:text-blue-400 hover:underline">Merge Audio</a>,{' '}
+      <a href="/audio/volume-normalize" class="text-primary dark:text-blue-400 hover:underline">Normalize Volume</a>,{' '}
+      <a href="/audio/wav-to-mp3" class="text-primary dark:text-blue-400 hover:underline">WAV to MP3</a>.
+    </p>
   </div>
 
   <div class="pt-8 sm:pt-12 pb-6 sm:pb-8">
@@ -148,6 +177,8 @@ const faqs = [
     let wavesurfer: WaveSurfer | null = null;
     let regions: RegionsPlugin | null = null;
     let currentRegion: ReturnType<RegionsPlugin['addRegion']> | null = null;
+    let previewObjectUrl: string | null = null;
+    let activeObjectUrl: string | null = null;
 
     const statusText = status.querySelector<HTMLElement>('[data-status-text]')!;
     const statusBar = status.querySelector<HTMLElement>('[data-status-bar]')!;
@@ -179,14 +210,16 @@ const faqs = [
 
       wavesurfer?.destroy();
       waveformHost.innerHTML = '';
+      if (previewObjectUrl) URL.revokeObjectURL(previewObjectUrl);
 
       regions = RegionsPlugin.create();
+      previewObjectUrl = URL.createObjectURL(file);
       wavesurfer = WaveSurfer.create({
         container: waveformHost,
         waveColor: '#94a3b8',
         progressColor: '#2563eb',
         height: 96,
-        url: URL.createObjectURL(file),
+        url: previewObjectUrl,
         plugins: [regions],
       });
 
@@ -238,7 +271,9 @@ const faqs = [
       try {
         const blob = await trimAudio(currentFile, currentRegion.start, currentRegion.end);
         setStatus(null);
+        if (activeObjectUrl) URL.revokeObjectURL(activeObjectUrl);
         const url = URL.createObjectURL(blob);
+        activeObjectUrl = url;
         downloadLink.href = url;
         downloadLink.download = currentFile.name.replace(/\.[^.]+$/, '-trimmed.wav');
         result.classList.remove('hidden');
@@ -257,6 +292,14 @@ const faqs = [
       wavesurfer?.destroy();
       wavesurfer = null;
       waveformHost.innerHTML = '';
+      if (previewObjectUrl) {
+        URL.revokeObjectURL(previewObjectUrl);
+        previewObjectUrl = null;
+      }
+      if (activeObjectUrl) {
+        URL.revokeObjectURL(activeObjectUrl);
+        activeObjectUrl = null;
+      }
       result.classList.add('hidden');
       dropzone.classList.remove('hidden');
       fileInfo.textContent = '';

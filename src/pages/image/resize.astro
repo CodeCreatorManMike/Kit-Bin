@@ -86,8 +86,15 @@ const faqs = [
       validate: (files) => (!files[0]?.type.startsWith('image/') ? 'This tool needs an image file.' : null),
       run: async (files) => {
         const width = Math.max(1, parseInt(widthInput.value, 10) || 800);
-        const blob = await resizeImage(files[0], width);
-        return { blob, filename: files[0].name };
+        const { blob, mimeType } = await resizeImage(files[0], width);
+        // Formats Canvas can't re-encode (GIF, BMP, ...) silently become PNG —
+        // rename the output so the extension matches what's actually inside.
+        const originalName = files[0].name;
+        const filename =
+          mimeType === files[0].type
+            ? originalName
+            : originalName.replace(/\.[^.]+$/, '') + '.png';
+        return { blob, filename };
       },
     });
   </script>

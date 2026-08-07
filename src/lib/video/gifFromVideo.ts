@@ -20,12 +20,31 @@ export async function gifFromVideo(file: File): Promise<Blob> {
   const gif = GIFEncoder();
   const delayMs = Math.round(1000 / FPS);
 
+  // Decode every frame first so one shared palette can be quantized across
+  // the whole clip. Quantizing per-frame (the previous approach) picks a
+  // different 256-color palette for each frame, which shows up as visible
+  // color flicker between frames in the output GIF.
+  const frames: { data: Uint8ClampedArray; width: number; height: number }[] = [];
   for await (const wrapped of sink.canvasesAtTimestamps(timestamps)) {
     if (!wrapped) continue;
     const { canvas } = wrapped;
     const ctx = canvas.getContext('2d')!;
     const { data, width, height } = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    const palette = quantize(data, 256);
+    frames.push({ data, width, height });
+  }
+  if (frames.length === 0) throw new Error('Could not read any frames from this video.');
+
+  const sampleStride = Math.max(1, Math.floor(frames.length / 20));
+  const sampled = frames.filter((_, i) => i % sampleStride === 0);
+  const combined = new Uint8ClampedArray(sampled.reduce((n, f) => n + f.data.length, 0));
+  let offset = 0;
+  for (const f of sampled) {
+    combined.set(f.data, offset);
+    offset += f.data.length;
+  }
+  const palette = quantize(combined, 256);
+
+  for (const { data, width, height } of frames) {
     const index = applyPalette(data, palette);
     gif.writeFrame(index, width, height, { palette, delay: delayMs });
   }

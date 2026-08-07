@@ -64,7 +64,7 @@ const faqs = [
         </span>
 
         <p class="mt-4 text-lg font-semibold text-ink dark:text-slate-100">Drop an image here or click to browse</p>
-        <p class="mt-1 text-xs text-muted dark:text-slate-500">Processed on your device. Nothing is uploaded.</p>
+        <p class="mt-1 text-xs text-muted dark:text-slate-500">Processed entirely in your browser. Never uploaded to a server.</p>
         <p id="file-info" class="mt-2 text-sm font-medium text-primary dark:text-blue-400"></p>
         <input id="file-input" type="file" accept="image/*" class="hidden" />
       </div>
@@ -152,6 +152,8 @@ const faqs = [
 
     let cropper: Cropper | null = null;
     let currentFile: File | null = null;
+    let previewObjectUrl: string | null = null;
+    let activeObjectUrl: string | null = null;
 
     const statusText = status.querySelector<HTMLElement>('[data-status-text]')!;
     const statusBar = status.querySelector<HTMLElement>('[data-status-bar]')!;
@@ -172,9 +174,11 @@ const faqs = [
       currentFile = file;
       fileInfo.textContent = file.name;
 
+      if (previewObjectUrl) URL.revokeObjectURL(previewObjectUrl);
       cropHost.innerHTML = '';
       const img = document.createElement('img');
-      img.src = URL.createObjectURL(file);
+      previewObjectUrl = URL.createObjectURL(file);
+      img.src = previewObjectUrl;
       img.style.display = 'block';
       img.style.maxWidth = '100%';
       cropHost.appendChild(img);
@@ -222,7 +226,9 @@ const faqs = [
           canvas.toBlob((b) => (b ? resolve(b) : reject(new Error('Crop failed'))), type),
         );
         setStatus(null);
+        if (activeObjectUrl) URL.revokeObjectURL(activeObjectUrl);
         const url = URL.createObjectURL(blob);
+        activeObjectUrl = url;
         downloadLink.href = url;
         downloadLink.download = currentFile.name;
         result.classList.remove('hidden');
@@ -238,6 +244,14 @@ const faqs = [
     resetButton.addEventListener('click', () => {
       currentFile = null;
       cropper = null;
+      if (previewObjectUrl) {
+        URL.revokeObjectURL(previewObjectUrl);
+        previewObjectUrl = null;
+      }
+      if (activeObjectUrl) {
+        URL.revokeObjectURL(activeObjectUrl);
+        activeObjectUrl = null;
+      }
       cropHost.innerHTML = '';
       result.classList.add('hidden');
       dropzone.classList.remove('hidden');

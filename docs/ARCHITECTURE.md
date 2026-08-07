@@ -14,7 +14,15 @@ visitor's CPU does the work, so the site can run on a static-hosting free tier i
 regardless of traffic volume. Server fallback is the only part of this project with a real,
 scaling cost, so it's gated behind actual demand (Phase 3, see `ROADMAP.md`).
 
-## Processing decision tree (per file, at runtime)
+## Processing decision tree (per file, at runtime) — planned, not yet built
+
+This decision tree was the pre-launch design intent. **As shipped, none of it exists**: there is
+no file-size check anywhere in the codebase (confirmed — no `MAX_FILE_SIZE`/threshold constant,
+no "file too large" message on any tool page), including on the video tools, which are the ones
+this was specifically meant to gate. Every tool, including all 6 video tools, currently attempts
+in-browser processing regardless of file size, with no explicit "this needs server processing"
+fallback message. A large file today just risks a slow or crashed tab, silently, which is
+exactly the failure mode this section was written to prevent.
 
 ```
 User selects/drops file
@@ -34,14 +42,14 @@ in-browser  needs server processing — [not available yet /
 Download result — file never left the device
 ```
 
-- **Size threshold for video**: start at 50MB as the client/server routing boundary — this is
-  the commonly cited practical ceiling before ffmpeg.wasm/WASM media libraries become unreliable
-  in-browser (memory pressure, mobile tab kills, Safari crashes). Tune per real usage data once
-  live; don't over-engineer this number pre-launch.
-- **Mobile is a second-class but not ignored citizen at launch.** WASM media processing on
-  mobile Safari has materially tighter memory limits than desktop — a transcode that works fine
-  on a laptop can crash an iPhone tab. Cap file size more aggressively on mobile UA, or clearly
-  message the limitation, rather than letting the tab silently die mid-job.
+- **Size threshold for video**: 50MB was the proposed client/server routing boundary — the
+  commonly cited practical ceiling before ffmpeg.wasm/WASM media libraries become unreliable
+  in-browser (memory pressure, mobile tab kills, Safari crashes). Not implemented yet — worth
+  prioritizing now that all 6 video tools are live in production, not deferred to a future phase.
+- **Mobile is a second-class but not ignored citizen.** WASM media processing on mobile Safari
+  has materially tighter memory limits than desktop — a transcode that works fine on a laptop
+  can crash an iPhone tab. Capping file size more aggressively on mobile UA, or clearly messaging
+  the limitation, is still an open gap, not just a launch-day one.
 
 ## Tech stack
 
@@ -49,44 +57,37 @@ Download result — file never left the device
 |---|---|---|
 | Framework | Astro (recommended) | Ships zero JS by default per page; only the specific tool's JS/WASM loads on that tool's page. This matters a lot here — a Next.js/React SPA tends to bundle more shared JS across routes unless very deliberately code-split, and this project has ~28 largely-unrelated interactive widgets, not one app. |
 | Styling | Tailwind CSS | Fast to build consistent, utility-tool-appropriate UI; see `PAGE_LAYOUT.md` for the actual visual system. |
-| Hosting | Cloudflare Pages (free tier) | Static hosting, generous free bandwidth, fast global edge, zero-config previews per PR. Vercel free tier is an equally valid alternative — main constraint is avoiding anything that meters by function-invocation, since there are none server-side at launch. |
+| Hosting | Cloudflare Worker (`toolkit`) serving `dist/` as static assets via `wrangler.jsonc`'s `assets.directory` — not Cloudflare Pages | Static hosting, generous free bandwidth, fast global edge. No Astro adapter, no bindings, no SSR — this site has neither, so `@astrojs/cloudflare` (which provisions Images + KV Sessions bindings unconditionally) doesn't belong here. See root `wrangler.jsonc`. |
 | Per-tool logic | Isolated ES modules, dynamically imported per page | Prevents one tool's heavy WASM payload (e.g. an image codec bundle) from loading on a page that doesn't need it. |
 | Data/state | None server-side. No database, no accounts, no user file storage — ever, for the client-side tool set. | This is a genuine trust/privacy differentiator to put directly in the copy — see `COPY_GUIDELINES.md`. |
 | Analytics | Privacy-respecting, aggregate-only (e.g. Cloudflare Web Analytics or Plausible) | Consistent with the privacy pitch; full user-tracking analytics undercuts the site's own positioning. |
 
-## Repo / folder structure (Astro convention)
+## Repo / folder structure (as actually built)
 
 ```
 /src
   /pages
     index.astro                 # homepage
-    /pdf/
+    /pdf/ /image/ /audio/ /video/ /data/ /dev/
       index.astro                # category hub
-      merge.astro
-      split.astro
-      compress.astro
-      ...
-    /image/
-      index.astro
-      heic-to-jpg.astro
-      ...
-    /audio/ ...
-    /video/ ...
-    /csv/ ...
+      merge.astro split.astro ...
+    /csv/ /json/                 # a few legacy tool routes predating /data/ and /dev/
+    /guides/                     # explainer content layer, see GUIDES.md
+    privacy.astro / about.astro / contact.astro / terms.astro
   /components
-    UploadZone.astro/.tsx        # shared drag-drop component, see PAGE_LAYOUT.md
-    ProcessingState.astro/.tsx
-    ResultDownload.astro/.tsx
-    RelatedTools.astro
-    Faq.astro
+    Sidebar.astro                # persistent nav shell, see PAGE_LAYOUT.md "Site shell"
+    ToolHeader.astro / ToolWidget.astro   # shared drop-zone/status/result chrome
+    AdsterraBanner.astro / ConsentBanner.astro   # ad system, see PAGE_LAYOUT.md monetization section
+    FaqAccordion.astro / Breadcrumbs.astro / ToolSchema.astro / CategorySchema.astro
   /lib
-    /pdf/  merge.ts split.ts compress.ts ...   # one module per operation
-    /image/ convert.ts compress.ts resize.ts ...
-    /audio/ ...
-    /video/ ...
-  /content or /data
-    tool-metadata.ts             # single source of truth per tool: title, description,
+    ui.ts                        # shared drop-zone/processing/result state machine every tool uses
+    /pdf/ /image/ /audio/ /video/ /data/ /dev/    # one pure module per operation
+    /ads/                         # Adsterra loader, consent, processing overlay, download gate
+  /data
+    tools.ts                     # single source of truth per tool: title, description,
                                   # keywords, related-tool links, schema fields — see SEO.md
+    toolIcons.ts                 # hand-drawn SVG icon paths, keyed by tool slug
+    faqs.ts / guides.ts / references.ts / site-config.ts
 ```
 
 Each `/lib/<category>/<operation>.ts` module should be a pure function wrapping the underlying

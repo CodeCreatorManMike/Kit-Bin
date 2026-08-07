@@ -75,8 +75,13 @@ const faqs = [
       accept: 'video/*',
       validate: (files) => (!files[0]?.type.startsWith('video/') ? 'This tool needs a video file.' : null),
       run: async (files) => {
-        const start = parseFloat(startInput.value) || 0;
-        const end = parseFloat(endInput.value) || start + 10;
+        const startRaw = parseFloat(startInput.value);
+        const endRaw = parseFloat(endInput.value);
+        const start = Number.isFinite(startRaw) && startRaw >= 0 ? startRaw : 0;
+        const end = Number.isFinite(endRaw) && endRaw >= 0 ? endRaw : start + 10;
+        if (end <= start) {
+          throw new Error('End time must be after start time.');
+        }
         const blob = await trimVideo(files[0], start, end);
         return { blob, filename: files[0].name.replace(/\.[^.]+$/, '-trimmed.mp4') };
       },

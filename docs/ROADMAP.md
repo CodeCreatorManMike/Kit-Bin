@@ -1,68 +1,65 @@
 # Roadmap
 
-**Current phase: Phase 1 / MVP — all 7 tools + homepage + hubs live locally, not yet deployed.**
-Update this line as work progresses — this file,
-not `CLAUDE.md`, is the source of truth for what phase the project is actually in.
+**Current phase: Phase 3 in progress — Phases 1 and 2 fully shipped and live in production at
+kit-bin.com.** All 47 tools listed below across PDF/Image/Audio/Video/Data/Dev are live, plus
+the homepage, all category hubs, the `/guides/` content layer (16 guides), and Adsterra
+monetization (banners, processing-state ad, pre-download gate). Update this line as work
+progresses — this file, not `CLAUDE.md`, is the source of truth for what phase the project is
+actually in.
 
-## Phase 1 — MVP (target: 2-4 weeks)
+## Phase 1 — MVP — SHIPPED
 
-Goal: launch with a small, fully-polished set of the highest-search-volume, lowest-technical-
-risk tools. Every tool shipped in this phase must be complete per the four-part definition in
-`CLAUDE.md` (UI, copy, schema, hub listing) — a half-finished 8th tool is worse than a fully
-finished 6th.
+Original target list, all live:
+- `/pdf/merge`, `/pdf/split`, `/pdf/compress`
+- `/image/heic-to-jpg`, `/image/compress`, `/image/resize`
+- `/audio/mp3-to-wav`
 
-Tool list:
-- `/pdf/merge`
-- `/pdf/split`
-- `/pdf/compress`
-- `/image/heic-to-jpg` (decode-only if HEIC-encode licensing isn't resolved by build time —
-  see `LICENSING.md`)
-- `/image/compress`
-- `/image/resize`
-- `/audio/mp3-to-wav` (Mediabunny)
+Also shipped: homepage + all category hubs, `/guides/` content layer (now 16 guides, not the
+original 6), Cloudflare Web Analytics. **Not yet done from this phase's original list: AdSense
+application** — the integration is fully scaffolded and guarded (`docs/ADSENSE_SETUP.md`) but
+`ADSENSE_ENABLED` is still `false` pending actually applying/getting approved. Google Search
+Console connection status is unverified from the codebase — confirm directly in the GSC
+dashboard, not here.
 
-Also required in Phase 1, not deferrable:
-- Homepage, all category hub pages for categories with at least one live tool.
-- Google Search Console connected.
-- Privacy-respecting analytics connected (see `ARCHITECTURE.md`).
-- AdSense applied for and approved — this can take time and gate on site having real content,
-  so apply as soon as 4-5 tools are live rather than waiting for full Phase 1 completion.
-- **`/guides/` content layer shipped (2026-08-04)** — six explainer pages plus a hub, built
-  specifically to strengthen the AdSense editorial review (see `docs/GUIDES.md`). This should be
-  in place *before* submitting the AdSense application, not added after a rejection.
+## Phase 2 — Expansion — SHIPPED
 
-## Phase 2 — Expansion (target: months 2-4)
-
-Driven by Search Console data, not guesswork: prioritize filling out tools in categories that
-are already getting impressions but not yet ranking top-10 (signal that the category has demand
-and needs more depth/authority, not that it's a dead end).
-
-Candidate tool list (sequence within this list based on actual Phase 1 data, not the order
-below):
-- Remaining PDF tools: rotate, to-images, watermark, reorder-pages, unlock (pending license
-  check)
-- Remaining image tools: webp-to-png, png-to-webp, svg-to-png, crop
+Every tool originally scoped for this phase is live:
+- Remaining PDF tools: rotate, to-images, watermark, reorder-pages, page-numbers,
+  remove-metadata, delete-pages, extract-pages, to-text (`/pdf/unlock` remains unbuilt — see
+  Phase 3)
+- Remaining image tools: webp-to-png, png-to-webp, svg-to-png, crop, optimize-svg,
+  compress-to-size, rotate, remove-metadata
 - Remaining audio tools: wav-to-mp3, trim, merge, volume-normalize
-- CSV/data tools: csv-to-json, json-to-csv, csv-to-excel, csv-cleaner
-- Programmatic format-pair expansion (see `SEO.md`) — only once Phase 1 tools show organic
-  traction, not on a fixed calendar date.
+- Data/dev tools: csv-to-json, json-to-csv, csv-to-excel, excel-to-csv, excel-to-json,
+  csv-cleaner, csv-merge, json-formatter, base64, sha256, json-diff, json-schema-validator
 
-## Phase 3 — Heavier/server-dependent (target: month 5+, gated on traffic, not time)
+Note: `src/pages/csv/*.astro` and `src/pages/json/*.astro` are earlier routes that predate the
+`/data/` and `/dev/` hubs and now overlap in purpose with tools living there — worth an audit to
+confirm none of them are duplicate/competing content before adding more data tools (see the
+2026-08 tool audit findings in git history / PR discussion for specifics).
 
-Only build this phase if Phase 1/2 traffic and revenue actually justify taking on real hosting
-cost — this phase is where the project stops being free to run.
+Programmatic format-pair expansion (see `SEO.md`) is still open-ended, gated on Search Console
+data showing which existing tools are getting impressions but not ranking top-10 — check GSC
+before adding more tools in an already-covered category.
 
-- Video tools (mp4-to-webm, compress, trim, mute, extract-audio, gif-from-video) — heavier WASM
-  payloads, materially worse mobile reliability (see `ARCHITECTURE.md` mobile notes), worth
-  doing once the rest of the site has proven the model.
-- `/image/background-remove` — high search volume but the most technically involved tool in the
-  catalog (ML inference, license-safe model sourcing per `LICENSING.md`) — deliberately not in
-  Phase 1 or 2 despite demand, specifically because it's the one tool where doing it wrong (AGPL
-  dependency, bad mobile performance, slow inference) does more reputational damage than not
-  having it yet.
-- Server-side fallback tier for large video files and for DOCX/PPTX ↔ PDF conversion — this is
-  the one piece of the entire project with a real, scaling infrastructure cost, so it's the last
-  thing built, once there's actual revenue to justify it.
+## Phase 3 — Heavier/server-dependent (in progress)
+
+- **Video tools — SHIPPED**, ahead of the original "gated on traffic" plan: mp4-to-webm,
+  compress, trim, mute, extract-audio, gif-from-video are all live. A 2026-08 functional audit
+  found these do not yet run in a Web Worker (violates `PAGE_LAYOUT.md`'s "never block the main
+  thread" requirement) and `gifFromVideo.ts` recomputes its color palette per-frame instead of
+  once globally — both worth fixing before pushing more traffic to this category.
+- `/pdf/unlock` — still not built. Previously pulled because `qpdf-wasm` needed COOP/COEP
+  headers and had broken worker resolution under Vite; revisit with a different qpdf-wasm
+  fork/version rather than treating it as permanently unsolvable (see `TOOL_SPECS.md` and
+  `OPEN_SOURCE_REPOS.md`).
+- `/image/background-remove` — still not built. High search volume but the most technically
+  involved tool in the catalog (ML inference, license-safe model sourcing per `LICENSING.md`) —
+  deliberately deferred because doing it wrong (AGPL dependency, bad mobile performance, slow
+  inference) does more reputational damage than not having it yet.
+- Server-side fallback tier for large video files and for DOCX/PPTX ↔ PDF conversion — still the
+  one piece of the entire project with a real, scaling infrastructure cost, so it stays last,
+  built only once there's actual revenue to justify it.
 
 ## Competitive research notes (2026-08-03)
 
