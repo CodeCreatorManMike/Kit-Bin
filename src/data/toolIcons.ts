@@ -250,6 +250,30 @@ export const toolIcons: Record<string, IconPrimitive[]> = {
     { t: 'circle', cx: 16.2, cy: 9, r: 0.85 },
     { t: 'path', d: 'M13.5 13.4l2.4-2.2 1.6 1.4 1.5-1.3 3 2.6' },
   ],
+  /** Small dense tile → large plain tile: AVIF's compactness unpacking to JPG. */
+  '/image/avif-to-jpg': [
+    { t: 'fill', d: 'M2 6h5.5v9H2z' },
+    { t: 'rect', x: 2, y: 6, w: 5.5, h: 9, rx: 1.4 },
+    { t: 'path', d: 'M3.3 9.2h2.9' },
+    { t: 'path', d: 'M3.3 11.4h2.9' },
+    { t: 'path', d: 'M9 10.5h2.8' },
+    { t: 'path', d: 'M10.4 8.7l1.8 1.8-1.8 1.8' },
+    { t: 'rect', x: 13.5, y: 6, w: 8.5, h: 9, rx: 1.4 },
+    { t: 'circle', cx: 16.2, cy: 9, r: 0.85 },
+    { t: 'path', d: 'M13.5 13.4l2.4-2.2 1.6 1.4 1.5-1.3 3 2.6' },
+  ],
+  /** Mirror of the above, so the pair can't be confused at card size. */
+  '/image/jpg-to-avif': [
+    { t: 'fill', d: 'M2 6h8.5v9H2z' },
+    { t: 'rect', x: 2, y: 6, w: 8.5, h: 9, rx: 1.4 },
+    { t: 'circle', cx: 4.7, cy: 9, r: 0.85 },
+    { t: 'path', d: 'M2 13.4l2.4-2.2 1.6 1.4 1.5-1.3 3 2.6' },
+    { t: 'path', d: 'M12 10.5h2.8' },
+    { t: 'path', d: 'M13.4 8.7l1.8 1.8-1.8 1.8' },
+    { t: 'rect', x: 16.5, y: 6, w: 5.5, h: 9, rx: 1.4 },
+    { t: 'path', d: 'M17.8 9.2h2.9' },
+    { t: 'path', d: 'M17.8 11.4h2.9' },
+  ],
   '/image/svg-to-png': [
     { t: 'circle', cx: 6, cy: 7, r: 1.6 },
     { t: 'circle', cx: 18, cy: 7, r: 1.6 },

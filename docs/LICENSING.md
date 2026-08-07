@@ -14,7 +14,7 @@ versions.
 |---|---|---|---|
 | `pdf-lib` | PDF create/edit | MIT | Yes |
 | `pdf.js` | PDF rendering | Apache-2.0 (Mozilla) | Yes |
-| `@jsquash/*` (avif, webp, png, jpeg, resize) | Image codecs | Apache-2.0 | Yes |
+| `@jsquash/*` (jpeg, png, webp, resize, avif, jxl, qoi) | Image codecs | Apache-2.0 — **not MIT**, which it's often reported as | Yes. The bundled codec WASM is permissive too: libavif is BSD-2, libjxl BSD-3, qoi MIT (shipped as `codec/LICENSE.codec.md`). Verified by scanning all nine `.wasm` blobs for GPL/LGPL strings — none present. |
 | `browser-image-compression` | Image compression | MIT | Yes |
 | `libheif-js` (`wasm-bundle` build) | HEIC decode (`/image/heic-to-jpg`) | LGPL-3.0, stated correctly in its own `package.json`/`LICENSE` | Yes, with caveats below — replaced `heic2any` for this reason |
 | ~~`heic2any`~~ | ~~HEIC decode~~ | Claims MIT, but silently inlines a compiled `libheif` (LGPL-3.0) WASM/JS blob into its bundle with **no LGPL notice, no license file, and no separate/relinkable artifact** | **No — removed.** Verified by attempting to re-parse its own output and inspecting `dist/heic2any.js` directly: the LGPL component ships with zero attribution. Do not reintroduce. |

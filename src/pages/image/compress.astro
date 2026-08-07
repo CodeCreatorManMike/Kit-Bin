@@ -95,6 +95,7 @@ const faqs = [
 
   <script>
     import { compressImage } from '../../lib/image/compress';
+    import { renameToMime } from '../../lib/image/codec';
     import { getToolElements, wireTool } from '../../lib/ui';
 
     function formatBytes(bytes: number): string {
@@ -111,12 +112,12 @@ const faqs = [
       validate: (files) =>
         files.some((f) => !f.type.startsWith('image/')) ? 'This tool only accepts image files.' : null,
       runEach: async (file) => {
-        const { blob, originalSize, compressedSize } = await compressImage(file);
+        const { blob, originalSize, compressedSize, mimeType } = await compressImage(file);
         const pct = Math.round((1 - compressedSize / originalSize) * 100);
         // Only meaningful for a single file; wireTool replaces the note with a
         // file count when the batch produces a zip.
         const note = `${formatBytes(originalSize)} → ${formatBytes(compressedSize)}${pct > 0 ? ` (${pct}% smaller)` : ''}`;
-        return { blob, filename: file.name, note };
+        return { blob, filename: renameToMime(file.name, mimeType), note };
       },
     });
   </script>

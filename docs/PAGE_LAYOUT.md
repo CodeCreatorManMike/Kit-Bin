@@ -201,6 +201,29 @@ a range from one document is meaningless against another), tools that already em
 (`split`, `to-images` — batching would nest archives), and many→one tools (`merge`,
 `images-to-pdf`).
 
+### Image format coverage
+
+`src/lib/image/codec.ts` is the single decode/encode surface every image tool goes through.
+It covers JPEG, PNG, WebP, AVIF, JPEG XL and QOI, plus a Canvas fallback for SVG and for
+anything a WASM codec rejects. Notes that aren't obvious from the code:
+
+- AVIF, JXL and QOI are **dynamically** imported. Their encoders are large (avif_enc ~3.3MB,
+  jxl_enc ~1.3MB) and a static import would put that weight in the chunk every image page loads.
+- `sniffMime()` exists because browsers report an empty `file.type` for `.qoi` (no registered
+  media type) and often for `.jxl`. Validation on any page accepting those formats must use it
+  rather than reading `file.type` directly.
+- `renameToMime()` fixes the output extension. Formats with no encoder here (GIF, BMP) come back
+  as JPEG, and without this the user gets JPEG bytes in a file named `.gif`.
+- AVIF's quality argument is inverted upstream (libavif takes `cqLevel`, 0 = lossless, 63 =
+  worst); `encodeImage` maps our 0-100 scale onto it so callers keep one convention.
+- QOI is lossless with no quality knob, so it's deliberately excluded from Compress Image —
+  "compressing" one just re-emits the same bytes.
+
+Only AVIF has dedicated conversion pages so far (`/image/avif-to-jpg`, `/image/jpg-to-avif`).
+JXL and QOI are supported at the codec layer — they work in compress/resize/convert — but got no
+pages, per the "Programmatic scaling" rule in `docs/SEO.md`: format-pair pages get added when
+Search Console shows demand, not speculatively.
+
 ### Processing state
 
 - Always show *something* moving (progress bar with real percentage where the library exposes
