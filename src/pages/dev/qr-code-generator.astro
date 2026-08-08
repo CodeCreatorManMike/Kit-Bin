@@ -1,0 +1,129 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import AdsterraBanner from '../../components/AdsterraBanner.astro';
+import ToolHeader from '../../components/ToolHeader.astro';
+import ToolSchema from '../../components/ToolSchema.astro';
+import FaqAccordion from '../../components/FaqAccordion.astro';
+import AdUnit from '../../components/AdUnit.astro';
+
+const faqs = [
+  { q: 'Is the text I enter uploaded anywhere?', a: 'No. The QR code is generated in this browser tab from the text you type. Nothing is sent to Kit-Bin or anyone else — that includes URLs, Wi-Fi passwords, or anything else you put in it.' },
+  { q: 'Do QR codes expire?', a: "No. A QR code is just a picture of data — there's no server involved and nothing to expire. It will keep working for as long as whatever it points to (a URL, for example) still exists." },
+  { q: 'PNG or SVG — which should I use?', a: 'SVG for printing or anywhere it might be scaled up — it stays crisp at any size. PNG is the safer default for pasting into a document, slide, or most websites.' },
+  { q: 'How much text can a QR code hold?', a: "A few thousand characters at most, and the more you put in, the denser and harder to scan the resulting code gets. For a lot of text, put it on a webpage and encode the link instead." },
+];
+---
+
+<Layout title="QR Code Generator, Free and Private | Kit-Bin" description="Turn any text or link into a QR code in your browser. Download as PNG or SVG. Nothing you type is uploaded.">
+  <ToolSchema name="QR Code Generator" description="Generate a QR code from text or a link entirely in your browser, with no uploads." faqs={faqs} />
+  <ToolHeader title="QR Code Generator" subtitle="Turn text or a link into a QR code. Generated locally, nothing is sent anywhere." />
+
+  <div class="max-w-2xl mx-auto px-4">
+    <div class="rounded-2xl border border-border-soft bg-surface p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+      <label for="qr-text" class="text-sm font-medium">Text or URL</label>
+      <textarea id="qr-text" rows="3" class="mt-2 block w-full resize-y rounded-xl border border-border-soft bg-transparent p-3 text-sm dark:border-slate-700" placeholder="https://example.com">https://kit-bin.com</textarea>
+
+      <div class="mt-4 flex flex-wrap items-center gap-4">
+        <label for="qr-ec" class="text-sm font-medium">Error correction</label>
+        <select id="qr-ec" class="rounded-lg border border-border-soft bg-transparent px-3 py-2 text-sm dark:border-slate-700">
+          <option value="M" selected>Medium (default)</option>
+          <option value="L">Low</option>
+          <option value="Q">Quartile</option>
+          <option value="H">High (best if adding a logo)</option>
+        </select>
+      </div>
+
+      <div id="qr-error" role="status" class="mt-4 hidden rounded-xl bg-red-50 px-4 py-3 text-sm text-red-800 dark:bg-red-950/40 dark:text-red-300"></div>
+
+      <div id="qr-output-wrap" class="mt-6 hidden flex-col items-center gap-4">
+        <div class="rounded-2xl border border-border-soft bg-white p-4 dark:border-slate-700">
+          <canvas id="qr-canvas" class="block"></canvas>
+        </div>
+        <div class="flex flex-wrap justify-center gap-2">
+          <button id="qr-download-png" class="rounded-xl bg-gradient-to-r from-primary to-violet-500 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-primary/25 transition hover:-translate-y-0.5">Download PNG</button>
+          <button id="qr-download-svg" class="rounded-xl border border-border-soft px-5 py-2.5 text-sm font-medium dark:border-slate-700">Download SVG</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <AdUnit />
+
+  <div class="max-w-2xl mx-auto space-y-6 px-4 py-12 text-ink dark:text-slate-300">
+    <p>Type or paste any text — a URL, a Wi-Fi password, a short message — and it updates into a scannable QR code as you type. Nothing you enter leaves this browser tab.</p>
+    <div>
+      <h2 class="tool-h2 text-lg font-semibold">What error correction does</h2>
+      <p class="mt-2 text-muted dark:text-slate-400">Higher error correction lets a QR code still scan correctly even if part of it is smudged, damaged, or has a logo placed over the middle — at the cost of a denser-looking code. Medium is a reasonable default for on-screen use; use High if you plan to print it small or add a logo.</p>
+    </div>
+    <div><h2 class="tool-h2 text-lg font-semibold">FAQ</h2><div class="mt-3"><FaqAccordion faqs={faqs} /></div></div>
+    <p class="text-sm">Need to read a QR code instead of make one? Use the <a class="text-primary hover:underline dark:text-blue-400" href="/dev/qr-code-scanner">QR Code Scanner</a>.</p>
+  </div>
+
+  <div class="pt-8 sm:pt-12 pb-6 sm:pb-8">
+    <AdsterraBanner placement="tool-page:dev/qr-code-generator" />
+  </div>
+
+  <script>
+    import QRCode from 'qrcode';
+
+    const textInput = document.querySelector<HTMLTextAreaElement>('#qr-text')!;
+    const ecSelect = document.querySelector<HTMLSelectElement>('#qr-ec')!;
+    const errorBox = document.querySelector<HTMLElement>('#qr-error')!;
+    const outputWrap = document.querySelector<HTMLElement>('#qr-output-wrap')!;
+    const canvas = document.querySelector<HTMLCanvasElement>('#qr-canvas')!;
+    const downloadPngButton = document.querySelector<HTMLButtonElement>('#qr-download-png')!;
+    const downloadSvgButton = document.querySelector<HTMLButtonElement>('#qr-download-svg')!;
+
+    let currentSvg = '';
+    let debounceHandle: ReturnType<typeof setTimeout> | undefined;
+
+    async function render() {
+      const text = textInput.value.trim();
+      errorBox.classList.add('hidden');
+      if (!text) {
+        outputWrap.classList.add('hidden');
+        outputWrap.classList.remove('flex');
+        return;
+      }
+      const ec = ecSelect.value as 'L' | 'M' | 'Q' | 'H';
+      try {
+        await QRCode.toCanvas(canvas, text, { width: 320, margin: 2, errorCorrectionLevel: ec });
+        currentSvg = await QRCode.toString(text, { type: 'svg', margin: 2, errorCorrectionLevel: ec });
+        outputWrap.classList.remove('hidden');
+        outputWrap.classList.add('flex');
+      } catch (error) {
+        outputWrap.classList.add('hidden');
+        outputWrap.classList.remove('flex');
+        errorBox.textContent = `Could not generate a QR code: ${error instanceof Error ? error.message : 'the text may be too long for this error correction level.'}`;
+        errorBox.classList.remove('hidden');
+      }
+    }
+
+    function scheduleRender() {
+      clearTimeout(debounceHandle);
+      debounceHandle = setTimeout(render, 200);
+    }
+
+    function downloadBlob(blob: Blob, filename: string) {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    textInput.addEventListener('input', scheduleRender);
+    ecSelect.addEventListener('change', scheduleRender);
+
+    downloadPngButton.addEventListener('click', () => {
+      canvas.toBlob((blob) => { if (blob) downloadBlob(blob, 'kit-bin-qr-code.png'); }, 'image/png');
+    });
+    downloadSvgButton.addEventListener('click', () => {
+      if (!currentSvg) return;
+      downloadBlob(new Blob([currentSvg], { type: 'image/svg+xml' }), 'kit-bin-qr-code.svg');
+    });
+
+    render();
+  </script>
+</Layout>

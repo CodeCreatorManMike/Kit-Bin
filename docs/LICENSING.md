@@ -30,7 +30,9 @@ versions.
 | `ajv-formats` | `format` keyword support (email, date, uri, uuid, etc.) for the schema validator | MIT | Yes |
 | SheetJS (`xlsx`, community edition) | Spreadsheet read/write | Apache-2.0 | Yes |
 | `fflate` | In-browser zipping | MIT | Yes |
-| `gifenc` | GIF encoding (`/video/gif-from-video`) | MIT | Yes — supersedes `gif.js`, faster with comparable quality; already in use |
+| `gifenc` | GIF encoding (`/video/gif-from-video`); also its `quantize()` reused for `/image/color-palette` | MIT | Yes — supersedes `gif.js`, faster with comparable quality; already in use |
+| `qrcode` | QR generation (`/dev/qr-code-generator`) | MIT | Yes. Its Node-only deps (`pngjs`, `yargs`, `dijkstrajs` — all MIT anyway) are excluded at bundle time via the package's own `browser` field remap to `lib/browser.js`; verified this resolves correctly under Vite. |
+| `jsqr` | QR decoding (`/dev/qr-code-scanner`) | Apache-2.0 | Yes — pure JS, zero dependencies. |
 | `qpdf-wasm` (multiple maintainers) | PDF password removal | Wraps Apache-2.0 QPDF | **No — attempted, pulled.** License is fine, but this build is pthreads/SharedArrayBuffer-based: needs site-wide COOP/COEP headers (conflicts with ad iframes) and its worker pool fails to spawn under Vite even with those headers set. See `TOOL_SPECS.md`'s `/pdf/unlock` entry. |
 | `@embedpdf/pdfium` | PDF rendering (alt. to pdf.js) | MIT | Yes |
 | `Cropper.js` | Image crop UI | MIT | Yes |

@@ -61,6 +61,8 @@ export const tools: Tool[] = [
     aliases: ['exif', 'remove gps', 'remove location from photo', 'strip exif', 'photo privacy', 'clear camera data', 'geotag'] },
   { slug: '/image/rotate', name: 'Rotate Image', description: 'Rotate or flip an image.', category: 'image',
     aliases: ['flip image', 'turn photo', 'sideways photo', 'mirror image', 'fix photo orientation', 'rotate photo'] },
+  { slug: '/image/color-palette', name: 'Color Palette from Image', description: 'Pull the dominant colors out of a photo as hex codes.', category: 'image',
+    aliases: ['extract colors', 'image color picker', 'dominant colors', 'color scheme from photo', 'hex codes from image', 'palette generator'] },
   { slug: '/image/crop', name: 'Crop Image', description: 'Crop an image to a custom selection.', category: 'image',
     aliases: ['cut image', 'trim photo', 'crop photo', 'cut out part of a picture'] },
   { slug: '/image/optimize-svg', name: 'SVG Optimizer', description: 'Clean up and shrink an SVG file.', category: 'image',
@@ -119,6 +121,14 @@ export const tools: Tool[] = [
     aliases: ['sha256 generator', 'file checksum', 'sha 256 hash', 'verify file hash', 'hash file locally'] },
   { slug: '/dev/base64', name: 'Base64 Encoder & Decoder', description: 'Encode or decode text as Base64 without sending it anywhere.', category: 'dev',
     aliases: ['base64 encode', 'base64 decode', 'base 64 converter', 'text to base64', 'decode base64 string'] },
+  { slug: '/dev/qr-code-generator', name: 'QR Code Generator', description: 'Create a QR code from text or a link, download as PNG or SVG.', category: 'dev',
+    aliases: ['make a qr code', 'qr generator', 'create qr code', 'url to qr code', 'wifi qr code', 'qr code maker', 'free qr code'] },
+  { slug: '/dev/qr-code-scanner', name: 'QR Code Scanner', description: 'Read a QR code from an image file.', category: 'dev',
+    aliases: ['qr code reader', 'decode qr code', 'scan qr from image', 'read qr code image', 'qr code decoder'] },
+  { slug: '/dev/password-generator', name: 'Password Generator', description: 'Generate a strong random password locally.', category: 'dev',
+    aliases: ['random password', 'strong password generator', 'secure password maker', 'passphrase generator'] },
+  { slug: '/dev/uuid-generator', name: 'UUID Generator', description: 'Generate random UUIDs (v4), one or in bulk.', category: 'dev',
+    aliases: ['guid generator', 'random uuid', 'unique id generator', 'generate uuid v4', 'bulk uuid'] },
 ];
 
 export const categories = [

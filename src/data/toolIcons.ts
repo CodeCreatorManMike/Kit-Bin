@@ -466,6 +466,18 @@ export const toolIcons: Record<string, IconPrimitive[]> = {
     { t: 'path', d: 'M14 5.5A6 6 0 0 1 20 11' },
     { t: 'path', d: 'M17 3l3 2.5-3 2.5' },
   ],
+  /** A photo frame with an eyedropper touching it, three swatches below —
+   * reads as "pulling colors out of a picture". */
+  '/image/color-palette': [
+    { t: 'fill', d: 'M3 4h13v13H3z' },
+    { t: 'rect', x: 3, y: 4, w: 13, h: 13, rx: 1.3 },
+    { t: 'circle', cx: 8, cy: 9, r: 1.6 },
+    { t: 'path', d: 'M3 15l4-4 3 2.5 4.5-5' },
+    { t: 'circle', cx: 5.5, cy: 20, r: 1.6 },
+    { t: 'circle', cx: 10, cy: 20, r: 1.6 },
+    { t: 'circle', cx: 14.5, cy: 20, r: 1.6 },
+    { t: 'path', d: 'M19.5 4.5l1.6 1.6-6 6-2-2z' },
+  ],
   '/data/excel-to-csv': [
     { t: 'rect', x: 3, y: 4, w: 8, h: 16, rx: 1.2 },
     { t: 'path', d: 'M3 9h8M7 4v16' },
@@ -510,6 +522,47 @@ export const toolIcons: Record<string, IconPrimitive[]> = {
     { t: 'path', d: 'M8.5 4.5c-2.5 0-2.5 2.8-2.5 7.5s0 7.5 2.5 7.5' },
     { t: 'path', d: 'M15.5 4.5c2.5 0 2.5 2.8 2.5 7.5s0 7.5-2.5 7.5' },
     { t: 'path', d: 'M10.5 9h3M10.5 15h3M12 7v10' },
+  ],
+  /** Three finder-pattern corner squares, matching a real QR code's most
+   * recognizable feature, plus a scatter of module dots. */
+  '/dev/qr-code-generator': [
+    { t: 'fill', d: 'M3 3h18v18H3z' },
+    { t: 'rect', x: 3, y: 3, w: 6, h: 6, rx: 1 },
+    { t: 'rect', x: 5, y: 5, w: 2, h: 2 },
+    { t: 'rect', x: 15, y: 3, w: 6, h: 6, rx: 1 },
+    { t: 'rect', x: 17, y: 5, w: 2, h: 2 },
+    { t: 'rect', x: 3, y: 15, w: 6, h: 6, rx: 1 },
+    { t: 'rect', x: 5, y: 17, w: 2, h: 2 },
+    { t: 'rect', x: 15, y: 15, w: 2, h: 2 },
+    { t: 'rect', x: 18, y: 15, w: 2, h: 2 },
+    { t: 'rect', x: 15, y: 18, w: 2, h: 2 },
+    { t: 'rect', x: 18, y: 18, w: 2, h: 2 },
+  ],
+  /** Same QR corner-square motif as the generator, with a magnifier glass
+   * over it — reads as "reading a QR code" rather than "making one". */
+  '/dev/qr-code-scanner': [
+    { t: 'fill', d: 'M3 3h13v13H3z' },
+    { t: 'rect', x: 3, y: 3, w: 5, h: 5, rx: 1 },
+    { t: 'rect', x: 4.7, y: 4.7, w: 1.6, h: 1.6 },
+    { t: 'rect', x: 11, y: 3, w: 5, h: 5, rx: 1 },
+    { t: 'rect', x: 3, y: 11, w: 5, h: 5, rx: 1 },
+    { t: 'circle', cx: 17, cy: 17, r: 3.4 },
+    { t: 'path', d: 'M19.4 19.4L22 22' },
+  ],
+  /** A key shape — the plainest, least-decorative read for "password". */
+  '/dev/password-generator': [
+    { t: 'fill', d: 'M9 3a5 5 0 1 0 3.2 8.8L14 13.6V16h2.5V18.5H19V21h2v-4l-8.8-8.8A5 5 0 0 0 9 3z' },
+    { t: 'circle', cx: 8.7, cy: 8.7, r: 4.4 },
+    { t: 'circle', cx: 8.7, cy: 8.7, r: 1.4 },
+    { t: 'path', d: 'M11.9 11.9L21 21M17 17v4M14.5 19.5H19' },
+  ],
+  /** A tag/label shape (the classic "unique ID sticker") with a short
+   * scribble standing in for an opaque generated string. */
+  '/dev/uuid-generator': [
+    { t: 'fill', d: 'M3 11.5V5a2 2 0 0 1 2-2h6.5L21 12.5 12.5 21 3 11.5z' },
+    { t: 'path', d: 'M3 11.5V5a2 2 0 0 1 2-2h6.5L21 12.5 12.5 21 3 11.5z' },
+    { t: 'circle', cx: 8, cy: 8, r: 1.6 },
+    { t: 'path', d: 'M10.5 14l1.6 1.6 3-3' },
   ],
 
   // Guides

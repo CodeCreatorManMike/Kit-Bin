@@ -164,6 +164,21 @@ This is the template that matters most — it's where 90%+ of organic traffic la
 └─────────────────────────────────────────┘
 ```
 
+### No-file tool pages (generators, text-in tools)
+
+A handful of tools have no file to drop: QR code generator, password generator, UUID generator,
+JSON Schema Validator. These don't use `wireTool`/`getToolElements` at all — that machinery is
+built around "one file goes in, one file comes out," which doesn't fit "type text, get a live
+result" or "click a button, get a fresh random value." They're hand-wired custom scripts instead,
+following the shape established by `/dev/sha256.astro` and `/dev/json-schema-validator.astro`:
+a `showMessage(text, valid)` helper toggling the same `successClasses`/`errorClasses` pair `result`
+state uses elsewhere, manual event listeners, no shared state machine. Copy that pattern for the
+next one rather than trying to force it through `wireTool`.
+
+QR Code Scanner and Color Palette from Image *do* take a file, but still skip `wireTool` — both
+need a live preview image alongside the result rather than the standard result-replaces-dropzone
+flow, so they use the same hand-wired pattern with their own drop-target markup instead.
+
 ### Upload zone behavior (applies to all tools)
 
 - Drag-and-drop **and** click-to-browse — never drag-only, mobile users have no drag gesture
