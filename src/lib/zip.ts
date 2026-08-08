@@ -10,7 +10,7 @@ export interface NamedBlob {
  * Batch input can legitimately contain two files with the same name from
  * different folders, and zipSync would silently keep only the last one. Suffix
  * collisions instead so the user gets back as many files as they put in. */
-function uniqueName(taken: Set<string>, name: string): string {
+export function uniqueName(taken: Set<string>, name: string): string {
   if (!taken.has(name)) {
     taken.add(name);
     return name;

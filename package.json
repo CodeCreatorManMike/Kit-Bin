@@ -10,6 +10,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "typecheck": "astro check",
+    "test": "vitest run",
     "adsense:check": "node scripts/check-adsense.mjs",
     "astro": "astro"
   },
@@ -47,6 +48,8 @@
     "@astrojs/check": "^0.9.10",
     "@types/papaparse": "^5.5.2",
     "@types/qrcode": "^1.5.6",
-    "typescript": "^6.0.3"
+    "happy-dom": "^20.11.2",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.10"
   }
 }

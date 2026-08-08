@@ -137,7 +137,7 @@ type WireOptions = WireOptionsAll | WireOptionsEach;
  * recorded and skipped, the run continues, and the note on the result says how
  * many were skipped. Losing nine good conversions because the tenth file was
  * corrupt is the worst possible outcome here. */
-async function runBatch(
+export async function runBatch(
   files: File[],
   opts: WireOptionsEach,
   report: ProgressReporter,
