@@ -39,6 +39,7 @@ const RING_CIRCUMFERENCE = 2 * Math.PI * 26;
 let activeIntervalId: number | null = null;
 let activeAdHandle: VastPlaybackHandle | null = null;
 let activeOverlay: HTMLElement | null = null;
+let activeResultElement: HTMLElement | null = null;
 
 /** Cancels any in-progress gate immediately: clears the timer, tears down its
  * ad slot, and removes the overlay. Safe to call when no gate is active.
@@ -51,6 +52,8 @@ export function cancelActiveDownloadGate(): void {
   }
   activeAdHandle?.destroy();
   activeAdHandle = null;
+  if (activeResultElement) activeResultElement.style.minHeight = '';
+  activeResultElement = null;
   activeOverlay?.remove();
   activeOverlay = null;
 }
@@ -83,7 +86,7 @@ export function maybeGateDownload(resultEl: HTMLElement): void {
     </p>
     <div class="relative mx-auto w-full max-w-[min(94vw,640px)]">
       <p class="mb-1.5 text-[11px] font-semibold uppercase tracking-widest text-muted/70 dark:text-slate-500">Advertisement</p>
-      <div data-video-ad-frame class="relative mx-auto flex h-[420px] sm:h-[500px] w-full items-center justify-center overflow-hidden rounded-xl border border-border-soft/70 dark:border-slate-800/70 bg-black"></div>
+      <div data-video-ad-frame class="relative mx-auto flex h-[min(65vh,560px)] min-h-[420px] sm:min-h-[500px] w-full items-center justify-center overflow-hidden rounded-xl border border-border-soft/70 dark:border-slate-800/70 bg-black"></div>
       <div class="pointer-events-none absolute right-3 top-9 z-20 drop-shadow-lg">
         <svg width="60" height="60" viewBox="0 0 60 60" role="status" aria-live="polite" aria-label="Download unlocks in ${COUNTDOWN_SECONDS} seconds">
           <defs>
@@ -113,6 +116,8 @@ export function maybeGateDownload(resultEl: HTMLElement): void {
   `;
   resultEl.insertBefore(overlay, resultEl.firstChild);
   activeOverlay = overlay;
+  activeResultElement = resultEl;
+  resultEl.style.minHeight = `${Math.ceil(overlay.getBoundingClientRect().height)}px`;
 
   const videoFrame = overlay.querySelector<HTMLElement>('[data-video-ad-frame]');
   if (videoFrame) {
@@ -157,6 +162,8 @@ export function maybeGateDownload(resultEl: HTMLElement): void {
     activeIntervalId = null;
     activeAdHandle?.destroy();
     activeAdHandle = null;
+    resultEl.style.minHeight = '';
+    activeResultElement = null;
     overlay.remove();
     if (activeOverlay === overlay) activeOverlay = null;
   }, 1000);
