@@ -83,7 +83,7 @@ export function maybeGateDownload(resultEl: HTMLElement): void {
     </p>
     <div class="relative mx-auto w-full max-w-[min(94vw,640px)]">
       <p class="mb-1.5 text-[11px] font-semibold uppercase tracking-widest text-muted/70 dark:text-slate-500">Advertisement</p>
-      <div data-video-ad-frame class="relative mx-auto flex min-h-[220px] sm:min-h-[320px] w-full items-center justify-center overflow-hidden rounded-xl border border-border-soft/70 dark:border-slate-800/70 bg-black"></div>
+      <div data-video-ad-frame class="relative mx-auto flex h-[420px] sm:h-[500px] w-full items-center justify-center overflow-hidden rounded-xl border border-border-soft/70 dark:border-slate-800/70 bg-black"></div>
       <div class="pointer-events-none absolute right-3 top-9 z-20 drop-shadow-lg">
         <svg width="60" height="60" viewBox="0 0 60 60" role="status" aria-live="polite" aria-label="Download unlocks in ${COUNTDOWN_SECONDS} seconds">
           <defs>
