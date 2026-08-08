@@ -33,9 +33,37 @@ const faqs = [
   <AdUnit />
 
   <div class="max-w-2xl mx-auto space-y-6 px-4 py-12 text-ink dark:text-slate-300">
-    <p>Drop a photo above and this tool pulls out its dominant colors as a small palette of hex codes — useful for matching a design to a photo, building a color scheme, or just knowing what's actually in an image.</p>
+    <p>
+      Drop a photo above and this tool pulls out its dominant colors as a small palette of hex
+      codes — useful for matching a design to a photo, building a brand or website color scheme,
+      or just knowing what's actually in an image without eyedropper-picking pixels one at a time.
+      It's not a simple "most common pixel" count: a photo can contain millions of near-identical
+      shades of the same color, so counting raw frequency would just return eight near-duplicate
+      variations of whatever color takes up the most space in the frame. Instead the tool groups
+      similar colors together first (the same clustering approach a GIF encoder uses to pick its
+      256-color palette), then reports each group's representative color — which is why the result
+      reads as a handful of visually distinct swatches instead of a wash of near-identical grays
+      or blues.
+    </p>
+    <p>
+      Each swatch shows its hex code and copies individually on click; the "copy all" button grabs
+      the whole palette at once, ready to paste into CSS, a design tool, or a style guide. Works on
+      any photo format your browser can decode — JPG, PNG, WebP, HEIC from an iPhone — and nothing
+      you drop here is uploaded anywhere.
+    </p>
     <div><h2 class="tool-h2 text-lg font-semibold">FAQ</h2><div class="mt-3"><FaqAccordion faqs={faqs} /></div></div>
-    <p class="text-sm">Need to check color contrast instead? Read <a class="text-primary hover:underline dark:text-blue-400" href="/guides/webp-vs-png-jpg">the format comparison guide</a> for related image decisions.</p>
+    <p class="text-sm">
+      Want to know how the clustering actually works? Read{' '}
+      <a class="text-primary hover:underline dark:text-blue-400" href="/guides/how-color-palette-extraction-works">how color palette extraction works</a>.
+      Converting between hex, RGB, and HSL for the colors you find? See{' '}
+      <a class="text-primary hover:underline dark:text-blue-400" href="/guides/hex-rgb-hsl-same-color">hex vs RGB vs HSL</a>.
+    </p>
+    <p class="text-sm">
+      Related tools:{' '}
+      <a href="/image/remove-background" class="text-primary dark:text-blue-400 hover:underline">Remove Background</a>,{' '}
+      <a href="/image/crop" class="text-primary dark:text-blue-400 hover:underline">Crop Image</a>,{' '}
+      <a href="/image/resize" class="text-primary dark:text-blue-400 hover:underline">Resize Image</a>.
+    </p>
   </div>
 
   <div class="pt-8 sm:pt-12 pb-6 sm:pb-8">

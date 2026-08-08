@@ -1,0 +1,85 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import GuideMeta from '../../components/GuideMeta.astro';
+---
+
+<Layout
+  title="UUID v1 vs v4 vs v7: Which One Should You Actually Use? | Kit-Bin"
+  description="v1 leaks your MAC address and timestamp, v4 is pure randomness, v7 is the new time-ordered version built for database indexes."
+>
+
+  <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-ink dark:text-slate-300 space-y-4">
+    <p class="text-sm"><a href="/guides/" class="text-primary dark:text-blue-400 hover:underline">← All guides</a></p>
+    <h1 class="text-3xl font-bold text-ink dark:text-slate-100">UUID v1 vs v4 vs v7: Which One Should You Actually Use?</h1>
+
+    <p>
+      "UUID" gets used as if it's one thing, but the version nibble (explained in{' '}
+      <a href="/guides/what-is-a-uuid" class="text-primary dark:text-blue-400 hover:underline">what a UUID actually is</a>)
+      marks genuinely different generation schemes with different tradeoffs. Three matter in
+      practice.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">v1: timestamp and MAC address, in the clear</h2>
+    <p>
+      v1 UUIDs encode two real pieces of information directly into the bits: a timestamp
+      (100-nanosecond intervals since October 1582, a deliberately odd epoch chosen for
+      compatibility with an older identifier format) and the network card's MAC address of the
+      machine that generated it. This isn't obfuscated, it's a documented, decodable field. That
+      made v1 a real privacy and security liability: a v1 UUID handed out publicly (in a URL, an
+      API response, a document ID) leaks when it was created and, historically, which physical
+      machine created it, which is exactly the kind of fingerprintable metadata you don't want
+      leaking through an identifier that was only supposed to be, well, an identifier. That's why
+      v1 fell out of favor for anything public-facing, even though it's still technically useful
+      inside a closed system where you control every machine's identity anyway.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">v4: pure randomness</h2>
+    <p>
+      v4 UUIDs contain no encoded information at all, they're 122 random bits plus the fixed
+      version/variant bits. Nothing about a v4 UUID reveals when or where it was generated. This
+      is what Kit-Bin's{' '}
+      <a href="/dev/uuid-generator" class="text-primary dark:text-blue-400 hover:underline">UUID Generator</a>{' '}
+      produces, and it's what most developers mean today when they say "a UUID" with no version
+      specified, it's become the default.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">v7: time-ordered, standardized in 2024</h2>
+    <p>
+      v7 is newer, formalized alongside v1 and v4 in the 2024 revision of the UUID specification.
+      It encodes a millisecond-precision Unix timestamp in the leading bits, followed by random
+      bits for the rest, so UUIDs generated later always sort after ones generated earlier, at
+      least at millisecond resolution.
+    </p>
+    <p>
+      That ordering matters specifically for database primary keys, and the reason is mechanical,
+      not aesthetic. Most relational databases store a primary key index as a B-tree. Insert rows
+      with a v4 key and each new value lands at a random position in the tree, because the key
+      itself is random, forcing the database to split and rebalance pages all over the index
+      rather than appending to the end. At small scale you won't notice. At high write volume, it
+      shows up as index fragmentation and measurably worse insert throughput, purely because the
+      key ordering carries no relationship to insert order. A v7 key inserts in roughly the same
+      order it was created, since the timestamp prefix keeps consecutive UUIDs numerically close,
+      so new rows append near the end of the index rather than scattering through it, the same
+      shape of write pattern an auto-increment integer gives you, while still being a large random
+      value that's safe to generate independently across multiple servers without coordinating on
+      a shared counter, which an auto-increment integer can't do.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Which one to actually use</h2>
+    <p>
+      For a general-purpose unique ID, session token, or public identifier, use v4. It's what Kit-Bin
+      generates, and it's the sane default when nothing about ordering matters. Reach for v7
+      specifically when you control the schema of a high-write database table and the primary key
+      choice will actually affect index performance at scale, that's the one situation where the
+      extra thought pays for itself. v1 is worth avoiding for anything that leaves a machine you
+      control.
+    </p>
+
+    <GuideMeta
+      headline={'UUID v1 vs v4 vs v7: Which One Should You Actually Use?'}
+      description={'v1 leaks your MAC address and timestamp, v4 is pure randomness, v7 is the new time-ordered version built for database indexes.'}
+      published="2026-08-08"
+      reviewed="2026-08-08"
+    />
+  </article>
+</Layout>

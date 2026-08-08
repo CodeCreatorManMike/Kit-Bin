@@ -1,0 +1,88 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import GuideMeta from '../../components/GuideMeta.astro';
+---
+
+<Layout
+  title="Why Won't My QR Code Scan? | Kit-Bin"
+  description="The four real reasons a QR code fails to scan — quiet zone, contrast, print size, and resolution — and how to actually fix each one."
+>
+
+  <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-ink dark:text-slate-300 space-y-4">
+    <p class="text-sm"><a href="/guides/" class="text-primary dark:text-blue-400 hover:underline">← All guides</a></p>
+    <h1 class="text-3xl font-bold text-ink dark:text-slate-100">Why Won't My QR Code Scan?</h1>
+
+    <p>
+      A QR code either works or it doesn't, there's no "sort of scans." When one fails, it's
+      almost always one of four specific, physical problems, not some vague bad luck. Here's how
+      to tell which one you're looking at, and how to fix it.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">1. The quiet zone got cropped</h2>
+    <p>
+      Every QR code needs a blank margin around it, called the quiet zone, so a scanner can tell
+      where the code's pattern starts and stops against its background. It's not decorative
+      padding, it's part of the spec: a scanner's detection algorithm actively looks for a clean
+      transition from empty space to the finder patterns at the corners. Crop the code tightly to
+      fit a logo, a flyer layout, or a business card and you can cut directly into that margin,
+      and the scanner can fail to detect the code at all, even though every module is still
+      visually intact.
+    </p>
+    <p><strong>Fix:</strong> keep a margin of at least four modules' width of empty space on all four sides. When in doubt, leave more room than looks strictly necessary.</p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">2. Poor contrast or inverted colors</h2>
+    <p>
+      Scanners are built expecting dark modules on a light background, that's the default every
+      camera-based scanning library is tuned for. A code styled with light modules on a dark
+      background, or one printed with insufficient contrast between the two colors (a pale gray
+      on white, for instance), can fail to register at all, or scan unreliably depending on
+      lighting. Some newer scanning apps handle inverted codes fine, but plenty of built-in
+      camera scanners still don't, so an inverted code is a real compatibility risk, not just a
+      style choice.
+    </p>
+    <p><strong>Fix:</strong> stick to dark modules on a light background unless you've specifically tested the inverted version against the scanners your actual audience uses.</p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">3. Printed too small for the scan distance</h2>
+    <p>
+      A QR code sized correctly for a phone screen at arm's length doesn't scale down safely to a
+      tiny flyer someone's expected to scan from a few feet away. As a rough rule of thumb, the
+      code needs about one unit of physical size for every ten units of intended scan distance,
+      a code meant to be scanned from 3 feet away needs to be roughly 3-4 inches across. Shrink
+      it below that and the camera can't resolve individual modules clearly enough to distinguish
+      them, especially at the denser higher versions used for longer URLs.
+    </p>
+    <p><strong>Fix:</strong> size the printed code for the distance people will actually stand from it, not the size that looks proportionate on the page layout.</p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">4. Pixelation from stretching a low-res image</h2>
+    <p>
+      A QR code exported as a small PNG and then stretched up to poster size doesn't scale
+      cleanly, it gets rasterized, meaning the sharp module edges the scanner relies on turn into
+      blurry, jagged approximations as the image is upscaled. Those blurred edges corrupt exactly
+      the fine detail a scanner needs to tell one module boundary from the next, especially at
+      higher versions where modules are already small relative to the whole grid.
+    </p>
+    <p>
+      <strong>Fix:</strong> for anything printed larger than a business card, generate or export
+      the code as SVG rather than a fixed-resolution PNG, SVG is vector-based and scales to any
+      size with perfectly sharp edges. If you're stuck with a bitmap PNG that needs to go larger,{' '}
+      <a href="/image/resize" class="text-primary dark:text-blue-400 hover:underline">resize it</a>{' '}
+      up front at the target print resolution rather than letting a print program stretch it
+      blindly, or convert an SVG version with{' '}
+      <a href="/image/svg-to-png" class="text-primary dark:text-blue-400 hover:underline">SVG to PNG</a>{' '}
+      at the exact pixel dimensions you need.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Generating a code that avoids all four</h2>
+    <p>
+      <a href="/data/qr-code-generator" class="text-primary dark:text-blue-400 hover:underline">Generate a QR code</a>{' '}
+      entirely in your browser, with the quiet zone and contrast handled correctly by default.
+    </p>
+
+    <GuideMeta
+      headline={"Why Won't My QR Code Scan?"}
+      description={"The four real reasons a QR code fails to scan — quiet zone, contrast, print size, and resolution — and how to actually fix each one."}
+      published="2026-08-08"
+      reviewed="2026-08-08"
+    />
+  </article>
+</Layout>

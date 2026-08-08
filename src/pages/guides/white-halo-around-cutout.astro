@@ -1,0 +1,87 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import GuideMeta from '../../components/GuideMeta.astro';
+---
+
+<Layout
+  title="Why Your Background-Removed Photo Has a White Halo | Kit-Bin"
+  description="The edge-fringing problem after cutting out a background, why it happens, and how to actually avoid it."
+>
+
+  <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-ink dark:text-slate-300 space-y-4">
+    <p class="text-sm"><a href="/guides/" class="text-primary dark:text-blue-400 hover:underline">← All guides</a></p>
+    <h1 class="text-3xl font-bold text-ink dark:text-slate-100">Why Your Background-Removed Photo Has a White Halo</h1>
+
+    <p>
+      The cutout looks right at a glance, then you drop it onto a dark background and notice a
+      faint, thin white or light-gray line tracing the subject's outline, hair, shoulders, the edge
+      of a product. It shows up even when the tool did its job correctly. That's not a mistake in
+      the segmentation. It's an optical fact about how the original photo was captured, and it's
+      fixable if you know where it comes from.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">The edge pixels were never 100% subject</h2>
+    <p>
+      A camera sensor (and the image encoder afterward) doesn't produce perfectly sharp boundaries
+      between a subject and its background. At the actual edge of any real-world object, the pixels
+      sit exactly on the transition, and the sensor captures an optical blend of subject color and
+      background color in that thin strip, a form of natural anti-aliasing baked into the original
+      photo before any editing happens. If your subject was photographed against a white backdrop,
+      that fringe of edge pixels is a mix of the subject's true color and white.
+    </p>
+    <p>
+      Background removal replaces the background with transparency, but it can only assign an alpha
+      value per pixel, it can't retroactively un-mix a color that was already blended at capture
+      time. Even a mathematically perfect alpha mask leaves those edge pixels holding their
+      original blended color, which still has some of the old background's tint in it. Composite
+      that cutout onto a new background and the old color reappears as a rim, because the pixel
+      itself was never purely "subject" to begin with.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Why it's worse on high-contrast swaps</h2>
+    <p>
+      The halo is proportional to how different the old and new backgrounds are. A faint white
+      fringe left over from a white studio backdrop is nearly invisible if you place the cutout on
+      a light gray page. Place the exact same cutout on a black or saturated background and that
+      same fringe suddenly reads as an obvious bright outline, because now it's the only light
+      pixel in an otherwise dark region. The fringe didn't get worse. The contrast that reveals it
+      did.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">What actually reduces it</h2>
+    <p>
+      Two practical options, depending on whether you control the original photo:
+    </p>
+    <ul class="list-disc pl-5 space-y-1">
+      <li>
+        If you're shooting the source photo yourself, use a backdrop closer in tone to where the
+        cutout will ultimately be placed. A neutral mid-gray backdrop fringes less visibly against
+        both light and dark destinations than a pure white or pure black one.
+      </li>
+      <li>
+        If you're stuck with a photo you didn't shoot, erode or feather the mask edge by a pixel or
+        two before compositing. This trims away the thin ring of contaminated edge pixels entirely
+        rather than trying to recolor them, at the cost of a very slightly tighter cutout.
+      </li>
+    </ul>
+    <p>
+      There's no setting that removes this at the segmentation step, because segmentation isn't
+      where the problem originates. The blended pixel exists in the source photo before any AI
+      model touches it.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Using it</h2>
+    <p>
+      <a href="/image/remove-background" class="text-primary dark:text-blue-400 hover:underline">Remove Background</a>{' '}
+      runs entirely in your browser. For the segmentation mechanics behind the cutout itself, see{' '}
+      <a href="/guides/how-background-removal-works" class="text-primary dark:text-blue-400 hover:underline">How Does AI Background Removal Actually Work?</a>
+    </p>
+
+    <GuideMeta
+      headline={'Why Your Background-Removed Photo Has a White Halo'}
+      description={'The edge-fringing problem after cutting out a background, why it happens, and how to actually avoid it.'}
+      published="2026-08-08"
+      reviewed="2026-08-08"
+    />
+  </article>
+</Layout>

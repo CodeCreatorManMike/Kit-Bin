@@ -1,0 +1,89 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import GuideMeta from '../../components/GuideMeta.astro';
+import GuideReferences from '../../components/GuideReferences.astro';
+---
+
+<Layout
+  title="Why Is Your GIF Bigger Than the Video It Came From? | Kit-Bin"
+  description="GIF's 256-color palette and per-frame compression make it fundamentally less efficient than any modern video codec — here's the real reason."
+>
+
+  <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-ink dark:text-slate-300 space-y-4">
+    <p class="text-sm"><a href="/guides/" class="text-primary dark:text-blue-400 hover:underline">← All guides</a></p>
+    <h1 class="text-3xl font-bold text-ink dark:text-slate-100">Why Is Your GIF Bigger Than the Video It Came From?</h1>
+
+    <p>
+      You convert a 5-second clip to GIF and the result is several times larger than the source
+      video. That's not a bad export setting, it's the format itself. GIF was designed in 1987 for
+      simple, low-color computer graphics, not photographic video, and two of its core limitations
+      have never gone away.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">The 256-color ceiling</h2>
+    <p>
+      GIF can only use 256 colors per frame, total, no exceptions. That's a hard limit baked into
+      the format's structure, not a quality setting you can raise. A modern video codec stores
+      full 24-bit color, over 16 million possible colors per pixel, natively. To fit a photographic
+      frame into GIF's 256-color budget, every pixel's color has to be quantized down to the
+      nearest of those 256 allowed colors, and dithering is used to fake the smooth gradients that
+      got lost in the process. That's why GIFs of real footage often look slightly grainy or
+      banded even before file size becomes the issue: the color information itself has already
+      been thrown away.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">The bigger reason: no real motion compression</h2>
+    <p>
+      Color loss alone doesn't explain the size gap, though. The real driver is how each format
+      handles the fact that consecutive video frames are almost identical to each other.
+      MP4 and WebM are built around this: instead of storing every frame as a complete image, they
+      use motion compensation to store one full reference frame and then, for the frames after it,
+      only the differences, what moved, and where. A mostly-static shot with a small moving subject
+      might store nearly nothing for dozens of frames in a row.
+    </p>
+    <p>
+      GIF's compression (LZW) has no real concept of this. It compresses each frame mostly on its
+      own, looking for repeated patterns within that single frame rather than exploiting how
+      similar it is to the frame before it. Every frame carries close to its full weight,
+      repeatedly, for the whole clip. That's the actual reason a 5-second video clip can be a
+      fraction of the size of the "same" clip as a GIF: one format is throwing away redundant
+      information between frames, and the other structurally can't.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">The three levers that actually shrink a GIF</h2>
+    <p>
+      Since GIF can't be given better inter-frame compression, the only real ways to shrink one
+      are: reduce the pixel dimensions (fewer pixels to encode per frame, the single biggest
+      lever), reduce the frame rate (GIFs rarely need the source video's full 30 or 60fps to read
+      fine, dropping to 10-15fps often looks nearly identical for typical loop content and roughly
+      halves or better the frame count), and reduce the duration (fewer frames, full stop). There's
+      no equivalent to a video codec's quality/bitrate slider that meaningfully helps here, those
+      three are genuinely most of what you control.
+    </p>
+    <p>
+      The better fix, when the destination supports it, is to just not use GIF. Most modern
+      platforms that historically required GIF for autoplay looping now accept MP4 or WebM for the
+      same purpose, and either will be dramatically smaller than a GIF of equivalent length and
+      quality. Reserve GIF for what it's actually good at: short, simple, palette-friendly loops,
+      screen recordings, simple animations, low color-count content, where the 256-color limit
+      barely costs anything.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Working with either format</h2>
+    <p>
+      <a href="/video/gif-from-video" class="text-primary dark:text-blue-400 hover:underline">Make a GIF from a video</a>
+      · <a href="/video/compress" class="text-primary dark:text-blue-400 hover:underline">Compress a video</a>
+      · <a href="/video/mp4-to-webm" class="text-primary dark:text-blue-400 hover:underline">Convert MP4 to WebM</a>,
+      all running entirely in your browser.
+    </p>
+
+    <GuideReferences keys={['mdnVideoCodecs']} />
+
+    <GuideMeta
+      headline={'Why Is Your GIF Bigger Than the Video It Came From?'}
+      description={"GIF's 256-color palette and per-frame compression make it fundamentally less efficient than any modern video codec — here's the real reason."}
+      published="2026-08-08"
+      reviewed="2026-08-08"
+    />
+  </article>
+</Layout>

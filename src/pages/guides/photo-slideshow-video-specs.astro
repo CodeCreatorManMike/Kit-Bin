@@ -1,0 +1,93 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import GuideMeta from '../../components/GuideMeta.astro';
+---
+
+<Layout
+  title="Turning Photos Into a Video: Resolution, Timing, and Letterboxing | Kit-Bin"
+  description="Why mixed-aspect-ratio photos get black bars in a slideshow video, and how to pick timing and output size that survive re-uploading."
+>
+
+  <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-ink dark:text-slate-300 space-y-4">
+    <p class="text-sm"><a href="/guides/" class="text-primary dark:text-blue-400 hover:underline">← All guides</a></p>
+    <h1 class="text-3xl font-bold text-ink dark:text-slate-100">Turning Photos Into a Video: Resolution, Timing, and Letterboxing</h1>
+
+    <p>
+      A slideshow tool has one problem a normal video doesn't: every photo you feed it can be a
+      different shape. A portrait phone photo, a landscape camera shot, and a square social crop
+      all have to end up inside the same fixed video frame. That single constraint is behind most
+      of the odd-looking results people get from slideshow tools, and it's worth understanding
+      before you build one.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Why the black bars show up</h2>
+    <p>
+      A video has one aspect ratio for its entire length. It can't stretch to portrait for one
+      photo and landscape for the next. So when a portrait photo needs to sit inside a landscape
+      (or square) frame, there are exactly two options: shrink the photo to fit inside the frame
+      and fill the leftover space with black bars (letterboxing for horizontal bars, pillarboxing
+      for vertical ones), or scale the photo up until it fills the frame completely and crop off
+      whatever hangs outside the edges.
+    </p>
+    <p>
+      Letterboxing preserves the entire photo; nothing is lost, you just see black space around
+      it. Cropping fills the frame edge-to-edge but permanently discards part of the image, and
+      you don't get to choose which part in an automated batch process, it's whatever the crop
+      math cuts. For a slideshow made from a mixed batch of photos, letterboxing is the safer
+      default specifically because it never loses content. Cropping only makes sense if you've
+      manually checked that every photo's important subject sits away from the edges, which
+      defeats the point of an automated tool. If a photo needs a specific framing, crop it
+      intentionally beforehand with <a href="/image/crop" class="text-primary dark:text-blue-400 hover:underline">a crop tool</a>
+      rather than letting the slideshow generator guess.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">How long each slide should stay on screen</h2>
+    <p>
+      Two to four seconds per slide is the range that reads naturally to a viewer: long enough to
+      register the image, short enough that attention doesn't drift. Under about 1.5 seconds
+      starts to feel like a strobe, especially with several photos in a row, since the eye barely
+      finishes focusing before the cut happens. Past 5-6 seconds, a static photo with no motion
+      starts to feel sluggish and viewers instinctively skip ahead.
+    </p>
+    <p>
+      Duration also compounds arithmetically in a way that's easy to miss until you check the
+      math. Ten photos at 3 seconds each is a 30-second video, not "a slideshow," a specific fixed
+      length. If you're pairing that with background music, the mismatch matters: a 3-minute
+      song behind a 30-second slideshow means the video ends less than a fifth of the way through
+      the track, and it either cuts off abruptly or the video finishes while the audio keeps
+      running past the last photo. Decide photo count and per-slide duration first, multiply them,
+      and pick or trim music to match that number, rather than bolting a song on afterward and
+      hoping it lines up.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Choosing an output resolution that survives re-uploading</h2>
+    <p>
+      Almost nowhere a slideshow video ends up is the final stop. YouTube, Instagram, and most
+      messaging apps re-encode whatever you upload, compressing it again on their end regardless
+      of how it was compressed on yours. That's fine if your source resolution was reasonably
+      high, the platform's re-encode has enough detail to work with. It's a real problem if your
+      source photos or your output resolution were already low, because the quality loss happens
+      twice: once when the slideshow is rendered, and again when the platform compresses it a
+      second time. Resize source photos up to a genuinely low resolution before building the
+      video and the result won't get sharper, it'll just make both compression passes work
+      against less information. If your photos vary widely in resolution, bring them to a
+      consistent, reasonably high size with <a href="/image/resize" class="text-primary dark:text-blue-400 hover:underline">an image resize tool</a>
+      before assembling the slideshow, rather than exporting to a resolution higher than your
+      worst source photo actually supports.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Building one</h2>
+    <p>
+      <a href="/video/slideshow" class="text-primary dark:text-blue-400 hover:underline">Build a slideshow video</a>,
+      which runs entirely in your browser, so a folder of phone photos never has to leave your
+      device to become a shareable video.
+    </p>
+
+    <GuideMeta
+      headline={'Turning Photos Into a Video: Resolution, Timing, and Letterboxing'}
+      description={'Why mixed-aspect-ratio photos get black bars in a slideshow video, and how to pick timing and output size that survive re-uploading.'}
+      published="2026-08-08"
+      reviewed="2026-08-08"
+    />
+  </article>
+</Layout>

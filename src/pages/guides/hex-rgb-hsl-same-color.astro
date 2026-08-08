@@ -1,0 +1,80 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import GuideMeta from '../../components/GuideMeta.astro';
+---
+
+<Layout
+  title="Hex, RGB, and HSL Are the Same Color in Three Notations | Kit-Bin"
+  description="Three ways to write the same color, and why HSL is the one to reach for when you need '20% darker.'"
+>
+
+  <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-ink dark:text-slate-300 space-y-4">
+    <p class="text-sm"><a href="/guides/" class="text-primary dark:text-blue-400 hover:underline">← All guides</a></p>
+    <h1 class="text-3xl font-bold text-ink dark:text-slate-100">Hex, RGB, and HSL Are the Same Color in Three Notations</h1>
+
+    <p>
+      #3B82F6, rgb(59, 130, 246), and hsl(217, 91%, 60%) all describe the exact same shade of
+      blue. None of them is more "accurate" than the others. They're just different ways of
+      writing down the same underlying color, and which one is convenient depends entirely on
+      what you're about to do with it.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Hex and RGB aren't even really different formats</h2>
+    <p>
+      A hex code like #3B82F6 breaks into three pairs of characters: 3B, 82, F6, one pair per
+      color channel, red, green, blue. Each pair is a byte (0-255) written in base-16 instead of
+      base-10. 3B in hexadecimal is 59 in decimal. 82 is 130. F6 is 246. That's the entire
+      relationship: rgb(59, 130, 246) and #3B82F6 are the same three numbers, same channel order,
+      same range, just written in a different number base. There's no conceptual difference to
+      explain, it's a notation choice, not a different color model.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">HSL encodes the same space differently</h2>
+    <p>
+      HSL describes the identical color space (every color RGB can represent, HSL can too) using
+      three different axes: hue is a position on a 0-360° color wheel (0 is red, 120 is green, 240
+      is blue, back to 0 at 360); saturation is how intense or muted the color is, from 0% (gray)
+      to 100% (fully vivid); lightness is how close the color sits to black or white, from 0%
+      (black) to 100% (white), with 50% being the pure, fully saturated version of that hue.
+    </p>
+    <p>
+      This is why HSL is the far more convenient notation for a specific kind of adjustment. "Make
+      this 20% darker" in HSL is one number: subtract 20 from the lightness value, hue and
+      saturation stay untouched, and the result is guaranteed to still be recognizably the same
+      color, just darker. "Same hue, less saturated" is equally direct: lower the saturation
+      number, leave hue and lightness alone. Try the same adjustment in RGB and there's no single
+      number to change. Darkening a color means scaling red, green, and blue down together,
+      proportionally, by hand, and getting the ratio wrong shifts the hue as a side effect, so what
+      was meant to be "the same blue, darker" quietly turns slightly purple or slightly teal. HSL
+      separates the three things a person actually thinks about (which color, how vivid, how
+      light) into three independent numbers. RGB doesn't separate them at all, each channel
+      contains a mix of all three.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Where opacity fits in</h2>
+    <p>
+      All three notations have a transparency-inclusive variant, and it's always a fourth value
+      bolted onto the same three. Hex gets two extra characters for an alpha byte:
+      #RRGGBBAA (so #3B82F6FF is fully opaque, #3B82F680 is roughly half-transparent). RGB becomes
+      rgba(59, 130, 246, 0.5), a fourth number from 0 to 1. HSL becomes hsla(217, 91%, 60%, 0.5),
+      same fourth slot. The color itself, whichever of the three ways it's written, is completely
+      unaffected by the alpha value; it's a separate layer describing how much of what's behind the
+      color shows through.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Pulling colors from an actual photo</h2>
+    <p>
+      All of this matters most in practice when you're trying to match a color you can see rather
+      than one you're inventing. <a href="/image/color-palette" class="text-primary dark:text-blue-400 hover:underline">Extract a color palette from an image</a>
+      to get the exact hex codes out of a photo, then convert to HSL if you need lighter, darker,
+      or less saturated variants of a brand color for a design system.
+    </p>
+
+    <GuideMeta
+      headline={'Hex, RGB, and HSL Are the Same Color in Three Notations'}
+      description={"Three ways to write the same color, and why HSL is the one to reach for when you need '20% darker.'"}
+      published="2026-08-08"
+      reviewed="2026-08-08"
+    />
+  </article>
+</Layout>

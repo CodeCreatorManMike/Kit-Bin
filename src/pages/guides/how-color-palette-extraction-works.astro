@@ -1,0 +1,87 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import GuideMeta from '../../components/GuideMeta.astro';
+---
+
+<Layout
+  title="How Does a Color Palette Get Extracted From a Photo? | Kit-Bin"
+  description="Why grabbing the most common pixel colors from a photo gives muddy results, and what color quantization actually does instead."
+>
+
+  <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-ink dark:text-slate-300 space-y-4">
+    <p class="text-sm"><a href="/guides/" class="text-primary dark:text-blue-400 hover:underline">← All guides</a></p>
+    <h1 class="text-3xl font-bold text-ink dark:text-slate-100">How Does a Color Palette Get Extracted From a Photo?</h1>
+
+    <p>
+      Pulling five clean, distinct colors out of a photo sounds like it should be as simple as
+      counting which color shows up most often. It isn't, and the reason why is worth
+      understanding if you've ever gotten a muddy, near-duplicate palette back from a tool that
+      claims to do this.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Why "most common exact color" doesn't work</h2>
+    <p>
+      A single photo can easily contain millions of distinct pixel colors. A patch of sky that
+      looks like one uniform blue to your eye is, pixel by pixel, dozens of extremely close but
+      technically different shades, tiny lighting variation, sensor noise, compression artifacts.
+      If you literally count exact-match pixel colors and take the most frequent ones, you get
+      back a handful of near-identical blues that are all, in effect, the same color three times
+      over, not the visually distinct set of colors a person would actually name if you asked them
+      to describe the photo. The naive approach isn't wrong, it's just answering a different
+      question than the one you meant to ask.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">What quantization does instead</h2>
+    <p>
+      The fix is color quantization, grouping pixels by proximity in color space rather than by
+      exact match. A common approach (k-means-style clustering) works roughly like this: pick a
+      target number of clusters, say five, and treat every pixel in the photo as a point in a
+      3D space where the axes are red, green, and blue. Group nearby points together into that
+      many clusters, then report the center of each cluster, its average color, as one palette
+      entry. Two near-identical blues that would have been counted as separate "most common
+      colors" under the naive approach now land in the same cluster and contribute to one
+      representative shade instead of splitting the palette between two entries that look
+      basically identical.
+    </p>
+    <p>
+      This is the actual mechanism behind why a good palette extractor returns colors that read as
+      visually distinct from each other, sky blue, skin tone, shirt red, background green, instead
+      of a list where three of the five entries are shades of the same blue. It's grouping by
+      what's visually similar first, then picking one representative per group, rather than
+      ranking by raw frequency of exact values.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Choosing how many colors to extract</h2>
+    <p>
+      Palette size changes what you get, not just how much of it. Three to five colors works well
+      when the goal is a brand or design palette, a small set of colors clean enough to use
+      directly in a UI or logo. Six to eight colors is better suited to capturing a busy photo's
+      full range, a landscape with sky, foliage, water, and rock all present, where forcing that
+      down to three colors would merge genuinely distinct elements into one averaged blob.
+    </p>
+    <p>
+      One thing to watch for regardless of palette size: a photo with a large single-color region,
+      a plain sky, a white studio background, a solid-color wall, contains so many pixels of that
+      one color that it will naturally dominate a small palette's clustering, potentially crowding
+      out smaller but more visually interesting details elsewhere in the frame. A tool that doesn't
+      account for this will hand back a palette that's mostly "the background, in four
+      near-identical ways." Weighting for diversity rather than pure pixel count is what keeps a
+      small, visually varied photo from producing a boring, background-dominated palette.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Extracting one</h2>
+    <p>
+      <a href="/image/color-palette" class="text-primary dark:text-blue-400 hover:underline">Extract a color palette from a photo</a>,
+      entirely in your browser. Once you have the hex codes, see{' '}
+      <a href="/guides/hex-rgb-hsl-same-color" class="text-primary dark:text-blue-400 hover:underline">Hex, RGB, and HSL Are the Same Color in Three Notations</a>{' '}
+      for converting them into lighter or darker variants for a design system.
+    </p>
+
+    <GuideMeta
+      headline={'How Does a Color Palette Get Extracted From a Photo?'}
+      description={'Why grabbing the most common pixel colors from a photo gives muddy results, and what color quantization actually does instead.'}
+      published="2026-08-08"
+      reviewed="2026-08-08"
+    />
+  </article>
+</Layout>

@@ -1,0 +1,79 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import GuideMeta from '../../components/GuideMeta.astro';
+---
+
+<Layout
+  title="Static vs Dynamic QR Codes | Kit-Bin"
+  description="Dynamic QR codes are a redirect through someone else's server — that's why free generators expire them. Here's the actual difference."
+>
+
+  <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-ink dark:text-slate-300 space-y-4">
+    <p class="text-sm"><a href="/guides/" class="text-primary dark:text-blue-400 hover:underline">← All guides</a></p>
+    <h1 class="text-3xl font-bold text-ink dark:text-slate-100">Static vs Dynamic QR Codes (and Why Some "Free" Ones Stop Working)</h1>
+
+    <p>
+      A surprising number of people who generate a "free" QR code find it works fine for months,
+      then just stops, no error, the destination simply doesn't load anymore, or the app tells
+      them to upgrade to a paid plan to keep using it. That's not a bug or a scam exactly, it's
+      the predictable consequence of a distinction most generators never explain: static versus
+      dynamic QR codes.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Static: the destination is inside the code</h2>
+    <p>
+      A static QR code encodes your actual destination, a URL, a piece of text, a Wi-Fi password,
+      contact details, directly in the pattern of modules itself. When a scanner reads it, it
+      decodes that content on the spot. No server, no third party, no network request beyond
+      whatever you do with the decoded content afterward. This means a static code works forever,
+      offline, printed or digital, with zero dependency on any company staying in business. Its
+      one real limitation is that it can never be edited once created, whatever destination you
+      encoded is permanent, because changing it would mean generating and redistributing an
+      entirely new code.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Dynamic: the code points at someone else's redirect</h2>
+    <p>
+      A dynamic QR code doesn't encode your real destination at all. It encodes a short URL
+      owned and hosted by the generator's own service, something like a link shortener. When
+      scanned, that short URL is looked up on the provider's server, which then redirects the
+      scanner to whatever your actual destination currently is. This indirection is genuinely
+      useful for two things: the destination can be changed later without reprinting the code,
+      and the provider can track how many times it's been scanned, when, and from where.
+    </p>
+    <p>
+      The cost of that flexibility is a permanent dependency you didn't necessarily notice you
+      took on. The code only ever works as long as that specific company's redirect service
+      keeps running, keeps that specific short link active, and keeps you on a plan that still
+      supports it. If the company shuts down, deprecates the free tier, or migrates its
+      infrastructure, every dynamic code it ever generated for you can silently stop resolving,
+      even if the code itself, printed on a sign, a menu, or packaging months or years earlier,
+      never physically changed. That's exactly the pattern behind "my permanent QR code just
+      stopped working": it was never actually storing the destination, only a pointer to a
+      service that, at some point, stopped forwarding it.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Which one you actually want</h2>
+    <p>
+      If you need to change the destination after the code is already printed, a dynamic code is
+      the only option that supports that, accept the trade-off deliberately and keep the account
+      active. But for the far more common case, a link to your own website, a Wi-Fi password, a
+      contact card, anything you don't plan to change later, a static code is strictly better: no
+      account to maintain, no service that can be discontinued, no scan-tracking dependency, and
+      no expiration risk at all.
+    </p>
+    <p>
+      <a href="/data/qr-code-generator" class="text-primary dark:text-blue-400 hover:underline">Kit-Bin's QR code generator</a>{' '}
+      produces static codes for exactly this reason. The destination is encoded directly into the
+      code in your browser, nothing is stored on a server, and nothing about the code can expire,
+      get deprecated, or get moved behind a paywall later.
+    </p>
+
+    <GuideMeta
+      headline={"Static vs Dynamic QR Codes (and Why Some 'Free' Ones Stop Working)"}
+      description={"Dynamic QR codes are a redirect through someone else's server — that's why free generators expire them. Here's the actual difference."}
+      published="2026-08-08"
+      reviewed="2026-08-08"
+    />
+  </article>
+</Layout>

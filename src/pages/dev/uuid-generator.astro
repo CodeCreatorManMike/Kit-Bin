@@ -14,7 +14,7 @@ const faqs = [
 ];
 ---
 
-<Layout title="UUID Generator (v4), Free and Private | Kit-Bin" description="Generate random UUIDs (v4) in your browser, one at a time or in bulk. Nothing is sent to a server.">
+<Layout title="UUID Generator (v4) — Bulk, Online, Free | Kit-Bin" description="Generate random UUIDs (v4) in your browser, one at a time or in bulk up to 1,000. Nothing is sent to a server.">
   <ToolSchema name="UUID Generator" description="Generate random UUID v4 identifiers entirely in your browser, with no uploads." faqs={faqs} />
   <ToolHeader title="UUID Generator" subtitle="Generate random UUIDs (v4), one or in bulk, entirely in your browser." />
 
@@ -45,7 +45,18 @@ const faqs = [
   <div class="max-w-2xl mx-auto space-y-6 px-4 py-12 text-ink dark:text-slate-300">
     <p>Set how many UUIDs you need — one, or up to a thousand at once — and generate them locally using the browser's cryptographically secure random number generator.</p>
     <div><h2 class="tool-h2 text-lg font-semibold">FAQ</h2><div class="mt-3"><FaqAccordion faqs={faqs} /></div></div>
-    <p class="text-sm">Need a random password instead of an identifier? Use the <a class="text-primary hover:underline dark:text-blue-400" href="/dev/password-generator">Password Generator</a>.</p>
+    <p class="text-sm">
+      What actually makes a UUID unique? Read{' '}
+      <a class="text-primary hover:underline dark:text-blue-400" href="/guides/what-is-a-uuid">what a UUID is and why they look like that</a>.
+      Why does this generator produce v4, not v1 or v7? See{' '}
+      <a class="text-primary hover:underline dark:text-blue-400" href="/guides/uuid-v1-vs-v4-vs-v7">UUID v1 vs v4 vs v7</a>.
+    </p>
+    <p class="text-sm">
+      Related tools:{' '}
+      <a href="/dev/password-generator" class="text-primary dark:text-blue-400 hover:underline">Password Generator</a>,{' '}
+      <a href="/dev/sha256" class="text-primary dark:text-blue-400 hover:underline">SHA-256 Hash</a>,{' '}
+      <a href="/dev/base64" class="text-primary dark:text-blue-400 hover:underline">Base64 Encode/Decode</a>.
+    </p>
   </div>
 
   <div class="pt-8 sm:pt-12 pb-6 sm:pb-8">

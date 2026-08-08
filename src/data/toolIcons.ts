@@ -653,4 +653,108 @@ export const toolIcons: Record<string, IconPrimitive[]> = {
     { t: 'path', d: 'M4.5 8h4M4.5 12h4M4.5 16h4' },
     { t: 'path', d: 'M14 4l2.5 2-2.5 2M18 12l2.5 2-2.5 2M14 20l2.5-2-2.5-2' },
   ],
+  '/guides/how-background-removal-works': [
+    { t: 'path', d: 'M4 6l4-2 4 2 4-2 4 2v12l-4 2-4-2-4 2-4-2z' },
+    { t: 'circle', cx: 12, cy: 12, r: 3 },
+  ],
+  '/guides/white-halo-around-cutout': [
+    { t: 'circle', cx: 12, cy: 12, r: 5 },
+    { t: 'circle', cx: 12, cy: 12, r: 8 },
+  ],
+  '/guides/what-transparent-png-means': [
+    { t: 'rect', x: 3, y: 3, w: 8, h: 8 },
+    { t: 'rect', x: 13, y: 13, w: 8, h: 8 },
+    { t: 'rect', x: 3, y: 13, w: 8, h: 8 },
+    { t: 'rect', x: 13, y: 3, w: 8, h: 8 },
+  ],
+  '/guides/avif-explained': [
+    { t: 'rect', x: 3, y: 5, w: 18, h: 14, rx: 1.5 },
+    { t: 'path', d: 'M7 15l3-5 3 3 2-2 3 4' },
+  ],
+  '/guides/avif-wont-open': [
+    { t: 'rect', x: 3, y: 5, w: 18, h: 14, rx: 1.5 },
+    { t: 'path', d: 'M9 9l6 6M15 9l-6 6' },
+  ],
+  '/guides/how-qr-codes-work': [
+    { t: 'rect', x: 3, y: 3, w: 6, h: 6 },
+    { t: 'rect', x: 15, y: 3, w: 6, h: 6 },
+    { t: 'rect', x: 3, y: 15, w: 6, h: 6 },
+    { t: 'rect', x: 14, y: 14, w: 3, h: 3 },
+    { t: 'rect', x: 18, y: 18, w: 3, h: 3 },
+  ],
+  '/guides/why-qr-code-wont-scan': [
+    { t: 'rect', x: 3, y: 3, w: 6, h: 6 },
+    { t: 'rect', x: 15, y: 3, w: 6, h: 6 },
+    { t: 'rect', x: 3, y: 15, w: 6, h: 6 },
+    { t: 'path', d: 'M14 14l7 7' },
+  ],
+  '/guides/static-vs-dynamic-qr-codes': [
+    { t: 'rect', x: 3, y: 3, w: 8, h: 8, rx: 1 },
+    { t: 'path', d: 'M15 5h6M18 2v6' },
+    { t: 'path', d: 'M3 17h8m-8-4h5' },
+  ],
+  '/guides/qr-code-payload-types': [
+    { t: 'rect', x: 3, y: 3, w: 7, h: 7 },
+    { t: 'path', d: 'M13 5h8M13 9h5' },
+    { t: 'path', d: 'M13 15h8M13 19h8M3 15h7v6h-7z' },
+  ],
+  '/guides/password-entropy-explained': [
+    { t: 'rect', x: 5, y: 11, w: 14, h: 9, rx: 1.5 },
+    { t: 'path', d: 'M8 11V7a4 4 0 0 1 8 0v4' },
+    { t: 'path', d: 'M12 15v2' },
+  ],
+  '/guides/password-generator-randomness': [
+    { t: 'rect', x: 5, y: 11, w: 14, h: 9, rx: 1.5 },
+    { t: 'path', d: 'M8 11V7a4 4 0 0 1 8 0v4' },
+    { t: 'path', d: 'M9 4l1 1-1 1M15 20l-1-1 1-1' },
+  ],
+  '/guides/passphrase-vs-random-password': [
+    { t: 'rect', x: 2.5, y: 6, w: 8, h: 12, rx: 1.2 },
+    { t: 'path', d: 'M4.5 10h4M4.5 14h4' },
+    { t: 'rect', x: 13, y: 6, w: 8, h: 12, rx: 1.2 },
+    { t: 'circle', cx: 17, cy: 12, r: 2 },
+  ],
+  '/guides/what-is-a-uuid': [
+    { t: 'rect', x: 2.5, y: 9, w: 4, h: 6, rx: 1 },
+    { t: 'rect', x: 7.5, y: 9, w: 3, h: 6, rx: 1 },
+    { t: 'rect', x: 11.5, y: 9, w: 3, h: 6, rx: 1 },
+    { t: 'rect', x: 15.5, y: 9, w: 3, h: 6, rx: 1 },
+    { t: 'rect', x: 19.5, y: 9, w: 2, h: 6, rx: 1 },
+  ],
+  '/guides/uuid-v1-vs-v4-vs-v7': [
+    { t: 'circle', cx: 7, cy: 12, r: 4 },
+    { t: 'circle', cx: 17, cy: 12, r: 4 },
+    { t: 'path', d: 'M11 12h2' },
+  ],
+  '/guides/how-to-shoot-a-boomerang-video': [
+    { t: 'path', d: 'M5 12a7 7 0 1 1 7 7' },
+    { t: 'path', d: 'M9 16l3 3-3 3' },
+  ],
+  '/guides/reverse-video-audio-and-file-size': [
+    { t: 'rect', x: 2.5, y: 6, w: 19, h: 12, rx: 1.5 },
+    { t: 'path', d: 'M14 9.5l-3.5 2.5 3.5 2.5z' },
+    { t: 'path', d: 'M6 12h2' },
+  ],
+  '/guides/photo-slideshow-video-specs': [
+    { t: 'rect', x: 2.5, y: 5, w: 12, h: 9, rx: 1.2 },
+    { t: 'circle', cx: 6, cy: 8, r: 1.2 },
+    { t: 'path', d: 'M3.5 13l3-3 2.5 2.5 2-2 2.5 2.5' },
+    { t: 'path', d: 'M17 9.5l3.5 2.5-3.5 2.5z' },
+  ],
+  '/guides/why-gif-is-bigger-than-video': [
+    { t: 'rect', x: 2.5, y: 7, w: 9, h: 10, rx: 1.2 },
+    { t: 'rect', x: 13.5, y: 7, w: 8, h: 10, rx: 1.2 },
+    { t: 'path', d: 'M17 12.5l3 2-3 2z' },
+  ],
+  '/guides/hex-rgb-hsl-same-color': [
+    { t: 'circle', cx: 9, cy: 9, r: 6 },
+    { t: 'circle', cx: 15, cy: 9, r: 6 },
+    { t: 'circle', cx: 12, cy: 15, r: 6 },
+  ],
+  '/guides/how-color-palette-extraction-works': [
+    { t: 'rect', x: 3, y: 3, w: 18, h: 12, rx: 1.5 },
+    { t: 'circle', cx: 7, cy: 18, r: 2 },
+    { t: 'circle', cx: 12, cy: 18, r: 2 },
+    { t: 'circle', cx: 17, cy: 18, r: 2 },
+  ],
 };

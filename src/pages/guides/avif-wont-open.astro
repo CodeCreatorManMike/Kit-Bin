@@ -1,0 +1,95 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import GuideMeta from '../../components/GuideMeta.astro';
+---
+
+<Layout
+  title="Why Won't My AVIF File Open? | Kit-Bin"
+  description="AVIF works fine in every modern browser but breaks in Photoshop, older Windows, and most email clients — here's where it's actually safe to use."
+>
+
+  <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-ink dark:text-slate-300 space-y-4">
+    <p class="text-sm"><a href="/guides/" class="text-primary dark:text-blue-400 hover:underline">← All guides</a></p>
+    <h1 class="text-3xl font-bold text-ink dark:text-slate-100">Why Won't My AVIF File Open?</h1>
+
+    <p>
+      AVIF opens instantly in Chrome, Firefox, Safari, and Edge. Drop the same file into
+      Photoshop, attach it to an email, or upload it to a form somewhere else, and it can just
+      fail, no thumbnail, no preview, sometimes no error message at all. Both things are true at
+      once because AVIF support isn't one on/off switch. It's a patchwork of separate decisions
+      made by browser vendors, operating systems, and individual applications, all on different
+      timelines.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Browsers solved this years ago. Everything else didn't</h2>
+    <p>
+      AVIF is an image format built on the AV1 video codec, and every evergreen browser added a
+      built-in AV1 decoder specifically to support it. That's why a webpage using an AVIF image
+      just works, the decoder ships inside the browser itself, with no extra install and no user
+      action required. Operating systems and desktop applications don't get that shortcut. Each
+      one has to add AVIF decoding on its own schedule, and most of the software people already
+      have installed predates AVIF entirely.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Windows needs a separate extension</h2>
+    <p>
+      Windows File Explorer and the Photos app don't ship an AV1 decoder in older builds. To get
+      thumbnails and previews for AVIF files, you need to separately install the "AV1 Video
+      Extension" and, in some Windows versions, the "AVIF Image Extension" from the Microsoft
+      Store. Without both, a folder full of AVIF files just shows generic icons and double-clicking
+      one does nothing. This is the same pattern Windows uses for HEIC: the format itself isn't
+      broken, the decoder simply isn't bundled into the OS by default the way JPG and PNG decoding
+      is.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Photoshop and Lightroom</h2>
+    <p>
+      Older versions of Photoshop and Lightroom predate AVIF support entirely, they were built
+      and released before the format existed as something Adobe needed to handle. Even on
+      versions that do support it, AVIF import was added later than most other formats, so a
+      Creative Cloud install that hasn't been updated in a while can still reject the file
+      outright. There's no workaround inside the app in that case, the decoder simply isn't
+      there, only updating or converting the file first fixes it.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Email and upload forms</h2>
+    <p>
+      Most email clients render attachment previews through their own older preview engines
+      rather than a modern browser rendering path, and those engines frequently don't recognize
+      AVIF at all, the attachment downloads fine but shows no preview and sometimes triggers an
+      "unsupported file" warning. Upload forms have the same problem from the opposite direction:
+      a lot of CMS platforms, government portals, and business file-upload fields still hard-code
+      an allowlist of accepted extensions, typically jpg, png, and webp, written before AVIF was
+      common enough to bother adding. The file gets rejected not because it's corrupt, but because
+      the form was never told AVIF exists.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">The actual rule</h2>
+    <p>
+      Use AVIF freely for anything staying on your own website, every evergreen browser decodes it
+      natively, so visitors never notice. Treat it as risky the moment the file leaves your control
+      and lands in software you don't choose, someone else's Windows PC, their Photoshop version,
+      their email client, or a form with a fixed allowlist. In that case, convert first rather than
+      finding out after the fact that it didn't open.
+    </p>
+    <p>
+      <a href="/image/avif-to-jpg" class="text-primary dark:text-blue-400 hover:underline">Convert AVIF to JPG</a>{' '}
+      runs entirely in your browser, so a batch of AVIF images can be converted to a format
+      everything opens without uploading a single file anywhere.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Related guide</h2>
+    <p>
+      For what AVIF actually is and why it produces smaller files than JPG or WebP in the first
+      place, see{' '}
+      <a href="/guides/avif-explained" class="text-primary dark:text-blue-400 hover:underline">AVIF explained</a>.
+    </p>
+
+    <GuideMeta
+      headline={"Why Won't My AVIF File Open?"}
+      description={"AVIF works fine in every modern browser but breaks in Photoshop, older Windows, and most email clients — here's where it's actually safe to use."}
+      published="2026-08-08"
+      reviewed="2026-08-08"
+    />
+  </article>
+</Layout>

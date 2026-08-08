@@ -1,0 +1,76 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import GuideMeta from '../../components/GuideMeta.astro';
+---
+
+<Layout
+  title="Reversing a Video: What Happens to the Audio and the File Size | Kit-Bin"
+  description="Why reversed video audio usually gets dropped, and why the reversed file often ends up bigger than the original."
+>
+
+  <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-ink dark:text-slate-300 space-y-4">
+    <p class="text-sm"><a href="/guides/" class="text-primary dark:text-blue-400 hover:underline">← All guides</a></p>
+    <h1 class="text-3xl font-bold text-ink dark:text-slate-100">Reversing a Video: What Happens to the Audio and the File Size</h1>
+
+    <p>
+      Reversing a video sounds like it should be as cheap as reversing a trim, just play the same
+      data backward. It isn't, and the reasons explain two things people are consistently
+      surprised by: the audio usually disappears, and the resulting file can end up larger than
+      the original.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Why reversing forces a full re-encode</h2>
+    <p>
+      Trimming a video can sometimes just copy a byte range, cutting between two points doesn't
+      require touching the pixels. Reversing can't take that shortcut, because modern video
+      codecs don't store every frame as a complete image. Most frames are stored as a difference
+      from the frames around them, which only makes sense when decoded in forward order, a frame
+      defined as "what changed since the last frame" is meaningless in isolation. To reverse a
+      video, every frame first has to be fully decoded into raw pixel data, the whole sequence
+      then gets reordered back to front, and the result has to be re-encoded from scratch as a
+      brand new compressed stream. There's no way to reverse the compressed bytes directly. That
+      full decode-reorder-encode pipeline is why reversing a video is noticeably more
+      computationally expensive than a simple trim or cut.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Why the audio usually doesn't survive</h2>
+    <p>
+      Audio has the same directional problem as video, reversed speech or music doesn't play back
+      as "the same audio, backward and still listenable," it plays as a distorted, backward mess,
+      speech in particular becomes unintelligible noise almost immediately. Reversing audio in
+      sync with reversed video also means re-timing it against a completely re-encoded video
+      stream, real added complexity for an output that, once reversed, usually isn't something
+      anyone actually wants to hear anyway. That's why reverse tools commonly drop the audio track
+      entirely rather than ship a reversed track nobody would use.
+      Kit-Bin's <a href="/video/reverse" class="text-primary dark:text-blue-400 hover:underline">Reverse Video</a>{' '}
+      tool follows the same reasoning: it decodes and re-encodes the video frames only, with no
+      audio track carried through to the output. If you specifically want the audio from a clip,
+      <a href="/video/mute" class="text-primary dark:text-blue-400 hover:underline">Mute Video</a>{' '}
+      or an audio extraction pass on the original (unreversed) file is the way to get it, reversed
+      video isn't the place to expect usable sound.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Why the file can come out bigger</h2>
+    <p>
+      Because a reversed output is always a fresh encode rather than a copy of the original
+      compressed stream, its file size depends entirely on the encoding settings used for that
+      new pass, not on the original file's size. If your source clip happened to be encoded
+      efficiently, at a low bitrate, with a modern codec tuned well for its content, a re-encode
+      at a different quality target can easily land larger, even though visually nothing looks
+      different. This isn't a bug or a sign something went wrong, it's inherent to the fact that
+      reversing requires a full re-encode, there is no version of "reverse the video" that can
+      also guarantee "and keep the exact original file size," because the exact original
+      compressed bytes cease to exist the moment the video gets decoded to reverse it. If the
+      resulting file is larger than you'd like,{' '}
+      <a href="/video/compress" class="text-primary dark:text-blue-400 hover:underline">Compress Video</a>{' '}
+      afterward brings it back down.
+    </p>
+
+    <GuideMeta
+      headline={'Reversing a Video: What Happens to the Audio and the File Size'}
+      description={'Why reversed video audio usually gets dropped, and why the reversed file often ends up bigger than the original.'}
+      published="2026-08-08"
+      reviewed="2026-08-08"
+    />
+  </article>
+</Layout>

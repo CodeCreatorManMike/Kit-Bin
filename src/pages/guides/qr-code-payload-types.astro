@@ -1,0 +1,120 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import GuideMeta from '../../components/GuideMeta.astro';
+---
+
+<Layout
+  title="What Can You Put in a QR Code Besides a Link? | Kit-Bin"
+  description="URL, WiFi credentials, contact cards, SMS, email — the real payload formats a QR code can encode, with the actual syntax."
+>
+
+  <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-ink dark:text-slate-300 space-y-4">
+    <p class="text-sm"><a href="/guides/" class="text-primary dark:text-blue-400 hover:underline">← All guides</a></p>
+    <h1 class="text-3xl font-bold text-ink dark:text-slate-100">What Can You Put in a QR Code Besides a Link?</h1>
+
+    <p>
+      A QR code doesn't "know" what a URL is. It's a grid that encodes a string of text, and
+      whatever app scans it decides what to do with that string based on its shape. Most QR
+      codes happen to contain a URL because phone cameras auto-detect `http://` and offer to
+      open it, but the underlying format supports several other structured payloads that
+      trigger different behavior on scan. Here's the actual syntax for each.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Plain URL and plain text</h2>
+    <p>
+      A URL payload is just the URL itself, nothing wrapped around it:
+      <code class="text-sm bg-slate-100 dark:bg-slate-800 px-1 rounded">https://example.com/page</code>.
+      Plain text is exactly the same idea with no scheme prefix at all, just literal text.
+      A scanner falls back to plain text display whenever the payload doesn't match one of the
+      recognized schemes below.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">WiFi network credentials</h2>
+    <p>
+      WiFi QR codes use a small parameter format defined informally by ZXing (the barcode
+      library most Android scanners are built on) and later adopted by iOS:
+    </p>
+    <p>
+      <code class="text-sm bg-slate-100 dark:bg-slate-800 px-1 rounded">WIFI:T:WPA;S:NetworkName;P:Password;;</code>
+    </p>
+    <p>Each field is a single letter followed by a colon and a value, terminated by a semicolon:</p>
+    <ul class="list-disc pl-5 space-y-1">
+      <li><code class="text-sm">T</code> — security type: <code class="text-sm">WPA</code> (covers WPA/WPA2/WPA3), <code class="text-sm">WEP</code>, or <code class="text-sm">nopass</code> for an open network</li>
+      <li><code class="text-sm">S</code> — the SSID (network name), case-sensitive</li>
+      <li><code class="text-sm">P</code> — the password, omitted entirely if <code class="text-sm">T</code> is <code class="text-sm">nopass</code></li>
+      <li><code class="text-sm">H</code> — optional, set to <code class="text-sm">true</code> if the network is hidden (not broadcasting its SSID)</li>
+    </ul>
+    <p>
+      The trailing double semicolon closes the record. A semicolon, comma, or colon that's
+      literally part of the SSID or password has to be escaped with a backslash
+      (<code class="text-sm">\;</code>), or the parser reads it as a field boundary and the
+      network name or password comes out truncated.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Contact cards: MECARD and vCard</h2>
+    <p>
+      Two competing formats show up here. MECARD is the compact one most QR generators default
+      to:
+    </p>
+    <p>
+      <code class="text-sm bg-slate-100 dark:bg-slate-800 px-1 rounded">MECARD:N:Doe,Jane;TEL:+15551234567;EMAIL:jane@example.com;;</code>
+    </p>
+    <p>
+      vCard is the same idea in the older format email/calendar clients already parse natively,
+      which is why iOS and Android contact apps generally prefer it over MECARD when both are
+      offered:
+    </p>
+    <pre class="text-sm bg-slate-100 dark:bg-slate-800 p-3 rounded overflow-x-auto">BEGIN:VCARD
+VERSION:3.0
+N:Doe;Jane
+TEL:+15551234567
+EMAIL:jane@example.com
+END:VCARD</pre>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Email, SMS, and phone</h2>
+    <p>
+      These reuse the same URI schemes browsers already understand:
+      <code class="text-sm bg-slate-100 dark:bg-slate-800 px-1 rounded">mailto:jane@example.com</code>{' '}
+      opens a new email addressed to that recipient (append <code class="text-sm">?subject=</code>
+      and <code class="text-sm">&body=</code> to prefill those fields);
+      <code class="text-sm bg-slate-100 dark:bg-slate-800 px-1 rounded">sms:+15551234567</code>{' '}
+      opens a new text message; and
+      <code class="text-sm bg-slate-100 dark:bg-slate-800 px-1 rounded">tel:+15551234567</code>{' '}
+      prompts a phone call.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Geographic coordinates</h2>
+    <p>
+      <code class="text-sm bg-slate-100 dark:bg-slate-800 px-1 rounded">geo:37.786971,-122.399677</code>{' '}
+      hands a pair of coordinates to whatever maps app the device has set as default, no address
+      lookup required. An optional third value adds altitude in meters.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Longer payloads mean a denser, harder-to-scan code</h2>
+    <p>
+      A QR code's version (its grid size) scales with how much data it has to hold. A short URL
+      fits comfortably in a low version with large, easy-to-scan modules. A vCard with a base64-
+      encoded photo embedded in it, or a long WiFi password, can push the code up several
+      versions into a dense grid where each module is small enough that a slightly blurry camera
+      or a code printed too small physically fails to scan. If a QR code needs to work reliably
+      from a few feet away or on a low-end camera, keep the payload short. A photo belongs in a
+      linked vCard file, not embedded inline.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Generating and reading these</h2>
+    <p>
+      <a href="/dev/qr-code-generator" class="text-primary dark:text-blue-400 hover:underline">QR Code Generator</a>{' '}
+      builds any of these payload types entirely in your browser, and{' '}
+      <a href="/dev/qr-code-scanner" class="text-primary dark:text-blue-400 hover:underline">QR Code Scanner</a>{' '}
+      decodes an existing QR code's raw payload so you can see exactly what format it's using
+      before you scan it with something else.
+    </p>
+
+    <GuideMeta
+      headline={'What Can You Put in a QR Code Besides a Link?'}
+      description={'URL, WiFi credentials, contact cards, SMS, email — the real payload formats a QR code can encode, with the actual syntax.'}
+      published="2026-08-08"
+      reviewed="2026-08-08"
+    />
+  </article>
+</Layout>

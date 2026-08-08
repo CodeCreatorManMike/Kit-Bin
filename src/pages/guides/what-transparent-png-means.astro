@@ -1,0 +1,83 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import GuideMeta from '../../components/GuideMeta.astro';
+import GuideReferences from '../../components/GuideReferences.astro';
+---
+
+<Layout
+  title="What 'Transparent Background' Actually Means | Kit-Bin"
+  description="The alpha channel explained — why JPG can't have a transparent background, and which formats actually preserve one."
+>
+
+  <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-ink dark:text-slate-300 space-y-4">
+    <p class="text-sm"><a href="/guides/" class="text-primary dark:text-blue-400 hover:underline">← All guides</a></p>
+    <h1 class="text-3xl font-bold text-ink dark:text-slate-100">What "Transparent Background" Actually Means</h1>
+
+    <p>
+      You cut out a background, save the result, and somewhere along the way it turns into a solid
+      white (or black) rectangle again. This isn't a bug hiding somewhere in whichever tool you
+      used. It's almost always one of two things: the file format you saved to structurally cannot
+      hold transparency, or the app you opened it in doesn't render the transparency it has.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">The fourth channel</h2>
+    <p>
+      A digital image normally stores three numbers per pixel: red, green, and blue intensity.
+      Formats that support transparency add a fourth number per pixel, the <strong>alpha
+      channel</strong>, which controls opacity rather than color: 255 means fully visible, 0 means
+      fully invisible, and values in between are partially see-through. "Transparent background"
+      just means the pixels outside your subject have their alpha set to 0. It's not a special mode
+      or a layer, it's literally one more number stored alongside the color at every pixel.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Why JPG specifically can never do this</h2>
+    <p>
+      JPG's compression format has no alpha channel defined at all, at any quality setting, in any
+      app. It isn't a checkbox someone forgot to add. The format's compression works by transforming
+      blocks of color data (technically, transforming brightness and color-difference channels), and
+      the spec simply never allocated a slot for a fourth, per-pixel opacity value. So "save this
+      transparent cutout as a JPG" is asking for something the container format cannot represent,
+      not a settings problem you can work around. When you export a transparent image to JPG,
+      something has to go in the transparent areas, and encoders fill it with a flat color, almost
+      always white, because they need a fallback and white is the least visually jarring default.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Which formats actually support it</h2>
+    <ul class="list-disc pl-5 space-y-1">
+      <li><strong>PNG</strong>: full alpha channel, 256 levels of transparency per pixel. The standard choice for cutouts.</li>
+      <li><strong>WebP</strong>: full alpha channel support, at meaningfully smaller file sizes than PNG for the same image.</li>
+      <li><strong>AVIF</strong>: also supports full alpha, and compresses even further than WebP in most cases.</li>
+      <li><strong>GIF</strong>: supports transparency, but only as a single fully-transparent color with no partial values, no soft edges, which is why GIF cutouts often look jagged around hair or curves.</li>
+      <li><strong>JPG, BMP (without an alpha extension), and most video formats</strong>: no alpha channel, ever. There's no version of the format that adds it.</li>
+    </ul>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">When even a PNG shows up white</h2>
+    <p>
+      Sometimes the file genuinely has a working alpha channel and still displays as solid white or
+      black somewhere. That's a rendering problem on the viewer's side, not the file's: older
+      versions of Word and some email clients flatten a pasted image onto a white canvas the moment
+      it's inserted, discarding the alpha data in the process. Some chat apps and file browsers
+      generate a quick thumbnail preview that skips alpha compositing entirely and shows whatever
+      the app treats as its default background color underneath. The PNG on disk is fine in both
+      cases, the specific app just isn't showing you what's actually stored in it.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Working with it</h2>
+    <p>
+      <a href="/image/remove-background" class="text-primary dark:text-blue-400 hover:underline">Remove Background</a>{' '}
+      outputs a PNG with a real alpha channel. To move between the formats that actually preserve
+      transparency, use{' '}
+      <a href="/image/png-to-webp" class="text-primary dark:text-blue-400 hover:underline">PNG to WebP</a>{' '}
+      or <a href="/image/webp-to-png" class="text-primary dark:text-blue-400 hover:underline">WebP to PNG</a>,
+      both of which keep the alpha channel intact.
+    </p>
+    <GuideReferences keys={['mdnImageTypes', 'pngSpec', 'webp']} />
+
+    <GuideMeta
+      headline={'What "Transparent Background" Actually Means'}
+      description={"The alpha channel explained — why JPG can't have a transparent background, and which formats actually preserve one."}
+      published="2026-08-08"
+      reviewed="2026-08-08"
+    />
+  </article>
+</Layout>

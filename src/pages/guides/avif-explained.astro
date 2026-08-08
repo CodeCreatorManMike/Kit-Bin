@@ -1,0 +1,88 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import GuideMeta from '../../components/GuideMeta.astro';
+---
+
+<Layout
+  title="What Is AVIF, and Why Is It So Much Smaller? | Kit-Bin"
+  description="AVIF's compression comes from the AV1 video codec — here's why that makes files smaller, and the real trade-off nobody mentions."
+>
+
+  <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-ink dark:text-slate-300 space-y-4">
+    <p class="text-sm"><a href="/guides/" class="text-primary dark:text-blue-400 hover:underline">← All guides</a></p>
+    <h1 class="text-3xl font-bold text-ink dark:text-slate-100">What Is AVIF, and Why Is It So Much Smaller?</h1>
+
+    <p>
+      AVIF files routinely come in at half the size of an equivalent JPG, and noticeably smaller
+      than WebP too, at the same visual quality. The reason isn't "newer format, better numbers."
+      AVIF is built on a genuinely different compression foundation than JPG and WebP, borrowed
+      wholesale from video, and that foundation is what actually produces the savings.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">It's a video codec still image</h2>
+    <p>
+      AVIF stands for AV1 Image File Format. It isn't a new image compression scheme, it's a single
+      still frame encoded using AV1, the open video codec developed for streaming video. AV1 has an
+      intra-frame compression mode, the part of a video codec responsible for compressing one frame
+      with no reference to neighboring frames, and that's exactly the mode AVIF reuses for still
+      images. JPG, by contrast, is built on discrete cosine transform (DCT) compression designed in
+      the late 1980s. WebP's lossy mode is based on the intra-frame compression from VP8, itself
+      roughly a decade older than AV1. AVIF is a full codec generation newer than both.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Where the real savings come from</h2>
+    <p>
+      Two specific improvements in AV1 do most of the work. First, larger and more flexible
+      prediction block sizes: JPG divides an image into fixed 8x8 pixel blocks and compresses each
+      independently, which is exactly why heavily compressed JPGs show visible blocky squares. AV1
+      can use much larger blocks (up to 128x128) and choose block shapes adaptively based on the
+      image content, so a large smooth area, a sky, a wall, skin, gets described far more
+      efficiently than JPG's fixed grid ever could.
+    </p>
+    <p>
+      Second, better handling of smooth gradients specifically. JPG's DCT-based approach struggles
+      to represent a slow, continuous color transition without introducing visible steps, which is
+      the technical cause of banding, the stripes you see in a low-quality JPG sky or gradient
+      background. AV1's prediction modes represent gradients more directly, which is why AVIF holds
+      up noticeably better than JPG at aggressive compression settings specifically on photos with
+      large smooth regions, not just "generally better," but better in a way traceable to a specific
+      mechanism.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">The real trade-off: encoding is slow</h2>
+    <p>
+      None of this is free. AV1's extra flexibility, larger block search space, more prediction
+      modes to evaluate, means an encoder has far more decisions to make per image than a JPG or
+      WebP encoder does. AVIF encoding is meaningfully heavier computationally, often several times
+      slower than encoding the same image to JPG or WebP. This matters if you're batch-converting a
+      large folder of images, the encode time adds up in a way it wouldn't with older formats.
+      Decoding an AVIF, actually viewing it, is comparatively fast, the asymmetry is specific to
+      encoding, not viewing. Kit-Bin's converters run the encode in your browser, so that
+      computational cost happens locally on your own device rather than requiring any server, but
+      it's still real CPU time worth expecting on larger batches.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Using it</h2>
+    <p>
+      <a href="/image/jpg-to-avif" class="text-primary dark:text-blue-400 hover:underline">JPG to AVIF</a>{' '}
+      and <a href="/image/avif-to-jpg" class="text-primary dark:text-blue-400 hover:underline">AVIF to JPG</a>{' '}
+      both run entirely in your browser. If you just want a smaller file without changing format,{' '}
+      <a href="/image/compress" class="text-primary dark:text-blue-400 hover:underline">Compress Image</a>{' '}
+      is the more direct tool.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Related guide</h2>
+    <p>
+      If an AVIF file refuses to open somewhere, that's usually a decoder support gap rather than a
+      broken file. See{' '}
+      <a href="/guides/avif-wont-open" class="text-primary dark:text-blue-400 hover:underline">Why Won't My AVIF File Open?</a>.
+    </p>
+
+    <GuideMeta
+      headline={'What Is AVIF, and Why Is It So Much Smaller?'}
+      description={"AVIF's compression comes from the AV1 video codec — here's why that makes files smaller, and the real trade-off nobody mentions."}
+      published="2026-08-08"
+      reviewed="2026-08-08"
+    />
+  </article>
+</Layout>

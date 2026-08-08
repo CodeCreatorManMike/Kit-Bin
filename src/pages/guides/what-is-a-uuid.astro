@@ -1,0 +1,86 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import GuideMeta from '../../components/GuideMeta.astro';
+---
+
+<Layout
+  title="What Is a UUID, and Why Do They Look Like That? | Kit-Bin"
+  description="128 bits, 8-4-4-4-12 hex groups, and the actual math behind why UUIDs almost never collide."
+>
+
+  <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-ink dark:text-slate-300 space-y-4">
+    <p class="text-sm"><a href="/guides/" class="text-primary dark:text-blue-400 hover:underline">← All guides</a></p>
+    <h1 class="text-3xl font-bold text-ink dark:text-slate-100">What Is a UUID, and Why Do They Look Like That?</h1>
+
+    <p>
+      A UUID looks like <code class="text-sm">3f29c9a2-6b4e-4b1a-9c2e-8e2f6a1d4b7c</code>, 32
+      hexadecimal characters split into five groups by hyphens. The format looks arbitrary until
+      you know what each piece is actually doing.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">128 bits, formatted for humans</h2>
+    <p>
+      A UUID (Universally Unique Identifier) is a 128-bit number. Written out in raw binary or
+      decimal it would be unreadable, so the standard displays it as 32 hex digits, each
+      representing 4 bits. The 8-4-4-4-12 grouping and the hyphens between them carry zero
+      information, they're not padding, a checksum, or a separator between meaningful fields in
+      the way a phone number's area code is. They exist purely so a human reading a UUID can
+      parse it into chunks instead of squinting at 32 unbroken characters. Strip every hyphen out
+      and you get the identical number.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">The version and variant bits</h2>
+    <p>
+      Not all 128 bits are random, even in the most common UUID type. A handful are reserved to
+      identify which UUID scheme produced the value. The first character of the third group is
+      the version nibble, in a v4 UUID that character is always <code class="text-sm">4</code>,
+      as in the example above. It tells any code reading the UUID "this was generated with the
+      random-based algorithm," as opposed to the timestamp-based v1 scheme or others. A couple of
+      bits at the start of the fourth group are the variant, marking which broader UUID layout
+      standard is in use (in practice, almost every UUID you'll encounter uses the same variant).
+      These reserved bits are why a v4 UUID has 122 random bits, not the full 128, six are spoken
+      for.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">The actual collision math</h2>
+    <p>
+      This is the part most explanations wave away with "practically impossible." Here's the real
+      number. With 122 random bits, there are 2^122 possible v4 UUIDs, a number with 37 digits.
+      The relevant question isn't how many UUIDs exist, it's how many you'd have to generate
+      before two of them happened to match, which is the classic birthday-problem calculation:
+      collision odds grow with the square of how many you've generated, not linearly.
+    </p>
+    <p>
+      Working that through for a 50% chance of at least one collision anywhere in the batch gives
+      roughly 2.71 quintillion UUIDs, that's 2.71 x 10^18. To put that in perspective: generating
+      one billion UUIDs every single second, nonstop, it would take about 86 years to reach that
+      number. Real-world systems generate nowhere near that volume, which is why UUID collisions
+      in practice are usually a sign of a broken random number generator, not bad luck.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Generating one</h2>
+    <p>
+      Kit-Bin's <a href="/dev/uuid-generator" class="text-primary dark:text-blue-400 hover:underline">UUID Generator</a>{' '}
+      produces v4 UUIDs using the browser's built-in cryptographically secure random number
+      source, entirely on your device.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Related guide</h2>
+    <p>
+      v4 isn't the only version in use. See{' '}
+      <a href="/guides/uuid-v1-vs-v4-vs-v7" class="text-primary dark:text-blue-400 hover:underline">UUID v1 vs v4 vs v7</a>{' '}
+      for why the timestamp-based versions still matter, especially for database design.
+    </p>
+
+    <p class="text-xs text-muted dark:text-slate-500">
+      Source: <a href="https://www.rfc-editor.org/rfc/rfc9562" rel="noopener nofollow" target="_blank" class="text-primary dark:text-blue-400 hover:underline">RFC 9562: Universally Unique IDentifiers (UUIDs)</a>
+    </p>
+
+    <GuideMeta
+      headline={'What Is a UUID, and Why Do They Look Like That?'}
+      description={'128 bits, 8-4-4-4-12 hex groups, and the actual math behind why UUIDs almost never collide.'}
+      published="2026-08-08"
+      reviewed="2026-08-08"
+    />
+  </article>
+</Layout>
