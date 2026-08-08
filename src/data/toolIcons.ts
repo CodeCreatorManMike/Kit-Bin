@@ -388,6 +388,17 @@ export const toolIcons: Record<string, IconPrimitive[]> = {
     { t: 'path', d: 'M6 8.5l-1.6 1' },
     { t: 'path', d: 'M18 15.5l1.6-1' },
   ],
+  /** A stack of overlapping photo frames with a small musical note —
+   * reads as "photos combined with music" rather than a single image. */
+  '/video/slideshow': [
+    { t: 'fill', d: 'M5 6h13v13H5z' },
+    { t: 'rect', x: 2, y: 3, w: 12, h: 12, rx: 1.3 },
+    { t: 'rect', x: 5, y: 6, w: 13, h: 13, rx: 1.3 },
+    { t: 'circle', cx: 9, cy: 11, r: 1.4 },
+    { t: 'path', d: 'M6 16.5l2.5-2.7 2 1.8 3-3.4 3.5 4.3' },
+    { t: 'path', d: 'M19.5 3.5v6.3' },
+    { t: 'circle', cx: 18.7, cy: 10.3, r: 1.3 },
+  ],
 
   // Data
   '/csv/to-json': [

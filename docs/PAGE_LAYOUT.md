@@ -261,6 +261,25 @@ reason.
 Audio is dropped in both — reversing audio in sync with reversed video is separate work these
 tools don't attempt, and the pages say so rather than silently producing a mismatched track.
 
+### Photo slideshow video (`/video/slideshow`)
+
+`src/lib/video/slideshow.ts` composes images + optional audio into an MP4 via the same low-level
+`CanvasSource`/`Output` API as reverse/boomerang, but is architecturally simpler than either: each
+image needs exactly **one** encoded sample, not a frame buffer. Verified this works correctly
+before relying on it — `videoSource.add(timestamp, duration)` displays for the *whole* `duration`,
+so a 5-second photo is one `add()` call, not 150 duplicate frames at 30fps. That means memory use
+here scales with photo count, not with output duration, unlike reverse/boomerang.
+
+Every image is fit inside a fixed 960×540 (16:9) canvas without cropping or stretching — mismatched
+aspect ratios get letterboxed (black bars), verified by sampling edge pixels on a deliberately
+non-16:9 test image. Optional background audio is decoded once via `AudioContext.decodeAudioData`
+and looped or trimmed with `fitAudioToDuration()` to match the video's total length exactly, so
+music that's shorter than the slideshow keeps playing rather than cutting to silence.
+
+This is the only tool with two independent drop targets on one page (photos, multiple; audio,
+single) plus a numeric option, which doesn't fit `ToolWidget`'s single `#dropzone`/`#file-input`
+id contract — like the no-file tools above, it's hand-wired custom markup, not `wireTool`.
+
 ### Processing state
 
 - Always show *something* moving (progress bar with real percentage where the library exposes

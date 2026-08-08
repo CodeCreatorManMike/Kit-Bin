@@ -95,6 +95,8 @@ export const tools: Tool[] = [
     aliases: ['play video backwards', 'backwards video', 'reverse a clip', 'flip video playback', 'undo video effect'] },
   { slug: '/video/boomerang', name: 'Boomerang Video', description: 'Turn a clip into a forward-and-back loop.', category: 'video',
     aliases: ['boomerang maker', 'ping pong video', 'loop video back and forth', 'instagram boomerang effect', 'forward and reverse loop'] },
+  { slug: '/video/slideshow', name: 'Photo Slideshow Video', description: 'Turn photos into a video slideshow, with optional background music.', category: 'video',
+    aliases: ['photos to video', 'slideshow maker', 'pictures to video', 'images to video with music', 'photo video creator', 'make a slideshow'] },
 
   { slug: '/csv/to-json', name: 'CSV to JSON', description: 'Convert a CSV file to JSON.', category: 'data',
     aliases: ['spreadsheet to json', 'csv converter', 'table to json', 'csv parser'] },
