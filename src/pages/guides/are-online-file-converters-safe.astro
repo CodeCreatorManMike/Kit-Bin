@@ -1,0 +1,100 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import GuideMeta from '../../components/GuideMeta.astro';
+import GuideReferences from '../../components/GuideReferences.astro';
+---
+
+<Layout
+  title="Are Online File Converters Actually Safe to Use? | Kit-Bin"
+  description="What actually happens to your file when you use a typical online converter, the real risks, and how to verify a site that claims to be client-side."
+>
+
+  <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-ink dark:text-slate-300 space-y-4">
+    <p class="text-sm"><a href="/guides/" class="text-primary dark:text-blue-400 hover:underline">← All guides</a></p>
+    <h1 class="text-3xl font-bold text-ink dark:text-slate-100">Are Online File Converters Actually Safe to Use?</h1>
+
+    <p>
+      Search "convert PDF to Word online" and you get dozens of nearly identical sites. Most of
+      them work the same way underneath: you drop a file in, it disappears for a few seconds, and
+      a download link appears. What happened in those few seconds is the actual question, and most
+      sites don't make it easy to answer.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">What "online converter" usually means, technically</h2>
+    <p>
+      For the large majority of these sites, that gap is a real upload. Your file leaves your
+      device, travels to a server you don't control, gets processed there by real conversion
+      software, and the result travels back to you. That's not a flaw specific to any one site —
+      it's how server-side conversion has to work, and it was the only practical way to run
+      complex file-processing software before browsers could run that kind of code themselves.
+    </p>
+    <p>
+      The part that matters for safety is what happens to your file during and after that trip.
+      How long does it sit on the server. Is it logged anywhere. Is a copy kept for "improving the
+      service." None of that is visible from the outside. You're trusting whatever the site's
+      privacy policy says, if it has one, and trusting that the policy is both accurate and
+      actually enforced.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">The real, concrete risk categories</h2>
+    <p>
+      This isn't about assuming bad intent everywhere. It's about a few specific, known patterns
+      worth checking for before you hand over a file that matters:
+    </p>
+    <ul class="list-disc pl-5 space-y-1">
+      <li>
+        <strong>No privacy policy at all.</strong> If a site doesn't say what happens to uploaded
+        files, there's no basis for assuming anything, including deletion.
+      </li>
+      <li>
+        <strong>An unclear business model for a "free" service that's doing real compute work.</strong>
+        Server-side conversion isn't free to run — it costs bandwidth and processing time per
+        file. A site with no visible ads, no paid tier, and no explanation for how it covers that
+        cost is a site whose actual revenue source is unstated, and file uploads are a plausible
+        candidate.
+      </li>
+      <li>
+        <strong>Document-converter scams as a known category.</strong> Security researchers and
+        consumer-protection agencies have repeatedly flagged free document-conversion sites as a
+        vector for malware-laced downloads and data harvesting — it's a well-documented enough
+        pattern in the free-online-tool space that it's worth treating as a real, not
+        hypothetical, risk when a site gives you no other reason to trust it.
+      </li>
+    </ul>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">How to actually verify a "processed in your browser" claim</h2>
+    <p>
+      Plenty of sites now claim client-side, no-upload processing, because it's become a
+      meaningful selling point. That claim is either true or it isn't, and you don't have to take
+      anyone's word for it. It's directly checkable, on any site, in under a minute:
+    </p>
+    <ol class="list-decimal pl-5 space-y-1">
+      <li>Open the site and press F12 (or right-click → Inspect) to open DevTools.</li>
+      <li>Click the <strong>Network</strong> tab.</li>
+      <li>Process a file through the tool as you normally would.</li>
+      <li>
+        Watch the list of requests that fires. If a request's size roughly matches your file, or
+        its payload contains your file's data, it was uploaded, whatever the site's copy claims.
+        If nothing carrying the file leaves the browser, the claim is verifiably true, not
+        marketing language.
+      </li>
+    </ol>
+    <p>
+      This works regardless of which site you're testing, and it's worth doing on Kit-Bin itself,
+      not just taking our word for it either. Open the Network tab, run a file through any tool
+      here, and confirm nothing containing it goes out. For the fuller technical explanation of
+      why that's structurally true here rather than just a policy promise, see{' '}
+      <a href="/guides/how-kit-bin-works" class="text-primary dark:text-blue-400 hover:underline">how Kit-Bin works</a>{' '}
+      — it applies the same way across every tool on the site, not just one.
+    </p>
+
+    <GuideReferences keys={['chromeNetworkPanel']} />
+
+    <GuideMeta
+      headline={"Are Online File Converters Actually Safe to Use?"}
+      description={"What actually happens to your file when you use a typical online converter, the real risks, and how to verify a site that claims to be client-side."}
+      published="2026-08-08"
+      reviewed="2026-08-08"
+    />
+  </article>
+</Layout>

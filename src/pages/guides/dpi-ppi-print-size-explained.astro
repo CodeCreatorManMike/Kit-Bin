@@ -1,0 +1,79 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import GuideMeta from '../../components/GuideMeta.astro';
+---
+
+<Layout
+  title="How Many Pixels Do You Actually Need? DPI, PPI, and Print Size | Kit-Bin"
+  description="The one formula that actually matters for print resolution, and why '300 DPI' means nothing without knowing the physical size."
+>
+
+  <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-ink dark:text-slate-300 space-y-4">
+    <p class="text-sm"><a href="/guides/" class="text-primary dark:text-blue-400 hover:underline">← All guides</a></p>
+    <h1 class="text-3xl font-bold text-ink dark:text-slate-100">How Many Pixels Do You Actually Need? DPI, PPI, and Print Size</h1>
+
+    <p>
+      "Is this image 300 DPI?" is a question that sounds precise and technical but is actually
+      missing half the information needed to answer it. DPI and PPI describe pixel density — pixels
+      packed per inch — and density only means something once you know how many inches you're
+      talking about.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">DPI vs PPI, and why the physical size is the missing piece</h2>
+    <p>
+      Strictly, DPI (dots per inch) refers to a physical output device — how many ink dots a
+      printer lays down per inch. PPI (pixels per inch) is the more accurate term for a digital
+      image's pixel density. In everyday use people say "DPI" for both, but the underlying idea is
+      the same either way: it's a ratio, pixels (or dots) relative to a physical inch, not an
+      absolute measure of quality on its own.
+    </p>
+    <p>
+      That's exactly why "300 DPI" alone tells you nothing. The formula that actually matters is:
+    </p>
+    <p class="pl-4 font-mono text-sm">inches × PPI = pixels needed</p>
+    <p>
+      A 4×6 inch print at 300 PPI needs 1200×1800 pixels (4 × 300 = 1200, 6 × 300 = 1800). A
+      24×36 inch poster at that same "300 DPI" target needs 7200×10800 pixels — twelve times the
+      linear dimensions, and roughly 36 times the total pixel count. Same density, wildly different
+      pixel requirement, because the physical size is doing most of the work in that equation.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Why upscaling doesn't actually fix a low-resolution image</h2>
+    <p>
+      If a photo falls short of the pixel count a print size needs, the tempting fix is to
+      resize it up to the target dimensions. That changes the pixel count, but it doesn't add any
+      information that wasn't there. The software has to invent values for pixels that don't exist
+      in the original — interpolating a guess based on the surrounding pixels — which produces a
+      softer, smoother-looking image, not a sharper or more detailed one. It fills the gap with a
+      plausible average, not with real detail. Genuine sharpness at a larger size only comes from
+      the image having been captured at that resolution to begin with, whether that's a
+      higher-resolution camera sensor or a scan done at a higher setting.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">The practical order to do this in</h2>
+    <p>
+      Work out the actual print size first, then calculate the pixel requirement from the formula
+      above, and only then judge whether your source image is big enough. A photo that looks
+      perfectly sharp on a phone screen, which is typically only a few inches across, can be
+      genuinely too low-resolution for a large print, because the phone screen never asked it to
+      cover that many physical inches. There's no way to know if an image is "big enough" without
+      first knowing what size it's actually going to be printed at.
+    </p>
+    <p>
+      Once you know the target pixel dimensions, {' '}
+      <a href="/image/resize" class="text-primary dark:text-blue-400 hover:underline">resize the image</a>{' '}
+      to match, or {' '}
+      <a href="/image/crop" class="text-primary dark:text-blue-400 hover:underline">crop it</a>{' '}
+      first if the aspect ratio of your source doesn't match the print size you need — cropping to
+      the right proportions before resizing avoids stretching or unwanted letterboxing in the final
+      print.
+    </p>
+
+    <GuideMeta
+      headline={"How Many Pixels Do You Actually Need? DPI, PPI, and Print Size"}
+      description={"The one formula that actually matters for print resolution, and why '300 DPI' means nothing without knowing the physical size."}
+      published="2026-08-08"
+      reviewed="2026-08-08"
+    />
+  </article>
+</Layout>

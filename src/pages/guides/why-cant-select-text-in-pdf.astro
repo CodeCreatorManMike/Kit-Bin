@@ -1,0 +1,88 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import GuideMeta from '../../components/GuideMeta.astro';
+import GuideReferences from '../../components/GuideReferences.astro';
+---
+
+<Layout
+  title="Why Can't I Select Text in This PDF? | Kit-Bin"
+  description="A scanned PDF is a photo of a page, not text — here's how to tell the difference, and what OCR actually adds that this site's tools don't."
+>
+
+  <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-ink dark:text-slate-300 space-y-4">
+    <p class="text-sm"><a href="/guides/" class="text-primary dark:text-blue-400 hover:underline">← All guides</a></p>
+    <h1 class="text-3xl font-bold text-ink dark:text-slate-100">Why Can't I Select Text in This PDF?</h1>
+
+    <p>
+      You open a PDF, try to drag-select a sentence to copy it, and nothing highlights. Ctrl+F
+      finds nothing either. It's not a bug, and it's not a permissions setting someone forgot to
+      turn on. There's a good chance the PDF has no text in it at all, just a picture that looks
+      like text.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Two completely different kinds of PDF</h2>
+    <p>
+      A PDF can store a page in one of two ways. The first is a real text layer: every letter is
+      stored as an actual character object, with a font and a position on the page. That's what
+      makes text selectable, searchable, and copyable, the PDF viewer knows exactly where each
+      character starts and ends because the character data is right there.
+    </p>
+    <p>
+      The second is a raster image of the page, exactly like a photograph. This is how most
+      scanned documents, faxes, and phone-camera photos of paper end up as PDFs, the scanner or
+      scanning app just wraps an image file in a PDF container. To your eyes it looks identical to
+      a real document. To the PDF viewer, it's one big picture. There is no character data behind
+      it to select, because none was ever stored, not because it's locked or hidden.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">How to actually tell which one you have</h2>
+    <p>
+      The fastest test: open the PDF and press Ctrl+F (or Cmd+F on Mac) and search for a word you
+      can see on the page. If it's found and highlighted, there's a real text layer somewhere in
+      the file. If the search comes back empty even though the word is clearly visible, you're
+      almost certainly looking at an image-only page. Trying to select a line of text with your
+      cursor and watching whether individual characters highlight (versus the whole page acting
+      like one image you can only drag) tells you the same thing.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">A different problem that looks similar: permission locks</h2>
+    <p>
+      There's a separate issue that gets confused with this one. Some PDFs genuinely do have a
+      real text layer, Ctrl+F finds text fine, you can even see the selection highlight appear,
+      but copying is blocked because the file's security settings explicitly disable the copy
+      permission. This is a restriction set by whoever created the PDF, enforced by the reader
+      software respecting that flag. It's a real limitation, but it's a completely different
+      mechanism from an image-only scan, and no amount of OCR fixes it, because the text was
+      never missing in the first place. Removing that restriction is a permissions problem, not a
+      text-extraction one.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">What OCR actually does</h2>
+    <p>
+      OCR (optical character recognition) is the process that fixes the image-only case. It
+      analyzes the pixels of a scanned page, recognizes shapes as specific letters and words, and
+      writes a new, invisible text layer positioned underneath the image so the page still looks
+      the same but now has real, searchable, selectable text behind it. It's a genuine
+      recognition step, not a format conversion, and it can make mistakes on poor scans, faint
+      print, or unusual fonts, which is why OCR'd documents occasionally have odd typos where the
+      software guessed wrong.
+    </p>
+    <p>
+      Kit-Bin's <a href="/pdf/to-text" class="text-primary dark:text-blue-400 hover:underline">PDF to Text</a> tool
+      extracts whatever text layer already exists in a PDF, it does not perform OCR. Run it on a
+      scanned, image-only PDF and you'll get an empty or near-empty result, because there's no
+      existing text layer for it to pull out. That's a real limitation of the tool as it stands
+      today, not a bug. If you need to pull the pages out as standalone images first, for example
+      to run through separate OCR software, <a href="/pdf/to-images" class="text-primary dark:text-blue-400 hover:underline">PDF to Images</a> does that conversion.
+    </p>
+
+    <GuideReferences keys={['pdfSpec']} />
+
+    <GuideMeta
+      headline={"Why Can't I Select Text in This PDF?"}
+      description={"A scanned PDF is a photo of a page, not text — here's how to tell the difference, and what OCR actually adds that this site's tools don't."}
+      published="2026-08-08"
+      reviewed="2026-08-08"
+    />
+  </article>
+</Layout>

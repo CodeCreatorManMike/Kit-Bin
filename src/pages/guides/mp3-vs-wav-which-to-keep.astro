@@ -1,0 +1,80 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import GuideMeta from '../../components/GuideMeta.astro';
+---
+
+<Layout
+  title="MP3 or WAV: Which One Should You Actually Keep? | Kit-Bin"
+  description="Lossy versus uncompressed audio, the real size difference, and why converting MP3 back to WAV doesn't restore anything."
+>
+
+  <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-ink dark:text-slate-300 space-y-4">
+    <p class="text-sm"><a href="/guides/" class="text-primary dark:text-blue-400 hover:underline">← All guides</a></p>
+    <h1 class="text-3xl font-bold text-ink dark:text-slate-100">MP3 or WAV: Which One Should You Actually Keep?</h1>
+
+    <p>
+      You've got a recording, and two choices for what to keep: MP3, which is small, or WAV, which
+      is ten times the size for what sounds like the same audio. Deleting the "big" one feels like
+      the obvious move, until you learn what each format is actually doing under the hood, and why
+      that decision is hard to undo once it's made.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">WAV stores the actual waveform</h2>
+    <p>
+      A WAV file is uncompressed PCM audio: the exact amplitude of the waveform, sampled thousands
+      of times per second, written to disk with nothing removed and nothing approximated. That's
+      the entire reason a WAV recording runs roughly ten times the size of an MP3 of the same
+      audio, it isn't compressed at all. Every sample the microphone (or your audio software)
+      captured is stored exactly as captured. There's no decoding step that has to "figure out"
+      what the sound is supposed to be; the file just is the sound, as numbers.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">MP3 throws data away on purpose</h2>
+    <p>
+      MP3 gets small through lossy psychoacoustic compression, meaning it deliberately discards
+      information rather than just packing the same information more efficiently. Specifically, it
+      identifies frequencies that are masked, drowned out by louder frequencies nearby that the
+      human ear is statistically unlikely to notice, and removes them from the file entirely. At a
+      reasonable bitrate the result sounds nearly identical to the original, because the missing
+      pieces were chosen specifically for being pieces most people can't hear anyway. But the data
+      is genuinely gone, not just hidden.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Converting MP3 back to WAV doesn't undo anything</h2>
+    <p>
+      This is the part that trips people up: converting an MP3 to WAV does not restore the
+      discarded quality. The resulting WAV file gets bigger, because uncompressed storage is
+      always bigger, but it contains exactly the same already-lossy audio the MP3 had, just
+      re-encoded into an uncompressed container. There's no original data left anywhere to recover.
+      Once those frequencies were thrown away during MP3 encoding, no later conversion, to WAV or
+      any other format, brings them back. Think of it like re-photocopying a photocopy onto nicer
+      paper: the paper improved, the image didn't.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">The practical rule</h2>
+    <p>
+      Record and edit in WAV if you're doing actual production work. Uncompressed audio has no
+      generational quality loss, so saving, re-opening, and re-saving a WAV file repeatedly during
+      editing doesn't degrade it the way repeatedly re-saving a lossy format can. Once editing is
+      finished and you're ready to distribute or share the result, convert to MP3. The size savings
+      matter for distribution (uploading, emailing, streaming), and at that final listening stage
+      the human ear generally can't tell the difference from the uncompressed original.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Converting</h2>
+    <p>
+      <a href="/audio/wav-to-mp3" class="text-primary dark:text-blue-400 hover:underline">Convert WAV to MP3</a>{' '}
+      when you're ready to share or distribute a finished recording, and{' '}
+      <a href="/audio/mp3-to-wav" class="text-primary dark:text-blue-400 hover:underline">convert MP3 to WAV</a>{' '}
+      if you need an uncompressed container for editing software that expects one, keeping in mind
+      it won't add back any quality the MP3 already lost. Both run entirely in your browser.
+    </p>
+
+    <GuideMeta
+      headline={"MP3 or WAV: Which One Should You Actually Keep?"}
+      description={"Lossy versus uncompressed audio, the real size difference, and why converting MP3 back to WAV doesn't restore anything."}
+      published="2026-08-08"
+      reviewed="2026-08-08"
+    />
+  </article>
+</Layout>

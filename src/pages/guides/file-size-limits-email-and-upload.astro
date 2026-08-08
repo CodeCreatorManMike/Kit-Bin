@@ -1,0 +1,89 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import GuideMeta from '../../components/GuideMeta.astro';
+---
+
+<Layout
+  title="Why Is Gmail Rejecting a File That's Only 26MB? | Kit-Bin"
+  description="Real attachment size limits per platform, why base64 encoding inflates a file by a third, and which tool to use to get under the limit."
+>
+
+  <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-ink dark:text-slate-300 space-y-4">
+    <p class="text-sm"><a href="/guides/" class="text-primary dark:text-blue-400 hover:underline">← All guides</a></p>
+    <h1 class="text-3xl font-bold text-ink dark:text-slate-100">Why Is Gmail Rejecting a File That's Only 26MB?</h1>
+
+    <p>
+      Finder or Windows Explorer says the file is 26MB. Gmail's attachment limit is famously
+      25MB. Close enough that it should probably work, and yet the message bounces. It's not a
+      glitch, and the two numbers aren't actually measuring the same thing.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">The limit applies to the encoded size, not the raw file</h2>
+    <p>
+      Email was originally designed to carry plain text, not arbitrary binary data. To get a
+      binary file (a PDF, a video, an image) through that text-only pipe safely, email clients
+      encode attachments using a scheme called base64, which converts binary bytes into a
+      restricted set of plain-text characters that any mail server can pass along without
+      corrupting them.
+    </p>
+    <p>
+      Base64 does this by taking every 3 raw bytes and representing them as 4 encoded characters.
+      That's a roughly 33% size increase before the message is even sent. A file that's 20MB on
+      disk is already pushing about 27MB once base64-encoded and wrapped into the actual email.
+      Gmail's 25MB limit is checked against that inflated, encoded size, not the file size your
+      operating system reports. So a file that looks comfortably under the limit in Finder can
+      still bounce, because the version that actually travels over the network is a third larger.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">"The limit" isn't one number</h2>
+    <p>
+      Every platform sets its own cap, and they're not close to each other:
+    </p>
+    <ul class="list-disc pl-5 space-y-1">
+      <li><strong>Gmail:</strong> 25MB per message, combined across all attachments, measured on the encoded size as above.</li>
+      <li><strong>WhatsApp:</strong> caps shared files (documents, video) well below what a typical Gmail attachment allows, and further compresses video and images by default unless you specifically choose to send as a document/original file.</li>
+      <li><strong>Corporate Exchange/Outlook setups:</strong> IT departments commonly set attachment limits far lower than Gmail's, 10MB is a typical default on managed corporate mailboxes, precisely because a mail server handling thousands of accounts can't afford everyone sending large files.</li>
+    </ul>
+    <p>
+      A file that clears one platform's limit can bounce on another without you changing anything
+      about the file itself.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">The practical fix</h2>
+    <p>
+      Compress before you send, and leave real margin below the stated limit rather than aiming
+      right at it, given the base64 overhead. Which tool to use depends on the file type:
+    </p>
+    <ul class="list-disc pl-5 space-y-1">
+      <li>
+        A large PDF (usually driven by embedded images or scanned pages), use{' '}
+        <a href="/pdf/compress" class="text-primary dark:text-blue-400 hover:underline">Compress PDF</a>.
+      </li>
+      <li>
+        A video file too large to attach, use{' '}
+        <a href="/video/compress" class="text-primary dark:text-blue-400 hover:underline">Compress Video</a>.
+      </li>
+      <li>
+        A photo or image you need under a specific size rather than just "smaller," use{' '}
+        <a href="/image/compress-to-size" class="text-primary dark:text-blue-400 hover:underline">Compress Image to Size</a>,
+        which lets you target an exact output size directly, useful when you know the hard limit
+        you're working against.
+      </li>
+    </ul>
+    <p>
+      All three run in your browser, so a file you're about to email somewhere doesn't get
+      uploaded to a third-party server first just to shrink it.
+    </p>
+
+    <p class="text-xs text-muted">
+      Source: <a href="https://support.google.com/mail/answer/6584" class="hover:underline">Gmail Help — File size limits</a>
+    </p>
+
+    <GuideMeta
+      headline={"Why Is Gmail Rejecting a File That's Only 26MB?"}
+      description={"Real attachment size limits per platform, why base64 encoding inflates a file by a third, and which tool to use to get under the limit."}
+      published="2026-08-08"
+      reviewed="2026-08-08"
+    />
+  </article>
+</Layout>

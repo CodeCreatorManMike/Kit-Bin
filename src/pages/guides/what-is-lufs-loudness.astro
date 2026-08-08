@@ -1,0 +1,79 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import GuideMeta from '../../components/GuideMeta.astro';
+import GuideReferences from '../../components/GuideReferences.astro';
+---
+
+<Layout
+  title="What Is LUFS, and Why Do Platforms Turn Your Audio Down? | Kit-Bin"
+  description="Peak volume and perceived loudness are different things — the LUFS targets Spotify, YouTube, and podcasts actually use, explained."
+>
+
+  <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-ink dark:text-slate-300 space-y-4">
+    <p class="text-sm"><a href="/guides/" class="text-primary dark:text-blue-400 hover:underline">← All guides</a></p>
+    <h1 class="text-3xl font-bold text-ink dark:text-slate-100">What Is LUFS, and Why Do Platforms Turn Your Audio Down?</h1>
+
+    <p>
+      You master a track as loud as you can get it, upload it to Spotify or YouTube, and it comes
+      out quieter than tracks that were mastered less aggressively. That's not a bug or bad luck.
+      It's LUFS normalization, and it rewards a completely different kind of "loud" than the one
+      most people are optimizing for.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Peak loudness and perceived loudness aren't the same measurement</h2>
+    <p>
+      A peak meter only catches one thing: the single loudest instantaneous moment in a file. LUFS
+      (Loudness Units Full Scale) measures something different, perceived loudness averaged over
+      time. Two tracks can have an identical peak level, both technically touching 0 dB at their
+      loudest instant, and still sound very differently loud when you actually listen to them,
+      because one has much higher average energy sustained throughout while the other is mostly
+      quiet with one sharp spike. Peak tells you about a single sample. LUFS tells you what your
+      ears actually experience across the whole track.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">The targets platforms actually use</h2>
+    <p>
+      Major platforms normalize incoming audio to a specific LUFS target rather than leaving
+      loudness up to whatever the uploader chose. Spotify normalizes to around -14 LUFS. YouTube
+      targets a similar level, also around -14 LUFS. Podcast platforms, including Apple Podcasts,
+      generally recommend closer to -16 LUFS. When a file arrives louder than the platform's
+      target, the platform automatically turns it down to match. There's no way to opt out and
+      "win" by mastering louder; the platform just pulls it back down.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Why peak-normalized audio can end up quieter, not louder</h2>
+    <p>
+      This is the trap: peak normalization (turning a track up until its single loudest moment just
+      touches the maximum) and loudness normalization (targeting a specific average LUFS value)
+      solve two different problems, and people often reach for the wrong one. A track that's been
+      pushed hard with peak normalization and heavy limiting to sound as loud as possible often has
+      a very high LUFS value, well above what the platform targets, so the platform turns it down
+      more than a track that was mastered sensibly to begin with. The result: the "louder" master
+      can end up sounding quieter on the platform than a track mastered with proper LUFS targets in
+      mind, because it got turned down further to reach the same destination.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">What normalizing on Kit-Bin actually does</h2>
+    <p>
+      <a href="/audio/volume-normalize" class="text-primary dark:text-blue-400 hover:underline">Volume Normalize</a>{' '}
+      measures a file's peak level and applies a single, uniform gain so the loudest moment lands at
+      a target peak. That's peak normalization, useful for making sure a quiet recording uses the
+      full available range without clipping, but it isn't the same thing as hitting a specific LUFS
+      target the way a streaming platform's loudness normalization does. If you're preparing a track
+      specifically for a platform's loudness target, peak normalization is a reasonable first pass,
+      not a substitute for checking the actual LUFS value with dedicated metering. If you're
+      combining multiple clips before normalizing,{' '}
+      <a href="/audio/merge" class="text-primary dark:text-blue-400 hover:underline">merge them first</a>,
+      then normalize the combined result once.
+    </p>
+
+    <GuideReferences keys={['mdnAudioCodecs']} />
+
+    <GuideMeta
+      headline={"What Is LUFS, and Why Do Platforms Turn Your Audio Down?"}
+      description={"Peak volume and perceived loudness are different things — the LUFS targets Spotify, YouTube, and podcasts actually use, explained."}
+      published="2026-08-08"
+      reviewed="2026-08-08"
+    />
+  </article>
+</Layout>

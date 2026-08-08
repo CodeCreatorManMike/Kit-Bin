@@ -1,0 +1,83 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import GuideMeta from '../../components/GuideMeta.astro';
+---
+
+<Layout
+  title="What a SHA-256 Hash Actually Proves (and What It Doesn't) | Kit-Bin"
+  description="Verifying a download against a published checksum only proves one specific thing — here's exactly what that is, and the trap people fall into."
+>
+
+  <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-ink dark:text-slate-300 space-y-4">
+    <p class="text-sm"><a href="/guides/" class="text-primary dark:text-blue-400 hover:underline">← All guides</a></p>
+    <h1 class="text-3xl font-bold text-ink dark:text-slate-100">What a SHA-256 Hash Actually Proves (and What It Doesn't)</h1>
+
+    <p>
+      A software download page lists a long string of hex characters next to the file and calls it
+      a "SHA-256 checksum." Computing that hash yourself and comparing it is a genuinely useful
+      step, but it's easy to overstate what a match actually tells you. It proves one specific
+      thing, and it says nothing at all about a different, equally important question people often
+      assume it answers.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">What SHA-256 does</h2>
+    <p>
+      SHA-256 takes an input of any size, a few bytes or many gigabytes, and produces a fixed
+      256-bit fingerprint, written out as 64 hexadecimal characters. Changing even a single bit
+      anywhere in the input produces a completely different, unpredictable-looking output, a
+      property called the avalanche effect. There's no way to predict how the hash will change from
+      looking at the change to the input; a one-character edit and a total rewrite both scramble the
+      output equally unrecognizably.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Why that makes it good for verifying downloads</h2>
+    <p>
+      Because of the avalanche effect, if you compute the SHA-256 of a file you downloaded and it
+      matches the hash the publisher listed, that's reliable proof the file arrived byte-for-byte
+      identical to whatever the publisher actually hashed. It wasn't corrupted in transit, and it
+      wasn't swapped for a different file somewhere along the way, any change at all would have
+      produced a visibly different hash.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">The caveat people miss</h2>
+    <p>
+      A matching hash proves the file is unchanged from what was hashed. It says nothing whatsoever
+      about whether the original file itself is safe, or whether the publisher is trustworthy. If an
+      attacker compromises the download server and replaces both the file and the published hash
+      together, the swapped hash will still "match" the malicious file perfectly, because you're
+      just comparing the file against a number that was published alongside it on the same
+      compromised system. The hash check only has teeth if the published hash comes from somewhere
+      the attacker didn't also control.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">How to actually verify a download</h2>
+    <ul class="list-disc pl-5 space-y-1">
+      <li>Compute the SHA-256 hash of the file you downloaded, locally, on your own machine</li>
+      <li>Compare it character-by-character against the hash published by the official source, not a mirror or third-party listing</li>
+      <li>Where possible, fetch the published hash through a different channel than the download itself (the vendor's signed release notes or a separate HTTPS page, rather than the same file listing right next to the download link)</li>
+    </ul>
+    <p>
+      That last step is what actually defends against the compromised-server scenario, since it
+      makes it harder for a single point of compromise to control both the file and the hash you're
+      checking it against.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Computing a hash</h2>
+    <p>
+      <a href="/dev/sha256" class="text-primary dark:text-blue-400 hover:underline">SHA-256 Hash Generator</a>{' '}
+      computes the hash of a file or text entirely in your browser, so you can compare it against a
+      published checksum without uploading the file anywhere. It's worth noting this is a different
+      kind of tool from{' '}
+      <a href="/dev/base64" class="text-primary dark:text-blue-400 hover:underline">Base64 encoding</a>,
+      which is a reversible text representation with no verification purpose at all, the two are
+      easy to lump together as "encoding stuff" but solve completely different problems.
+    </p>
+
+    <GuideMeta
+      headline={"What a SHA-256 Hash Actually Proves (and What It Doesn't)"}
+      description={"Verifying a download against a published checksum only proves one specific thing — here's exactly what that is, and the trap people fall into."}
+      published="2026-08-08"
+      reviewed="2026-08-08"
+    />
+  </article>
+</Layout>

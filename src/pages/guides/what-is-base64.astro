@@ -1,0 +1,78 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import GuideMeta from '../../components/GuideMeta.astro';
+---
+
+<Layout
+  title="Base64 Is Not Compression, and It's Not Encryption | Kit-Bin"
+  description="What Base64 encoding actually does — and the common mix-up that leads people to think it's either compressing or securing their data."
+>
+
+  <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-ink dark:text-slate-300 space-y-4">
+    <p class="text-sm"><a href="/guides/" class="text-primary dark:text-blue-400 hover:underline">← All guides</a></p>
+    <h1 class="text-3xl font-bold text-ink dark:text-slate-100">Base64 Is Not Compression, and It's Not Encryption</h1>
+
+    <p>
+      Someone pastes a block of jumbled letters and numbers ending in one or two <code>=</code>
+      signs and calls it "encrypted." It isn't. It's very likely Base64, and the actual purpose of
+      Base64 has nothing to do with hiding or shrinking data. Understanding what it's really for
+      also explains why the misconception is worth correcting.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">What Base64 actually does</h2>
+    <p>
+      Base64 converts binary data into plain ASCII text by mapping every 3 raw bytes of input into
+      4 printable characters drawn from a fixed 64-character alphabet (A–Z, a–z, 0–9, plus two
+      symbols). It exists purely so binary data can survive being passed through systems that were
+      designed to carry text, not arbitrary bytes: early email transport, URLs, JSON and XML
+      payloads, all of which can mangle or reject raw binary but handle plain text reliably. Base64
+      is the adapter that lets binary data travel safely through a text-only pipe.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">It is not compression</h2>
+    <p>
+      Encoding to Base64 makes the output bigger, not smaller. Because every 4 encoded characters
+      represent only 3 original bytes, the encoded result runs about 33% larger than the input. If
+      you've ever pasted a small file into a Base64 encoder and been surprised the output is longer
+      than the file itself, that's expected, not a bug. Base64 trades size for compatibility; it
+      never trades size for smaller size.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">It is not encryption</h2>
+    <p>
+      This is the genuinely common, and genuinely dangerous, misconception: seeing a string of
+      Base64 and assuming it's encrypted or otherwise hidden. It's neither. Base64 is a reversible
+      text representation, not a cipher. Anyone can decode it back to the original data instantly,
+      with no key, no password, and nothing secret about the process at all, decoding is a single
+      well-known, publicly documented algorithm with no security step involved anywhere. If
+      sensitive data gets Base64-encoded and sent somewhere, it should be treated exactly as if it
+      were sent in plain text, because functionally, it was.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">What it's legitimately used for</h2>
+    <ul class="list-disc pl-5 space-y-1">
+      <li>Embedding small images directly inside HTML or CSS as data URIs, avoiding a separate file request</li>
+      <li>Packing binary data (like a file or image) inside a JSON or XML payload, which can only carry text values</li>
+      <li>Encoding email attachments under MIME, so binary files survive transport designed for text messages</li>
+    </ul>
+    <p>
+      In every one of these cases, the goal is compatibility with a text-based format, never size
+      reduction and never confidentiality.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Encoding and decoding</h2>
+    <p>
+      <a href="/dev/base64" class="text-primary dark:text-blue-400 hover:underline">Base64 Encode/Decode</a>{' '}
+      converts text or files to and from Base64 entirely in your browser, useful for exactly the
+      compatibility cases above, and a quick way to see for yourself how completely reversible the
+      encoding is.
+    </p>
+
+    <GuideMeta
+      headline={"Base64 Is Not Compression, and It's Not Encryption"}
+      description={"What Base64 encoding actually does — and the common mix-up that leads people to think it's either compressing or securing their data."}
+      published="2026-08-08"
+      reviewed="2026-08-08"
+    />
+  </article>
+</Layout>

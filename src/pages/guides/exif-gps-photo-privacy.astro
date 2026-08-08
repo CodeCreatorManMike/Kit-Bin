@@ -1,0 +1,78 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import GuideMeta from '../../components/GuideMeta.astro';
+---
+
+<Layout
+  title="What Your Photos Are Telling People: EXIF, GPS, and Camera Data | Kit-Bin"
+  description="The hidden metadata inside a photo file — including, sometimes, the exact GPS coordinates where it was taken — and which platforms actually strip it."
+>
+
+  <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-ink dark:text-slate-300 space-y-4">
+    <p class="text-sm"><a href="/guides/" class="text-primary dark:text-blue-400 hover:underline">← All guides</a></p>
+    <h1 class="text-3xl font-bold text-ink dark:text-slate-100">What Your Photos Are Telling People: EXIF, GPS, and Camera Data</h1>
+
+    <p>
+      A photo file isn't just the picture. Alongside the pixel data, most image files carry a
+      block of metadata called EXIF, embedded inside the same file, invisible when you're just
+      looking at the image, but readable by plenty of software the moment someone opens the file
+      properly.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">What's actually in there</h2>
+    <p>
+      EXIF (Exchangeable Image File Format) data typically includes the camera or phone make and
+      model, the exact exposure settings (aperture, shutter speed, ISO), the timestamp the photo
+      was taken, and, if the device had location services enabled for the camera app, GPS
+      coordinates. Phone GPS is usually accurate enough to identify a specific building, not just
+      a neighborhood. A photo taken inside someone's home, at their workplace, or at their child's
+      school can carry that exact location embedded in the file, with nothing about the visible
+      image itself hinting that it's there.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Why "I posted it online and it was fine" doesn't generalize</h2>
+    <p>
+      Most major social platforms re-encode every image uploaded to them, generating their own
+      resized, re-compressed versions for feeds and thumbnails. EXIF data typically doesn't survive
+      that re-encoding, so a photo posted to a feed on a mainstream social network usually has its
+      metadata stripped as a side effect, not because the platform is deliberately protecting your
+      privacy, just because their processing pipeline doesn't carry it forward.
+    </p>
+    <p>
+      Direct file transfer is a different story. AirDrop, a USB or cable transfer, a messaging
+      app's "send as file" or "original quality" option (as opposed to its default compressed
+      photo mode) typically hands the file over untouched, byte for byte, EXIF and all. Telegram
+      is a clean example of both paths existing side by side in one app: send a photo the normal
+      way and it gets compressed and stripped, choose "send as file" instead and the original,
+      metadata intact, arrives on the other end. The same photo can be safe by one method and
+      carry your exact location by another, from the same app, on the same day.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Why strip it yourself instead of trusting the platform</h2>
+    <p>
+      Trusting whatever app you're sharing through to strip metadata means trusting that you know
+      which of its sharing modes does that and which doesn't, and that it doesn't change in a
+      future update. Stripping EXIF data locally before you share, regardless of which method you
+      then use to send the file, removes that guesswork entirely, the file you attach or send is
+      already clean.
+    </p>
+    <p>
+      It also matters where the stripping happens. An online "remove EXIF" tool that isn't
+      client-side has to receive your file on its server to process it, meaning the GPS
+      coordinates you're trying to remove pass through, and are briefly visible to, that server
+      first. A tool that strips metadata in your browser never sends the file anywhere, the
+      removal happens on your own device and the file that leaves is already stripped.{' '}
+      <a href="/image/remove-metadata" class="text-primary dark:text-blue-400 hover:underline">Remove Image Metadata</a>{' '}
+      and{' '}
+      <a href="/pdf/remove-metadata" class="text-primary dark:text-blue-400 hover:underline">Remove PDF Metadata</a>{' '}
+      both work this way.
+    </p>
+
+    <GuideMeta
+      headline={"What Your Photos Are Telling People: EXIF, GPS, and Camera Data"}
+      description={"The hidden metadata inside a photo file — including, sometimes, the exact GPS coordinates where it was taken — and which platforms actually strip it."}
+      published="2026-08-08"
+      reviewed="2026-08-08"
+    />
+  </article>
+</Layout>

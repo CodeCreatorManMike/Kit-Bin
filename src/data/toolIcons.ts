@@ -757,4 +757,49 @@ export const toolIcons: Record<string, IconPrimitive[]> = {
     { t: 'circle', cx: 12, cy: 18, r: 2 },
     { t: 'circle', cx: 17, cy: 18, r: 2 },
   ],
+  '/guides/why-cant-select-text-in-pdf': [
+    ...page,
+    { t: 'path', d: 'M8 10h8M8 13h5' },
+    { t: 'path', d: 'M6 17l3 3 9-9' },
+  ],
+  '/guides/file-size-limits-email-and-upload': [
+    { t: 'rect', x: 3, y: 6, w: 18, h: 13, rx: 1.5 },
+    { t: 'path', d: 'M3 7l9 6 9-6' },
+    { t: 'path', d: 'M12 3v6M9.5 6.5L12 9l2.5-2.5' },
+  ],
+  '/guides/exif-gps-photo-privacy': [
+    { t: 'path', d: 'M4 6l4-2 4 2 4-2 4 2v12l-4 2-4-2-4 2-4-2z' },
+    { t: 'path', d: 'M12 8v5l3 2' },
+  ],
+  '/guides/are-online-file-converters-safe': [
+    { t: 'path', d: 'M12 3l7 3v5.5c0 4.3-3 7.6-7 9-4-1.4-7-4.7-7-9V6l7-3z' },
+    { t: 'path', d: 'M9.5 12l1.8 1.8L15 9.5' },
+  ],
+  '/guides/svg-vs-png-when-to-use-which': [
+    { t: 'path', d: 'M3 8l9-5 9 5-9 5-9-5z' },
+    { t: 'path', d: 'M3 8v8l9 5 9-5V8' },
+  ],
+  '/guides/dpi-ppi-print-size-explained': [
+    { t: 'rect', x: 4, y: 3, w: 16, h: 12, rx: 1.2 },
+    { t: 'path', d: 'M4 15h2v6h-2zM18 15h2v6h-2z' },
+    { t: 'path', d: 'M8 21h8' },
+  ],
+  '/guides/mp3-vs-wav-which-to-keep': [
+    { t: 'path', d: 'M4 10v4h4l5 4V6l-5 4H4z' },
+    { t: 'path', d: 'M16 10v4M18.5 8.5v7' },
+  ],
+  '/guides/what-is-lufs-loudness': [
+    { t: 'path', d: 'M3 14v-4h3l4-4v12l-4-4z' },
+    { t: 'path', d: 'M13 8v8M16 6v12M19 10v4' },
+  ],
+  '/guides/what-is-base64': [
+    { t: 'rect', x: 2.5, y: 4, w: 8, h: 16, rx: 1.2 },
+    { t: 'path', d: 'M4.5 8h4M4.5 12h4M4.5 16h4' },
+    { t: 'path', d: 'M14 12h7M17.5 8.5v7' },
+  ],
+  '/guides/what-sha256-hash-proves': [
+    { t: 'rect', x: 5, y: 11, w: 14, h: 9, rx: 1.5 },
+    { t: 'path', d: 'M8 11V7a4 4 0 0 1 8 0v4' },
+    { t: 'path', d: 'M9.5 15.5l1.8 1.8L14.5 14' },
+  ],
 };

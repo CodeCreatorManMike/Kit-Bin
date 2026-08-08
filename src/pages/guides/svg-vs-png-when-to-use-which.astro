@@ -1,0 +1,81 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import GuideMeta from '../../components/GuideMeta.astro';
+---
+
+<Layout
+  title="SVG vs PNG: When Should a Logo Be Neither? | Kit-Bin"
+  description="Vector versus raster, why an SVG can be 10KB while an equivalent PNG is 200KB, and where SVG isn't actually accepted."
+>
+
+  <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-ink dark:text-slate-300 space-y-4">
+    <p class="text-sm"><a href="/guides/" class="text-primary dark:text-blue-400 hover:underline">← All guides</a></p>
+    <h1 class="text-3xl font-bold text-ink dark:text-slate-100">SVG vs PNG: When Should a Logo Be Neither?</h1>
+
+    <p>
+      A designer hands you a logo as an SVG that's 8KB. You export it as a PNG at the size you
+      need and it's 220KB. Same logo, same visual result on screen, twenty-seven times the file
+      size. That's not a compression setting you got wrong — it's a fundamentally different way of
+      storing the image.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Two different ways to store a picture</h2>
+    <p>
+      A PNG is a raster format: it stores a grid of pixels, each with its own colour value, at a
+      fixed resolution baked in at export time. Enlarge it past that resolution and there's no more
+      data to draw on — the image gets blurry or blocky because the software is just stretching the
+      pixels it already has.
+    </p>
+    <p>
+      An SVG is a vector format: it doesn't store pixels at all. It stores a set of mathematical
+      instructions — this shape is a path with these curve points, filled with this colour, this
+      circle has this radius — as plain text. A renderer reads those instructions and draws the
+      shape fresh, at whatever size is needed, every time. That's why an SVG logo looks identical
+      on a business card and on a billboard: there's no fixed resolution to run out of.
+    </p>
+    <p>
+      It's also why the file sizes diverge so sharply as size goes up. The SVG's file size is
+      driven by how many shapes and points it takes to describe the logo — it doesn't change
+      whether you render it at 16px or 1600px. The PNG's file size is driven by how many pixels it
+      has to store, so a print-resolution export of the same logo needs far more stored pixel data
+      than a small web icon, even though it's visually the same image.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">The actual decision rule</h2>
+    <p>
+      Use SVG for anything genuinely built from shapes: logos, icons, line art, flat illustrations.
+      "Genuinely vector-based" matters — a logo that started as a photo or a hand-painted texture
+      and got traced badly into SVG paths won't behave well either. Use PNG (or another raster
+      format) for photographs and anything with continuous-tone gradients, soft shadows, or
+      photographic detail — vector shapes can't efficiently represent that kind of continuous
+      colour variation, so trying to force a photo into SVG produces a bloated, worse-looking file
+      than just using a raster format in the first place.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Where SVG quietly isn't accepted</h2>
+    <p>
+      This is the part that catches people out: SVG being the objectively better format for a logo
+      doesn't mean every upload field will take it. Instagram, Facebook, and LinkedIn's profile and
+      post image uploads don't accept SVG files at all — they expect raster formats. So even a
+      logo that lives as SVG everywhere else in your brand assets still needs a rasterized PNG or
+      JPG export the moment it's going on a social platform. That's not a case where one format is
+      "better," it's a hard platform requirement you have to design around.
+    </p>
+    <p>
+      In practice that means keeping the SVG as your master file and exporting a PNG at whatever
+      size each platform actually needs, rather than trying to make one file format serve every
+      destination. <a href="/image/svg-to-png" class="text-primary dark:text-blue-400 hover:underline">Convert SVG to PNG</a>{' '}
+      handles that export directly in your browser. If the SVG itself is larger than it should be —
+      leftover editor metadata, unnecessarily precise path points — {' '}
+      <a href="/image/optimize-svg" class="text-primary dark:text-blue-400 hover:underline">optimize the SVG</a>{' '}
+      first, before exporting from it.
+    </p>
+
+    <GuideMeta
+      headline={"SVG vs PNG: When Should a Logo Be Neither?"}
+      description={"Vector versus raster, why an SVG can be 10KB while an equivalent PNG is 200KB, and where SVG isn't actually accepted."}
+      published="2026-08-08"
+      reviewed="2026-08-08"
+    />
+  </article>
+</Layout>
