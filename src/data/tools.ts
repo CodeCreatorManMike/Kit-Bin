@@ -146,6 +146,14 @@ export const tools: Tool[] = [
     aliases: ['unzip online', 'extract zip file', 'open zip file', 'zip extractor', 'decompress zip'] },
   { slug: '/image/exif-viewer', name: 'EXIF & GPS Metadata Viewer', description: 'See the camera, exposure, timestamp, and GPS location hidden inside a photo file.', category: 'image',
     aliases: ['exif viewer', 'view exif data', 'photo metadata viewer', 'gps data from photo', 'check photo location data', 'exif reader'] },
+  { slug: '/image/to-text', name: 'Extract Text from Image (OCR)', description: 'Pull selectable text out of a photo or screenshot using on-device OCR — no upload.', category: 'image',
+    aliases: ['ocr', 'image to text', 'photo to text', 'screenshot to text', 'extract text from image', 'image text extractor', 'ocr online'] },
+  { slug: '/pdf/scan-to-pdf', name: 'Scan Document to PDF', description: 'Turn a photo of a paper document into a clean, deskewed PDF.', category: 'pdf',
+    aliases: ['document scanner', 'scan to pdf', 'photo to pdf', 'camera scanner', 'deskew document'] },
+  { slug: '/audio/transcribe', name: 'Transcribe Audio to Text', description: 'Turn spoken audio into a text transcript and SRT subtitles.', category: 'audio',
+    aliases: ['audio to text', 'speech to text', 'voice to text', 'generate subtitles', 'audio transcription', 'srt from audio'] },
+  { slug: '/audio/text-to-speech', name: 'Text to Speech', description: 'Convert typed or pasted text into a spoken MP3.', category: 'audio',
+    aliases: ['tts', 'text to mp3', 'text to voice', 'read text aloud', 'ai voice generator', 'free text to speech'] },
 ];
 
 export const categories = [

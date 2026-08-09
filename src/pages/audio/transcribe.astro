@@ -1,0 +1,320 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import AdsterraBanner from '../../components/AdsterraBanner.astro';
+import ToolHeader from '../../components/ToolHeader.astro';
+import ToolSchema from '../../components/ToolSchema.astro';
+import FaqAccordion from '../../components/FaqAccordion.astro';
+import AdUnit from '../../components/AdUnit.astro';
+
+const faqs = [
+  {
+    q: 'How long does transcription take?',
+    a: "It depends on your device and audio length. On a machine with WebGPU (most recent Chrome/Edge on a discrete or capable integrated GPU), a few minutes of audio typically finishes in well under the audio's own length. Without WebGPU the model falls back to a CPU-only WASM path, which can take noticeably longer than the audio itself — a 10-minute recording taking several minutes is normal on an older laptop or phone, not a sign something is broken.",
+  },
+  {
+    q: 'What languages does this support?',
+    a: "Whisper base is a multilingual model and can transcribe dozens of languages, but this tool is tuned and tested for English. Other languages will often produce a usable transcript, but accuracy is not something we've verified beyond English — treat non-English results as a rough draft rather than a finished transcript.",
+  },
+  {
+    q: 'Is my audio uploaded anywhere?',
+    a: "No. The audio file is decoded and transcribed entirely in this browser tab. Separately, the speech recognition model itself (around 150MB) downloads once from Hugging Face's CDN the first time you use this tool, and your browser caches it after that — that one-time model download is not the same thing as your audio file, which never leaves your device.",
+  },
+  {
+    q: 'How accurate is it with background noise, multiple speakers, or accents?',
+    a: "Clear single-speaker audio with minimal background noise gets the best results. Accuracy drops with heavy background noise, overlapping speakers talking at once, and strong or unfamiliar accents — this model doesn't separate or label different speakers, so a multi-person conversation comes back as one continuous transcript, not one broken out by who said what. Treat the output as a strong first draft, not a certified transcript.",
+  },
+  {
+    q: 'Can I transcribe a video file?',
+    a: "Not directly on this tool — v1 only accepts audio files (MP3, WAV, M4A, OGG, FLAC, and similar). Decoding a video file's audio track reliably in-browser across every browser (Safari in particular) isn't solid enough yet to promise here. Pull the audio out first with Extract Audio from Video, then drop the result into this tool.",
+  },
+];
+---
+
+<Layout
+  title="Transcribe Audio to Text Online, Free & Private, No Upload | Kit-Bin"
+  description="Turn spoken audio into a text transcript and downloadable SRT subtitle file. Runs entirely in your browser — your audio is never uploaded to a server."
+>
+  <ToolSchema
+    name="Audio Transcription"
+    description="Turn spoken audio into a text transcript and a downloadable SRT subtitle file, entirely in your browser."
+    faqs={faqs}
+  />
+
+  <ToolHeader title="Transcribe Audio to Text" subtitle="Get a text transcript and an SRT subtitle file. Processed entirely on your device." />
+
+  <div class="max-w-2xl mx-auto px-4">
+    <div
+      id="dropzone"
+      role="button"
+      tabindex="0"
+      class="group relative cursor-pointer overflow-hidden rounded-2xl border-2 border-dashed border-border-soft dark:border-slate-700 bg-surface dark:bg-slate-900/60 px-6 py-12 text-center transition-all duration-200 hover:border-primary/50 hover:bg-primary-tint/40 dark:hover:border-blue-500/50 dark:hover:bg-slate-900 hover:shadow-[0_10px_30px_rgba(16,24,47,0.08)] data-[dragging=true]:border-primary data-[dragging=true]:bg-primary-tint/60 data-[dragging=true]:scale-[1.01] dark:data-[dragging=true]:bg-blue-950/30"
+    >
+      <div
+        class="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/[0.06] via-transparent to-violet-500/[0.06] opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-data-[dragging=true]:opacity-100"
+        aria-hidden="true"
+      >
+      </div>
+
+      <div class="relative">
+        <span class="relative mx-auto grid h-14 w-14 place-items-center">
+          <span
+            class="absolute inset-0 rounded-full bg-primary/20 opacity-0 group-data-[dragging=true]:opacity-100 group-data-[dragging=true]:animate-pulse-ring"
+            aria-hidden="true"></span>
+          <span
+            class="relative grid h-14 w-14 place-items-center rounded-2xl bg-gradient-to-br from-primary to-violet-500 text-white shadow-lg shadow-primary/25 transition-transform duration-200 group-hover:scale-105 group-hover:-rotate-3 group-data-[dragging=true]:scale-110"
+          >
+            <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 12h2l2-6 3 12 2-9 2 6h1.5" />
+              <path d="M17 12h3" />
+              <path d="M18.5 10.5v3" />
+            </svg>
+          </span>
+        </span>
+
+        <p class="mt-4 text-lg font-semibold text-ink dark:text-slate-100">Drop an audio file here or click to browse</p>
+        <p class="mt-1 text-xs text-muted dark:text-slate-500">Processed entirely in your browser. Never uploaded to a server.</p>
+        <p class="mt-1 text-xs text-muted dark:text-slate-500">Audio only for now (MP3, WAV, M4A, OGG, FLAC). Not video files.</p>
+        <p id="file-info" class="mt-2 text-sm font-medium text-primary dark:text-blue-400"></p>
+        <input id="file-input" type="file" accept="audio/*" class="hidden" />
+      </div>
+    </div>
+
+    <div id="status" class="hidden mt-4" role="status" aria-live="polite">
+      <div class="rounded-xl border border-border-soft dark:border-slate-800 bg-surface dark:bg-slate-900 px-4 py-3">
+        <p data-status-text class="text-center text-sm font-medium text-ink dark:text-slate-200"></p>
+        <div data-status-bar class="mt-2.5 h-1 overflow-hidden rounded-full bg-app-bg dark:bg-slate-800">
+          <div class="h-full w-full animate-shimmer rounded-full" aria-hidden="true"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="result-panel" class="hidden mt-4 space-y-4">
+      <div class="rounded-xl border border-border-soft dark:border-slate-800 bg-surface dark:bg-slate-900 px-5 py-4">
+        <div class="flex items-center justify-between gap-3">
+          <p class="font-medium text-ink dark:text-slate-100">Transcript</p>
+          <button
+            id="copy-button"
+            type="button"
+            class="shrink-0 rounded-lg border border-border-soft px-3 py-1.5 text-xs font-medium text-ink transition hover:bg-app-bg dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800"
+          >
+            Copy transcript
+          </button>
+        </div>
+        <div
+          id="transcript-text"
+          class="mt-3 max-h-80 overflow-y-auto whitespace-pre-wrap text-sm leading-relaxed text-ink dark:text-slate-300"
+        ></div>
+      </div>
+
+      <div class="flex flex-col gap-3 sm:flex-row">
+        <a
+          id="download-txt"
+          class="flex-1 inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-primary to-violet-500 px-5 py-3 text-sm font-medium text-white shadow-lg shadow-primary/25 transition-all duration-200 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98]"
+        >
+          <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 4v12" />
+            <path d="M8 12l4 4 4-4" />
+            <path d="M4 20h16" />
+          </svg>
+          Download .txt
+        </a>
+        <a
+          id="download-srt"
+          class="flex-1 inline-flex items-center justify-center gap-2 rounded-xl border border-border-soft bg-surface px-5 py-3 text-sm font-medium text-ink shadow-sm transition hover:-translate-y-0.5 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
+        >
+          <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 4v12" />
+            <path d="M8 12l4 4 4-4" />
+            <path d="M4 20h16" />
+          </svg>
+          Download .srt
+        </a>
+      </div>
+
+      <button id="reset-button" class="block w-full text-sm text-muted dark:text-slate-400 underline decoration-dotted underline-offset-2 transition-colors hover:text-ink dark:hover:text-slate-200">
+        Transcribe another file
+      </button>
+    </div>
+  </div>
+
+  <AdUnit />
+
+  <div class="max-w-2xl mx-auto px-4 py-12 text-ink dark:text-slate-300 space-y-6">
+    <p>
+      This tool turns spoken audio into a written transcript, plus a timed SRT subtitle file you
+      can drop straight into a video editor. Drop your audio file above, wait for the model to
+      load and the audio to process, then copy the transcript or download it as a plain-text
+      file or an SRT.
+    </p>
+    <p>
+      Every commercial transcription service you've probably seen charges per minute of audio
+      specifically because it runs the actual speech recognition on their servers — your file has
+      to leave your device for them to process it and bill you for it. This tool runs the same
+      kind of speech recognition model (OpenAI's Whisper) directly in your browser instead, so
+      there's no per-minute meter and no upload step: the audio is decoded and transcribed on
+      your own device, in this tab, and is never sent anywhere. The only network activity involved
+      is a one-time download of the recognition model itself (around 150MB, cached by your
+      browser after the first run) — that's the model's weights, not your file.
+    </p>
+
+    <div>
+      <h2 class="tool-h2 font-semibold text-lg">FAQ</h2>
+      <div class="mt-3">
+        <FaqAccordion faqs={faqs} />
+      </div>
+    </div>
+
+    <p class="text-sm">
+      Related tools:{' '}
+      <a href="/audio/mp3-to-wav" class="text-primary dark:text-blue-400 hover:underline">MP3 to WAV</a>,{' '}
+      <a href="/video/extract-audio" class="text-primary dark:text-blue-400 hover:underline">Extract Audio from Video</a>,{' '}
+      <a href="/audio/trim" class="text-primary dark:text-blue-400 hover:underline">Trim Audio</a>.
+    </p>
+  </div>
+
+  <div class="pt-8 sm:pt-12 pb-6 sm:pb-8">
+    <AdsterraBanner placement="tool-page:audio/transcribe" />
+  </div>
+
+  <script>
+    import { transcribeMedia, hasWebGPU, type TranscriptionResult } from '../../lib/audio/transcribe';
+    import { segmentsToSrt } from '../../lib/audio/srt';
+
+    const dropzone = document.querySelector<HTMLElement>('#dropzone')!;
+    const fileInput = document.querySelector<HTMLInputElement>('#file-input')!;
+    const fileInfo = document.querySelector<HTMLElement>('#file-info')!;
+
+    const status = document.querySelector<HTMLElement>('#status')!;
+    const statusText = status.querySelector<HTMLElement>('[data-status-text]')!;
+    const statusBar = status.querySelector<HTMLElement>('[data-status-bar]')!;
+
+    const resultPanel = document.querySelector<HTMLElement>('#result-panel')!;
+    const transcriptText = document.querySelector<HTMLElement>('#transcript-text')!;
+    const copyButton = document.querySelector<HTMLButtonElement>('#copy-button')!;
+    const downloadTxt = document.querySelector<HTMLAnchorElement>('#download-txt')!;
+    const downloadSrt = document.querySelector<HTMLAnchorElement>('#download-srt')!;
+    const resetButton = document.querySelector<HTMLButtonElement>('#reset-button')!;
+
+    let txtObjectUrl: string | null = null;
+    let srtObjectUrl: string | null = null;
+    let currentText = '';
+
+    function setStatus(message: string | null, isError = false) {
+      statusText.textContent = message ?? '';
+      status.classList.toggle('hidden', !message);
+      statusBar.classList.toggle('hidden', isError);
+      statusText.classList.toggle('text-red-600', isError);
+      statusText.classList.toggle('dark:text-red-400', isError);
+    }
+
+    function revokeUrls() {
+      if (txtObjectUrl) {
+        URL.revokeObjectURL(txtObjectUrl);
+        txtObjectUrl = null;
+      }
+      if (srtObjectUrl) {
+        URL.revokeObjectURL(srtObjectUrl);
+        srtObjectUrl = null;
+      }
+    }
+
+    function baseName(filename: string): string {
+      return filename.replace(/\.[^.]+$/, '') || 'transcript';
+    }
+
+    function renderResult(file: File, result: TranscriptionResult) {
+      currentText = result.text;
+      transcriptText.textContent = result.text || '(No speech was detected in this file.)';
+
+      revokeUrls();
+      const name = baseName(file.name);
+
+      const txtBlob = new Blob([result.text], { type: 'text/plain' });
+      txtObjectUrl = URL.createObjectURL(txtBlob);
+      downloadTxt.href = txtObjectUrl;
+      downloadTxt.download = `${name}.txt`;
+
+      const srtBlob = new Blob([segmentsToSrt(result.segments)], { type: 'application/x-subrip' });
+      srtObjectUrl = URL.createObjectURL(srtBlob);
+      downloadSrt.href = srtObjectUrl;
+      downloadSrt.download = `${name}.srt`;
+
+      resultPanel.classList.remove('hidden');
+      dropzone.classList.add('hidden');
+    }
+
+    async function handleFile(file: File) {
+      if (!file.type.startsWith('audio/')) {
+        setStatus('This tool needs an audio file (MP3, WAV, M4A, OGG, FLAC). Video files are not supported yet.', true);
+        return;
+      }
+
+      fileInfo.textContent = file.name;
+      resultPanel.classList.add('hidden');
+      setStatus('Starting…');
+
+      if (!hasWebGPU()) {
+        setStatus('No WebGPU detected — running on CPU, which will be slower.');
+      }
+
+      try {
+        const result = await transcribeMedia(file, (message) => setStatus(message));
+        setStatus(null);
+        renderResult(file, result);
+      } catch (err) {
+        setStatus(
+          err instanceof Error
+            ? `Could not transcribe this file: ${err.message}`
+            : 'Could not transcribe this file.',
+          true,
+        );
+      }
+    }
+
+    dropzone.addEventListener('click', () => fileInput.click());
+    dropzone.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        fileInput.click();
+      }
+    });
+    dropzone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropzone.dataset.dragging = 'true';
+    });
+    dropzone.addEventListener('dragleave', () => {
+      dropzone.dataset.dragging = 'false';
+    });
+    dropzone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropzone.dataset.dragging = 'false';
+      const file = e.dataTransfer?.files?.[0];
+      if (file) handleFile(file);
+    });
+    fileInput.addEventListener('change', () => {
+      const file = fileInput.files?.[0];
+      if (file) handleFile(file);
+    });
+
+    copyButton.addEventListener('click', async () => {
+      if (!currentText) return;
+      try {
+        await navigator.clipboard.writeText(currentText);
+        copyButton.textContent = 'Copied';
+        setTimeout(() => (copyButton.textContent = 'Copy transcript'), 1500);
+      } catch {
+        setStatus('Clipboard access was blocked.', true);
+      }
+    });
+
+    resetButton.addEventListener('click', () => {
+      revokeUrls();
+      currentText = '';
+      resultPanel.classList.add('hidden');
+      dropzone.classList.remove('hidden');
+      fileInfo.textContent = '';
+      fileInput.value = '';
+      setStatus(null);
+    });
+  </script>
+</Layout>

@@ -22,3 +22,9 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# runtime-downloaded model/language data (tesseract.js, transformers.js, etc.)
+# — these are fetched from a CDN at runtime and cached by the browser, never
+# bundled; a stray copy can end up at the repo root during local testing.
+*.traineddata
+

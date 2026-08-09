@@ -26,6 +26,7 @@
     "@jsquash/webp": "^1.5.0",
     "@mediabunny/mp3-encoder": "^1.52.2",
     "@tailwindcss/vite": "^4.3.3",
+    "@techstark/opencv-js": "^5.0.0-release.1",
     "ajv": "^8.20.0",
     "ajv-formats": "^3.0.1",
     "astro": "7.1.6",
@@ -34,6 +35,7 @@
     "fflate": "^0.8.3",
     "gifenc": "^1.0.3",
     "jsqr": "^1.4.0",
+    "kokoro-js": "^1.2.1",
     "libheif-js": "^1.19.8",
     "mediabunny": "^1.52.2",
     "papaparse": "^5.5.4",
@@ -43,6 +45,7 @@
     "qrcode": "^1.5.4",
     "svgo": "^4.0.2",
     "tailwindcss": "^4.3.3",
+    "tesseract.js": "^7.0.0",
     "wavesurfer.js": "^7.12.11",
     "xlsx": "^0.18.5"
   },

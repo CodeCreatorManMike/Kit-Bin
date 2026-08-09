@@ -1,0 +1,130 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import AdsterraBanner from '../../components/AdsterraBanner.astro';
+import ToolHeader from '../../components/ToolHeader.astro';
+import FaqAccordion from '../../components/FaqAccordion.astro';
+import ToolSchema from '../../components/ToolSchema.astro';
+import ToolWidget from '../../components/ToolWidget.astro';
+import AdUnit from '../../components/AdUnit.astro';
+
+const faqs = [
+  {
+    q: 'How does the auto-crop actually work?',
+    a: "It runs a classic computer-vision pipeline entirely in your browser: find edges in the photo, look for the largest four-sided shape those edges form, and if one is found with reasonable confidence, warp it flat so the page fills the frame corner to corner, like it was photographed head-on. This runs on-device, using an OpenCV build compiled to WebAssembly, not a server.",
+  },
+  {
+    q: 'What if it picks the wrong edges, or doesn\'t find the page at all?',
+    a: "Then it falls back to your original photo, uncropped and unwarped, rather than failing outright or guessing badly. Being honest about that: a photo where the document doesn't fill most of the frame, or where the background is a similar colour to the paper, is the case most likely to trip up auto-detection. Good lighting and a plain, contrasting background behind the page both help a lot.",
+  },
+  {
+    q: 'Can I adjust the corners myself if auto-detect gets them wrong?',
+    a: "Not in this version. There's no manual drag-the-corners step — it's auto-detect or the full photo, one or the other. If the auto-crop consistently misses on a particular photo, retake it with the document flatter, better lit, and filling more of the frame, or use Crop Image afterward on the resulting page.",
+  },
+  {
+    q: 'Does this work on a whiteboard, a receipt, or a page from a book?',
+    a: "A whiteboard or a receipt against a contrasting surface usually works fine, since both are still a rectangular thing with clear edges. A book page is harder: the curve near the spine and the second, adjacent page in frame both confuse the four-corner assumption this tool makes, so expect the fallback (full photo) path more often there. It still produces a usable PDF, just without the perspective correction.",
+  },
+  {
+    q: 'Can I scan a multi-page document in one go?',
+    a: "Not yet — this is a single photo in, single-page PDF out tool for now. Scan each page separately and combine the resulting PDFs with Merge PDF, or use Images to PDF if you'd rather skip the scan-look processing for some pages.",
+  },
+  {
+    q: 'Is my photo uploaded anywhere?',
+    a: 'No. The edge detection, perspective warp, and the PDF itself are all built in this browser tab. The only thing ever downloaded is the scanning library itself, a few megabytes, cached by your browser after the first use — your photo never leaves your device.',
+  },
+];
+---
+
+<Layout
+  title="Scan a Document to PDF Online, Free & No Upload Required | Kit-Bin"
+  description="Turn a photo of a paper document into a clean, deskewed PDF. Auto-detects the page edges and straightens it. Runs entirely in your browser, no upload."
+>
+  <ToolSchema
+    name="Scan Document to PDF"
+    description="Turn a photo of a paper document into a clean, deskewed PDF. Auto-detects the page edges and straightens it. Runs entirely in your browser, no upload."
+    faqs={faqs}
+  />
+
+  <ToolHeader title="Scan a Document to PDF" />
+
+  <ToolWidget
+    accept="image/*"
+    dropLabel="Drop a photo of a document here or click to browse"
+    hint="Processed entirely in your browser. Never uploaded to a server."
+  />
+
+  <AdUnit />
+
+  <div class="max-w-2xl mx-auto px-4 py-12 text-ink dark:text-slate-300 space-y-6">
+    <p>
+      Drop a photo of a paper document above and this tool tries to find its four edges, straighten
+      it into a flat, top-down rectangle the way a real scanner would, boost the contrast so it
+      reads like a scan rather than a photo, and hand you back a single-page PDF. It's the free,
+      offline version of the "scan to PDF" feature built into most phone camera apps.
+    </p>
+
+    <div>
+      <h2 class="tool-h2 font-semibold text-lg">What actually happens to your photo</h2>
+      <p class="text-muted dark:text-slate-400">
+        The photo is decoded onto a canvas, edge-detected, and searched for the largest four-sided
+        outline in the frame — the document's edges, on a well-lit shot against a plain background.
+        When that outline is found with reasonable confidence, a perspective transform warps it flat,
+        correcting the skew from photographing the page at an angle. A contrast boost runs afterward
+        either way, so the result looks crisp and scan-like rather than like a photo of paper.
+      </p>
+    </div>
+
+    <div>
+      <h2 class="tool-h2 font-semibold text-lg">Getting a good result depends on the photo</h2>
+      <p class="text-muted dark:text-slate-400">
+        This is the honest part: auto-detection is only as good as what it's given. Good, even
+        lighting with no harsh shadow across the page, the document filling most of the frame rather
+        than sitting small in a wide shot, and a background that contrasts with the paper (a dark
+        desk under a white page, for example) all meaningfully improve corner detection. A cluttered
+        background, a page that blends into the surface under it, or heavy glare can all cause
+        auto-crop to miss — in which case this tool falls back to your original photo rather than
+        producing a bad crop or failing outright.
+      </p>
+    </div>
+
+    <div>
+      <h2 class="tool-h2 font-semibold text-lg pt-2">FAQ</h2>
+      <div class="mt-3">
+        <FaqAccordion faqs={faqs} />
+      </div>
+    </div>
+
+    <p class="text-sm">
+      Related tools:{' '}
+      <a href="/pdf/images-to-pdf" class="text-primary dark:text-blue-400 hover:underline">Images to PDF</a>,{' '}
+      <a href="/pdf/compress" class="text-primary dark:text-blue-400 hover:underline">Compress PDF</a>,{' '}
+      <a href="/image/crop" class="text-primary dark:text-blue-400 hover:underline">Crop Image</a>.
+    </p>
+  </div>
+
+  <div class="pt-8 sm:pt-12 pb-6 sm:pb-8">
+    <AdsterraBanner placement="tool-page:pdf/scan-to-pdf" />
+  </div>
+
+  <script>
+    import { scanToPdf } from '../../lib/pdf/scanToPdf';
+    import { getToolElements, wireTool } from '../../lib/ui';
+
+    const els = getToolElements();
+    wireTool(els, {
+      accept: 'image/*',
+      validate: (files) =>
+        !files[0]?.type.startsWith('image/') ? 'This tool needs a photo of a document.' : null,
+      run: async (files, reportProgress) => {
+        const { blob, cornersDetected } = await scanToPdf(files[0], reportProgress);
+        return {
+          blob,
+          filename: files[0].name.replace(/\.[^.]+$/, '') + '-scan.pdf',
+          note: cornersDetected
+            ? 'Page edges detected and straightened.'
+            : "Couldn't confidently find the page edges, so the full photo was used.",
+        };
+      },
+    });
+  </script>
+</Layout>

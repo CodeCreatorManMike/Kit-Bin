@@ -659,6 +659,23 @@ export const toolIcons: Record<string, IconPrimitive[]> = {
     { t: 'path', d: 'M18 9a4 4 0 0 1 3 3.8V15' },
     { t: 'path', d: 'M19.5 7.5L21 9l-1.5 1.5' },
   ],
+  '/image/to-text': [
+    { t: 'path', d: 'M4 6l4-2 4 2 4-2 4 2v12l-4 2-4-2-4 2-4-2z' },
+    { t: 'path', d: 'M8 13h8M8 16h5' },
+  ],
+  '/pdf/scan-to-pdf': [
+    { t: 'rect', x: 2.5, y: 6, w: 11, h: 9, rx: 1.5 },
+    { t: 'circle', cx: 8, cy: 10.5, r: 2 },
+    { t: 'path', d: 'M15 4l6 2v14l-6-2z' },
+  ],
+  '/audio/transcribe': [
+    { t: 'path', d: 'M4 12v-2M7.5 15v-8M11 17v-12M14.5 15v-8M18 12v-2' },
+    { t: 'path', d: 'M14 5h6M14 8h4' },
+  ],
+  '/audio/text-to-speech': [
+    { t: 'path', d: 'M4 6h13a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H10l-4 3v-3H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2z' },
+    { t: 'path', d: 'M14 9.5a2.2 2.2 0 0 1 0 3M16.5 8a4.5 4.5 0 0 1 0 6' },
+  ],
   '/pdf/sign': [
     ...page,
     { t: 'path', d: 'M6 16c1-1.5 2-1.5 3 0s2 1.5 3 0 2-1.5 3 0 2 1.5 3 0' },
