@@ -653,6 +653,40 @@ export const toolIcons: Record<string, IconPrimitive[]> = {
     { t: 'path', d: 'M4.5 8h4M4.5 12h4M4.5 16h4' },
     { t: 'path', d: 'M14 4l2.5 2-2.5 2M18 12l2.5 2-2.5 2M14 20l2.5-2-2.5-2' },
   ],
+  '/video/convert-to-mp4': [
+    { t: 'rect', x: 2.5, y: 6, w: 15, h: 12, rx: 1.5 },
+    { t: 'path', d: 'M8 10.5l3.5 2-3.5 2z' },
+    { t: 'path', d: 'M18 9a4 4 0 0 1 3 3.8V15' },
+    { t: 'path', d: 'M19.5 7.5L21 9l-1.5 1.5' },
+  ],
+  '/pdf/sign': [
+    ...page,
+    { t: 'path', d: 'M6 16c1-1.5 2-1.5 3 0s2 1.5 3 0 2-1.5 3 0 2 1.5 3 0' },
+  ],
+  '/pdf/protect': [
+    ...page,
+    { t: 'rect', x: 8, y: 13, w: 8, h: 6, rx: 1 },
+    { t: 'path', d: 'M9.5 13v-2a2.5 2.5 0 0 1 5 0v2' },
+  ],
+  '/dev/favicon-generator': [
+    { t: 'rect', x: 3, y: 3, w: 14, h: 14, rx: 2 },
+    { t: 'rect', x: 13, y: 13, w: 8, h: 8, rx: 1.5 },
+  ],
+  '/dev/zip-files': [
+    { t: 'path', d: 'M4 8l2-4h12l2 4z' },
+    { t: 'rect', x: 4, y: 8, w: 16, h: 11, rx: 1.2 },
+    { t: 'path', d: 'M12 8v11M10.5 9.5h3M10.5 12.5h3M10.5 15.5h3' },
+  ],
+  '/dev/unzip-files': [
+    { t: 'path', d: 'M4 8l2-4h12l2 4z' },
+    { t: 'rect', x: 4, y: 8, w: 16, h: 11, rx: 1.2 },
+    { t: 'path', d: 'M12 20v-7M9.5 15.5l2.5-2.5 2.5 2.5' },
+  ],
+  '/image/exif-viewer': [
+    { t: 'path', d: 'M4 6l4-2 4 2 4-2 4 2v12l-4 2-4-2-4 2-4-2z' },
+    { t: 'circle', cx: 10, cy: 10, r: 1.6 },
+    { t: 'path', d: 'M17 14a3 3 0 0 0-3 3c0 2 3 4.5 3 4.5s3-2.5 3-4.5a3 3 0 0 0-3-3z' },
+  ],
   '/guides/how-background-removal-works': [
     { t: 'path', d: 'M4 6l4-2 4 2 4-2 4 2v12l-4 2-4-2-4 2-4-2z' },
     { t: 'circle', cx: 12, cy: 12, r: 3 },

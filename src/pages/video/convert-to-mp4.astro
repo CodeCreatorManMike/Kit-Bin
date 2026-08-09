@@ -1,0 +1,87 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import AdsterraBanner from '../../components/AdsterraBanner.astro';
+import ToolHeader from '../../components/ToolHeader.astro';
+import FaqAccordion from '../../components/FaqAccordion.astro';
+import ToolSchema from '../../components/ToolSchema.astro';
+import ToolWidget from '../../components/ToolWidget.astro';
+import AdUnit from '../../components/AdUnit.astro';
+
+const faqs = [
+  {
+    q: 'Will converting to MP4 lose quality?',
+    a: "It depends on the source. If the video and audio inside are already codecs MP4 supports (H.264/AAC, common for MOV and some MKV files), this is a fast container swap with no quality loss. If they aren't, the streams are decoded and re-encoded, which does re-compress the video and can lose a small amount of quality — usually not noticeable at normal viewing sizes.",
+  },
+  {
+    q: "My file won't convert. Why?",
+    a: "The file's container either isn't one Mediabunny can read, or the file is truncated or corrupted. Try re-exporting or re-downloading the original file and converting again.",
+  },
+  {
+    q: 'How long does this take?',
+    a: 'A straight container swap (no re-encoding needed) takes seconds. A full re-encode takes longer and scales with video length and resolution — a few minutes for a typical phone-length clip, longer on mobile devices or very large files.',
+  },
+  {
+    q: 'What happens to subtitles or multiple audio tracks?',
+    a: "Multiple audio tracks are carried over where the source format supports it. Soft (selectable) subtitle tracks embedded in some containers, like MKV, are not currently carried into the MP4 output. Subtitles that are burned into the video image itself are unaffected, since they're just pixels.",
+  },
+  {
+    q: 'Can I convert an MP4 file with this tool?',
+    a: "Yes. Some MP4 files have an unusual internal structure (moov atom placement, older codec profiles) that causes playback issues in certain software. Running it back through this tool re-muxes it cleanly.",
+  },
+];
+---
+
+<Layout
+  title="Convert Video to MP4 Online, Free & No Upload Required | Kit-Bin"
+  description="Convert MOV, WebM, MKV, and other video files to MP4 in your browser. Your file is never uploaded to a server."
+>
+  <ToolSchema
+    name="Convert Video to MP4"
+    description="Convert MOV, WebM, MKV, and other video files to MP4 in your browser. Your file is never uploaded to a server."
+    faqs={faqs}
+  />
+
+  <ToolHeader title="Convert Video to MP4" />
+
+  <ToolWidget accept="video/*" dropLabel="Drop a video file here or click to browse" />
+
+  <AdUnit />
+
+  <div class="max-w-2xl mx-auto px-4 py-12 text-ink dark:text-slate-300 space-y-6">
+    <p>This tool converts a video file — MOV, WebM, MKV, AVI, or another container — into MP4. Drop your file above and download the result once it's done.</p>
+    <p>MP4 is the most widely compatible video container in use: it plays natively on virtually every phone, computer, video editor, and website. A MOV straight off an iPhone or an MKV from a downloaded file can fail to open in software that only expects MP4; converting fixes that without changing what the video actually shows. Under the hood, this is either a container remux (repackaging the existing video/audio streams with no re-encoding, when they're already MP4-compatible codecs) or a full transcode (decoding and re-encoding into MP4-compatible codecs) — whichever the source file actually needs.</p>
+    <div>
+      <h2 class="tool-h2 font-semibold text-lg pt-2">FAQ</h2>
+      <div class="mt-3">
+        <FaqAccordion faqs={faqs} />
+      </div>
+    </div>
+    <div class="pt-2">
+      <h2 class="tool-h2 font-semibold text-lg">Related tools</h2>
+      <ul class="mt-2 list-disc list-inside space-y-1 text-sm">
+        <li><a href="/video/mp4-to-webm" class="text-primary dark:text-blue-400 hover:underline">Convert MP4 to WebM</a></li>
+        <li><a href="/video/compress" class="text-primary dark:text-blue-400 hover:underline">Compress a video</a></li>
+        <li><a href="/video/trim" class="text-primary dark:text-blue-400 hover:underline">Trim a video</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="pt-8 sm:pt-12 pb-6 sm:pb-8">
+    <AdsterraBanner placement="tool-page:video/convert-to-mp4" />
+  </div>
+
+  <script>
+    import { convertToMp4 } from '../../lib/video/convertToMp4';
+    import { getToolElements, wireTool } from '../../lib/ui';
+
+    const els = getToolElements();
+    wireTool(els, {
+      accept: 'video/*',
+      validate: (files) => (!files[0]?.type.startsWith('video/') ? 'This tool needs a video file.' : null),
+      run: async (files, report) => {
+        const blob = await convertToMp4(files[0], report);
+        return { blob, filename: files[0].name.replace(/\.[^.]+$/, '.mp4') };
+      },
+    });
+  </script>
+</Layout>

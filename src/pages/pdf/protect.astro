@@ -1,0 +1,143 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import AdsterraBanner from '../../components/AdsterraBanner.astro';
+import ToolHeader from '../../components/ToolHeader.astro';
+import FaqAccordion from '../../components/FaqAccordion.astro';
+import ToolSchema from '../../components/ToolSchema.astro';
+import ToolWidget from '../../components/ToolWidget.astro';
+import AdUnit from '../../components/AdUnit.astro';
+
+const faqs = [
+  {
+    q: 'What encryption strength does this use?',
+    a: 'This tool uses the PDF format\'s built-in Standard Security Handler with 128-bit AES encryption, the same mechanism Adobe Acrobat and other PDF software use for password protection. It is real encryption, not just a viewer-level lock — a PDF reader cannot open the file at all without the correct password.',
+  },
+  {
+    q: 'Can I use this to remove a password instead?',
+    a: 'No. This tool only adds a password. Removing one you already know is the opposite operation and isn\'t available on this site yet.',
+  },
+  {
+    q: 'What if I forget the password?',
+    a: 'There is no recovery. This is real encryption, not a cosmetic lock, so if you forget the password there is no way for us, or anyone else, to open the file or reset it. Keep the password somewhere safe before you close this tab.',
+  },
+  {
+    q: 'Is my file uploaded anywhere to add the password?',
+    a: 'No. The encryption happens locally in your browser using your device\'s own processing. Your file, and the password you set, never leave your computer.',
+  },
+  {
+    q: 'Will this work on a PDF that already has a password?',
+    a: 'No, not directly. A PDF can only carry one password at a time, so this tool needs to be able to open the file first. If your PDF is already password-protected, remove the existing password with the PDF\'s original password before adding a new one.',
+  },
+];
+---
+
+<Layout
+  title="Password Protect a PDF Online, Free & No Upload Required | Kit-Bin"
+  description="Add a password to a PDF so it can't be opened without it. Runs entirely in your browser with real 128-bit AES encryption — your file is never uploaded to a server."
+>
+  <ToolSchema
+    name="Protect PDF"
+    description="Add a password to a PDF so it can't be opened without it. Runs entirely in your browser. Your file is never uploaded to a server."
+    faqs={faqs}
+  />
+
+  <ToolHeader title="Password Protect a PDF" />
+
+  <div class="max-w-2xl mx-auto px-4 mb-4 flex flex-col items-center gap-2 text-sm">
+    <div class="flex items-center gap-2">
+      <label for="protect-password">Password:</label>
+      <div class="relative">
+        <input
+          id="protect-password"
+          type="password"
+          placeholder="Enter a password"
+          autocomplete="new-password"
+          class="rounded border border-border-soft dark:border-slate-700 bg-surface dark:bg-slate-900 text-ink dark:text-slate-100 px-2 py-1 pr-16"
+        />
+        <button
+          id="toggle-password"
+          type="button"
+          class="absolute right-1.5 top-1/2 -translate-y-1/2 text-xs text-muted dark:text-slate-400 hover:text-ink dark:hover:text-slate-200"
+        >
+          Show
+        </button>
+      </div>
+    </div>
+    <p id="password-error" class="hidden text-red-600 dark:text-red-400 text-xs"></p>
+  </div>
+
+  <ToolWidget accept="application/pdf" dropLabel="Drop a PDF file here or click to browse" />
+
+  <AdUnit />
+
+  <div class="max-w-2xl mx-auto px-4 py-12 text-ink dark:text-slate-300 space-y-6">
+    <p>
+      This tool adds a password to a PDF so it can't be opened without it. Set a password above,
+      drop your PDF, and the encrypted file downloads automatically once ready.
+    </p>
+    <p class="text-muted dark:text-slate-400">
+      Uploading a document to a stranger's server specifically to make it private defeats the
+      point. The password and the encryption both happen on your device, in your browser, so the
+      one thing you're trying to protect is never the thing that gets sent anywhere.
+    </p>
+
+    <div>
+      <h2 class="tool-h2 font-semibold text-lg pt-2">FAQ</h2>
+      <div class="mt-3">
+        <FaqAccordion faqs={faqs} />
+      </div>
+    </div>
+    <p class="text-sm">
+      Related tools:{' '}
+      <a href="/pdf/remove-metadata" class="text-primary dark:text-blue-400 hover:underline">Remove PDF Metadata</a>,{' '}
+      <a href="/pdf/merge" class="text-primary dark:text-blue-400 hover:underline">Merge PDF</a>,{' '}
+      <a href="/pdf/compress" class="text-primary dark:text-blue-400 hover:underline">Compress PDF</a>.
+    </p>
+  </div>
+
+  <div class="pt-8 sm:pt-12 pb-6 sm:pb-8">
+    <AdsterraBanner placement="tool-page:pdf/protect" />
+  </div>
+
+  <script>
+    import { protectPdf } from '../../lib/pdf/protect';
+    import { getToolElements, wireTool } from '../../lib/ui';
+
+    const passwordInput = document.querySelector<HTMLInputElement>('#protect-password')!;
+    const passwordError = document.querySelector<HTMLElement>('#password-error')!;
+    const toggleButton = document.querySelector<HTMLButtonElement>('#toggle-password')!;
+
+    toggleButton.addEventListener('click', () => {
+      const showing = passwordInput.type === 'text';
+      passwordInput.type = showing ? 'password' : 'text';
+      toggleButton.textContent = showing ? 'Show' : 'Hide';
+    });
+
+    passwordInput.addEventListener('input', () => {
+      if (passwordInput.value) {
+        passwordError.classList.add('hidden');
+        passwordError.textContent = '';
+      }
+    });
+
+    const els = getToolElements();
+    wireTool(els, {
+      accept: 'application/pdf',
+      validate: (files) => {
+        if (files.some((f) => f.type !== 'application/pdf' && !f.name.toLowerCase().endsWith('.pdf'))) {
+          return 'This tool only accepts PDF files.';
+        }
+        if (!passwordInput.value) {
+          passwordError.textContent = 'Enter a password before adding a file.';
+          passwordError.classList.remove('hidden');
+          return 'Enter a password above before dropping your file.';
+        }
+        return null;
+      },
+      run: async ([file]) => {
+        const blob = await protectPdf(file, passwordInput.value);
+        return { blob, filename: file.name.replace(/\.pdf$/i, '-protected.pdf') };
+      },
+    });
+  </script>
+</Layout>

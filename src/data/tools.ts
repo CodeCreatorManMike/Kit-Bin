@@ -131,6 +131,21 @@ export const tools: Tool[] = [
     aliases: ['random password', 'strong password generator', 'secure password maker', 'passphrase generator'] },
   { slug: '/dev/uuid-generator', name: 'UUID Generator', description: 'Generate random UUIDs (v4), one or in bulk.', category: 'dev',
     aliases: ['guid generator', 'random uuid', 'unique id generator', 'generate uuid v4', 'bulk uuid'] },
+
+  { slug: '/video/convert-to-mp4', name: 'Convert Video to MP4', description: 'Convert MOV, WebM, MKV, and other video files to MP4 in your browser.', category: 'video',
+    aliases: ['mov to mp4', 'webm to mp4', 'mkv to mp4', 'convert to mp4', 'video to mp4', 'avi to mp4'] },
+  { slug: '/pdf/sign', name: 'Sign PDF', description: 'Draw or type a signature and place it on a PDF page.', category: 'pdf',
+    aliases: ['pdf signer', 'esign pdf', 'add signature to pdf', 'sign pdf online'] },
+  { slug: '/pdf/protect', name: 'Protect PDF', description: "Add a password to a PDF so it can't be opened without it.", category: 'pdf',
+    aliases: ['password protect pdf', 'encrypt pdf', 'lock pdf', 'add password to pdf'] },
+  { slug: '/dev/favicon-generator', name: 'Favicon Generator', description: 'Generate a full favicon set — all sizes, favicon.ico, and a web manifest — from one image.', category: 'dev',
+    aliases: ['favicon maker', 'ico generator', 'app icon generator', 'favicon.ico generator', 'apple touch icon generator'] },
+  { slug: '/dev/zip-files', name: 'Create a ZIP File', description: 'Combine multiple files into one compressed ZIP archive.', category: 'dev',
+    aliases: ['make a zip file', 'zip files online', 'create zip archive', 'compress files into zip', 'combine files into one zip'] },
+  { slug: '/dev/unzip-files', name: 'Extract Files From a ZIP', description: 'Unzip a ZIP archive and download the files inside.', category: 'dev',
+    aliases: ['unzip online', 'extract zip file', 'open zip file', 'zip extractor', 'decompress zip'] },
+  { slug: '/image/exif-viewer', name: 'EXIF & GPS Metadata Viewer', description: 'See the camera, exposure, timestamp, and GPS location hidden inside a photo file.', category: 'image',
+    aliases: ['exif viewer', 'view exif data', 'photo metadata viewer', 'gps data from photo', 'check photo location data', 'exif reader'] },
 ];
 
 export const categories = [

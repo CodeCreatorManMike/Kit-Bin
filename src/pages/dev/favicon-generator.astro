@@ -1,0 +1,134 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import AdsterraBanner from '../../components/AdsterraBanner.astro';
+import ToolHeader from '../../components/ToolHeader.astro';
+import ToolSchema from '../../components/ToolSchema.astro';
+import FaqAccordion from '../../components/FaqAccordion.astro';
+import ToolWidget from '../../components/ToolWidget.astro';
+import AdUnit from '../../components/AdUnit.astro';
+
+const faqs = [
+  {
+    q: 'What sizes are actually in the zip?',
+    a: 'Six PNGs (16×16, 32×32, 48×48, 180×180 for iOS, and 192×192 plus 512×512 for Android/PWA use), a favicon.ico built from the 16/32/48 sizes, and a site.webmanifest file that points at the two largest PNGs.',
+  },
+  {
+    q: 'Do I need to edit the manifest before using it?',
+    a: 'Yes. site.webmanifest ships with placeholder name and short_name fields ("My Site") and default white theme/background colors — open it in a text editor and swap those for your actual site name and brand colors before deploying it.',
+  },
+  {
+    q: 'Will this work for a photo, or only a logo?',
+    a: "A simple logo or icon works best. A busy photo gets crushed down to 16×16 pixels for the browser-tab favicon, and detail that fine just turns into a blurry smear at that size — that's a limit of how small favicons are, not a bug in this tool. Photos still work fine for the larger 180-512px sizes.",
+  },
+  {
+    q: 'Does a PNG or SVG source give a better result?',
+    a: 'A large, simple source image gives the best result regardless of format — this tool decodes PNG, JPG, and SVG all the same way and re-renders each target size from it. An SVG logo tends to hold up best since it has no fixed resolution to run out of, but a high-resolution PNG or JPG works just as well.',
+  },
+  {
+    q: 'Is my image uploaded anywhere?',
+    a: 'No. The source image is decoded and every size is rendered locally in this browser tab using <canvas>. Nothing leaves your device.',
+  },
+];
+---
+
+<Layout
+  title="Favicon Generator — All Sizes, ICO & Manifest | Kit-Bin"
+  description="Turn one image into a full favicon set: PNGs from 16px to 512px, a favicon.ico, and a site.webmanifest. Runs entirely in your browser, no upload."
+>
+  <ToolSchema
+    name="Favicon Generator"
+    description="Generate a complete favicon and app-icon set — PNGs, favicon.ico, and site.webmanifest — from one source image, entirely in your browser."
+    faqs={faqs}
+  />
+
+  <ToolHeader title="Favicon Generator" subtitle="Drop one image, get every favicon size, an .ico file, and a web manifest, packaged in a zip." />
+
+  <ToolWidget accept="image/*" dropLabel="Drop a logo or icon image here or click to browse" />
+
+  <div id="preview-grid" class="hidden max-w-2xl mx-auto mt-6 grid grid-cols-3 gap-3 px-4 sm:grid-cols-6"></div>
+
+  <AdUnit />
+
+  <div class="max-w-2xl mx-auto px-4 py-12 text-ink dark:text-slate-300 space-y-4">
+    <p>This tool turns one source image into a complete favicon and app-icon set, packaged as a single zip.</p>
+    <p>Drop a logo or icon image above. Six PNG sizes, a favicon.ico, and a site.webmanifest file are generated and downloaded automatically once ready.</p>
+    <div>
+      <h2 class="tool-h2 font-semibold text-lg pt-2">What's actually in the zip, and why so many sizes</h2>
+      <p class="mt-2 text-muted dark:text-slate-400">
+        A single low-resolution image looks blurry the moment a platform asks for a size bigger than what you gave
+        it — a browser tab, an iOS home screen icon, and an Android/PWA install icon all request different pixel
+        dimensions, and each one upscales a too-small source rather than asking twice. This tool renders each size
+        fresh from your original image instead of stretching one small PNG, so every context gets a crisp icon:
+      </p>
+      <ul class="mt-2 list-disc space-y-1 pl-5 text-muted dark:text-slate-400">
+        <li><span class="font-mono text-ink dark:text-slate-200">favicon-16x16.png</span>, <span class="font-mono text-ink dark:text-slate-200">favicon-32x32.png</span> — the browser tab icon (32 covers retina displays).</li>
+        <li><span class="font-mono text-ink dark:text-slate-200">favicon-48x48.png</span> — Windows taskbar/shortcut size.</li>
+        <li><span class="font-mono text-ink dark:text-slate-200">apple-touch-icon.png</span> (180×180) — the icon iOS shows when a page is added to the home screen.</li>
+        <li><span class="font-mono text-ink dark:text-slate-200">android-chrome-192x192.png</span> and <span class="font-mono text-ink dark:text-slate-200">android-chrome-512x512.png</span> — Android home screen and PWA install icons.</li>
+        <li><span class="font-mono text-ink dark:text-slate-200">favicon.ico</span> — a single file bundling the 16/32/48px sizes, for browsers that still request the legacy <span class="font-mono text-ink dark:text-slate-200">.ico</span> path.</li>
+        <li><span class="font-mono text-ink dark:text-slate-200">site.webmanifest</span> — the JSON file that tells Android/Chrome which icons and colors to use for a PWA install, with editable placeholder fields.</li>
+      </ul>
+      <p class="mt-2 text-muted dark:text-slate-400">
+        If your source image isn't square, it's centered on a transparent square canvas at each size rather than
+        stretched or cropped, so shapes and logos keep their proportions.
+      </p>
+    </div>
+    <div><h2 class="tool-h2 font-semibold text-lg pt-2">FAQ</h2><div class="mt-3"><FaqAccordion faqs={faqs} /></div></div>
+    <p class="text-sm">
+      Related tools:{' '}
+      <a href="/image/resize" class="text-primary dark:text-blue-400 hover:underline">Resize Image</a>,{' '}
+      <a href="/image/crop" class="text-primary dark:text-blue-400 hover:underline">Crop Image</a>,{' '}
+      <a href="/image/svg-to-png" class="text-primary dark:text-blue-400 hover:underline">SVG to PNG</a>.
+    </p>
+  </div>
+
+  <div class="pt-8 sm:pt-12 pb-6 sm:pb-8">
+    <AdsterraBanner placement="tool-page:dev/favicon-generator" />
+  </div>
+
+  <script>
+    import { generateFaviconSet, type FaviconSize } from '../../lib/dev/favicon';
+    import { getToolElements, wireTool } from '../../lib/ui';
+
+    const previewGrid = document.querySelector<HTMLElement>('#preview-grid')!;
+    let previewUrls: string[] = [];
+
+    function renderPreview(sizes: FaviconSize[]) {
+      previewUrls.forEach((url) => URL.revokeObjectURL(url));
+      previewUrls = [];
+      previewGrid.replaceChildren();
+      for (const s of sizes) {
+        const url = URL.createObjectURL(s.blob);
+        previewUrls.push(url);
+        const cell = document.createElement('div');
+        cell.className = 'flex flex-col items-center gap-1.5 rounded-xl border border-border-soft bg-surface p-3 text-center dark:border-slate-800 dark:bg-slate-900';
+        cell.innerHTML = `
+          <div class="grid h-12 w-12 place-items-center rounded-lg bg-[conic-gradient(#e5e7eb_90deg,transparent_90deg_180deg,#e5e7eb_180deg_270deg,transparent_270deg)] bg-[length:12px_12px] dark:bg-[conic-gradient(#334155_90deg,transparent_90deg_180deg,#334155_180deg_270deg,transparent_270deg)]">
+            <img src="${url}" class="max-h-11 max-w-11" alt="${s.label}" />
+          </div>
+          <p class="text-[11px] leading-tight text-muted dark:text-slate-400">${s.label}</p>
+        `;
+        previewGrid.append(cell);
+      }
+      previewGrid.classList.remove('hidden');
+    }
+
+    const els = getToolElements();
+    wireTool(els, {
+      accept: 'image/*',
+      validate: (files) =>
+        !files[0].type.startsWith('image/') ? 'This tool needs an image file (PNG, JPG, or SVG).' : null,
+      run: async ([file], report) => {
+        report('Rendering icon sizes…');
+        const { sizes, zip } = await generateFaviconSet(file);
+        renderPreview(sizes);
+        report('Packaging your files…');
+        return {
+          blob: zip,
+          filename: 'kit-bin-favicons.zip',
+          note: `${sizes.length} PNGs, favicon.ico, and site.webmanifest.`,
+        };
+      },
+    });
+  </script>
+</Layout>

@@ -35,6 +35,8 @@ versions.
 | `jsqr` | QR decoding (`/dev/qr-code-scanner`) | Apache-2.0 | Yes — pure JS, zero dependencies. |
 | `qpdf-wasm` (multiple maintainers) | PDF password removal | Wraps Apache-2.0 QPDF | **No — attempted, pulled.** License is fine, but this build is pthreads/SharedArrayBuffer-based: needs site-wide COOP/COEP headers (conflicts with ad iframes) and its worker pool fails to spawn under Vite even with those headers set. See `TOOL_SPECS.md`'s `/pdf/unlock` entry. |
 | `@embedpdf/pdfium` | PDF rendering (alt. to pdf.js) | MIT | Yes |
+| `exifr` | EXIF/GPS/XMP metadata parsing (`/image/exif-viewer`) | MIT, verified in `node_modules/exifr/LICENSE` | Yes |
+| `pdf-lib-plus-encrypt` | PDF password encryption (`/pdf/protect`) | MIT, verified in `node_modules/pdf-lib-plus-encrypt/LICENSE.md` — a maintained fork of `pdf-lib` with AES/RC4 encryption merged in, browser-tested | Yes. Used only on `/pdf/protect`'s own page (lazy-loaded per-page, per the project's code-splitting rule) — does not replace the plain `pdf-lib` used everywhere else, to avoid coupling unrelated tools to a smaller-community fork. |
 | `Cropper.js` | Image crop UI | MIT | Yes |
 | `wavesurfer.js` (+ Regions plugin) | Waveform/region UI (`/audio/trim`) | BSD-3-Clause | Yes — visual-only, pairs with Mediabunny for the actual trim operation |
 | `react-dropzone` | Upload UI (only if using React components) | MIT | Yes |
