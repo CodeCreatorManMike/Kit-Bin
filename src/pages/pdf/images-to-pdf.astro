@@ -54,8 +54,8 @@ const faqs = [
   <div class="max-w-2xl mx-auto px-4 mb-4 flex items-center justify-center gap-2 text-sm">
     <label for="page-size">Page size:</label>
     <select id="page-size" class="rounded border border-border-soft dark:border-slate-700 bg-surface dark:bg-slate-900 text-ink dark:text-slate-100 px-2 py-1">
+      <option value="a4" selected>A4 (uniform page size, image centred)</option>
       <option value="fit-to-image">Fit to image (page matches each image)</option>
-      <option value="a4">A4 (image centred, aspect ratio kept)</option>
     </select>
   </div>
 
@@ -75,13 +75,17 @@ const faqs = [
     <div>
       <h2 class="tool-h2 font-semibold text-lg">The two page-size modes</h2>
       <p class="text-muted dark:text-slate-400">
-        <strong>Fit to image</strong> gives every page the same dimensions as the image on it, so
-        the image fills the page edge to edge and is not scaled at all. Pages can end up different
-        sizes from each other, which is fine on screen but awkward to print. <strong>A4</strong>{' '}
-        puts every image on a uniform A4 page with a half-inch margin, choosing portrait or
-        landscape per image based on which way round the image is. The image is scaled by a single
-        factor so its aspect ratio is preserved exactly, then centred. Images are never stretched
-        to fill the page in either mode.
+        <strong>A4</strong> (the default) puts every image on a uniform A4 page with a half-inch
+        margin, choosing portrait or landscape per image based on which way round the image is.
+        The image is scaled by a single factor so its aspect ratio is preserved exactly, then
+        centred. This is almost always what you want when combining several photos: every page
+        looks and prints the same size. <strong>Fit to image</strong> instead gives every page the
+        image's own pixel dimensions treated as the page size, so a phone photo (often 3000+
+        pixels wide) becomes a page many times larger than a small screenshot from the same batch
+        — the pages will look wildly inconsistent in size next to each other. Only use it if you
+        specifically need each page's aspect ratio and resolution preserved exactly, e.g. for
+        further processing rather than reading or printing. Images are never stretched to fill the
+        page in either mode.
       </p>
     </div>
 

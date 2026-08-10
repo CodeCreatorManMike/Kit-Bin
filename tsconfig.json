@@ -1,5 +1,14 @@
 {
   "extends": "astro/tsconfigs/strict",
   "include": [".astro/types.d.ts", "**/*"],
-  "exclude": ["dist"]
+  // TypeScript's implicit default exclude (node_modules, bower_components,
+  // jspm_packages, outDir) only applies when "exclude" is unset — supplying
+  // any "exclude" array of your own replaces it entirely, not adds to it.
+  // With only "dist" listed, "**/*" was crawling all of node_modules on
+  // every run. That was always wrong, but went unnoticed while the tree was
+  // small; it became a multi-minute-plus hang once tesseract.js, opencv-js,
+  // and kokoro-js (each with large asset/worker trees) landed. "public" is
+  // excluded too — it now holds a vendored 13MB opencv.js that TS has no
+  // reason to ever parse.
+  "exclude": ["dist", "node_modules", "public"]
 }

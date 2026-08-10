@@ -152,8 +152,14 @@ export const tools: Tool[] = [
     aliases: ['document scanner', 'scan to pdf', 'photo to pdf', 'camera scanner', 'deskew document'] },
   { slug: '/audio/transcribe', name: 'Transcribe Audio to Text', description: 'Turn spoken audio into a text transcript and SRT subtitles.', category: 'audio',
     aliases: ['audio to text', 'speech to text', 'voice to text', 'generate subtitles', 'audio transcription', 'srt from audio'] },
-  { slug: '/audio/text-to-speech', name: 'Text to Speech', description: 'Convert typed or pasted text into a spoken MP3.', category: 'audio',
-    aliases: ['tts', 'text to mp3', 'text to voice', 'read text aloud', 'ai voice generator', 'free text to speech'] },
+  // /audio/text-to-speech is deliberately NOT listed here — the tool is
+  // temporarily disabled (see the doc comment at the top of
+  // src/pages/audio/text-to-speech.astro for the confirmed root cause).
+  // Delisting keeps it out of the hub grid and homepage search while the
+  // page itself stays live with an honest "temporarily offline" message,
+  // so it isn't a mysterious dead end for anyone who already has it
+  // bookmarked or indexed. Re-add this entry when the underlying bug is
+  // actually fixed, not before.
 ];
 
 export const categories = [

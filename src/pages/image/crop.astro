@@ -191,6 +191,24 @@ const faqs = [
         cropper = new Cropper(img, {});
         cropPanel.classList.remove('hidden');
         dropzone.classList.add('hidden');
+
+        // Cropper.js v2 has no sensible built-in default here — left alone,
+        // the initial selection box renders as a small, awkwardly-shaped
+        // sliver that's genuinely hard to find and grab, especially on a
+        // touchscreen. requestAnimationFrame waits for the custom elements
+        // to actually lay out before reading real pixel dimensions from
+        // them; reading synchronously here can return a zero-size rect.
+        requestAnimationFrame(() => {
+          const canvas = cropper?.getCropperCanvas();
+          const selection = cropper?.getCropperSelection();
+          if (!canvas || !selection) return;
+          const rect = canvas.getBoundingClientRect();
+          if (rect.width === 0 || rect.height === 0) return;
+          const coverage = 0.8;
+          const w = rect.width * coverage;
+          const h = rect.height * coverage;
+          selection.$change((rect.width - w) / 2, (rect.height - h) / 2, w, h);
+        });
       };
     }
 

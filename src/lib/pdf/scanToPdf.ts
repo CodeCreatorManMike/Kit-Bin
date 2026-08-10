@@ -17,10 +17,24 @@
  *   6. Encode as PNG and embed it as a single PDF page via pdf-lib, the same
  *      way `imagesToPdf.ts` does.
  *
- * `@techstark/opencv-js` (Apache-2.0) is a large WASM build of OpenCV, so it's
- * loaded lazily here — only when this function is actually called — never as
- * a static/eager import that would land in every page's shared chunk.
- */
+ * OpenCV.js (Apache-2.0, the `@techstark/opencv-js` build) is a large WASM
+ * build of OpenCV, so it's loaded lazily here — only when this function is
+ * actually called — never as a static/eager import that would land in every
+ * page's shared chunk.
+ *
+ * It's loaded via a plain injected <script> tag from `/vendor/opencv.js`
+ * (vendored as a static public asset, copied verbatim from the npm package's
+ * `dist/opencv.js`), not via `import('@techstark/opencv-js')`. That's not
+ * stylistic — a bundled dynamic import of this exact package broke in
+ * production only (never in `astro dev`): OpenCV.js's own UMD factory
+ * function can return either the ready module *or* a bare `new Promise(...)`
+ * depending on WASM-compile timing, and Astro/Vite's automatic
+ * preload+CJS-interop wrapping for bundled dynamic imports mishandles that
+ * shape, throwing "Method Promise.prototype.then called on incompatible
+ * receiver" before our own code ever runs. Loading it as an unprocessed
+ * static script sidesteps that bundler transform entirely — this is also
+ * OpenCV.js's own documented/intended loading method (it assigns
+ * `window.cv`), not a workaround bolted onto an ESM-shaped library. */
 import { PDFDocument } from 'pdf-lib';
 import type { ProgressReporter } from '../ui';
 
@@ -75,20 +89,50 @@ interface Cv {
 
 let cvPromise: Promise<Cv> | null = null;
 
+declare global {
+  interface Window {
+    cv?: unknown;
+  }
+}
+
+/** Injects the vendored OpenCV.js UMD build as a plain <script> tag and
+ * waits for it to execute. Only ever inserted once per page load. */
+function loadOpenCvScript(): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const existing = document.querySelector<HTMLScriptElement>('script[data-kb-opencv]');
+    if (existing) {
+      // Already inserted by an earlier call (e.g. a fast double-click) —
+      // just wait for it rather than injecting a second copy.
+      existing.addEventListener('load', () => resolve());
+      existing.addEventListener('error', () => reject(new Error('Could not load the document scanner.')));
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = '/vendor/opencv.js';
+    script.dataset.kbOpencv = 'true';
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('Could not load the document scanner.'));
+    document.head.append(script);
+  });
+}
+
 /** Loads the OpenCV.js WASM module exactly once per page and caches it, since
  * initialising the runtime is the expensive part (multi-MB WASM binary). */
 async function getCv(): Promise<Cv> {
   if (cvPromise) return cvPromise;
 
   cvPromise = (async () => {
-    // Dynamic import keeps this multi-MB WASM payload out of every page's
-    // shared bundle — it only loads when scanToPdf() actually runs.
-    const cvModule = (await import('@techstark/opencv-js')).default as unknown;
+    await loadOpenCvScript();
+    const cvModule = window.cv as unknown;
 
-    // Per the package's own README: the default export is sometimes already
-    // a ready `cv` object, sometimes a Promise that resolves to one, and
-    // sometimes a Module stub that needs `onRuntimeInitialized` to fire.
-    // Handle all three rather than assuming one shape.
+    // Per the package's own README: window.cv is sometimes already a ready
+    // `cv` object, sometimes a Promise that resolves to one, and sometimes a
+    // Module stub that needs `onRuntimeInitialized` to fire. Handle all
+    // three rather than assuming one shape. Because this now runs as a
+    // genuine unbundled global-script load (not a bundler-wrapped dynamic
+    // import), a real `instanceof Promise` check here is reliable — the
+    // production bug this replaced was specifically the bundler's own
+    // wrapping mishandling that shape, not this logic.
     if (cvModule instanceof Promise) {
       return (await cvModule) as Cv;
     }
