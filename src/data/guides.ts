@@ -121,6 +121,12 @@ export const guides: Guide[] = [
     description: "The alpha channel explained — why JPG can't have a transparent background, and which formats actually preserve one.",
   },
   {
+    slug: '/guides/which-image-formats-support-transparency',
+    title: 'Which Image File Types Support Transparency?',
+    cardTitle: 'Which Image Formats Support Transparency?',
+    description: "PNG, WebP, SVG, GIF, and AVIF all support transparency; JPEG doesn't. A real comparison of how each one handles it, and which to pick.",
+  },
+  {
     slug: '/guides/avif-explained',
     title: 'What Is AVIF, and Why Is It So Much Smaller?',
     cardTitle: 'AVIF Explained',
