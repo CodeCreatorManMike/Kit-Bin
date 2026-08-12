@@ -43,6 +43,12 @@ jobs:
       # place for a compromised transitive dependency to execute code.
       - run: npm ci --ignore-scripts
 
+      # --ignore-scripts above also skips package.json's own "postinstall":
+      # "patch-package", so it has to run explicitly. This applies
+      # patches/kokoro-js+*.patch, which fixes a real bug (not a style
+      # preference) — see that patch file's header comment.
+      - run: npx patch-package
+
       - name: Typecheck
         run: npm run typecheck
 

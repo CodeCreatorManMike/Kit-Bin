@@ -1,54 +1,213 @@
 ---
-// TEMPORARILY DISABLED (2026-08-10). Do not re-enable without either fixing
-// or replacing the underlying bug — this is not a style choice.
-//
-// Root cause, confirmed by reproducing on production and bisecting against
-// an unbundled load of the same package version: kokoro-js statically
-// imports `phonemizer` (an Emscripten/WASM package, `import { phonemize }
-// from 'phonemizer'`), and Astro/Vite's production bundling of that already
-// pre-built package corrupts its language-voice data. `list_voices()` comes
-// back with zero entries inside Kit-Bin's bundle, while the exact same call
-// against `phonemizer` loaded fresh from a CDN returns 8 real voices — so
-// every generation deterministically throws `Invalid language identifier:
-// "en-us". Should be one of: .` after the ~80MB model finishes downloading.
-// It is not a network flake or a bad input; it reproduces 100% of the time.
-//
-// This is the same *class* of bug that broke /pdf/scan-to-pdf's opencv-js
-// import (see scanToPdf.ts's getCv() doc comment) — a bundler re-processing
-// an already-bundled Emscripten/WASM library — but scan-to-pdf's fix
-// (vendor the library as a static <script>-loaded asset, bypassing Vite's
-// interop entirely) doesn't transfer directly here: `phonemizer` isn't
-// imported by our own code, it's a *static* import inside kokoro-js's own
-// dist file, so fixing it would mean patch-package-ing kokoro-js itself
-// rather than changing an import site we control. That's real, scoped work
-// someone should pick up deliberately, not a quick follow-on to this pass.
-//
-// Taken offline rather than left live and broken: with the ~80MB download
-// already paid, every real visitor got a dead end with no way to retry
-// into success. See docs/LICENSING.md's kokoro-js entry for the technical
-// writeup. The lib module (src/lib/audio/textToSpeech.ts) and its FAQ copy
-// are left completely intact — only this page's markup changed.
 import Layout from '../../layouts/Layout.astro';
+import AdsterraBanner from '../../components/AdsterraBanner.astro';
 import ToolHeader from '../../components/ToolHeader.astro';
+import ToolSchema from '../../components/ToolSchema.astro';
+import FaqAccordion from '../../components/FaqAccordion.astro';
+import AdUnit from '../../components/AdUnit.astro';
+
+const faqs = [
+  {
+    q: 'How many voices and languages are there?',
+    a: '28 English voices — a mix of American and British, male and female. The underlying model is a small one, so this is the current tradeoff for keeping everything on-device; it does not support other languages yet.',
+  },
+  {
+    q: 'Is there a usage limit?',
+    a: "Yes: 3,000 characters per generation. That's a device-memory limit, not a billing one — there's no server metering usage, so there's nothing to subscribe to or run out of. The cap exists purely to keep synthesis time and memory reasonable on an average phone or laptop.",
+  },
+  {
+    q: 'Is my text sent anywhere?',
+    a: "No. The text you type is only ever handed to the speech model running in this browser tab. The one thing that does get downloaded is the model itself (about 80 MB, once per browser, cached afterwards) — that download is separate from your text and contains no information about it.",
+  },
+  {
+    q: 'How natural does it sound?',
+    a: "Good for a model this size, not indistinguishable from a professional voiceover. It's an 82-million-parameter model chosen specifically because it can run entirely on-device — a cloud service with a multi-billion-parameter model will generally sound more natural, at the cost of your text leaving your device.",
+  },
+  {
+    q: 'Can I use this on my phone?',
+    a: 'Yes, though the first generation will be slower on a phone than a desktop while the model downloads and runs — subsequent generations in the same browser tab are faster since the model stays cached.',
+  },
+];
 ---
 
 <Layout
   title="Text to Speech Online, Free MP3 Download, No Sign-Up | Kit-Bin"
-  description="Text to speech is temporarily unavailable while we fix an issue with the underlying speech model."
+  description="Paste text and download an MP3 of it read aloud. Runs entirely in your browser — no account, no per-character limit tied to a subscription, nothing uploaded."
 >
-  <ToolHeader title="Text to Speech Online" subtitle="Temporarily unavailable." />
+  <ToolSchema
+    name="Text to Speech"
+    description="Convert typed or pasted text into a spoken MP3, entirely in your browser."
+    faqs={faqs}
+  />
+
+  <ToolHeader title="Text to Speech Online" subtitle="Paste text, pick a voice, download an MP3. Nothing you type leaves this browser tab." />
 
   <div class="max-w-2xl mx-auto px-4">
-    <div class="rounded-2xl border border-amber-300/70 dark:border-amber-500/25 bg-amber-50 dark:bg-amber-950/20 p-6 text-center">
-      <p class="font-semibold text-ink dark:text-slate-100">This tool is temporarily offline.</p>
-      <p class="mt-2 text-sm text-muted dark:text-slate-400">
-        We found a bug in the on-device speech model that makes every generation fail after a long
-        download, and we'd rather take it down than waste your time and data on something that
-        won't work. We're working on a fix.
-      </p>
-      <p class="mt-4 text-sm">
-        <a href="/audio/" class="text-primary dark:text-blue-400 hover:underline">See the other audio tools →</a>
-      </p>
+    <div class="rounded-2xl border border-border-soft bg-surface p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+      <div class="flex items-baseline justify-between">
+        <label for="tts-text" class="text-sm font-medium">Text to read aloud</label>
+        <span id="tts-count" class="text-xs text-muted dark:text-slate-400">0 / 3000</span>
+      </div>
+      <textarea
+        id="tts-text"
+        rows="8"
+        maxlength="3000"
+        class="mt-2 block w-full resize-y rounded-xl border border-border-soft bg-transparent p-3 text-sm dark:border-slate-700"
+        placeholder="Paste or type up to 3,000 characters…"
+      ></textarea>
+
+      <div class="mt-4 flex flex-wrap items-center gap-3">
+        <label for="tts-voice" class="text-sm font-medium">Voice</label>
+        <select id="tts-voice" class="rounded-lg border border-border-soft bg-transparent px-3 py-2 text-sm dark:border-slate-700">
+          <option value="af_heart">Loading voices…</option>
+        </select>
+      </div>
+
+      <button
+        id="tts-generate"
+        class="mt-5 w-full rounded-xl bg-gradient-to-r from-primary to-violet-500 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-primary/25 transition hover:-translate-y-0.5 disabled:opacity-60 disabled:hover:translate-y-0"
+      >
+        Generate
+      </button>
+
+      <div id="tts-status" role="status" class="mt-4 hidden text-sm text-muted dark:text-slate-400"></div>
+      <div id="tts-error" role="alert" class="mt-4 hidden rounded-xl bg-red-50 px-4 py-3 text-sm text-red-800 dark:bg-red-950/40 dark:text-red-300"></div>
+
+      <div id="tts-output-wrap" class="mt-6 hidden flex-col items-stretch gap-3">
+        <audio id="tts-audio" controls class="w-full"></audio>
+        <a
+          id="tts-download"
+          class="inline-flex items-center justify-center rounded-xl border border-border-soft px-5 py-2.5 text-sm font-medium dark:border-slate-700"
+          download="kit-bin-speech.mp3"
+        >
+          Download MP3
+        </a>
+      </div>
     </div>
   </div>
+
+  <AdUnit />
+
+  <div class="max-w-2xl mx-auto space-y-6 px-4 py-12 text-ink dark:text-slate-300">
+    <p>
+      Paste or type text, pick a voice, and click Generate to get an MP3 of it read aloud. The
+      speech model runs on your device — nothing you type is uploaded anywhere.
+    </p>
+    <div>
+      <h2 class="tool-h2 text-lg font-semibold">Why there's no per-character limit tied to a subscription</h2>
+      <p class="mt-2 text-muted dark:text-slate-400">
+        Every hosted text-to-speech service that meters usage or requires an account does so
+        because they're paying for server-side inference on their own hardware, every time you
+        generate audio. That constraint doesn't exist here — the model runs in your browser, not
+        on a server Kit-Bin pays for, so there's nothing to meter and no account to create. The
+        one limit this tool does have — 3,000 characters per generation — is a flat cap chosen to
+        keep synthesis time and memory reasonable on an average device, not a usage tier. For
+        longer text, split it into chunks and generate each separately.
+      </p>
+    </div>
+    <div><h2 class="tool-h2 text-lg font-semibold">FAQ</h2><div class="mt-3"><FaqAccordion faqs={faqs} /></div></div>
+    <p class="text-sm">
+      Related tools:{' '}
+      <a href="/audio/mp3-to-wav" class="text-primary dark:text-blue-400 hover:underline">MP3 to WAV</a>,{' '}
+      <a href="/audio/trim" class="text-primary dark:text-blue-400 hover:underline">Trim Audio</a>,{' '}
+      <a href="/audio/merge" class="text-primary dark:text-blue-400 hover:underline">Merge Audio</a>.
+    </p>
+  </div>
+
+  <div class="pt-8 sm:pt-12 pb-6 sm:pb-8">
+    <AdsterraBanner placement="tool-page:audio/text-to-speech" />
+  </div>
+
+  <script>
+    import { synthesizeSpeech, listVoices, MAX_CHARACTERS } from '../../lib/audio/textToSpeech';
+
+    const textInput = document.querySelector<HTMLTextAreaElement>('#tts-text')!;
+    const countLabel = document.querySelector<HTMLElement>('#tts-count')!;
+    const voiceSelect = document.querySelector<HTMLSelectElement>('#tts-voice')!;
+    const generateButton = document.querySelector<HTMLButtonElement>('#tts-generate')!;
+    const statusBox = document.querySelector<HTMLElement>('#tts-status')!;
+    const errorBox = document.querySelector<HTMLElement>('#tts-error')!;
+    const outputWrap = document.querySelector<HTMLElement>('#tts-output-wrap')!;
+    const audioEl = document.querySelector<HTMLAudioElement>('#tts-audio')!;
+    const downloadLink = document.querySelector<HTMLAnchorElement>('#tts-download')!;
+
+    let currentUrl: string | null = null;
+
+    function updateCount() {
+      countLabel.textContent = `${textInput.value.length} / ${MAX_CHARACTERS}`;
+    }
+    textInput.addEventListener('input', updateCount);
+    updateCount();
+
+    function setStatus(text: string) {
+      statusBox.textContent = text;
+      statusBox.classList.remove('hidden');
+    }
+    function clearStatus() {
+      statusBox.classList.add('hidden');
+      statusBox.textContent = '';
+    }
+    function setError(text: string) {
+      errorBox.textContent = text;
+      errorBox.classList.remove('hidden');
+    }
+    function clearError() {
+      errorBox.classList.add('hidden');
+      errorBox.textContent = '';
+    }
+
+    // Voices only need loading once the model itself loads (listVoices()
+    // triggers the same lazy load as generation), so populate the picker
+    // in the background without blocking the page.
+    (async () => {
+      try {
+        const voices = await listVoices((message) => setStatus(message));
+        clearStatus();
+        voiceSelect.innerHTML = '';
+        for (const voice of voices) {
+          const option = document.createElement('option');
+          option.value = voice.id;
+          option.textContent = `${voice.name} (${voice.language === 'en-us' ? 'US' : 'UK'} ${voice.gender})`;
+          if (voice.id === 'af_heart') option.selected = true;
+          voiceSelect.appendChild(option);
+        }
+      } catch {
+        // Leave the default option in place; generation will surface the
+        // real error when the user clicks Generate.
+        clearStatus();
+      }
+    })();
+
+    generateButton.addEventListener('click', async () => {
+      clearError();
+      const text = textInput.value;
+      if (!text.trim()) {
+        setError('Enter some text to read aloud.');
+        return;
+      }
+
+      generateButton.disabled = true;
+      outputWrap.classList.add('hidden');
+      outputWrap.classList.remove('flex');
+      setStatus('Starting…');
+
+      try {
+        const blob = await synthesizeSpeech(text, { voice: voiceSelect.value }, (message) => setStatus(message));
+
+        if (currentUrl) URL.revokeObjectURL(currentUrl);
+        currentUrl = URL.createObjectURL(blob);
+        audioEl.src = currentUrl;
+        downloadLink.href = currentUrl;
+
+        clearStatus();
+        outputWrap.classList.remove('hidden');
+        outputWrap.classList.add('flex');
+      } catch (error) {
+        setError(error instanceof Error ? error.message : 'Could not generate speech for that text.');
+        clearStatus();
+      } finally {
+        generateButton.disabled = false;
+      }
+    });
+  </script>
 </Layout>
