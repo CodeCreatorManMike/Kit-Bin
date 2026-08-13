@@ -17,6 +17,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 import { google } from 'googleapis';
+// Note: Authentication uses OAuth2 from googleapis directly, no separate auth package needed
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(__dirname, '..');
