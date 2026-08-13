@@ -28,3 +28,11 @@ pnpm-debug.log*
 # bundled; a stray copy can end up at the repo root during local testing.
 *.traineddata
 
+# credentials & tokens (Google Auth, etc.)
+.env.local
+.tokens/
+scripts/.tokens/
+
+# analytics data (local cache, not committed)
+data/analytics/*.json
+!data/analytics/.gitkeep

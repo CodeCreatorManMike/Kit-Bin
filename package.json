@@ -12,10 +12,13 @@
     "typecheck": "astro check",
     "test": "vitest run",
     "adsense:check": "node scripts/check-adsense.mjs",
+    "seo:collect": "node scripts/seo-analytics-collector.mjs",
+    "seo:report": "node scripts/seo-analytics-collector.mjs && cat data/analytics/report.json",
     "astro": "astro",
     "postinstall": "patch-package"
   },
   "dependencies": {
+    "@google-cloud/local-auth": "^2.5.0",
     "@astrojs/sitemap": "^3.7.3",
     "@huggingface/transformers": "^4.2.0",
     "@jsquash/avif": "^2.1.1",
@@ -48,7 +51,9 @@
     "tailwindcss": "^4.3.3",
     "tesseract.js": "^7.0.0",
     "wavesurfer.js": "^7.12.11",
-    "xlsx": "^0.18.5"
+    "xlsx": "^0.18.5",
+    "googleapis": "^130.0.0",
+    "dotenv": "^16.3.1"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
