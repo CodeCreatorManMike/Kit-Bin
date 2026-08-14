@@ -1,0 +1,11 @@
+[Unit]
+Description=Daily Kit-Bin Search Console ingestion
+
+[Timer]
+OnCalendar=*-*-* 04:00:00 Europe/London
+Persistent=true
+RandomizedDelaySec=5m
+Unit=kitbin-gsc.service
+
+[Install]
+WantedBy=timers.target

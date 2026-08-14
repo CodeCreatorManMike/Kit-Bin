@@ -36,3 +36,10 @@ scripts/.tokens/
 # analytics data (local cache, not committed)
 data/analytics/*.json
 !data/analytics/.gitkeep
+.env
+seo/python/.env
+seo/python/credentials.json
+seo/python/token.json
+seo/python/.venv/
+seo/python/logs/
+seo/python/reports/
