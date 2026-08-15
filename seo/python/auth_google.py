@@ -19,7 +19,8 @@ def credentials(interactive=True):
         doc = json.loads(client.read_text())
         if "installed" not in doc: raise RuntimeError("credentials.json must be a Desktop/installed OAuth client; Web clients are intentionally rejected")
         creds = InstalledAppFlow.from_client_secrets_file(str(client), SCOPE).run_local_server(
-            host="127.0.0.1", port=0, open_browser=True, access_type="offline", prompt="consent")
+            host="127.0.0.1", port=0, open_browser=True, access_type="offline",
+            prompt="select_account consent")
     token.write_text(creds.to_json()); os.chmod(token, 0o600)
     return creds
 

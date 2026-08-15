@@ -25,3 +25,7 @@ def test_pagination_and_empty(): assert sum(map(len,fetch_pages(Service(),"p",da
 def test_batching():
     from seo_common import SupabaseREST
     x=object.__new__(SupabaseREST); calls=[]; x.request=lambda *a,**k:calls.append(k["data"]); x.upsert("t",list(range(11)),5); assert list(map(len,calls))==[5,5,1]
+def test_select_all_paginates():
+    from seo_common import SupabaseREST
+    x=object.__new__(SupabaseREST); pages=[[1,2],[3]]; x.request=lambda *a,**k:pages.pop(0); assert x.select_all("t",page_size=2)==[1,2,3]
+def test_empty_response_stops_pagination(): assert list(fetch_pages(Service(),"p",date.today(),date.today(),3))==[[{},{}]]

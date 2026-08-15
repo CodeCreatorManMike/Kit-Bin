@@ -49,6 +49,14 @@ class SupabaseREST:
     def upsert(self, table, rows, batch=500):
         for i in range(0, len(rows), batch):
             self.request("POST", table, data=rows[i:i+batch], prefer="resolution=merge-duplicates,return=minimal")
+    def select_all(self, table, params=None, page_size=1000):
+        params = dict(params or {}); out = []; offset = 0
+        while True:
+            page_params = {**params, "limit": str(page_size), "offset": str(offset)}
+            page = self.request("GET", table, params=page_params)
+            out.extend(page)
+            if len(page) < page_size: return out
+            offset += page_size
 
 def windows(anchor: date):
     def span(end_offset, days):

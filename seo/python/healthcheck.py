@@ -3,6 +3,7 @@ from googleapiclient.discovery import build
 from auth_google import credentials
 from collector import select_site
 from seo_common import SupabaseREST
+import subprocess
 def main():
     errors=[]
     try: site=select_site(build("searchconsole","v1",credentials=credentials(False))); print(f"PASS: Google {site}")
@@ -12,5 +13,11 @@ def main():
         print(f"PASS: Supabase latest_data={latest[0]['data_date'] if latest else 'none'} recent_failures={sum(r['status']=='failed' for r in runs)}")
         if not latest or (date.today()-date.fromisoformat(latest[0]['data_date'])).days>7: errors.append("Search Console dataset is stale")
     except Exception as e: errors.append("Supabase: "+str(e)); print("FAIL: Supabase")
+    try:
+        state=subprocess.run(["systemctl","--user","is-enabled","kitbin-gsc.timer"],capture_output=True,text=True,timeout=5).stdout.strip()
+        active=subprocess.run(["systemctl","--user","is-active","kitbin-gsc.timer"],capture_output=True,text=True,timeout=5).stdout.strip()
+        print(f"{'PASS' if state=='enabled' and active=='active' else 'FAIL'}: systemd timer enabled={state} active={active}")
+        if state!='enabled' or active!='active': errors.append("systemd timer is not enabled and active")
+    except Exception as e: errors.append("systemd timer check failed"); print("FAIL: systemd timer")
     raise SystemExit(1 if errors else 0)
 if __name__=="__main__":main()
