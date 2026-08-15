@@ -46,4 +46,8 @@ def build_context(db=None):
     candidates=[c for c in classify(grouped["last_28"],grouped["previous_28"]) if c["page"] not in cooldown]
     page_candidates=[c for c in classify_pages(page_grouped["last_28"],page_grouped["previous_28"]) if c["page"] not in cooldown]
     return {"anchor_date":anchor.isoformat(),"windows":{k:[str(a),str(b)] for k,(a,b) in ws.items()},"query_page_metrics":grouped,"page_metrics":page_grouped,"candidates":candidates[:25],"page_candidates":page_candidates[:25],"cooldown_pages":sorted(cooldown),"recent_runs":runs[:5]}
-if __name__=="__main__": print(json.dumps(build_context(),indent=2))
+if __name__=="__main__":
+    p=argparse.ArgumentParser();p.add_argument("--full",action="store_true");a=p.parse_args();result=build_context()
+    if not a.full:
+        result.pop("query_page_metrics",None);result.pop("page_metrics",None)
+    print(json.dumps(result,indent=2))

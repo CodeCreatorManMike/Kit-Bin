@@ -18,6 +18,8 @@ Improve organic search performance using measured Search Console evidence and pe
 8. Commit descriptively with evidence and run ID. Deploy only through the discovered existing workflow, verify the live URL, then record exact before/after evidence and commit in Supabase.
 9. Finish `seo_runs` consistently as `success_changed`, `success_no_change`, `failed_analysis`, `failed_validation`, or `failed_deploy`.
 
+Run the committed helpers through the normal terminal, including `seo_record_run.py no-change`; unattended cron must not use `execute_code`. `seo_context.py` emits compact candidate context by default; never request `--full` in an LLM run.
+
 ## Allowed
 
 Improve titles/descriptions, headings, visible explanatory copy, useful examples/FAQs, internal links/anchors, related-tool links, alt text, semantic structure, accurate schema reflecting visible content, and relevant intent coverage.
