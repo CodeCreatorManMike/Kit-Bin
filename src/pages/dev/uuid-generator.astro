@@ -11,6 +11,8 @@ const faqs = [
   { q: 'What is a UUID v4?', a: "A 128-bit identifier that's random rather than derived from a timestamp or hardware address (unlike v1) — the version used almost everywhere a unique ID is needed and privacy or unpredictability matters." },
   { q: 'How likely is a collision?', a: "For practical purposes, not going to happen: there are about 5.3 x 10^36 possible v4 UUIDs. You'd need to generate roughly a billion per second for about 100 years before a 50% chance of any two matching." },
   { q: 'Can I generate more than one at a time?', a: 'Yes, up to 1,000 at once — set the count and generate, then copy them all or download as a text file.' },
+  { q: 'How many characters are in a UUID, and why does it have dashes?', a: "36 characters total: 32 hexadecimal digits plus 4 hyphens, grouped 8-4-4-4-12. The hyphens don't encode anything — they exist purely to make the string easier for a human to read. Strip them out (the checkbox above does this) and it's the identical underlying value." },
+  { q: 'Does this generate UUID v1 or "uuid1"?', a: 'No, this generates version 4 (random) UUIDs only. Version 1 UUIDs encode a timestamp and network identifier instead of pure randomness — see UUID v1 vs v4 vs v7 for what each version actually contains and when v1 still gets used.' },
 ];
 ---
 

@@ -32,6 +32,10 @@ const faqs = [
     a: 'It can read the metadata of an encrypted PDF, but it will not rewrite one. Removing the password first is a separate step that this tool does not do.',
   },
   {
+    q: 'Does this remove the owner password or permissions on a PDF?',
+    a: 'No, and that is a different thing from what this tool does. An owner or permissions password restricts what a reader can do with the file (printing, editing, copying) and is separate from the Author, Title, and other metadata fields this tool clears. This tool does not remove passwords or permission restrictions, and it will not rewrite a file that is encrypted at all.',
+  },
+  {
     q: 'Are the pages changed at all?',
     a: 'No. Page content is copied through untouched, so text stays selectable and image quality is unchanged. Only the metadata dictionary is rewritten.',
   },

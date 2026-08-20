@@ -11,6 +11,8 @@ const faqs = [
   { q: "Why didn't it find a QR code in my image?", a: "The code needs to be reasonably sharp, in-frame, and not too small relative to the photo. A blurry photo, an extreme angle, or a QR code that takes up only a tiny corner of a large image is the most common reason a real code doesn't get found." },
   { q: 'Does this work with a screenshot?', a: "Yes — a screenshot generally decodes better than a photo, since there's no blur, glare, or angle distortion to work around." },
   { q: "What if it decodes to a link?", a: "The decoded text is shown as plain text, and if it starts with http:// or https:// it's also shown as a clickable link. It never opens automatically." },
+  { q: "Does this decode WiFi, contact card, or other non-URL codes?", a: "Yes. Any QR code decodes to its raw text, so a WiFi (WIFI:...) or contact card (MECARD/vCard) code shows up as that exact raw string in the output box, rather than being parsed into separate fields." },
+  { q: "Does this work on a QR code with a logo in the middle?", a: "It can, if the code itself was generated with enough error correction to cover the logo — that recovery comes from the QR format's own error correction, not from anything special this scanner does. A code generated with low error correction and a large logo may not decode." },
 ];
 ---
 
@@ -46,6 +48,10 @@ const faqs = [
       <a class="text-primary hover:underline dark:text-blue-400" href="/guides/how-qr-codes-work/">how QR codes actually work</a>.
       Code not scanning at all? Read{' '}
       <a class="text-primary hover:underline dark:text-blue-400" href="/guides/why-qr-code-wont-scan/">the troubleshooting guide</a>.
+      Decoded a raw string like WIFI: or MECARD:? See{' '}
+      <a class="text-primary hover:underline dark:text-blue-400" href="/guides/qr-code-payload-types/">what those payload formats mean</a>,
+      and if the code stopped resolving over time, read{' '}
+      <a class="text-primary hover:underline dark:text-blue-400" href="/guides/static-vs-dynamic-qr-codes/">static vs dynamic QR codes</a>.
     </p>
     <p class="text-sm">
       Related tools:{' '}

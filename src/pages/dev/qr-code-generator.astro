@@ -11,6 +11,8 @@ const faqs = [
   { q: 'Do QR codes expire?', a: "No. A QR code is just a picture of data — there's no server involved and nothing to expire. It will keep working for as long as whatever it points to (a URL, for example) still exists." },
   { q: 'PNG or SVG — which should I use?', a: 'SVG for printing or anywhere it might be scaled up — it stays crisp at any size. PNG is the safer default for pasting into a document, slide, or most websites.' },
   { q: 'How much text can a QR code hold?', a: "A few thousand characters at most, and the more you put in, the denser and harder to scan the resulting code gets. For a lot of text, put it on a webpage and encode the link instead." },
+  { q: 'Does a QR code have to be square?', a: "Yes. The QR standard defines a square grid of modules, and both the PNG and SVG this tool exports are square for that reason — there's no rectangular or custom-shape option, that would no longer be a QR code." },
+  { q: 'Is this a binary or hex QR code generator?', a: "No. You type text, whatever you enter — a URL, a WiFi string, plain text — is encoded using the QR standard's own byte mode, not raw binary or hex. There's no mode here for encoding an arbitrary byte sequence directly." },
 ];
 ---
 
@@ -63,6 +65,8 @@ const faqs = [
       <a class="text-primary hover:underline dark:text-blue-400" href="/guides/static-vs-dynamic-qr-codes/">this generator makes static codes that never expire</a>,
       and what else besides a URL you can{' '}
       <a class="text-primary hover:underline dark:text-blue-400" href="/guides/qr-code-payload-types/">actually put in a QR code</a>.
+      Code not scanning once you print or share it? See{' '}
+      <a class="text-primary hover:underline dark:text-blue-400" href="/guides/why-qr-code-wont-scan/">the four real reasons a QR code fails to scan</a>.
     </p>
     <p class="text-sm">
       Related tools:{' '}
