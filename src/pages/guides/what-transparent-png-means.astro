@@ -64,12 +64,19 @@ import GuideReferences from '../../components/GuideReferences.astro';
 
     <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Working with it</h2>
     <p>
-      <a href="/image/remove-background" class="text-primary dark:text-blue-400 hover:underline">Remove Background</a>{' '}
+      <a href="/image/remove-background/" class="text-primary dark:text-blue-400 hover:underline">Remove Background</a>{' '}
       outputs a PNG with a real alpha channel. To move between the formats that actually preserve
       transparency, use{' '}
-      <a href="/image/png-to-webp" class="text-primary dark:text-blue-400 hover:underline">PNG to WebP</a>{' '}
-      or <a href="/image/webp-to-png" class="text-primary dark:text-blue-400 hover:underline">WebP to PNG</a>,
+      <a href="/image/png-to-webp/" class="text-primary dark:text-blue-400 hover:underline">PNG to WebP</a>{' '}
+      or <a href="/image/webp-to-png/" class="text-primary dark:text-blue-400 hover:underline">WebP to PNG</a>,
       both of which keep the alpha channel intact.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Related guide</h2>
+    <p>
+      PNG isn't the only format with real transparency support. See{' '}
+      <a href="/guides/which-image-formats-support-transparency/" class="text-primary dark:text-blue-400 hover:underline">which image file types support transparency</a>{' '}
+      for how WebP, SVG, GIF, and AVIF compare.
     </p>
     <GuideReferences keys={['mdnImageTypes', 'pngSpec', 'webp']} />
 

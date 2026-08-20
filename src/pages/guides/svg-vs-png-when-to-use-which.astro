@@ -64,11 +64,18 @@ import GuideMeta from '../../components/GuideMeta.astro';
     <p>
       In practice that means keeping the SVG as your master file and exporting a PNG at whatever
       size each platform actually needs, rather than trying to make one file format serve every
-      destination. <a href="/image/svg-to-png" class="text-primary dark:text-blue-400 hover:underline">Convert SVG to PNG</a>{' '}
+      destination. <a href="/image/svg-to-png/" class="text-primary dark:text-blue-400 hover:underline">Convert SVG to PNG</a>{' '}
       handles that export directly in your browser. If the SVG itself is larger than it should be —
       leftover editor metadata, unnecessarily precise path points — {' '}
-      <a href="/image/optimize-svg" class="text-primary dark:text-blue-400 hover:underline">optimize the SVG</a>{' '}
+      <a href="/image/optimize-svg/" class="text-primary dark:text-blue-400 hover:underline">optimize the SVG</a>{' '}
       first, before exporting from it.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Related guide</h2>
+    <p>
+      Both SVG and PNG handle transparency fine, unlike JPEG. See{' '}
+      <a href="/guides/which-image-formats-support-transparency/" class="text-primary dark:text-blue-400 hover:underline">which image formats support transparency</a>{' '}
+      for how they and the rest compare.
     </p>
 
     <GuideMeta

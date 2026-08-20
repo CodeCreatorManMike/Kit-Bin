@@ -1,0 +1,160 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import GuideMeta from '../../components/GuideMeta.astro';
+import GuideReferences from '../../components/GuideReferences.astro';
+---
+
+<Layout
+  title="Which Image File Types Support Transparency? | Kit-Bin"
+  description="PNG, WebP, SVG, GIF, and AVIF all support transparency; JPEG doesn't. A real comparison of how each one handles it, and which to pick for logos, photos, and the web."
+>
+
+  <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-ink dark:text-slate-300 space-y-4">
+    <p class="text-sm"><a href="/guides/" class="text-primary dark:text-blue-400 hover:underline">← All guides</a></p>
+    <h1 class="text-3xl font-bold text-ink dark:text-slate-100">Which Image File Types Support Transparency?</h1>
+
+    <p>
+      PNG, WebP, SVG, GIF, and AVIF all support transparency; JPEG does not, and never will, because
+      the format has no way to represent it. Which of the transparent ones you actually want depends
+      on whether you're making a logo, a photo cutout, or animated art, and that's the part most
+      answers skip.
+    </p>
+
+    <div class="overflow-x-auto">
+      <table class="w-full border-collapse text-sm">
+        <thead>
+          <tr class="border-b border-border-soft dark:border-slate-700 text-left">
+            <th class="py-2 pr-4 font-semibold text-ink dark:text-slate-100">Format</th>
+            <th class="py-2 pr-4 font-semibold text-ink dark:text-slate-100">Transparency</th>
+            <th class="py-2 pr-4 font-semibold text-ink dark:text-slate-100">Compression</th>
+            <th class="py-2 font-semibold text-ink dark:text-slate-100">Best for</th>
+          </tr>
+        </thead>
+        <tbody class="text-muted dark:text-slate-400">
+          <tr class="border-b border-border-soft dark:border-slate-800">
+            <td class="py-2 pr-4 font-medium text-ink dark:text-slate-200">PNG</td>
+            <td class="py-2 pr-4">Full alpha (256 levels)</td>
+            <td class="py-2 pr-4">Lossless</td>
+            <td class="py-2">Logos, icons, screenshots, UI graphics</td>
+          </tr>
+          <tr class="border-b border-border-soft dark:border-slate-800">
+            <td class="py-2 pr-4 font-medium text-ink dark:text-slate-200">WebP</td>
+            <td class="py-2 pr-4">Full alpha, both modes</td>
+            <td class="py-2 pr-4">Lossy or lossless</td>
+            <td class="py-2">Web photos and graphics that need transparency and a small file</td>
+          </tr>
+          <tr class="border-b border-border-soft dark:border-slate-800">
+            <td class="py-2 pr-4 font-medium text-ink dark:text-slate-200">AVIF</td>
+            <td class="py-2 pr-4">Full alpha, both modes</td>
+            <td class="py-2 pr-4">Lossy or lossless</td>
+            <td class="py-2">Same as WebP, smaller still, narrower software support</td>
+          </tr>
+          <tr class="border-b border-border-soft dark:border-slate-800">
+            <td class="py-2 pr-4 font-medium text-ink dark:text-slate-200">SVG</td>
+            <td class="py-2 pr-4">Full alpha (it's vector, not pixels)</td>
+            <td class="py-2 pr-4">N/A — described, not compressed</td>
+            <td class="py-2">Logos and icons that need to scale to any size</td>
+          </tr>
+          <tr class="border-b border-border-soft dark:border-slate-800">
+            <td class="py-2 pr-4 font-medium text-ink dark:text-slate-200">GIF</td>
+            <td class="py-2 pr-4">Binary only (on/off, no blending)</td>
+            <td class="py-2 pr-4">Lossless</td>
+            <td class="py-2">Simple animation, not photo cutouts</td>
+          </tr>
+          <tr>
+            <td class="py-2 pr-4 font-medium text-ink dark:text-slate-200">JPEG</td>
+            <td class="py-2 pr-4">None — not supported at all</td>
+            <td class="py-2 pr-4">Lossy</td>
+            <td class="py-2">Photos with no transparency requirement</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Binary transparency vs alpha transparency</h2>
+    <p>
+      This is the distinction the table above compresses into one word, and it's the part that
+      actually explains why some transparent images look clean and others look jagged around the
+      edges.
+    </p>
+    <p>
+      <strong>Binary transparency</strong> means every pixel is either fully see-through or fully
+      opaque, nothing in between. GIF works this way: one palette color is designated "transparent,"
+      and any pixel using it disappears entirely. There's no partial blending at the edge of a
+      shape, which is why a GIF cutout of a round object or a strand of hair shows a visibly hard,
+      stair-stepped edge instead of a smooth one.
+    </p>
+    <p>
+      <strong>Alpha transparency</strong> means each pixel carries its own opacity value, typically
+      256 levels from fully transparent to fully opaque. PNG, WebP, and AVIF all work this way. That
+      extra information is what lets an edge fade smoothly into whatever background it's placed on,
+      rather than cutting out in a hard line. SVG achieves the same smooth result differently, since
+      it isn't pixels at all; shapes are described mathematically, and opacity is just a property on
+      that description.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Which one to actually use</h2>
+    <ul class="list-disc pl-5 space-y-1.5">
+      <li>
+        <strong>A logo or icon:</strong> SVG if it's simple flat shapes (it'll stay sharp at any
+        size and is usually the smallest file by far); PNG if it needs fine detail, a photographic
+        element, or a piece of software that doesn't handle SVG well.
+      </li>
+      <li>
+        <strong>A product photo or portrait with the background removed:</strong> PNG for
+        guaranteed compatibility, or WebP if the destination (a website you control) supports it
+        and file size matters — same alpha quality, meaningfully smaller.
+      </li>
+      <li>
+        <strong>A screenshot or UI graphic:</strong> PNG. Lossless matters here because compression
+        artifacts are much more visible on sharp text and flat colors than on a photo.
+      </li>
+      <li>
+        <strong>Simple animation:</strong> GIF still works for basic cases, but its binary
+        transparency and 256-color palette both show. An animated WebP or AVIF gives a genuinely
+        cleaner result with full-color, full-alpha frames, at the cost of narrower support in
+        older software.
+      </li>
+      <li>
+        <strong>Anything getting uploaded somewhere that only takes JPEG:</strong> transparency
+        won't survive the trip. A JPEG has no alpha channel to put it in, so a transparent area gets
+        flattened onto a solid background (usually white) before the file is even saved.
+      </li>
+    </ul>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Why it sometimes turns white instead of staying transparent</h2>
+    <p>
+      This is a separate, very common problem from picking the wrong format: a PNG or WebP that
+      genuinely does support transparency still shows up with a white background somewhere. That's
+      almost always the viewing or editing software flattening the alpha channel onto white for
+      display, not the file losing its transparency. See{' '}
+      <a href="/guides/what-transparent-png-means/" class="text-primary dark:text-blue-400 hover:underline">what "transparent background" actually means</a>{' '}
+      for the specific causes and fixes.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Converting and creating</h2>
+    <p>
+      <a href="/image/png-to-webp/" class="text-primary dark:text-blue-400 hover:underline">PNG to WebP</a>
+      · <a href="/image/webp-to-png/" class="text-primary dark:text-blue-400 hover:underline">WebP to PNG</a>
+      · <a href="/image/svg-to-png/" class="text-primary dark:text-blue-400 hover:underline">SVG to PNG</a>
+      · <a href="/image/remove-background/" class="text-primary dark:text-blue-400 hover:underline">Remove Background</a>
+      (produces a transparent PNG from a photo)
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Related guides</h2>
+    <p>
+      <a href="/guides/what-transparent-png-means/" class="text-primary dark:text-blue-400 hover:underline">What "Transparent Background" Actually Means</a>{' '}
+      · <a href="/guides/white-halo-around-cutout/" class="text-primary dark:text-blue-400 hover:underline">Why Your Background-Removed Photo Has a White Halo</a>{' '}
+      · <a href="/guides/webp-vs-png-jpg/" class="text-primary dark:text-blue-400 hover:underline">WebP vs PNG vs JPG</a>{' '}
+      · <a href="/guides/avif-explained/" class="text-primary dark:text-blue-400 hover:underline">What Is AVIF, and Why Is It So Much Smaller?</a>{' '}
+      · <a href="/guides/svg-vs-png-when-to-use-which/" class="text-primary dark:text-blue-400 hover:underline">SVG vs PNG: When Should a Logo Be Neither?</a>
+    </p>
+    <GuideReferences keys={['mdnImageTypes', 'pngSpec', 'webp']} />
+
+    <GuideMeta
+      headline={'Which Image File Types Support Transparency?'}
+      description={'PNG, WebP, SVG, GIF, and AVIF all support transparency; JPEG doesn\'t. A real comparison of how each one handles it, and which to pick for logos, photos, and the web.'}
+      published="2026-08-12"
+    />
+  </article>
+</Layout>
