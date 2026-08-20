@@ -38,6 +38,56 @@ import GuideMeta from '../../components/GuideMeta.astro';
       pixel requirement, because the physical size is doing most of the work in that equation.
     </p>
 
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">What 300 DPI means in actual pixels, for common sizes</h2>
+    <p>
+      300 PPI is the standard target for photo-quality print. Here's what that works out to in
+      pixel dimensions for the sizes people print most often — apply the same formula to any other
+      size by multiplying its inches by the PPI you're targeting.
+    </p>
+    <div class="overflow-x-auto">
+      <table class="w-full border-collapse text-sm">
+        <thead>
+          <tr class="border-b border-border-soft dark:border-slate-700">
+            <th class="py-2 pr-4 text-left font-semibold text-ink dark:text-slate-100">Print size</th>
+            <th class="py-2 text-left font-semibold text-ink dark:text-slate-100">Pixels needed at 300 DPI</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-border-soft dark:border-slate-800">
+            <td class="py-2 pr-4">4×6 in (standard photo print)</td>
+            <td class="py-2 font-mono">1200 × 1800 px</td>
+          </tr>
+          <tr class="border-b border-border-soft dark:border-slate-800">
+            <td class="py-2 pr-4">5×7 in</td>
+            <td class="py-2 font-mono">1500 × 2100 px</td>
+          </tr>
+          <tr class="border-b border-border-soft dark:border-slate-800">
+            <td class="py-2 pr-4">8×10 in</td>
+            <td class="py-2 font-mono">2400 × 3000 px</td>
+          </tr>
+          <tr class="border-b border-border-soft dark:border-slate-800">
+            <td class="py-2 pr-4">A4 (210×297mm)</td>
+            <td class="py-2 font-mono">2480 × 3508 px</td>
+          </tr>
+          <tr class="border-b border-border-soft dark:border-slate-800">
+            <td class="py-2 pr-4">Business card (3.5×2 in)</td>
+            <td class="py-2 font-mono">1050 × 600 px</td>
+          </tr>
+          <tr>
+            <td class="py-2 pr-4">Passport photo (2×2 in)</td>
+            <td class="py-2 font-mono">600 × 600 px</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p>
+      Below 300 PPI, print quality drops off gradually rather than at some fixed cliff edge — 200
+      PPI can still look acceptable at normal viewing distance for a poster viewed from across a
+      room, while the same density on a business card held a few inches from someone's eyes would
+      look visibly soft. 300 PPI is the safe, standard target when you don't know the exact
+      viewing distance in advance.
+    </p>
+
     <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Why upscaling doesn't actually fix a low-resolution image</h2>
     <p>
       If a photo falls short of the pixel count a print size needs, the tempting fix is to
@@ -73,7 +123,7 @@ import GuideMeta from '../../components/GuideMeta.astro';
       headline={"How Many Pixels Do You Actually Need? DPI, PPI, and Print Size"}
       description={"The one formula that actually matters for print resolution, and why '300 DPI' means nothing without knowing the physical size."}
       published="2026-08-08"
-      reviewed="2026-08-08"
+      reviewed="2026-08-20"
     />
   </article>
 </Layout>

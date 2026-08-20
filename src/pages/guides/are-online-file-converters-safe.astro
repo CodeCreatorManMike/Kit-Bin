@@ -85,8 +85,84 @@ import GuideReferences from '../../components/GuideReferences.astro';
       here, and confirm nothing containing it goes out. For the fuller technical explanation of
       why that's structurally true here rather than just a policy promise, see{' '}
       <a href="/guides/how-kit-bin-works/" class="text-primary dark:text-blue-400 hover:underline">how Kit-Bin works</a>{' '}
-      — it applies the same way across every tool on the site, not just one.
+      — it applies the same way across every tool on the site, not just one. The same check works
+      for archive tools specifically, too — see{' '}
+      <a href="/guides/how-to-unzip-a-file-online/" class="text-primary dark:text-blue-400 hover:underline">
+        how to unzip a file online
+      </a>{' '}
+      for the ZIP-specific version of this, since "online unzip" tools are just as likely to
+      upload the archive as any other converter.
     </p>
+    <p>
+      One nuance worth knowing before you rely on this test: a request firing in the Network tab
+      isn't automatically damning, and an empty Network tab isn't automatically proof of nothing.
+      A site can legitimately make small requests during conversion (loading a WASM module, a
+      font, an ad) that have nothing to do with your file — check the request's size and, if
+      you're unsure, its payload, not just whether the list is empty. And a site could in theory
+      delay an upload or send it from a background service worker after you've stopped watching,
+      though that's a more elaborate deception than sites doing ordinary server-side conversion
+      have any reason to bother with. For an ordinary check, watching the Network tab for the
+      several seconds a conversion actually takes is enough.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">What a privacy policy should actually tell you</h2>
+    <p>
+      A privacy policy existing at all is a low bar — plenty of sites publish one that's boilerplate
+      and says almost nothing about the specific thing you care about, which is what happens to the
+      file itself, not just account data. A policy worth trusting answers these directly, and if it
+      doesn't, that's the same as it not existing:
+    </p>
+    <ul class="list-disc pl-5 space-y-1">
+      <li>
+        <strong>Retention period, stated as a number.</strong> "Deleted after processing" is vague
+        — after how long, exactly, and is that enforced automatically or does someone have to
+        remember to run a cleanup job? "Files are deleted within 1 hour of conversion" is a
+        checkable claim. "We may retain files" with no timeframe is not.
+      </li>
+      <li>
+        <strong>Whether the file is used for anything other than the conversion you asked for.</strong>
+        Some services reserve the right to use uploaded content to "improve our service" — which
+        can mean training a model, building a dataset, or simply keeping samples indefinitely for
+        QA. That's a materially different privacy posture than "we convert it and discard it," and
+        a policy that doesn't rule it out should be read as allowing it.
+      </li>
+      <li>
+        <strong>Whether processing is outsourced to a third party.</strong> A lot of "we built this"
+        conversion sites are thin front ends that pipe your file to a separate processing API or
+        cloud storage bucket under a different company's control. If the policy doesn't name who
+        actually touches the file, you're trusting a chain of custody you can't see, not just the
+        site you're on.
+      </li>
+    </ul>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Red flags that hold up regardless of which site you're looking at</h2>
+    <p>
+      None of these prove a site is malicious on their own, but each one removes a reason to trust
+      it, and they're all checkable before you upload anything:
+    </p>
+    <ul class="list-disc pl-5 space-y-1">
+      <li>
+        <strong>Forced account creation before you can even try the tool.</strong> A conversion —
+        reading bytes in one format and writing them in another — doesn't need to know who you are.
+        Requiring signup before the first use is a data-collection decision dressed up as a product
+        requirement.
+      </li>
+      <li>
+        <strong>No findable privacy policy.</strong> Not buried three clicks deep in a footer with
+        no real content either — actually absent, or present but not covering file handling at all.
+      </li>
+      <li>
+        <strong>Payment information required to "unlock" a tool advertised as free.</strong> A
+        genuinely free tool doesn't need a card number. Asking for one to remove a fake limit is a
+        pattern associated with subscription-trap sites more than with conversion quality.
+      </li>
+      <li>
+        <strong>Requesting broader permissions than the task needs.</strong> A page that asks for
+        clipboard access, notifications, your location, or contacts to convert a file has no
+        technical reason to want any of that — the request itself is the tell, independent of
+        whatever the site claims it's for.
+      </li>
+    </ul>
 
     <GuideReferences keys={['chromeNetworkPanel']} />
 
@@ -94,7 +170,7 @@ import GuideReferences from '../../components/GuideReferences.astro';
       headline={"Are Online File Converters Actually Safe to Use?"}
       description={"What actually happens to your file when you use a typical online converter, the real risks, and how to verify a site that claims to be client-side."}
       published="2026-08-08"
-      reviewed="2026-08-08"
+      reviewed="2026-08-20"
     />
   </article>
 </Layout>

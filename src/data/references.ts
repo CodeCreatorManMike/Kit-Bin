@@ -86,6 +86,11 @@ export const references = {
     url: 'https://opensource.adobe.com/dc-acrobat-sdk-docs/pdfstandards/PDF32000_2008.pdf',
     publisher: 'Adobe / ISO',
   },
+  deflateSpec: {
+    title: 'RFC 1951: DEFLATE Compressed Data Format Specification',
+    url: 'https://www.rfc-editor.org/rfc/rfc1951',
+    publisher: 'IETF',
+  },
 } as const satisfies Record<string, Reference>;
 
 export type ReferenceKey = keyof typeof references;

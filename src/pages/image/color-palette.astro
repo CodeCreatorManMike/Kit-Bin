@@ -11,6 +11,8 @@ const faqs = [
   { q: 'How are the colors chosen?', a: "Not just the most frequent pixels — that tends to pick near-duplicate shades from a large area of one color. The algorithm groups similar colors together first, so the result better represents the image's actual range of color rather than just its biggest block." },
   { q: 'Why does a mostly-one-color photo still show several swatches?', a: "The tool always returns up to 8 colors, even from a fairly uniform image — some will be close variations of each other in that case. That's expected, not a bug." },
   { q: 'What can I do with the hex codes?', a: 'Paste them directly into CSS, a design tool, or a style guide. Each swatch copies its own hex code, and there\'s a "copy all" button for grabbing the whole palette at once.' },
+  { q: 'Does it work on any image format?', a: 'Any format your browser can decode into an image — JPG, PNG, WebP, GIF, and HEIC photos straight from an iPhone. If a file won\'t load, it\'s not a supported image format rather than a size or color issue.' },
+  { q: 'Is there a limit on image size?', a: "No hard limit, since nothing leaves your browser. Large photos are automatically downscaled before the color analysis runs, so a 40-megapixel photo takes about the same time to process as a small one and returns the same palette." },
 ];
 ---
 

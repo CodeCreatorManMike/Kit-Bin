@@ -31,6 +31,14 @@ const faqs = [
     q: 'What about formatting, charts, and merged cells?',
     a: 'None of it is carried over. Cell colours, fonts, borders, charts, pivot tables, images, and comments have no JSON equivalent and are dropped. Merged cells are flattened, with the value in the top-left cell of the range and the rest empty. Dates are written as the spreadsheet displayed them, so check them if the exact format matters.',
   },
+  {
+    q: 'Does this work with the older .xls format, not just .xlsx?',
+    a: 'Yes. The tool reads .xlsx, the older .xls binary format, and macro-enabled .xlsm files the same way. Macros in an .xlsm file are not run and are not carried over, only the cell values are read.',
+  },
+  {
+    q: 'Is it really free, and is there a file size limit?',
+    a: "Free, with no sign-up and no cap on how many files you convert. There's no hard file size limit either, since the workbook is parsed in your browser tab rather than uploaded, but a very large workbook is limited by your device's memory rather than any rule this tool enforces.",
+  },
 ];
 ---
 

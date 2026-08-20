@@ -288,4 +288,10 @@ export const guides: Guide[] = [
     cardTitle: 'What SHA-256 Proves',
     description: "Verifying a download against a published checksum only proves one specific thing — here's exactly what that is, and the trap people fall into.",
   },
+  {
+    slug: '/guides/how-to-unzip-a-file-online',
+    title: 'How to Unzip a File Online Without Uploading It Anywhere',
+    cardTitle: 'How to Unzip a File Online',
+    description: 'What a ZIP file actually contains, why most "online unzip" tools mean uploading your files to a stranger\'s server, and what to check before you trust one.',
+  },
 ];

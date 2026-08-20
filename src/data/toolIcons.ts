@@ -853,4 +853,9 @@ export const toolIcons: Record<string, IconPrimitive[]> = {
     { t: 'path', d: 'M8 11V7a4 4 0 0 1 8 0v4' },
     { t: 'path', d: 'M9.5 15.5l1.8 1.8L14.5 14' },
   ],
+  '/guides/how-to-unzip-a-file-online': [
+    { t: 'rect', x: 4, y: 4, w: 16, h: 16, rx: 1.5 },
+    { t: 'path', d: 'M12 4v3M12 9v2M12 13v2M12 17v3' },
+    { t: 'rect', x: 10.3, y: 10.3, w: 3.4, h: 3.4, rx: 0.6 },
+  ],
 };
