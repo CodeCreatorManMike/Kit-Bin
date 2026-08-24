@@ -5,7 +5,7 @@ import GuideMeta from '../../components/GuideMeta.astro';
 
 <Layout
   title="Why Won't My QR Code Scan? | Kit-Bin"
-  description="The four real reasons a QR code fails to scan — quiet zone, contrast, print size, and resolution — and how to actually fix each one."
+  description="The five real reasons a QR code fails to scan — quiet zone, contrast, print size, resolution, and logo placement — and how to actually fix each one."
 >
 
   <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-ink dark:text-slate-300 space-y-4">
@@ -14,7 +14,7 @@ import GuideMeta from '../../components/GuideMeta.astro';
 
     <p>
       A QR code either works or it doesn't, there's no "sort of scans." When one fails, it's
-      almost always one of four specific, physical problems, not some vague bad luck. Here's how
+      almost always one of five specific, physical problems, not some vague bad luck. Here's how
       to tell which one you're looking at, and how to fix it.
     </p>
 
@@ -71,6 +71,18 @@ import GuideMeta from '../../components/GuideMeta.astro';
       <a href="/image/svg-to-png/" class="text-primary dark:text-blue-400 hover:underline">SVG to PNG</a>{' '}
       at the exact pixel dimensions you need.
     </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">5. A logo or custom styling covers a finder pattern</h2>
+    <p>
+      A logo dropped in the center of a QR code is usually fine, that area typically overlaps
+      redundant data the error-correction budget can absorb (see how error correction works).
+      A logo, rounded corner treatment, or color overlay placed on or near one of the three
+      corner squares is a different problem entirely, those finder patterns are how a scanner
+      locates and orients the code in the first place, and damaging one isn't something
+      error correction can compensate for the way it can a few missing data modules in the
+      middle of the grid.
+    </p>
+    <p><strong>Fix:</strong> keep any logo or decoration centered and small, well clear of all three corner squares, and raise the error-correction level to Q or H before adding one, so there's more redundancy to spare.</p>
 
     <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Generating a code that avoids all four</h2>
     <p>

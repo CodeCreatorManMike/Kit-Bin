@@ -67,6 +67,8 @@ export const tools: Tool[] = [
     aliases: ['cut image', 'trim photo', 'crop photo', 'cut out part of a picture'] },
   { slug: '/image/optimize-svg', name: 'SVG Optimizer', description: 'Clean up and shrink an SVG file.', category: 'image',
     aliases: ['compress svg', 'minify svg', 'svgo', 'reduce svg size', 'optimize svg online'] },
+  { slug: '/image/dpi-calculator', name: 'DPI / Print Size Calculator', description: 'Work out print size from pixels and DPI, or pixels needed for a target print size.', category: 'image',
+    aliases: ['dpi calculator', 'ppi calculator', '300 dpi in pixels', 'print size calculator', 'pixels to inches', 'pixels needed for print', 'dpi to inches'] },
 
   { slug: '/audio/mp3-to-wav', name: 'MP3 to WAV', description: 'Convert MP3 audio to WAV.', category: 'audio',
     aliases: ['mp3 converter', 'uncompressed audio', 'pcm audio', 'wav converter'] },
@@ -129,6 +131,8 @@ export const tools: Tool[] = [
     aliases: ['qr code reader', 'decode qr code', 'scan qr from image', 'read qr code image', 'qr code decoder'] },
   { slug: '/dev/password-generator', name: 'Password Generator', description: 'Generate a strong random password locally.', category: 'dev',
     aliases: ['random password', 'strong password generator', 'secure password maker', 'passphrase generator'] },
+  { slug: '/dev/password-entropy-checker', name: 'Password Entropy Checker', description: 'Type a password and see its real bit-entropy and rough crack time.', category: 'dev',
+    aliases: ['password entropy checker', 'password strength checker', 'how strong is my password', 'calculate password entropy', 'password crack time'] },
   { slug: '/dev/uuid-generator', name: 'UUID Generator', description: 'Generate random UUIDs (v4), one or in bulk.', category: 'dev',
     aliases: ['guid generator', 'random uuid', 'unique id generator', 'generate uuid v4', 'bulk uuid'] },
 

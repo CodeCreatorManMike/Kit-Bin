@@ -11,6 +11,8 @@ const faqs = [
   { q: 'What is a SHA-256 checksum used for?', a: 'A checksum is a fixed fingerprint for a file. Compare it with the value published by a software vendor to check that a downloaded file has not changed.' },
   { q: 'Does a matching hash prove a file is safe?', a: 'No. It only proves that the bytes match the file used to create the expected hash. Get the expected value from a source you trust.' },
   { q: 'Can I hash a large file?', a: 'Usually, yes, but the full file must fit in browser memory for Web Crypto to process it. Very large files can be slow or exceed a mobile browser’s memory limit.' },
+  { q: 'Is a SHA-256 hash case-sensitive?', a: 'The hash itself is not case-sensitive as a value — hex digits a-f and A-F represent the same bits — but comparing two hashes as text requires matching case or lowercasing both first, since a plain string comparison treats "a3" and "A3" as different. This tool always outputs lowercase hex, so paste the published hash into a comparison as lowercase too.' },
+  { q: 'How do I get the SHA-256 hash of a file?', a: 'Choose or drop the file above. The hash is calculated locally with the browser\'s Web Crypto API and shown as a 64-character hex string, ready to copy and compare.' },
 ];
 ---
 

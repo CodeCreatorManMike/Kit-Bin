@@ -1,0 +1,78 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import GuideMeta from '../../components/GuideMeta.astro';
+---
+
+<Layout
+  title="Rotate vs Flip vs Mirror: What's the Difference (and Which Do You Need)? | Kit-Bin"
+  description="Rotating turns an image around its center. Flipping reflects it across an axis. A quick way to match your actual problem to the right fix."
+>
+
+  <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-ink dark:text-slate-300 space-y-4">
+    <p class="text-sm"><a href="/guides/" class="text-primary dark:text-blue-400 hover:underline">← All guides</a></p>
+    <h1 class="text-3xl font-bold text-ink dark:text-slate-100">Rotate vs Flip vs Mirror: What's the Difference (and Which Do You Need)?</h1>
+
+    <p>
+      These three get used interchangeably in everyday speech, but only two operations actually
+      exist, rotating and flipping, and "mirror" is just the common name for one specific kind of
+      flip. Picking the wrong one produces an image that's technically "turned around" but not in
+      the way you meant.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Rotate</h2>
+    <p>
+      Turns the whole image around its center point, typically in 90 degree steps: 90, 180, or
+      270 degrees. This is what fixes a sideways phone photo (the camera was held on its side
+      when the shot was taken) or an upside-down scan. A 90 or 270 degree rotation also swaps the
+      image's width and height; 180 does not.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Flip, and why "mirror" means one specific flip</h2>
+    <p>
+      Flipping reflects the image across an axis instead of turning it, the dimensions stay the
+      same either way. A horizontal flip, left and right swap, is what people mean when they say
+      "mirror," because it's the same transformation a bathroom mirror applies to your reflection.
+      A vertical flip (top and bottom swap) is the less common one, mostly used to fix an image
+      that was captured upside-down by a sensor rather than a camera orientation issue. If text or
+      writing in a photo reads backwards, that's a horizontal flip problem, not a rotation
+      problem, no amount of rotating fixes mirrored text, since rotation never reflects anything.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Why some tools say "transpose"</h2>
+    <p>
+      "Transpose" is image-processing shorthand for a rotate-plus-flip combination applied
+      together as one step, and it's also the exact term used inside a photo's EXIF orientation
+      metadata to describe how a camera was physically held when it captured a frame. That's the
+      real reason phone photos sometimes load rotated wrong in the first place: the sensor always
+      captures the same physical orientation, and the phone records which way it was actually
+      held as an EXIF tag, expecting the viewer to read that tag and rotate the display
+      accordingly. A viewer that ignores the tag shows the raw sensor orientation instead, which
+      is why the same file can look correctly oriented in one app and sideways in another.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Matching the problem to the fix</h2>
+    <ul class="list-disc list-inside space-y-1 text-muted dark:text-slate-400">
+      <li><strong class="text-ink dark:text-slate-200">Sideways photo</strong> → rotate 90° (clockwise or counterclockwise, whichever straightens it).</li>
+      <li><strong class="text-ink dark:text-slate-200">Selfie or screenshot where text reads backwards</strong> → horizontal flip.</li>
+      <li><strong class="text-ink dark:text-slate-200">Upside-down scan</strong> → rotate 180°.</li>
+      <li><strong class="text-ink dark:text-slate-200">Image looks fine but a specific app displays it sideways</strong> → an EXIF orientation tag mismatch, not something rotating the pixels fixes; strip and bake the orientation in instead.</li>
+    </ul>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Doing it</h2>
+    <p>
+      <a href="/image/rotate/" class="text-primary dark:text-blue-400 hover:underline">Rotate and Flip an Image</a>{' '}
+      handles both operations, and lets you combine them (rotation applied first, then the flip),
+      entirely in your browser. If the problem is specifically an EXIF orientation mismatch rather
+      than needing the pixels themselves turned, see{' '}
+      <a href="/image/exif-viewer/" class="text-primary dark:text-blue-400 hover:underline">EXIF Viewer</a>{' '}
+      to check what orientation tag the file actually carries first.
+    </p>
+
+    <GuideMeta
+      headline={"Rotate vs Flip vs Mirror: What's the Difference (and Which Do You Need)?"}
+      description={'Rotating turns an image around its center. Flipping reflects it across an axis. A quick way to match your actual problem to the right fix.'}
+      published="2026-08-24"
+      reviewed="2026-08-24"
+    />
+  </article>
+</Layout>

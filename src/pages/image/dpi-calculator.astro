@@ -1,0 +1,146 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import AdsterraBanner from '../../components/AdsterraBanner.astro';
+import ToolHeader from '../../components/ToolHeader.astro';
+import ToolSchema from '../../components/ToolSchema.astro';
+import FaqAccordion from '../../components/FaqAccordion.astro';
+import AdUnit from '../../components/AdUnit.astro';
+
+const faqs = [
+  { q: 'What is the actual formula?', a: 'inches × PPI = pixels needed. This calculator runs that formula both directions: pixels ÷ PPI = inches, when you already have an image and want its print size, or inches × PPI = pixels, when you know the print size and need to check your image is big enough.' },
+  { q: 'What PPI should I use for print?', a: '300 PPI is the standard safe target for photo-quality print viewed at a normal distance. Large posters viewed from across a room can look acceptable well below that, closer to 150-200 PPI, since viewing distance matters as much as density.' },
+  { q: 'Is DPI the same as PPI?', a: 'Not strictly — DPI (dots per inch) technically describes a printer\'s physical output, PPI (pixels per inch) describes a digital image\'s pixel density — but the two terms get used interchangeably in everyday conversation, and the formula is identical either way.' },
+  { q: 'My image is short a few pixels. Should I just resize it up?', a: "Resizing up changes the pixel count but invents the missing detail rather than recovering it, producing a softer result, not a sharper one. It can be an acceptable compromise for a small shortfall, but it is not a substitute for having captured the photo at a high enough resolution to begin with." },
+  { q: 'Does this account for image bleed or printer margins?', a: 'No, this calculates the pixels needed for the stated print size exactly. Commercial printing often adds a small bleed margin (commonly an extra 1/8 inch per side) beyond the trim size — check with your specific printer whether bleed is required and add it to the inches before calculating.' },
+];
+---
+
+<Layout title="DPI / PPI Print Size Calculator, Free & No Upload | Kit-Bin" description="Work out print size from pixel dimensions and DPI, or the pixels you need for a target print size. Calculated entirely in your browser.">
+  <ToolSchema name="DPI / PPI Print Size Calculator" description="Calculate print size from pixels and DPI, or pixels needed for a target print size, entirely in your browser." faqs={faqs} />
+  <ToolHeader title="DPI / PPI Print Size Calculator" subtitle="inches × PPI = pixels needed. Work it out either direction." />
+
+  <div class="max-w-2xl mx-auto px-4">
+    <div class="rounded-2xl border border-border-soft bg-surface p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+      <div class="inline-flex items-center gap-1 rounded-xl bg-app-bg dark:bg-slate-950 border border-border-soft dark:border-slate-800 p-1 text-sm">
+        <button type="button" id="mode-pixels-to-size" class="rounded-lg px-3 py-1.5 font-semibold transition-all" aria-pressed="true">Pixels → print size</button>
+        <button type="button" id="mode-size-to-pixels" class="rounded-lg px-3 py-1.5 font-semibold transition-all" aria-pressed="false">Print size → pixels</button>
+      </div>
+
+      <div id="panel-pixels-to-size" class="mt-5 grid grid-cols-2 gap-3">
+        <label class="text-sm font-medium">Width (px)<input id="px-width" type="number" min="1" value="1200" class="mt-1 block w-full rounded-lg border border-border-soft bg-transparent p-2.5 dark:border-slate-700" /></label>
+        <label class="text-sm font-medium">Height (px)<input id="px-height" type="number" min="1" value="1800" class="mt-1 block w-full rounded-lg border border-border-soft bg-transparent p-2.5 dark:border-slate-700" /></label>
+        <label class="col-span-2 text-sm font-medium">Target PPI/DPI<input id="px-ppi" type="number" min="1" value="300" class="mt-1 block w-full rounded-lg border border-border-soft bg-transparent p-2.5 dark:border-slate-700" /></label>
+      </div>
+
+      <div id="panel-size-to-pixels" class="mt-5 hidden grid grid-cols-2 gap-3">
+        <label class="text-sm font-medium">Width (in)<input id="in-width" type="number" min="0.1" step="0.1" value="4" class="mt-1 block w-full rounded-lg border border-border-soft bg-transparent p-2.5 dark:border-slate-700" /></label>
+        <label class="text-sm font-medium">Height (in)<input id="in-height" type="number" min="0.1" step="0.1" value="6" class="mt-1 block w-full rounded-lg border border-border-soft bg-transparent p-2.5 dark:border-slate-700" /></label>
+        <label class="col-span-2 text-sm font-medium">Target PPI/DPI<input id="in-ppi" type="number" min="1" value="300" class="mt-1 block w-full rounded-lg border border-border-soft bg-transparent p-2.5 dark:border-slate-700" /></label>
+      </div>
+
+      <div id="result" class="mt-5 rounded-xl bg-app-bg dark:bg-slate-950 p-4 text-center">
+        <p id="result-primary" class="text-2xl font-bold text-ink dark:text-slate-100"></p>
+        <p id="result-secondary" class="mt-1 text-sm text-muted dark:text-slate-400"></p>
+      </div>
+    </div>
+  </div>
+
+  <AdUnit />
+
+  <div class="max-w-2xl mx-auto space-y-6 px-4 py-12 text-ink dark:text-slate-300">
+    <p>
+      This calculator runs one formula, inches × PPI = pixels needed, in whichever direction you
+      need it. Enter pixel dimensions and a target PPI to see the largest size you can print at
+      that density, or enter a print size and PPI to see the pixel dimensions your image needs to
+      hit it. Everything updates as you type, entirely in this browser tab.
+    </p>
+    <div>
+      <h2 class="tool-h2 text-lg font-semibold">Why this needs a real calculator, not just a table</h2>
+      <p class="mt-2 text-muted dark:text-slate-400">
+        "300 DPI" alone doesn't tell you anything, it's a density, not a size, and the pixel
+        requirement scales directly with the physical dimensions you actually need. A quick
+        reference table only covers a handful of common sizes; this covers any width, height, and
+        target density combination.
+      </p>
+    </div>
+    <div><h2 class="tool-h2 text-lg font-semibold">FAQ</h2><div class="mt-3"><FaqAccordion faqs={faqs} /></div></div>
+    <p class="text-sm">
+      Want the full explanation behind the formula, including why upscaling doesn't fix a
+      shortfall? Read{' '}
+      <a class="text-primary hover:underline dark:text-blue-400" href="/guides/dpi-ppi-print-size-explained/">DPI, PPI, and print size explained</a>.
+      Once you know your target pixel dimensions, use{' '}
+      <a class="text-primary hover:underline dark:text-blue-400" href="/image/resize/">Resize Image</a>{' '}
+      or{' '}
+      <a class="text-primary hover:underline dark:text-blue-400" href="/image/crop/">Crop Image</a>{' '}
+      to match them.
+    </p>
+  </div>
+
+  <div class="pt-8 sm:pt-12 pb-6 sm:pb-8">
+    <AdsterraBanner placement="tool-page:image/dpi-calculator" />
+  </div>
+
+  <script>
+    const modePixelsBtn = document.querySelector<HTMLButtonElement>('#mode-pixels-to-size')!;
+    const modeSizeBtn = document.querySelector<HTMLButtonElement>('#mode-size-to-pixels')!;
+    const panelPixels = document.querySelector<HTMLElement>('#panel-pixels-to-size')!;
+    const panelSize = document.querySelector<HTMLElement>('#panel-size-to-pixels')!;
+    const resultPrimary = document.querySelector<HTMLElement>('#result-primary')!;
+    const resultSecondary = document.querySelector<HTMLElement>('#result-secondary')!;
+
+    const pxWidth = document.querySelector<HTMLInputElement>('#px-width')!;
+    const pxHeight = document.querySelector<HTMLInputElement>('#px-height')!;
+    const pxPpi = document.querySelector<HTMLInputElement>('#px-ppi')!;
+    const inWidth = document.querySelector<HTMLInputElement>('#in-width')!;
+    const inHeight = document.querySelector<HTMLInputElement>('#in-height')!;
+    const inPpi = document.querySelector<HTMLInputElement>('#in-ppi')!;
+
+    let mode: 'pixels-to-size' | 'size-to-pixels' = 'pixels-to-size';
+
+    function setMode(next: typeof mode): void {
+      mode = next;
+      const pixelsActive = mode === 'pixels-to-size';
+      modePixelsBtn.setAttribute('aria-pressed', String(pixelsActive));
+      modeSizeBtn.setAttribute('aria-pressed', String(!pixelsActive));
+      modePixelsBtn.classList.toggle('bg-gradient-to-br', pixelsActive);
+      modePixelsBtn.classList.toggle('from-primary', pixelsActive);
+      modePixelsBtn.classList.toggle('to-violet-500', pixelsActive);
+      modePixelsBtn.classList.toggle('text-white', pixelsActive);
+      modeSizeBtn.classList.toggle('bg-gradient-to-br', !pixelsActive);
+      modeSizeBtn.classList.toggle('from-primary', !pixelsActive);
+      modeSizeBtn.classList.toggle('to-violet-500', !pixelsActive);
+      modeSizeBtn.classList.toggle('text-white', !pixelsActive);
+      panelPixels.classList.toggle('hidden', !pixelsActive);
+      panelSize.classList.toggle('hidden', pixelsActive);
+      update();
+    }
+
+    function update(): void {
+      if (mode === 'pixels-to-size') {
+        const w = Number(pxWidth.value);
+        const h = Number(pxHeight.value);
+        const ppi = Number(pxPpi.value);
+        if (!w || !h || !ppi) { resultPrimary.textContent = 'Enter valid numbers'; resultSecondary.textContent = ''; return; }
+        const wIn = w / ppi;
+        const hIn = h / ppi;
+        resultPrimary.textContent = `${wIn.toFixed(2)} × ${hIn.toFixed(2)} in`;
+        resultSecondary.textContent = `${(wIn * 2.54).toFixed(1)} × ${(hIn * 2.54).toFixed(1)} cm at ${ppi} PPI`;
+      } else {
+        const w = Number(inWidth.value);
+        const h = Number(inHeight.value);
+        const ppi = Number(inPpi.value);
+        if (!w || !h || !ppi) { resultPrimary.textContent = 'Enter valid numbers'; resultSecondary.textContent = ''; return; }
+        const wPx = Math.round(w * ppi);
+        const hPx = Math.round(h * ppi);
+        resultPrimary.textContent = `${wPx.toLocaleString()} × ${hPx.toLocaleString()} px`;
+        resultSecondary.textContent = `needed for ${w} × ${h} in at ${ppi} PPI`;
+      }
+    }
+
+    modePixelsBtn.addEventListener('click', () => setMode('pixels-to-size'));
+    modeSizeBtn.addEventListener('click', () => setMode('size-to-pixels'));
+    [pxWidth, pxHeight, pxPpi, inWidth, inHeight, inPpi].forEach((el) => el.addEventListener('input', update));
+
+    setMode('pixels-to-size');
+  </script>
+</Layout>

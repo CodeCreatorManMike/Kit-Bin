@@ -567,6 +567,11 @@ export const toolIcons: Record<string, IconPrimitive[]> = {
     { t: 'circle', cx: 8.7, cy: 8.7, r: 1.4 },
     { t: 'path', d: 'M11.9 11.9L21 21M17 17v4M14.5 19.5H19' },
   ],
+  '/dev/password-entropy-checker': [
+    { t: 'rect', x: 2.5, y: 4, w: 19, h: 5, rx: 1.2 },
+    { t: 'rect', x: 2.5, y: 11, w: 12, h: 5, rx: 1.2 },
+    { t: 'rect', x: 2.5, y: 18, w: 6, h: 3, rx: 1 },
+  ],
   /** A tag/label shape (the classic "unique ID sticker") with a short
    * scribble standing in for an opaque generated string. */
   '/dev/uuid-generator': [
@@ -835,6 +840,12 @@ export const toolIcons: Record<string, IconPrimitive[]> = {
     { t: 'path', d: 'M4 15h2v6h-2zM18 15h2v6h-2z' },
     { t: 'path', d: 'M8 21h8' },
   ],
+  '/image/dpi-calculator': [
+    { t: 'rect', x: 3, y: 3, w: 12, h: 9, rx: 1 },
+    { t: 'path', d: 'M3 15h2v6h-2zM13 15h2v6h-2z' },
+    { t: 'path', d: 'M7 21h6' },
+    { t: 'path', d: 'M17 7h4M17 11h4M17 15h4' },
+  ],
   '/guides/mp3-vs-wav-which-to-keep': [
     { t: 'path', d: 'M4 10v4h4l5 4V6l-5 4H4z' },
     { t: 'path', d: 'M16 10v4M18.5 8.5v7' },
@@ -857,5 +868,25 @@ export const toolIcons: Record<string, IconPrimitive[]> = {
     { t: 'rect', x: 4, y: 4, w: 16, h: 16, rx: 1.5 },
     { t: 'path', d: 'M12 4v3M12 9v2M12 13v2M12 17v3' },
     { t: 'rect', x: 10.3, y: 10.3, w: 3.4, h: 3.4, rx: 0.6 },
+  ],
+  '/guides/excel-to-csv-vs-excel-to-json': [
+    { t: 'rect', x: 2.5, y: 4, w: 8, h: 16, rx: 1.2 },
+    { t: 'path', d: 'M4.5 8h4M4.5 12h4M4.5 16h4' },
+    { t: 'path', d: 'M14 6h2a2 2 0 0 1 2 2v1a2 2 0 0 0 2 2 2 2 0 0 0-2 2v1a2 2 0 0 1-2 2h-2' },
+  ],
+  '/guides/what-is-a-json-schema': [
+    { t: 'path', d: 'M8 4H6a2 2 0 0 0-2 2v1a2 2 0 0 1-2 2 2 2 0 0 1 2 2v1a2 2 0 0 0 2 2h2' },
+    { t: 'path', d: 'M16 4h2a2 2 0 0 1 2 2v1a2 2 0 0 0 2 2 2 2 0 0 0-2 2v1a2 2 0 0 1-2 2h-2' },
+    { t: 'path', d: 'M9.5 13l1.8 1.8L15 10.8' },
+  ],
+  '/guides/rotate-vs-flip-vs-mirror': [
+    { t: 'path', d: 'M4.5 12a7.5 7.5 0 1 1 2.5 5.6' },
+    { t: 'path', d: 'M4.5 15v3h3' },
+    { t: 'path', d: 'M15 6h6v12h-6zM3 6h6v12H3' },
+  ],
+  '/guides/csv-merge-stacking-vs-joining': [
+    { t: 'rect', x: 3, y: 3, w: 8, h: 6, rx: 1 },
+    { t: 'rect', x: 3, y: 11, w: 8, h: 6, rx: 1 },
+    { t: 'path', d: 'M13 6h6M13 14h6M17 6v8' },
   ],
 };

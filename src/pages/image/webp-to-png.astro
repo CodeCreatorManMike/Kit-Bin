@@ -9,6 +9,10 @@ import AdUnit from '../../components/AdUnit.astro';
 
 const faqs = [
   {
+    q: 'Does converting WebP to PNG keep transparency?',
+    a: 'Yes. If the source WebP has an alpha channel, it decodes with that transparency intact and re-encodes into PNG the same way, since both formats support a full alpha channel. If the WebP had no transparency to begin with, there is nothing to preserve, but that is a property of the source file, not a limitation of this conversion.',
+  },
+  {
     q: 'Does this lose quality?',
     a: 'No, PNG is lossless, so the pixel data is preserved exactly. The output file will typically be larger than the WebP source, since PNG doesn\'t compress as efficiently.',
   },

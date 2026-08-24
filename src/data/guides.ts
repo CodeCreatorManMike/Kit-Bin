@@ -347,4 +347,32 @@ export const guides: Guide[] = [
     description: 'What a ZIP file actually contains, why most "online unzip" tools mean uploading your files to a stranger\'s server, and what to check before you trust one.',
     category: 'dev',
   },
+  {
+    slug: '/guides/excel-to-csv-vs-excel-to-json',
+    title: 'Excel to CSV vs Excel to JSON: Which Export Should You Use?',
+    cardTitle: 'Excel to CSV vs Excel to JSON',
+    description: 'A flat spreadsheet import wants CSV. An API or app expecting structured data wants JSON. The real decision rule, and the gotchas either way.',
+    category: 'data',
+  },
+  {
+    slug: '/guides/what-is-a-json-schema',
+    title: 'What Is a JSON Schema, and How Do You Validate Against One?',
+    cardTitle: 'What Is a JSON Schema?',
+    description: 'A schema describes the expected shape of a JSON document, not the data itself. What that actually looks like, and how to read a failed validation.',
+    category: 'dev',
+  },
+  {
+    slug: '/guides/rotate-vs-flip-vs-mirror',
+    title: "Rotate vs Flip vs Mirror: What's the Difference (and Which Do You Need)?",
+    cardTitle: 'Rotate vs Flip vs Mirror',
+    description: 'Rotating turns an image around its center. Flipping reflects it across an axis. A quick way to match your actual problem to the right fix.',
+    category: 'image',
+  },
+  {
+    slug: '/guides/csv-merge-stacking-vs-joining',
+    title: 'Merging CSV Files: Stacking Rows vs Joining by Column',
+    cardTitle: 'CSV Merge: Stacking vs Joining',
+    description: 'Two different things people mean by "merge CSV files" — appending matching rows, or combining two files on a shared key. Which one you actually need, and which one a merge tool actually does.',
+    category: 'data',
+  },
 ];

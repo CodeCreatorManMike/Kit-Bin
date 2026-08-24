@@ -18,6 +18,13 @@ import GuideMeta from '../../components/GuideMeta.astro';
       you know what each piece is actually doing.
     </p>
 
+    <ul class="list-disc list-inside space-y-1 text-muted dark:text-slate-400">
+      <li><strong class="text-ink dark:text-slate-200">36 characters</strong> total, written out — 32 hex digits plus 4 hyphens.</li>
+      <li><strong class="text-ink dark:text-slate-200">32 hex digits</strong>, each one representing 4 bits.</li>
+      <li><strong class="text-ink dark:text-slate-200">128 bits</strong> total (122 of them random, in the common v4 case — see below).</li>
+      <li>The hyphens carry <strong class="text-ink dark:text-slate-200">zero information</strong>. They exist purely for human readability.</li>
+    </ul>
+
     <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">128 bits, formatted for humans</h2>
     <p>
       A UUID (Universally Unique Identifier) is a 128-bit number. Written out in raw binary or

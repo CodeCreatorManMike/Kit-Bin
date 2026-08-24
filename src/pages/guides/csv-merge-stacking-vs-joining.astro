@@ -1,0 +1,69 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import GuideMeta from '../../components/GuideMeta.astro';
+---
+
+<Layout
+  title="Merging CSV Files: Stacking Rows vs Joining by Column | Kit-Bin"
+  description="Two different things people mean by 'merge CSV files' — appending matching rows, or combining two files on a shared key. Which one you actually need, and which one a merge tool actually does."
+>
+
+  <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-ink dark:text-slate-300 space-y-4">
+    <p class="text-sm"><a href="/guides/" class="text-primary dark:text-blue-400 hover:underline">← All guides</a></p>
+    <h1 class="text-3xl font-bold text-ink dark:text-slate-100">Merging CSV Files: Stacking Rows vs Joining by Column</h1>
+
+    <p>
+      "Merge CSV files" means two genuinely different operations depending on who's asking, and
+      mixing them up is the single most common reason someone runs a merge and gets a result
+      that's technically correct but not what they wanted.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Stacking: same structure, more rows</h2>
+    <p>
+      Stacking appends the rows of every file underneath one header row, the way you'd combine
+      twelve monthly export files that all share the identical column layout into one file
+      covering the whole year. If the same customer ID happens to appear in two of those files,
+      stacking gives you two separate rows for that ID, not one combined row, because stacking
+      never looks at the values inside the rows at all, only at matching up columns by header
+      name.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Joining: different structures, one shared key</h2>
+    <p>
+      A join combines two files that have different columns but one column in common, a customer
+      list and a separate orders list, joined on a shared customer ID, the same operation a
+      database <code class="text-sm">JOIN</code> or a spreadsheet <code class="text-sm">VLOOKUP</code>/<code class="text-sm">XLOOKUP</code>{' '}
+      performs. This needs the tool to know which column is the key and what to do when a key
+      appears in one file but not the other, decisions a plain stacking merge never has to make.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">What Kit-Bin's CSV Merge actually does</h2>
+    <p>
+      To be direct about it: <a href="/data/csv-merge/" class="text-primary dark:text-blue-400 hover:underline">CSV Merge</a>{' '}
+      only stacks. It appends the rows of every file you drop in under a single header row,
+      matching columns by header name (so files don't need identical column order) and keeping
+      every column seen in any file, filling a blank where a given file lacked one. It does not
+      do a key-based join, and it won't silently produce join-shaped output that looks plausible
+      but combined the wrong rows, if what you actually need is a join, this isn't the tool, and
+      there currently isn't a Kit-Bin tool that does one.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">If you need a join today</h2>
+    <p>
+      A spreadsheet's <code class="text-sm">VLOOKUP</code> or <code class="text-sm">XLOOKUP</code>{' '}
+      formula, or a short script (Python's pandas <code class="text-sm">merge()</code>, or a SQL{' '}
+      <code class="text-sm">JOIN</code> if the data's already in a database), is the practical
+      route until a browser-based join tool exists. Stacking first with{' '}
+      <a href="/data/csv-merge/" class="text-primary dark:text-blue-400 hover:underline">CSV Merge</a>{' '}
+      is still useful prep work if you first need to combine several files sharing one structure
+      before joining that combined file against a second one.
+    </p>
+
+    <GuideMeta
+      headline={'Merging CSV Files: Stacking Rows vs Joining by Column'}
+      description={"Two different things people mean by \"merge CSV files\" — appending matching rows, or combining two files on a shared key. Which one you actually need, and which one a merge tool actually does."}
+      published="2026-08-24"
+      reviewed="2026-08-24"
+    />
+  </article>
+</Layout>

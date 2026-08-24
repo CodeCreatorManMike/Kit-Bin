@@ -30,6 +30,17 @@ import GuideMeta from '../../components/GuideMeta.astro';
       skew, whether the photo was taken at an angle or the code itself was printed crooked.
     </p>
 
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">The quiet zone</h2>
+    <p>
+      The plain blank border surrounding the code isn't just margin, it's a required part of the
+      spec called the quiet zone, and a scanner uses it the same way the finder patterns are used:
+      as a signal that the code starts here and nothing else is bleeding into it. Crop that border
+      too tight, place the code hard against a busy background, or print it right up to the edge
+      of a label, and a scanner can fail to recognize where the code begins even though every
+      module inside is perfectly intact. The minimum quiet zone is four modules wide on every
+      side, scaled to whatever size the rest of the code is printed at.
+    </p>
+
     <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Modules: the actual data grid</h2>
     <p>
       Every individual black or white cell in the grid is called a module. Each module is one

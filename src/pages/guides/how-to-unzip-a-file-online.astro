@@ -71,6 +71,25 @@ import GuideReferences from '../../components/GuideReferences.astro';
       grant a web page by default.
     </p>
 
+    <p>
+      That path prefix is the folder structure, it just isn't rendered as an expandable tree.
+      Before assuming it was lost, check the filename shown next to each extracted entry: if it
+      reads "photos/2024/beach.jpg" rather than plain "beach.jpg," the folders it belonged to are
+      right there, and a manual "New Folder" plus a drag of each file recreates the original
+      layout on disk. If you genuinely need the nested folders rebuilt for you automatically
+      rather than doing that by hand, that's a real limitation of a flattened-list extractor, and
+      a desktop archive manager (the built-in one on Windows or macOS is enough) is the more
+      honest tool for that specific case.
+    </p>
+
+    <p>
+      Going the other direction, zipping folders back up: select the top-level folder itself when
+      creating the archive, not just the files inside it, so the paths get recorded with that
+      folder name as their prefix. Selecting only the loose files and skipping the folder is the
+      most common way people accidentally flatten a structure on the way in, before an unzip tool
+      ever gets involved.
+    </p>
+
     <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Unzip and re-zip, in your browser</h2>
     <p>
       <a href="/dev/unzip-files/" class="text-primary dark:text-blue-400 hover:underline">Extract Files From a ZIP</a>{' '}

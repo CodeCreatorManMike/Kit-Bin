@@ -24,6 +24,10 @@ const faqs = [
     q: 'Does this work with MP3 files?',
     a: "Yes. Drop an MP3, WAV, M4A, or any other format your browser can decode — it's read with the browser's built-in audio decoder, then normalized and downloaded as a WAV regardless of what you uploaded.",
   },
+  {
+    q: 'What loudness level should I target for YouTube, Spotify, or a podcast?',
+    a: 'Those platforms target loudness (LUFS), not peak level, so this peak normalizer can\'t hit those numbers directly. As a reference: YouTube and Spotify both target roughly −14 LUFS, podcasts typically aim for −16 to −19 LUFS. If you need to match one of those specifically, read <a href="/guides/what-is-lufs-loudness/" class="text-primary dark:text-blue-400 hover:underline">what LUFS actually measures</a>.',
+  },
 ];
 ---
 

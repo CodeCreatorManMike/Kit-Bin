@@ -24,6 +24,10 @@ const faqs = [
     q: 'What happens to a column that only contains empty values in some rows, not all?',
     a: "It stays. Only columns that are empty in every single row are dropped. A column with even one non-empty value anywhere in the file is kept as-is.",
   },
+  {
+    q: 'Can this fix an encoding problem, like garbled accented characters?',
+    a: "No. Encoding (a file saved as Windows-1252 or ISO-8859-1 instead of UTF-8, which is the usual cause of accented letters or curly quotes turning into garbled symbols) happens before the file gets to this tool, in whatever program exported it. Re-export or re-save the source file as UTF-8, then run it through this cleaner for whitespace, duplicates, and empty rows/columns.",
+  },
 ];
 ---
 

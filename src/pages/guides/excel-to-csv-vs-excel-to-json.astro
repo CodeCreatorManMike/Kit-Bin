@@ -1,0 +1,81 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import GuideMeta from '../../components/GuideMeta.astro';
+---
+
+<Layout
+  title="Excel to CSV vs Excel to JSON: Which Export Should You Use? | Kit-Bin"
+  description="A flat spreadsheet import wants CSV. An API or app expecting structured data wants JSON. The real decision rule, and the gotchas either way."
+>
+
+  <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-ink dark:text-slate-300 space-y-4">
+    <p class="text-sm"><a href="/guides/" class="text-primary dark:text-blue-400 hover:underline">← All guides</a></p>
+    <h1 class="text-3xl font-bold text-ink dark:text-slate-100">Excel to CSV vs Excel to JSON: Which Export Should You Use?</h1>
+
+    <p>
+      The short answer first: importing into another spreadsheet, a database table, or a BI tool
+      wants CSV. Sending the data to an API, a developer, or an app that expects structured data
+      wants JSON. Everything else below is the reasoning behind that rule and the specific cases
+      where it flips.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">What actually changes between the two</h2>
+    <p>
+      CSV is flat rows and columns, and everything in it is text, even a number or a date is just
+      a string of characters until whatever reads it decides to parse it back. JSON can nest data
+      and preserve real types, a number stays a number, a boolean stays a boolean, and a list
+      stays a list rather than getting flattened into extra rows or comma-joined into one cell.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Where CSV breaks down</h2>
+    <p>
+      A single flat table works fine for CSV. Multiple sheets in one workbook, merged cells, or
+      genuinely hierarchical data, an order with a list of line items, for example, don't fit a
+      flat CSV without duplicating the parent row once per child item, which is exactly the kind
+      of repeated-row structure a relational export produces and a JSON array of line items
+      avoids entirely.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Where JSON is overkill</h2>
+    <p>
+      If the destination is Excel, Google Sheets, or a plain database import tool, JSON just adds
+      a parsing step nobody asked for. Those tools read rows and columns natively; handing them
+      nested JSON means writing code to flatten it back into a table before it's usable, which is
+      the CSV shape you started with, produced the hard way.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">The gotchas that actually bite</h2>
+    <p>
+      A few specific things trip people up regardless of which direction they're exporting:
+    </p>
+    <ul class="list-disc list-inside space-y-1 text-muted dark:text-slate-400">
+      <li><strong class="text-ink dark:text-slate-200">.xlsm converts the same as .xlsx.</strong> The macro-enabled format stores the same worksheet data underneath; the macros themselves aren't exported, since neither CSV nor JSON has anywhere to put executable code.</li>
+      <li><strong class="text-ink dark:text-slate-200">A multi-sheet workbook doesn't collapse into one output.</strong> CSV holds exactly one table, so Kit-Bin's Excel to CSV tool lets you pick one sheet, or export every sheet at once as a ZIP of individual CSVs. Excel to JSON converts one sheet per run, since a single JSON array maps to a single table; pick a different sheet from the dropdown to convert another.</li>
+      <li><strong class="text-ink dark:text-slate-200">Dates can come out ambiguous, not wrong.</strong> Both tools write a date the way the sheet displayed it, so it won't turn into Excel's internal serial number, but a cell shown as 03/04/2025 stays exactly that ambiguous text, and whatever imports it next may read it as 3 April or 4 March. Reformat the column to an unambiguous format like YYYY-MM-DD in Excel first if the exact date matters.</li>
+      <li><strong class="text-ink dark:text-slate-200">Formulas convert to their last calculated value, not the formula itself.</strong> Neither CSV nor JSON has a concept of a live formula, so what gets exported is whatever the cell displayed the moment the file was opened, not <code class="text-sm">=SUM(A1:A10)</code>.</li>
+    </ul>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">Doing the export</h2>
+    <p>
+      <a href="/data/excel-to-csv/" class="text-primary dark:text-blue-400 hover:underline">Excel to CSV</a>{' '}
+      converts one sheet, or every sheet at once as a ZIP of individual CSVs.{' '}
+      <a href="/data/excel-to-json/" class="text-primary dark:text-blue-400 hover:underline">Excel to JSON</a>{' '}
+      converts one selected sheet into an array of objects, one per row, with column headers as
+      the keys, keeping numbers and booleans as real JSON types instead of text. Both run
+      entirely in your browser.
+    </p>
+
+    <p>
+      Need to go from CSV to JSON afterward instead, or the reverse? See{' '}
+      <a href="/guides/csv-vs-json/" class="text-primary dark:text-blue-400 hover:underline">CSV vs JSON: which one do you need</a>{' '}
+      for the same decision without the Excel step in front of it.
+    </p>
+
+    <GuideMeta
+      headline={'Excel to CSV vs Excel to JSON: Which Export Should You Use?'}
+      description={'A flat spreadsheet import wants CSV. An API or app expecting structured data wants JSON. The real decision rule, and the gotchas either way.'}
+      published="2026-08-24"
+      reviewed="2026-08-24"
+    />
+  </article>
+</Layout>
