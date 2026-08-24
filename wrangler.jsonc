@@ -15,6 +15,12 @@
     "command": "npm run build"
   },
   "assets": {
-    "directory": "./dist"
+    "directory": "./dist",
+    // Explicit, not just relying on the (matching) default: every tool/guide
+    // page builds as a folder + index.html, so a request without the
+    // trailing slash 307-redirects to the canonical trailing-slash URL.
+    // This is what keeps Google indexing one URL per page instead of two —
+    // see docs/SEO.md and the Aug 2026 GSC audit that flagged the split.
+    "html_handling": "auto-trailing-slash"
   }
 }

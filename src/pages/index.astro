@@ -219,6 +219,37 @@ const siteSchema = {
     </div>
   </div>
 
+  <!-- Homepage body copy: real substance for Google to match against head
+       terms ("free online file converter", "browser-based pdf tools"), and
+       for AdSense review, without turning this into a padded content page.
+       Kept to a handful of short paragraphs, no layout change. -->
+  <div class="max-w-3xl mx-auto px-6 pb-14 space-y-4 text-sm sm:text-base leading-relaxed text-muted dark:text-slate-400">
+    <h2 class="text-lg font-bold tracking-tight text-ink dark:text-slate-100">What Kit-Bin actually does</h2>
+    <p>
+      Kit-Bin is a set of free tools for the file tasks people run into most often: merging or
+      compressing a PDF, converting an iPhone photo, trimming an audio clip, shrinking a video,
+      cleaning up a spreadsheet export, or validating a chunk of JSON. There's nothing to install
+      and no account to create — open a tool, drop a file in, get the result.
+    </p>
+    <p>
+      What makes it different is where the work happens: every tool on this site runs entirely
+      on your device, using WebAssembly and the browser's own APIs, not a server you have to
+      trust. Your file is never uploaded anywhere. That matters most for anything you wouldn't
+      hand to a stranger, a signed contract, an ID scan, a tax document, or private photos, but it
+      also just means conversions finish immediately, with no upload wait and no queue.
+    </p>
+    <p>
+      The tools are grouped into six categories. <a href="/pdf/" class="text-primary dark:text-blue-400 hover:underline">PDF tools</a> cover
+      merging, splitting, compressing, and rearranging documents.
+      <a href="/image/" class="text-primary dark:text-blue-400 hover:underline">Image tools</a> handle format conversion (HEIC, WebP, AVIF, PNG),
+      resizing, and background removal. <a href="/audio/" class="text-primary dark:text-blue-400 hover:underline">Audio</a> and
+      <a href="/video/" class="text-primary dark:text-blue-400 hover:underline">video tools</a> convert, trim, and compress media files.
+      <a href="/data/" class="text-primary dark:text-blue-400 hover:underline">Data tools</a> clean and convert CSV, JSON, and spreadsheet exports, and
+      <a href="/dev/" class="text-primary dark:text-blue-400 hover:underline">developer tools</a> cover hashing, encoding, and validation
+      without pasting anything into a third-party site.
+    </p>
+  </div>
+
   <!-- FAQ -->
   <div class="max-w-3xl mx-auto px-6 py-14">
     <h2 class="text-2xl font-bold tracking-tight text-ink dark:text-slate-100">

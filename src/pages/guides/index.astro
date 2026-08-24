@@ -1,7 +1,23 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import ToolIcon from '../../components/ToolIcon.astro';
-import { guides } from '../../data/guides';
+import { guides, type Guide } from '../../data/guides';
+import { categories } from '../../data/tools';
+import { categoryColors } from '../../data/toolIcons';
+
+// Group every published guide by the tool category its subject matter
+// belongs to, so the hub reads as topic sections with a path back to the
+// matching tool hub, instead of one flat chronological list. 'general'
+// guides (trust/safety, not tied to one file type) render first, unlabeled
+// by a tool-category link since there's no single hub to point back to.
+const categoryOrder = ['general', ...categories.map((c) => c.slug)] as const;
+const groups = categoryOrder
+  .map((slug) => ({
+    slug,
+    name: slug === 'general' ? 'General' : categories.find((c) => c.slug === slug)!.name,
+    guides: guides.filter((g) => g.category === slug),
+  }))
+  .filter((group) => group.guides.length > 0);
 ---
 
 <Layout
@@ -24,25 +40,54 @@ import { guides } from '../../data/guides';
     </p>
   </div>
 
-  <div class="max-w-5xl mx-auto px-6 pb-16">
-    <div class="grid gap-4 sm:grid-cols-2">
-      {guides.map((g) => (
-        <a
-          href={g.slug}
-          class="group flex gap-3 rounded-xl border border-border-soft dark:border-slate-800 p-4 shadow-[0_1px_2px_rgba(16,24,47,0.04)] transition-all duration-150 hover:border-primary/25 hover:shadow-[0_6px_16px_rgba(16,24,47,0.08)] hover:-translate-y-0.5 bg-surface dark:bg-slate-900"
-        >
-          <div class="shrink-0 transition-transform duration-200 group-hover:scale-110 group-hover:-rotate-3">
-            <ToolIcon slug={g.slug} category="guides" />
+  <div class="max-w-5xl mx-auto px-6 pb-16 space-y-12">
+    {groups.map((group) => {
+      const cc = group.slug === 'general' ? null : categoryColors[group.slug];
+      return (
+        <div>
+          <div class="mb-4 flex items-center gap-3">
+            {cc ? (
+              <span
+                class={`inline-flex items-center gap-2 rounded-full ${cc.tile} ${cc.text} ring-1 ring-inset ${cc.ring} px-3 py-1 text-xs font-bold uppercase tracking-wide`}
+              >
+                {group.name}
+              </span>
+            ) : (
+              <span class="inline-flex items-center gap-2 rounded-full bg-app-bg dark:bg-slate-900 text-muted dark:text-slate-400 ring-1 ring-inset ring-border-soft dark:ring-slate-800 px-3 py-1 text-xs font-bold uppercase tracking-wide">
+                {group.name}
+              </span>
+            )}
+            <span class="h-px flex-1 bg-border-soft dark:bg-slate-800" aria-hidden="true"></span>
+            {group.slug !== 'general' && (
+              <a
+                href={`/${group.slug}/`}
+                class={`shrink-0 text-xs font-semibold ${cc?.text ?? 'text-primary dark:text-blue-400'} hover:underline`}
+              >
+                Browse {group.name} →
+              </a>
+            )}
           </div>
-          <span>
-            <span class="block font-semibold text-ink dark:text-slate-100">{g.cardTitle}</span>
-            <span class="mt-1 block text-sm text-muted dark:text-slate-400">{g.description}</span>
-            <span class="mt-2 inline-block text-sm font-medium text-primary dark:text-indigo-400 group-hover:underline">
-              Read the guide →
-            </span>
-          </span>
-        </a>
-      ))}
-    </div>
+          <div class="grid gap-4 sm:grid-cols-2">
+            {group.guides.map((g: Guide) => (
+              <a
+                href={g.slug}
+                class="glass-panel group flex gap-3 rounded-xl p-4 transition-all duration-150 hover:border-primary/25 hover:shadow-[0_6px_16px_rgba(16,24,47,0.08)] hover:-translate-y-0.5"
+              >
+                <div class="shrink-0 transition-transform duration-200 group-hover:scale-110 group-hover:-rotate-3">
+                  <ToolIcon slug={g.slug} category="guides" />
+                </div>
+                <span>
+                  <span class="block font-semibold text-ink dark:text-slate-100">{g.cardTitle}</span>
+                  <span class="mt-1 block text-sm text-muted dark:text-slate-400">{g.description}</span>
+                  <span class="mt-2 inline-block text-sm font-medium text-primary dark:text-indigo-400 group-hover:underline">
+                    Read the guide →
+                  </span>
+                </span>
+              </a>
+            ))}
+          </div>
+        </div>
+      );
+    })}
   </div>
 </Layout>
