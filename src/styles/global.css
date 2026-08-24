@@ -14,6 +14,8 @@
   --color-app-bg: #f8fafd;
   --color-surface: #ffffff;
   --color-border-soft: #e4e9f2;
+  --color-accent-violet: #8b5cf6;
+  --color-accent-cyan: #22d3ee;
 }
 
 /* Motion primitives, kept subtle and used sparingly (hero blobs, tool card
@@ -64,17 +66,21 @@
 .animate-pulse-ring { animation: pulse-ring 1.8s ease-out infinite; }
 .animate-pop-in { animation: pop-in 0.32s cubic-bezier(0.34, 1.4, 0.64, 1) both; }
 
-/* Indeterminate progress sweep, used while a tool is working. */
+/* Indeterminate progress sweep, used while a tool is working. Flux-style
+ * blue → cyan → violet gradient with a matching glow so it reads as an
+ * active process rather than a flat loading stripe. */
 .animate-shimmer {
   background-image: linear-gradient(
     90deg,
     transparent 0%,
-    var(--color-primary) 45%,
-    var(--color-primary) 55%,
+    var(--color-primary) 30%,
+    var(--color-accent-cyan) 50%,
+    var(--color-accent-violet) 70%,
     transparent 100%
   );
   background-size: 200% 100%;
   animation: shimmer 1.4s linear infinite;
+  box-shadow: 0 0 10px color-mix(in oklab, var(--color-primary) 55%, transparent);
 }
 
 .animate-draw-check {
@@ -120,6 +126,127 @@
   border-radius: 4px;
 }
 
+/* ── Glass / glow UI layer ───────────────────────────────────────────────
+ * Shared building blocks for the "glossy modern" tool-widget treatment:
+ * a blurred translucent panel, a colored halo behind CTA buttons, a rotating
+ * gradient ring for focused inputs, a hero-to-body background fade, and an
+ * animated gradient sweep for headline highlights. Each degrades gracefully
+ * (falls back to the plain surface/border colors) where backdrop-filter or
+ * @property isn't supported. */
+
+.glass-panel {
+  position: relative;
+  background: color-mix(in oklab, var(--color-surface) 70%, transparent);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  border: 1px solid color-mix(in oklab, var(--color-border-soft) 65%, transparent);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    0 12px 32px -14px rgba(16, 24, 47, 0.16);
+}
+.dark .glass-panel {
+  background: color-mix(in oklab, #0d1424 60%, transparent);
+  border-color: rgba(148, 163, 184, 0.14);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 20px 44px -18px rgba(0, 0, 0, 0.6),
+    0 0 0 1px rgba(59, 130, 246, 0.05);
+}
+
+/* Vibrant glow halo behind pill/CTA buttons, colored from the button's own
+ * background so it works with any accent gradient already in use (primary,
+ * donate rose/pink, active tab, etc.) without hardcoding a color here. */
+.btn-glow {
+  position: relative;
+  isolation: isolate;
+}
+.btn-glow::before {
+  content: '';
+  position: absolute;
+  inset: -8px;
+  z-index: -1;
+  border-radius: inherit;
+  background: inherit;
+  filter: blur(16px);
+  opacity: 0.45;
+  transition: opacity 0.25s ease;
+}
+.btn-glow:hover::before {
+  opacity: 0.75;
+}
+
+@property --beam-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+@keyframes beam-rotate {
+  to {
+    --beam-angle: 360deg;
+  }
+}
+/* Rotating gradient ring shown around search/filter inputs while focused. */
+.search-beam {
+  position: relative;
+  border-radius: 0.75rem;
+}
+.search-beam::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: conic-gradient(
+    from var(--beam-angle, 0deg),
+    var(--color-primary),
+    var(--color-accent-violet),
+    var(--color-accent-cyan),
+    var(--color-primary)
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  animation: beam-rotate 3s linear infinite;
+  animation-play-state: paused;
+  pointer-events: none;
+}
+.search-beam:focus-within::before {
+  opacity: 1;
+  animation-play-state: running;
+}
+
+/* Fades the hero's animated gradient blobs into the site's normal background
+ * color, so the landing hero blends into the rest of the page on scroll
+ * instead of ending on a hard edge. */
+.hero-fade {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 45%;
+  background: linear-gradient(to bottom, transparent, var(--color-app-bg));
+  pointer-events: none;
+}
+.dark .hero-fade {
+  background: linear-gradient(to bottom, transparent, #020617);
+}
+
+@keyframes gradient-shift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+/* Slow animated gradient sweep for headline highlights, layered on top of the
+ * existing bg-clip-text gradient spans. */
+.text-glow {
+  background-size: 200% 200%;
+  animation: gradient-shift 6s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-float,
   .animate-blob,
@@ -127,7 +254,11 @@
   .animate-pulse-ring,
   .animate-pop-in,
   .animate-shimmer,
-  .animate-draw-check {
+  .animate-draw-check,
+  .text-glow {
+    animation: none;
+  }
+  .search-beam::before {
     animation: none;
   }
   .js [data-reveal] {

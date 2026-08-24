@@ -18,7 +18,7 @@ const c = categoryColors[tool.category] ?? categoryColors.pdf;
   data-name={tool.name.toLowerCase()}
   data-description={tool.description.toLowerCase()}
   data-aliases={(tool.aliases ?? []).join(' ').toLowerCase()}
-  class="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-border-soft dark:border-slate-800 p-4 bg-surface dark:bg-slate-900 shadow-[0_1px_2px_rgba(16,24,47,0.05)] transition-all duration-200 hover:border-primary/30 hover:shadow-[0_10px_28px_-8px_rgba(16,24,47,0.22)] hover:-translate-y-1 active:translate-y-0 active:scale-[0.985]"
+  class="glass-panel group relative flex h-full flex-col overflow-hidden rounded-2xl p-4 transition-all duration-200 hover:border-primary/30 hover:shadow-[0_10px_28px_-8px_rgba(16,24,47,0.22)] hover:-translate-y-1 active:translate-y-0 active:scale-[0.985]"
 >
   <!-- Category wash: invisible at rest, blooms from the icon corner on hover. -->
   <span
