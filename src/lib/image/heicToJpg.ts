@@ -3,7 +3,12 @@
 // the accepted HEVC patent-pool risk shared by every HEIC decoder).
 import libheif from 'libheif-js/wasm-bundle';
 
-export async function heicToJpg(file: File, quality = 0.9): Promise<Blob> {
+/** Shared HEIC/HEIF decode step, reused by every heic-to-* page so the
+ * libheif wiring only has to be gotten right once. Returns plain ImageData;
+ * callers encode it into whatever target format they need (via
+ * `canvas.toBlob` for JPEG/PNG/WebP, or `encodeImage` from `./codec` for
+ * AVIF/JXL/QOI). */
+export async function decodeHeicToImageData(file: File): Promise<ImageData> {
   const buffer = new Uint8Array(await file.arrayBuffer());
   const decoder = new libheif.HeifDecoder();
   const images = decoder.decode(buffer);
@@ -25,6 +30,16 @@ export async function heicToJpg(file: File, quality = 0.9): Promise<Blob> {
       resolve();
     });
   });
+
+  return imageData;
+}
+
+export async function heicToJpg(file: File, quality = 0.9): Promise<Blob> {
+  const imageData = await decodeHeicToImageData(file);
+  const canvas = document.createElement('canvas');
+  canvas.width = imageData.width;
+  canvas.height = imageData.height;
+  const ctx = canvas.getContext('2d')!;
   ctx.putImageData(imageData, 0, 0);
 
   return new Promise((resolve, reject) => {
