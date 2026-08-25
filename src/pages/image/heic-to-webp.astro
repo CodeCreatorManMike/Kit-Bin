@@ -1,0 +1,113 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import AdBanner from '../../components/AdBanner.astro';
+import ToolHeader from '../../components/ToolHeader.astro';
+import FaqAccordion from '../../components/FaqAccordion.astro';
+import ToolSchema from '../../components/ToolSchema.astro';
+import ToolWidget from '../../components/ToolWidget.astro';
+import AdUnit from '../../components/AdUnit.astro';
+
+const faqs = [
+  {
+    q: 'Is my photo uploaded anywhere?',
+    a: 'No. Conversion happens entirely in your browser. Your photo never leaves your device.',
+  },
+  {
+    q: 'Why WebP instead of JPG?',
+    a: "WebP typically produces a smaller file than JPG at a similar visual quality, which matters if you're uploading a lot of photos to a website or CMS and it accepts WebP. If you need maximum compatibility with older software or people who might reopen the raw file, JPG is still the safer default.",
+  },
+  {
+    q: 'Does every site or app accept WebP?',
+    a: "Nearly every modern browser and most current CMS platforms and design tools accept WebP. Some older desktop software and a few legacy upload forms still don't. If you hit one of those, HEIC to JPG is the safer fallback.",
+  },
+  {
+    q: 'Does the converted photo keep transparency?',
+    a: "WebP supports transparency, but it won't matter here: iPhone camera photos in HEIC are captured as a fully opaque frame with no alpha channel, so there's nothing to preserve either way.",
+  },
+  {
+    q: 'What happens to photo metadata like location and date?',
+    a: "This tool focuses on the image data itself; camera/location/date metadata isn't guaranteed to carry over the same way it does when AirDropping or exporting from Photos. If you need that metadata preserved exactly, check the output before deleting your original.",
+  },
+];
+---
+
+<Layout
+  title="HEIC to WebP Converter, Convert iPhone Photos to WebP | Kit-Bin"
+  description="Convert iPhone HEIC photos to WebP in your browser for smaller files than JPG. Your file is never uploaded to a server."
+>
+  <ToolSchema
+    name="Convert HEIC to WebP"
+    description="Convert iPhone HEIC photos to WebP in your browser for smaller files than JPG. Your file is never uploaded to a server."
+    faqs={faqs}
+  />
+
+  <ToolHeader title="Convert HEIC Photos to WebP" />
+
+  <ToolWidget accept=".heic,.heif,image/heic,image/heif" multiple dropLabel="Drop HEIC photos here or click to browse" />
+
+  <AdUnit />
+
+  <div class="max-w-2xl mx-auto px-4 py-12 text-ink dark:text-slate-300 space-y-6">
+    <p>
+      Convert HEIC photos from an iPhone to WebP. WebP is a good fit when you're uploading photos
+      to a website, blog, or CMS that accepts it and you want a smaller file than a JPG would give
+      you at similar quality.
+    </p>
+
+    <div>
+      <h2 class="tool-h2 font-semibold text-lg">WebP vs. JPG for this conversion</h2>
+      <p class="text-muted dark:text-slate-400">
+        Both are lossy formats, so this is still a re-encode, not a lossless copy. WebP generally
+        compresses more efficiently than JPG at a comparable visual quality, which is the whole
+        reason to reach for it. If you need the widest possible compatibility instead — email,
+        older software, or someone who might not recognize a .webp file — use{' '}
+        <a href="/image/heic-to-jpg/" class="text-primary dark:text-blue-400 hover:underline">HEIC to JPG</a>{' '}
+        instead. If you need a lossless copy for further editing, use{' '}
+        <a href="/image/heic-to-png/" class="text-primary dark:text-blue-400 hover:underline">HEIC to PNG</a>.
+      </p>
+    </div>
+
+    <div>
+      <h2 class="tool-h2 font-semibold text-lg pt-2">FAQ</h2>
+      <div class="mt-3">
+        <FaqAccordion faqs={faqs} />
+      </div>
+    </div>
+
+    <p class="text-sm">Want to understand why iPhone photos use this format in the first place? <a href="/guides/heic-explained/" class="text-primary dark:text-blue-400 hover:underline">Read the guide</a></p>
+    <p class="text-sm">
+      Need maximum compatibility, or a lossless copy? Try{' '}
+      <a href="/image/heic-to-jpg/" class="text-primary dark:text-blue-400 hover:underline">HEIC to JPG</a>{' '}
+      or <a href="/image/heic-to-png/" class="text-primary dark:text-blue-400 hover:underline">HEIC to PNG</a>.
+    </p>
+  </div>
+
+  <div class="pt-8 sm:pt-12 pb-6 sm:pb-8">
+    <AdBanner placement="tool-page:image/heic-to-webp" />
+  </div>
+
+  <script>
+    import { decodeHeicToImageData } from '../../lib/image/heicToJpg';
+    import { encodeImage } from '../../lib/image/codec';
+    import { getToolElements, wireTool } from '../../lib/ui';
+
+    const els = getToolElements();
+    wireTool(els, {
+      accept: '.heic,.heif,image/heic,image/heif',
+      multiple: true,
+      batchZipName: 'kit-bin-heic-to-webp.zip',
+      validate: (files) => {
+        const bad = files.some((f) => {
+          const name = f.name.toLowerCase();
+          return !name.endsWith('.heic') && !name.endsWith('.heif');
+        });
+        return bad ? 'This tool only accepts HEIC or HEIF files.' : null;
+      },
+      runEach: async (file) => {
+        const imageData = await decodeHeicToImageData(file);
+        const blob = await encodeImage(imageData, 'image/webp', 82);
+        return { blob, filename: file.name.replace(/\.(heic|heif)$/i, '.webp') };
+      },
+    });
+  </script>
+</Layout>

@@ -1,0 +1,128 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import AdBanner from '../../components/AdBanner.astro';
+import ToolHeader from '../../components/ToolHeader.astro';
+import FaqAccordion from '../../components/FaqAccordion.astro';
+import ToolSchema from '../../components/ToolSchema.astro';
+import ToolWidget from '../../components/ToolWidget.astro';
+import AdUnit from '../../components/AdUnit.astro';
+
+const faqs = [
+  {
+    q: 'Will this affect quality?',
+    a: 'No. PNG compression here is lossless — the pixels come out identical. Only the file\'s internal encoding gets more efficient.',
+  },
+  {
+    q: 'Why did my PNG barely shrink?',
+    a: 'PNG compression is lossless. It can only remove redundancy the original encoder left behind, not throw away visible detail. If your PNG was already efficiently encoded, there may be very little left to save. That\'s expected, not a bug — PNG trades smaller size potential for guaranteed pixel-perfect output.',
+  },
+  {
+    q: 'How much smaller will my PNG actually get?',
+    a: "It depends entirely on how the original was encoded. Screenshots and simple graphics with a lot of flat color sometimes shrink noticeably; photos saved as PNG usually don't shrink much, since PNG's lossless approach has less redundancy to find in photographic detail. Don't expect JPG or WebP-level size drops — that would require throwing away actual image data, which this tool doesn't do to a PNG."
+  },
+  {
+    q: 'I need it much smaller — what should I do?',
+    a: "Convert to a lossy format instead. PNG to WebP typically goes much further than re-compressing the PNG, at the cost of it no longer being lossless.",
+  },
+  {
+    q: 'What if my file isn\'t actually a PNG?',
+    a: 'This tool checks the file and will reject anything that isn\'t really a PNG. Use the generic Compress Image tool if you have a JPG or WebP instead.',
+  },
+];
+---
+
+<Layout
+  title="Compress PNG Online, Reduce PNG File Size Losslessly | Kit-Bin"
+  description="Shrink a PNG image's file size losslessly in your browser. No quality loss, no upload, nothing leaves your device."
+>
+  <ToolSchema
+    name="Compress PNG"
+    description="Shrink a PNG image's file size losslessly in your browser. No quality loss, no upload, nothing leaves your device."
+    faqs={faqs}
+  />
+
+  <ToolHeader title="Compress a PNG and Reduce Its File Size" />
+
+  <ToolWidget accept=".png,image/png" multiple dropLabel="Drop PNG images here or click to browse" />
+
+  <AdUnit />
+
+  <div class="max-w-2xl mx-auto px-4 py-12 text-ink dark:text-slate-300 space-y-6">
+    <p>
+      Drop a PNG image above. This tool re-encodes it more efficiently while staying fully
+      lossless — the output pixels are identical to the input, only the file is smaller. It's
+      useful when an email attachment limit, a website upload cap, or an app's storage quota
+      rejects a file that's otherwise fine.
+    </p>
+
+    <div>
+      <h2 class="tool-h2 font-semibold text-lg">Lossless means honest, smaller gains</h2>
+      <p class="text-muted dark:text-slate-400">
+        Unlike JPG or WebP, PNG compression here doesn't throw away any image detail — it only
+        removes redundancy the original encoder left behind. That's why gains are often much
+        smaller than a JPG or WebP re-compression would give: there's simply less slack to squeeze
+        out without changing a single pixel. A PNG that was already tightly encoded may barely
+        shrink at all, and that's the format working as intended, not this tool underperforming.
+      </p>
+    </div>
+
+    <div>
+      <h2 class="tool-h2 font-semibold text-lg">Need it smaller than lossless allows?</h2>
+      <p class="text-muted dark:text-slate-400">
+        If your file isn't a PNG, use the general{' '}
+        <a href="/image/compress/" class="text-primary dark:text-blue-400 hover:underline">Compress Image</a>{' '}
+        tool, which handles JPG and WebP too. If you need an exact KB or MB limit rather than just
+        "smaller," use{' '}
+        <a href="/image/compress-to-size/" class="text-primary dark:text-blue-400 hover:underline">Compress to a Target Size</a>{' '}
+        — note that tool encodes PNG input as WebP, since PNG has no quality dial to search
+        against. For the biggest realistic size drop while keeping full control, converting to
+        WebP with{' '}
+        <a href="/image/png-to-webp/" class="text-primary dark:text-blue-400 hover:underline">PNG to WebP</a>{' '}
+        usually goes further than any lossless re-encode can.
+      </p>
+    </div>
+
+    <div>
+      <h2 class="tool-h2 font-semibold text-lg pt-2">FAQ</h2>
+      <div class="mt-3">
+        <FaqAccordion faqs={faqs} />
+      </div>
+    </div>
+
+    <p class="text-sm">Not sure which format you actually need? <a href="/guides/webp-vs-png-jpg/" class="text-primary dark:text-blue-400 hover:underline">Read: WebP vs PNG vs JPG</a></p>
+    <p class="text-sm">Trying to shrink a file that's much larger than it needs to display? <a href="/guides/compression-vs-resizing/" class="text-primary dark:text-blue-400 hover:underline">Read: Compression vs Resizing</a></p>
+  </div>
+
+  <div class="pt-8 sm:pt-12 pb-6 sm:pb-8">
+    <AdBanner placement="tool-page:image/compress-png" />
+  </div>
+
+  <script>
+    import { compressImage } from '../../lib/image/compress';
+    import { sniffMime, renameToMime } from '../../lib/image/codec';
+    import { getToolElements, wireTool } from '../../lib/ui';
+
+    function formatBytes(bytes: number): string {
+      if (bytes < 1024) return `${bytes} B`;
+      if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+      return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+    }
+
+    const els = getToolElements();
+    wireTool(els, {
+      accept: '.png,image/png',
+      multiple: true,
+      batchZipName: 'kit-bin-compressed-png.zip',
+      validate: (files) =>
+        files.some((f) => sniffMime(f) !== 'image/png')
+          ? 'This tool only accepts PNG files. Use Compress Image for other formats.'
+          : null,
+      runEach: async (file) => {
+        const { blob, originalSize, compressedSize, mimeType } = await compressImage(file);
+        const pct = Math.round((1 - compressedSize / originalSize) * 100);
+        const note = `${formatBytes(originalSize)} → ${formatBytes(compressedSize)}${pct > 0 ? ` (${pct}% smaller)` : ''}`;
+        return { blob, filename: renameToMime(file.name, mimeType), note };
+      },
+    });
+  </script>
+</Layout>

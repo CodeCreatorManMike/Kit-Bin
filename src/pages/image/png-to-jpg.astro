@@ -1,0 +1,104 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import AdBanner from '../../components/AdBanner.astro';
+import ToolHeader from '../../components/ToolHeader.astro';
+import FaqAccordion from '../../components/FaqAccordion.astro';
+import ToolSchema from '../../components/ToolSchema.astro';
+import ToolWidget from '../../components/ToolWidget.astro';
+import AdUnit from '../../components/AdUnit.astro';
+
+const faqs = [
+  {
+    q: 'What happens to transparency?',
+    a: "JPG has no alpha channel, so it can't be carried over. The transparent areas of your PNG aren't filled in with white — the alpha channel is simply dropped and whatever color was stored underneath it is what's left. Most PNGs with transparent backgrounds store black there by default, so that's usually what you'll see. If you need the transparent areas to end up white (or any specific color), flatten the PNG onto that background before converting, or keep it as PNG.",
+  },
+  {
+    q: 'Will the JPG look worse than the PNG?',
+    a: "For anything that isn't a photograph, likely yes at close inspection. JPG's lossy compression handles smooth photographic gradients well but can introduce visible artifacts around sharp edges, text, and flat color blocks — exactly what a lot of PNGs contain (screenshots, logos, graphics). At normal viewing sizes it's often not noticeable, but it's a real quality tradeoff, not a neutral repack.",
+  },
+  {
+    q: 'Why convert PNG to JPG at all?',
+    a: 'File size, mainly. PNG is lossless and doesn\'t compress photographic content efficiently, so photos saved as PNG are often several times larger than they need to be. Converting to JPG is the standard move for shrinking photos meant for the web, email, or anywhere upload size limits matter.',
+  },
+  {
+    q: 'Is this a good idea for logos or screenshots?',
+    a: "Usually not. Flat colors and sharp edges are exactly what JPG compresses worst, and if the image has any transparency you'll lose it. PNG (or WebP) is the better format for that kind of content — this conversion is best reserved for actual photographs.",
+  },
+];
+---
+
+<Layout
+  title="PNG to JPG Converter, Smaller File Size | Kit-Bin"
+  description="Convert PNG images to JPG in seconds. Runs entirely in your browser. Your file is never uploaded to a server."
+>
+  <ToolSchema
+    name="Convert PNG to JPG"
+    description="Convert PNG images to JPG in seconds. Runs entirely in your browser. Your file is never uploaded to a server."
+    faqs={faqs}
+  />
+
+  <ToolHeader title="Convert PNG Images to JPG" />
+
+  <ToolWidget accept=".png,image/png" multiple dropLabel="Drop PNG images here or click to browse" />
+
+  <AdUnit />
+
+  <div class="max-w-2xl mx-auto px-4 py-12 text-ink dark:text-slate-300 space-y-6">
+    <p>
+      PNG is lossless and often much bigger than it needs to be for a photo. Converting to JPG
+      trades some of that losslessness for a meaningfully smaller file — the right call for
+      photographs headed to the web or an inbox, less so for graphics with sharp edges or
+      transparency.
+    </p>
+
+    <div>
+      <h2 class="tool-h2 font-semibold text-lg">Transparency doesn't survive the conversion</h2>
+      <p class="text-muted dark:text-slate-400">
+        JPG has no alpha channel. Any transparent pixels in the source PNG lose their transparency
+        and keep only their underlying color — commonly black, since that's what most tools store
+        under a transparent area by default. If that matters for your image, flatten it onto your
+        intended background first, or keep it as PNG.
+      </p>
+    </div>
+
+    <div>
+      <h2 class="tool-h2 font-semibold text-lg pt-2">FAQ</h2>
+      <div class="mt-3">
+        <FaqAccordion faqs={faqs} />
+      </div>
+    </div>
+
+    <p class="text-sm">
+      Need to go back the other way, losslessly? Try{' '}
+      <a href="/image/jpg-to-png/" class="text-primary dark:text-blue-400 hover:underline">JPG to PNG</a>.
+    </p>
+    <p class="text-sm">
+      Need the JPG smaller still, or a specific size? Try{' '}
+      <a href="/image/compress/" class="text-primary dark:text-blue-400 hover:underline">Compress Image</a>{' '}
+      or <a href="/image/resize/" class="text-primary dark:text-blue-400 hover:underline">Resize Image</a> next.
+    </p>
+  </div>
+
+  <div class="pt-8 sm:pt-12 pb-6 sm:pb-8">
+    <AdBanner placement="tool-page:image/png-to-jpg" />
+  </div>
+
+  <script>
+    import { convertImageFormat } from '../../lib/image/convertFormat';
+    import { sniffMime } from '../../lib/image/codec';
+    import { getToolElements, wireTool } from '../../lib/ui';
+
+    const els = getToolElements();
+    wireTool(els, {
+      accept: '.png,image/png',
+      multiple: true,
+      batchZipName: 'kit-bin-png-to-jpg.zip',
+      validate: (files) =>
+        files.some((f) => sniffMime(f) !== 'image/png') ? 'This tool only accepts PNG files.' : null,
+      runEach: async (file) => {
+        const blob = await convertImageFormat(file, 'image/jpeg');
+        return { blob, filename: file.name.replace(/\.png$/i, '.jpg') };
+      },
+    });
+  </script>
+</Layout>

@@ -1,0 +1,102 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import AdBanner from '../../components/AdBanner.astro';
+import ToolHeader from '../../components/ToolHeader.astro';
+import FaqAccordion from '../../components/FaqAccordion.astro';
+import ToolSchema from '../../components/ToolSchema.astro';
+import ToolWidget from '../../components/ToolWidget.astro';
+import AdUnit from '../../components/AdUnit.astro';
+
+const faqs = [
+  {
+    q: 'Does converting a JPG to PNG add transparency?',
+    a: "No. JPG never had an alpha channel to begin with, so there's nothing to restore. Converting to PNG switches you to a format that supports transparency, but it can't invent it — every pixel comes out fully opaque, exactly as it looked in the JPG. If you need an actual transparent background, you need a background removal tool, not a format conversion.",
+  },
+  {
+    q: 'Does this improve image quality?',
+    a: "No. The JPG's compression artifacts are already baked into the pixels by the time you open the file — PNG just stores those same pixels losslessly from that point forward. Converting won't undo blur or blockiness that's already there, but it does stop the picture from degrading further if you keep editing and re-saving it.",
+  },
+  {
+    q: 'Why would I convert JPG to PNG at all?',
+    a: "The usual reason is a round trip through an editor: PNG is lossless, so if you're going to open the image, edit it, and save it again (maybe more than once), starting from PNG means each save doesn't add a fresh layer of JPEG artifacts. It's also useful when a tool or upload form specifically requires PNG.",
+  },
+  {
+    q: 'Why is the PNG so much bigger than the JPG?',
+    a: "PNG's lossless compression can't match JPEG's lossy compression on photographic content, so the same image typically takes several times more storage as a PNG. That's the tradeoff for a format that won't degrade the picture any further.",
+  },
+];
+---
+
+<Layout
+  title="JPG to PNG Converter, Lossless Format | Kit-Bin"
+  description="Convert JPG images to PNG in seconds. Runs entirely in your browser. Your file is never uploaded to a server."
+>
+  <ToolSchema
+    name="Convert JPG to PNG"
+    description="Convert JPG images to PNG in seconds. Runs entirely in your browser. Your file is never uploaded to a server."
+    faqs={faqs}
+  />
+
+  <ToolHeader title="Convert JPG Images to PNG" />
+
+  <ToolWidget accept=".jpg,.jpeg,image/jpeg" multiple dropLabel="Drop JPG images here or click to browse" />
+
+  <AdUnit />
+
+  <div class="max-w-2xl mx-auto px-4 py-12 text-ink dark:text-slate-300 space-y-6">
+    <p>
+      Converting a JPG to PNG is mostly about what happens next, not what's different right away.
+      The image looks identical the moment you convert it — the value shows up once you start
+      editing and re-saving, since PNG won't add another round of compression artifacts each time.
+    </p>
+
+    <div>
+      <h2 class="tool-h2 font-semibold text-lg">A JPG's opaque pixels stay opaque</h2>
+      <p class="text-muted dark:text-slate-400">
+        JPG has no alpha channel, so there's no hidden transparency for a conversion to reveal.
+        Every pixel in the output PNG is fully opaque. If you need a transparent background, use a
+        background removal tool first, then export as PNG.
+      </p>
+    </div>
+
+    <div>
+      <h2 class="tool-h2 font-semibold text-lg pt-2">FAQ</h2>
+      <div class="mt-3">
+        <FaqAccordion faqs={faqs} />
+      </div>
+    </div>
+
+    <p class="text-sm">
+      Going the other way, for a smaller file? Try{' '}
+      <a href="/image/png-to-jpg/" class="text-primary dark:text-blue-400 hover:underline">PNG to JPG</a>.
+    </p>
+    <p class="text-sm">
+      PNG output too big, or need it a different size? Try{' '}
+      <a href="/image/compress/" class="text-primary dark:text-blue-400 hover:underline">Compress Image</a>{' '}
+      or <a href="/image/resize/" class="text-primary dark:text-blue-400 hover:underline">Resize Image</a> next.
+    </p>
+  </div>
+
+  <div class="pt-8 sm:pt-12 pb-6 sm:pb-8">
+    <AdBanner placement="tool-page:image/jpg-to-png" />
+  </div>
+
+  <script>
+    import { convertImageFormat } from '../../lib/image/convertFormat';
+    import { sniffMime } from '../../lib/image/codec';
+    import { getToolElements, wireTool } from '../../lib/ui';
+
+    const els = getToolElements();
+    wireTool(els, {
+      accept: '.jpg,.jpeg,image/jpeg',
+      multiple: true,
+      batchZipName: 'kit-bin-jpg-to-png.zip',
+      validate: (files) =>
+        files.some((f) => sniffMime(f) !== 'image/jpeg') ? 'This tool only accepts JPG files.' : null,
+      runEach: async (file) => {
+        const blob = await convertImageFormat(file, 'image/png');
+        return { blob, filename: file.name.replace(/\.jpe?g$/i, '.png') };
+      },
+    });
+  </script>
+</Layout>

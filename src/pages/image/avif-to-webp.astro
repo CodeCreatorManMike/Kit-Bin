@@ -1,0 +1,109 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import AdBanner from '../../components/AdBanner.astro';
+import ToolHeader from '../../components/ToolHeader.astro';
+import FaqAccordion from '../../components/FaqAccordion.astro';
+import ToolSchema from '../../components/ToolSchema.astro';
+import ToolWidget from '../../components/ToolWidget.astro';
+import AdUnit from '../../components/AdUnit.astro';
+
+const faqs = [
+  {
+    q: 'Why convert AVIF to WebP instead of keeping AVIF?',
+    a: "Compatibility. WebP has been around longer and is supported by more software — older browsers, more image editors, more CMS platforms, more third-party tools. AVIF support is improving but is still noticeably patchier. Moving to WebP trades a bit of the smallest-possible file size for something more things can actually open.",
+  },
+  {
+    q: 'Does this lose more quality?',
+    a: "A little, in principle. Most AVIF files are already lossy, and re-encoding to WebP runs the decoded pixels through a second lossy compression pass, so it isn't a lossless copy. In practice the difference is rarely visible at normal quality settings, but avoid repeating the round trip more than necessary.",
+  },
+  {
+    q: 'Will the WebP file be bigger than the AVIF?',
+    a: 'Usually, yes, at least somewhat — AVIF tends to compress a bit more efficiently than WebP at comparable visual quality, so going from AVIF to WebP typically gives some of that size advantage back. It should still be noticeably smaller than the equivalent JPG or PNG, though.',
+  },
+  {
+    q: 'What happens to transparency?',
+    a: "Nothing bad — both AVIF and WebP support a full alpha channel, and this conversion preserves it. Transparent and partially transparent areas in the source AVIF carry through to the WebP unchanged.",
+  },
+];
+---
+
+<Layout
+  title="AVIF to WebP Converter for Wider Compatibility | Kit-Bin"
+  description="Convert AVIF images to WebP in seconds. Runs entirely in your browser. Your file is never uploaded to a server."
+>
+  <ToolSchema
+    name="Convert AVIF to WebP"
+    description="Convert AVIF images to WebP in seconds. Runs entirely in your browser. Your file is never uploaded to a server."
+    faqs={faqs}
+  />
+
+  <ToolHeader title="Convert AVIF Images to WebP" />
+
+  <ToolWidget accept=".avif,image/avif" multiple dropLabel="Drop AVIF images here or click to browse" />
+
+  <AdUnit />
+
+  <div class="max-w-2xl mx-auto px-4 py-12 text-ink dark:text-slate-300 space-y-6">
+    <p>
+      AVIF usually wins on raw file size, but WebP wins on reach — it's been supported by
+      browsers, image editors, and content platforms for years longer. If something in your
+      pipeline is choking on AVIF, WebP keeps most of the size savings over JPG or PNG while
+      working in far more places.
+    </p>
+
+    <div>
+      <h2 class="tool-h2 font-semibold text-lg">Decoding happens on your device</h2>
+      <p class="text-muted dark:text-slate-400">
+        The AVIF decoder is a WebAssembly build of libavif, downloaded once on your first
+        conversion and then cached by the browser. It's a couple of megabytes, so the first file
+        takes a moment longer than the rest. Nothing about your image is sent anywhere.
+      </p>
+    </div>
+
+    <div>
+      <h2 class="tool-h2 font-semibold text-lg pt-2">FAQ</h2>
+      <div class="mt-3">
+        <FaqAccordion faqs={faqs} />
+      </div>
+    </div>
+
+    <p class="text-sm">
+      Want to squeeze the file down further instead? Try{' '}
+      <a href="/image/webp-to-avif/" class="text-primary dark:text-blue-400 hover:underline">WebP to AVIF</a>.
+    </p>
+    <p class="text-sm">
+      Want more control over the output size or dimensions? Try{' '}
+      <a href="/image/compress/" class="text-primary dark:text-blue-400 hover:underline">Compress Image</a>{' '}
+      or <a href="/image/resize/" class="text-primary dark:text-blue-400 hover:underline">Resize Image</a>.
+    </p>
+    <p class="text-sm">
+      Curious what makes AVIF different from WebP? Read{' '}
+      <a href="/guides/avif-explained/" class="text-primary dark:text-blue-400 hover:underline">AVIF explained</a>.
+      Wondering why an AVIF file won't open somewhere? Read{' '}
+      <a href="/guides/avif-wont-open/" class="text-primary dark:text-blue-400 hover:underline">where AVIF is and isn't safe to use</a>.
+    </p>
+  </div>
+
+  <div class="pt-8 sm:pt-12 pb-6 sm:pb-8">
+    <AdBanner placement="tool-page:image/avif-to-webp" />
+  </div>
+
+  <script>
+    import { convertImageFormat } from '../../lib/image/convertFormat';
+    import { sniffMime } from '../../lib/image/codec';
+    import { getToolElements, wireTool } from '../../lib/ui';
+
+    const els = getToolElements();
+    wireTool(els, {
+      accept: '.avif,image/avif',
+      multiple: true,
+      batchZipName: 'kit-bin-avif-to-webp.zip',
+      validate: (files) =>
+        files.some((f) => sniffMime(f) !== 'image/avif') ? 'This tool only accepts AVIF files.' : null,
+      runEach: async (file) => {
+        const blob = await convertImageFormat(file, 'image/webp');
+        return { blob, filename: file.name.replace(/\.avif$/i, '.webp') };
+      },
+    });
+  </script>
+</Layout>

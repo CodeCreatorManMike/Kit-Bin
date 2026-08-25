@@ -1,0 +1,109 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import AdBanner from '../../components/AdBanner.astro';
+import ToolHeader from '../../components/ToolHeader.astro';
+import FaqAccordion from '../../components/FaqAccordion.astro';
+import ToolSchema from '../../components/ToolSchema.astro';
+import ToolWidget from '../../components/ToolWidget.astro';
+import AdUnit from '../../components/AdUnit.astro';
+
+const faqs = [
+  {
+    q: "Why can't I open my AVIF file?",
+    a: "Browsers all display AVIF, but plenty of desktop software still doesn't read it — older Windows builds without the AV1 Image Extension, most email clients, and a lot of older photo editors and print or print-shop workflows. PNG is about as universally readable as an image format gets, which is why it's the safer target when a tool flatly refuses AVIF.",
+  },
+  {
+    q: 'Does this restore the quality lost when the AVIF was encoded?',
+    a: "No, and nothing can. Most AVIF files are encoded lossy, so whatever detail that encode discarded is gone. This conversion decodes the AVIF and re-encodes it losslessly to PNG — the PNG matches the AVIF's pixels exactly, but the AVIF's pixels were already an approximation of the original.",
+  },
+  {
+    q: 'Does the transparency carry over?',
+    a: "Yes. AVIF and PNG both support a full alpha channel, so any transparency in the source AVIF decodes and re-encodes intact. If the AVIF had no transparency, the PNG won't either — that reflects the source file, not a limitation here.",
+  },
+  {
+    q: 'Why is the PNG so much bigger than the AVIF?',
+    a: "PNG compresses losslessly and AVIF is a generation ahead on lossy compression efficiency, so trading AVIF for PNG usually multiplies the file size several times over. You're paying that cost specifically to get lossless, universally-openable pixels — not for a smaller file.",
+  },
+];
+---
+
+<Layout
+  title="AVIF to PNG Converter, Lossless & Universally Editable | Kit-Bin"
+  description="Convert AVIF images to PNG in seconds. Runs entirely in your browser. Your file is never uploaded to a server."
+>
+  <ToolSchema
+    name="Convert AVIF to PNG"
+    description="Convert AVIF images to PNG in seconds. Runs entirely in your browser. Your file is never uploaded to a server."
+    faqs={faqs}
+  />
+
+  <ToolHeader title="Convert AVIF Images to PNG" />
+
+  <ToolWidget accept=".avif,image/avif" multiple dropLabel="Drop AVIF images here or click to browse" />
+
+  <AdUnit />
+
+  <div class="max-w-2xl mx-auto px-4 py-12 text-ink dark:text-slate-300 space-y-6">
+    <p>
+      AVIF opens fine in a browser and then stalls out the moment you try to reopen it somewhere
+      older — a photo editor without AVIF support, a print workflow, software that's simply never
+      been updated to handle it. PNG is the safest landing spot: lossless, alpha-capable, and
+      readable by essentially everything that opens images at all.
+    </p>
+
+    <div>
+      <h2 class="tool-h2 font-semibold text-lg">Decoding happens on your device</h2>
+      <p class="text-muted dark:text-slate-400">
+        The AVIF decoder is a WebAssembly build of libavif, downloaded once on your first
+        conversion and then cached by the browser. It's a couple of megabytes, so the first file
+        takes a moment longer than the rest. Nothing about your image is sent anywhere.
+      </p>
+    </div>
+
+    <div>
+      <h2 class="tool-h2 font-semibold text-lg pt-2">FAQ</h2>
+      <div class="mt-3">
+        <FaqAccordion faqs={faqs} />
+      </div>
+    </div>
+
+    <p class="text-sm">
+      Going back the other way, for a website? Try{' '}
+      <a href="/image/png-to-avif/" class="text-primary dark:text-blue-400 hover:underline">PNG to AVIF</a>.
+    </p>
+    <p class="text-sm">
+      Need the PNG smaller, or a specific size? Try{' '}
+      <a href="/image/compress/" class="text-primary dark:text-blue-400 hover:underline">Compress Image</a>{' '}
+      or <a href="/image/resize/" class="text-primary dark:text-blue-400 hover:underline">Resize Image</a> next.
+    </p>
+    <p class="text-sm">
+      Curious what makes AVIF different from PNG? Read{' '}
+      <a href="/guides/avif-explained/" class="text-primary dark:text-blue-400 hover:underline">AVIF explained</a>.
+      Wondering why an AVIF file won't open somewhere? Read{' '}
+      <a href="/guides/avif-wont-open/" class="text-primary dark:text-blue-400 hover:underline">where AVIF is and isn't safe to use</a>.
+    </p>
+  </div>
+
+  <div class="pt-8 sm:pt-12 pb-6 sm:pb-8">
+    <AdBanner placement="tool-page:image/avif-to-png" />
+  </div>
+
+  <script>
+    import { convertImageFormat } from '../../lib/image/convertFormat';
+    import { sniffMime } from '../../lib/image/codec';
+    import { getToolElements, wireTool } from '../../lib/ui';
+
+    const els = getToolElements();
+    wireTool(els, {
+      accept: '.avif,image/avif',
+      multiple: true,
+      batchZipName: 'kit-bin-avif-to-png.zip',
+      validate: (files) =>
+        files.some((f) => sniffMime(f) !== 'image/avif') ? 'This tool only accepts AVIF files.' : null,
+      runEach: async (file) => {
+        const blob = await convertImageFormat(file, 'image/png');
+        return { blob, filename: file.name.replace(/\.avif$/i, '.png') };
+      },
+    });
+  </script>
+</Layout>

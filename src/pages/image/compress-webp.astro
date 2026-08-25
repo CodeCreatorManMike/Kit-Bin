@@ -1,0 +1,124 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import AdBanner from '../../components/AdBanner.astro';
+import ToolHeader from '../../components/ToolHeader.astro';
+import FaqAccordion from '../../components/FaqAccordion.astro';
+import ToolSchema from '../../components/ToolSchema.astro';
+import ToolWidget from '../../components/ToolWidget.astro';
+import AdUnit from '../../components/AdUnit.astro';
+
+const faqs = [
+  {
+    q: 'Will this affect quality?',
+    a: 'Yes, some quality loss is expected. WebP compression here is lossy: it trades a small, usually invisible amount of visual detail for a smaller file.',
+  },
+  {
+    q: 'Is it worth re-compressing a WebP?',
+    a: "Often only modestly. WebP is already an efficient format, so a WebP re-compression tends to shrink a file less dramatically than compressing a JPG or PNG down would. Think of this as squeezing a bit further, not as an essential step — if the file already meets your size need, there's nothing to gain from running it through again.",
+  },
+  {
+    q: 'Why is the result bigger than my original in some cases?',
+    a: "It isn't. If re-encoding wouldn't actually make the file smaller, this tool keeps your original file instead of returning a larger one.",
+  },
+  {
+    q: 'Does this preserve transparency?',
+    a: "The decode/encode step preserves an alpha channel if the source WebP has one — compressing doesn't strip transparency on its own.",
+  },
+  {
+    q: 'What if my file isn\'t actually a WebP?',
+    a: 'This tool checks the file and will reject anything that isn\'t really a WebP. Use the generic Compress Image tool if you have a JPG or PNG instead.',
+  },
+];
+---
+
+<Layout
+  title="Compress WebP Online, Shrink WebP File Size | Kit-Bin"
+  description="Shrink a WebP image's file size a bit further in your browser. No upload, nothing leaves your device."
+>
+  <ToolSchema
+    name="Compress WebP"
+    description="Shrink a WebP image's file size a bit further in your browser. No upload, nothing leaves your device."
+    faqs={faqs}
+  />
+
+  <ToolHeader title="Compress a WebP and Shrink Its File Size Further" />
+
+  <ToolWidget accept=".webp,image/webp" multiple dropLabel="Drop WebP images here or click to browse" />
+
+  <AdUnit />
+
+  <div class="max-w-2xl mx-auto px-4 py-12 text-ink dark:text-slate-300 space-y-6">
+    <p>
+      Drop a WebP image above. This tool re-encodes it at a lower quality setting to shrink the
+      file further while keeping it a WebP. It's useful when an already-optimized WebP still needs
+      to shave off a bit more to clear an email attachment limit, a website upload cap, or an
+      app's storage quota.
+    </p>
+
+    <div>
+      <h2 class="tool-h2 font-semibold text-lg">Modest gains, because WebP starts efficient</h2>
+      <p class="text-muted dark:text-slate-400">
+        WebP is already one of the more space-efficient common image formats, so there's usually
+        less slack left to squeeze out than there would be compressing an equivalent JPG or PNG.
+        Treat this tool as "shrink it a bit further," not as a step every WebP file needs — if the
+        file already fits, running it through again just spends a lossy re-encode for little or no
+        benefit.
+      </p>
+    </div>
+
+    <div>
+      <h2 class="tool-h2 font-semibold text-lg">Wrong format, or need an exact size?</h2>
+      <p class="text-muted dark:text-slate-400">
+        If your file isn't a WebP, use the general{' '}
+        <a href="/image/compress/" class="text-primary dark:text-blue-400 hover:underline">Compress Image</a>{' '}
+        tool, which handles JPG and PNG too. If you need the result under a specific KB or MB
+        limit rather than just "smaller," use{' '}
+        <a href="/image/compress-to-size/" class="text-primary dark:text-blue-400 hover:underline">Compress to a Target Size</a>{' '}
+        instead.
+      </p>
+    </div>
+
+    <div>
+      <h2 class="tool-h2 font-semibold text-lg pt-2">FAQ</h2>
+      <div class="mt-3">
+        <FaqAccordion faqs={faqs} />
+      </div>
+    </div>
+
+    <p class="text-sm">Not sure which format you actually need? <a href="/guides/webp-vs-png-jpg/" class="text-primary dark:text-blue-400 hover:underline">Read: WebP vs PNG vs JPG</a></p>
+    <p class="text-sm">Trying to shrink a file that's much larger than it needs to display? <a href="/guides/compression-vs-resizing/" class="text-primary dark:text-blue-400 hover:underline">Read: Compression vs Resizing</a></p>
+  </div>
+
+  <div class="pt-8 sm:pt-12 pb-6 sm:pb-8">
+    <AdBanner placement="tool-page:image/compress-webp" />
+  </div>
+
+  <script>
+    import { compressImage } from '../../lib/image/compress';
+    import { sniffMime, renameToMime } from '../../lib/image/codec';
+    import { getToolElements, wireTool } from '../../lib/ui';
+
+    function formatBytes(bytes: number): string {
+      if (bytes < 1024) return `${bytes} B`;
+      if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+      return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+    }
+
+    const els = getToolElements();
+    wireTool(els, {
+      accept: '.webp,image/webp',
+      multiple: true,
+      batchZipName: 'kit-bin-compressed-webp.zip',
+      validate: (files) =>
+        files.some((f) => sniffMime(f) !== 'image/webp')
+          ? 'This tool only accepts WebP files. Use Compress Image for other formats.'
+          : null,
+      runEach: async (file) => {
+        const { blob, originalSize, compressedSize, mimeType } = await compressImage(file);
+        const pct = Math.round((1 - compressedSize / originalSize) * 100);
+        const note = `${formatBytes(originalSize)} → ${formatBytes(compressedSize)}${pct > 0 ? ` (${pct}% smaller)` : ''}`;
+        return { blob, filename: renameToMime(file.name, mimeType), note };
+      },
+    });
+  </script>
+</Layout>

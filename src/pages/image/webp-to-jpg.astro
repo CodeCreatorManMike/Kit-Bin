@@ -1,0 +1,106 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import AdBanner from '../../components/AdBanner.astro';
+import ToolHeader from '../../components/ToolHeader.astro';
+import FaqAccordion from '../../components/FaqAccordion.astro';
+import ToolSchema from '../../components/ToolSchema.astro';
+import ToolWidget from '../../components/ToolWidget.astro';
+import AdUnit from '../../components/AdUnit.astro';
+
+const faqs = [
+  {
+    q: "Why can't I use my WebP file somewhere?",
+    a: "WebP displays fine in every modern browser, but plenty of things outside the browser still reject it: some older image editors, some print and passport-photo upload services, some older phones and desktop software, and some CMS or e-commerce platforms with a strict file-type allowlist. Converting to JPG is the fix when something specifically won't take the file.",
+  },
+  {
+    q: 'What happens to transparency?',
+    a: "WebP supports an alpha channel and JPG doesn't. If your WebP has transparency, it's discarded on conversion — JPG has no alpha channel to hold onto it, so the transparent areas keep only their underlying color rather than staying see-through. If you need to keep transparency, convert to PNG instead.",
+  },
+  {
+    q: 'Will the JPG look worse than the WebP?',
+    a: "There's a small quality cost, since this is a second lossy encode on top of whatever compression the WebP already used. In most cases it isn't visible at normal viewing sizes, but it's not a lossless operation, so avoid converting back and forth repeatedly.",
+  },
+  {
+    q: 'Does this work with animated WebP?',
+    a: "No — only the first frame converts, since JPG doesn't support animation. If you need to keep the animation, keep the file as WebP, or convert it to GIF or video instead.",
+  },
+];
+---
+
+<Layout
+  title="WebP to JPG Converter, Fix Compatibility | Kit-Bin"
+  description="Convert WebP images to JPG in seconds. Runs entirely in your browser. Your file is never uploaded to a server."
+>
+  <ToolSchema
+    name="Convert WebP to JPG"
+    description="Convert WebP images to JPG in seconds. Runs entirely in your browser. Your file is never uploaded to a server."
+    faqs={faqs}
+  />
+
+  <ToolHeader title="Convert WebP Images to JPG" />
+
+  <ToolWidget accept=".webp,image/webp" multiple dropLabel="Drop WebP images here or click to browse" />
+
+  <AdUnit />
+
+  <div class="max-w-2xl mx-auto px-4 py-12 text-ink dark:text-slate-300 space-y-6">
+    <p>
+      WebP is what most modern websites serve images as, so it's what you often end up with after
+      saving a picture from one. It opens fine in a browser and then gets rejected by an upload
+      form, an older editor, or a print service that only accepts JPG. Converting trades a little
+      file size back for that compatibility.
+    </p>
+
+    <div>
+      <h2 class="tool-h2 font-semibold text-lg">Decoding happens on your device</h2>
+      <p class="text-muted dark:text-slate-400">
+        Nothing about your image is sent anywhere — the WebP is decoded and re-encoded as JPG
+        entirely inside your browser using WebAssembly.
+      </p>
+    </div>
+
+    <div>
+      <h2 class="tool-h2 font-semibold text-lg pt-2">FAQ</h2>
+      <div class="mt-3">
+        <FaqAccordion faqs={faqs} />
+      </div>
+    </div>
+
+    <p class="text-sm">
+      Going the other way, for a website? Try{' '}
+      <a href="/image/jpg-to-webp/" class="text-primary dark:text-blue-400 hover:underline">JPG to WebP</a>.
+    </p>
+    <p class="text-sm">
+      Need the JPG smaller, or a specific size? Try{' '}
+      <a href="/image/compress/" class="text-primary dark:text-blue-400 hover:underline">Compress Image</a>{' '}
+      or <a href="/image/resize/" class="text-primary dark:text-blue-400 hover:underline">Resize Image</a> next.
+    </p>
+    <p class="text-sm">
+      Not sure which format you actually need? Read{' '}
+      <a href="/guides/webp-vs-png-jpg/" class="text-primary dark:text-blue-400 hover:underline">the comparison</a>.
+    </p>
+  </div>
+
+  <div class="pt-8 sm:pt-12 pb-6 sm:pb-8">
+    <AdBanner placement="tool-page:image/webp-to-jpg" />
+  </div>
+
+  <script>
+    import { convertImageFormat } from '../../lib/image/convertFormat';
+    import { sniffMime } from '../../lib/image/codec';
+    import { getToolElements, wireTool } from '../../lib/ui';
+
+    const els = getToolElements();
+    wireTool(els, {
+      accept: '.webp,image/webp',
+      multiple: true,
+      batchZipName: 'kit-bin-webp-to-jpg.zip',
+      validate: (files) =>
+        files.some((f) => sniffMime(f) !== 'image/webp') ? 'This tool only accepts WebP files.' : null,
+      runEach: async (file) => {
+        const blob = await convertImageFormat(file, 'image/jpeg');
+        return { blob, filename: file.name.replace(/\.webp$/i, '.jpg') };
+      },
+    });
+  </script>
+</Layout>

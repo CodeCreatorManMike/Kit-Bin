@@ -1,0 +1,110 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import AdBanner from '../../components/AdBanner.astro';
+import ToolHeader from '../../components/ToolHeader.astro';
+import FaqAccordion from '../../components/FaqAccordion.astro';
+import ToolSchema from '../../components/ToolSchema.astro';
+import ToolWidget from '../../components/ToolWidget.astro';
+import AdUnit from '../../components/AdUnit.astro';
+
+const faqs = [
+  {
+    q: 'Does the transparency survive?',
+    a: "Yes. AVIF supports a full alpha channel, and this converter carries a PNG's transparency straight through to the AVIF — including partial transparency, not just an on/off mask. If you're replacing PNG icons or graphics with alpha on a website, AVIF is a safe target for that.",
+  },
+  {
+    q: 'Is this a lossless conversion?',
+    a: "No, by default it isn't. PNG is always lossless; this tool encodes the AVIF at a lossy quality setting because that's where most of the file-size win comes from. If you need a bit-for-bit-safe copy in a smaller lossless format, this isn't it — AVIF supports a lossless mode, but a general-purpose converter tuned for lossy web output isn't the place to rely on that.",
+  },
+  {
+    q: 'How much smaller will the file be?',
+    a: 'Often dramatically smaller, especially for photographic PNGs — PNG compresses losslessly and doesn\'t handle photos efficiently at all, so a lossy AVIF re-encode of a photo saved as PNG can come out at a fraction of the size. Flat-color graphics, icons, and screenshots shrink too, just less dramatically since PNG already compresses that kind of content well.',
+  },
+  {
+    q: "Why was my image a PNG in the first place if it's a photo?",
+    a: "Usually because it was screenshotted, exported from a design tool, or downloaded from somewhere that only offered PNG. PNG is the right call when you need pixel-perfect output or transparency; it's not chosen for photos on purpose. Converting it to AVIF fixes the size without losing the transparency that PNG was probably there for.",
+  },
+];
+---
+
+<Layout
+  title="PNG to AVIF Converter, Keep Transparency | Kit-Bin"
+  description="Convert PNG images to AVIF in seconds. Runs entirely in your browser. Your file is never uploaded to a server."
+>
+  <ToolSchema
+    name="Convert PNG to AVIF"
+    description="Convert PNG images to AVIF in seconds. Runs entirely in your browser. Your file is never uploaded to a server."
+    faqs={faqs}
+  />
+
+  <ToolHeader title="Convert PNG Images to AVIF" />
+
+  <ToolWidget accept=".png,image/png" multiple dropLabel="Drop PNG images here or click to browse" />
+
+  <AdUnit />
+
+  <div class="max-w-2xl mx-auto px-4 py-12 text-ink dark:text-slate-300 space-y-6">
+    <p>
+      PNG is lossless and keeps transparency, but it's a poor fit for anything photographic and a
+      heavy download for a website. AVIF keeps the alpha channel PNG gives you while compressing
+      far more aggressively, which is the usual reason to make this switch for web assets.
+    </p>
+
+    <div>
+      <h2 class="tool-h2 font-semibold text-lg">Expect this one to take a while</h2>
+      <p class="text-muted dark:text-slate-400">
+        The encoder is a WebAssembly build of libavif and it's about three megabytes, downloaded
+        once on your first conversion. AVIF encoding is slow by nature — it inherits AV1's
+        expensive search — so a large image can take a few seconds per file. All of it runs on
+        your device; nothing is uploaded.
+      </p>
+    </div>
+
+    <div>
+      <h2 class="tool-h2 font-semibold text-lg pt-2">FAQ</h2>
+      <div class="mt-3">
+        <FaqAccordion faqs={faqs} />
+      </div>
+    </div>
+
+    <p class="text-sm">
+      Need the lossless PNG back, or software that can't open AVIF? Use{' '}
+      <a href="/image/avif-to-png/" class="text-primary dark:text-blue-400 hover:underline">AVIF to PNG</a>.
+    </p>
+    <p class="text-sm">
+      Want more control over the output size or dimensions? Try{' '}
+      <a href="/image/compress/" class="text-primary dark:text-blue-400 hover:underline">Compress Image</a>{' '}
+      or <a href="/image/resize/" class="text-primary dark:text-blue-400 hover:underline">Resize Image</a>.
+    </p>
+    <p class="text-sm">
+      Curious what makes AVIF different from PNG? Read{' '}
+      <a href="/guides/avif-explained/" class="text-primary dark:text-blue-400 hover:underline">AVIF explained</a>.
+      Before you commit to it site-wide, check{' '}
+      <a href="/guides/avif-wont-open/" class="text-primary dark:text-blue-400 hover:underline">where AVIF is and isn't safe to use</a>.
+    </p>
+  </div>
+
+  <div class="pt-8 sm:pt-12 pb-6 sm:pb-8">
+    <AdBanner placement="tool-page:image/png-to-avif" />
+  </div>
+
+  <script>
+    import { convertImageFormat } from '../../lib/image/convertFormat';
+    import { sniffMime } from '../../lib/image/codec';
+    import { getToolElements, wireTool } from '../../lib/ui';
+
+    const els = getToolElements();
+    wireTool(els, {
+      accept: '.png,image/png',
+      multiple: true,
+      batchZipName: 'kit-bin-png-to-avif.zip',
+      validate: (files) =>
+        files.some((f) => sniffMime(f) !== 'image/png') ? 'This tool only accepts PNG files.' : null,
+      runEach: async (file, reportProgress) => {
+        reportProgress('Encoding AVIF (this one is slow)…');
+        const blob = await convertImageFormat(file, 'image/avif');
+        return { blob, filename: file.name.replace(/\.png$/i, '.avif') };
+      },
+    });
+  </script>
+</Layout>

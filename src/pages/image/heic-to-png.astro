@@ -1,0 +1,114 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import AdBanner from '../../components/AdBanner.astro';
+import ToolHeader from '../../components/ToolHeader.astro';
+import FaqAccordion from '../../components/FaqAccordion.astro';
+import ToolSchema from '../../components/ToolSchema.astro';
+import ToolWidget from '../../components/ToolWidget.astro';
+import AdUnit from '../../components/AdUnit.astro';
+
+const faqs = [
+  {
+    q: 'Is my photo uploaded anywhere?',
+    a: 'No. Conversion happens entirely in your browser. Your photo never leaves your device.',
+  },
+  {
+    q: 'Why convert to PNG instead of JPG?',
+    a: "PNG is lossless, so this conversion doesn't throw away any image detail the way a JPG re-encode does. Use it when you need a clean, lossless copy to keep editing further without stacking up lossy compression generations.",
+  },
+  {
+    q: 'Will the PNG have a transparent background?',
+    a: "Almost never, no. HEIC/HEIF photos taken by an iPhone's camera are captured as a fully opaque frame, so there's no alpha channel to preserve. PNG's transparency support only matters for images that were transparent to begin with, such as graphics or edited cutouts, not standard camera photos.",
+  },
+  {
+    q: 'Will the file be a lot bigger than the original HEIC?',
+    a: "Usually, yes. HEIC uses efficient lossy video-derived compression, while this tool produces an uncompressed-detail lossless PNG. A PNG conversion of a HEIC photo is normally several times larger than the source file. If size matters more than losslessness, HEIC to JPG or HEIC to WebP will give you a much smaller file.",
+  },
+  {
+    q: 'What happens to photo metadata like location and date?',
+    a: "This tool focuses on the image data itself; camera/location/date metadata isn't guaranteed to carry over the same way it does when AirDropping or exporting from Photos. If you need that metadata preserved exactly, check the output before deleting your original.",
+  },
+];
+---
+
+<Layout
+  title="HEIC to PNG Converter, Convert iPhone Photos Losslessly | Kit-Bin"
+  description="Convert iPhone HEIC photos to lossless PNG in your browser. Your file is never uploaded to a server."
+>
+  <ToolSchema
+    name="Convert HEIC to PNG"
+    description="Convert iPhone HEIC photos to lossless PNG in your browser. Your file is never uploaded to a server."
+    faqs={faqs}
+  />
+
+  <ToolHeader title="Convert HEIC Photos to PNG" />
+
+  <ToolWidget accept=".heic,.heif,image/heic,image/heif" multiple dropLabel="Drop HEIC photos here or click to browse" />
+
+  <AdUnit />
+
+  <div class="max-w-2xl mx-auto px-4 py-12 text-ink dark:text-slate-300 space-y-6">
+    <p>
+      Convert HEIC photos from an iPhone to lossless PNG. Use PNG when you need a clean copy for
+      further editing without introducing lossy compression, rather than for everyday sharing —
+      for everyday sharing, <a href="/image/heic-to-jpg/" class="text-primary dark:text-blue-400 hover:underline">HEIC to JPG</a>
+      produces a much smaller, more widely compatible file.
+    </p>
+
+    <div>
+      <h2 class="tool-h2 font-semibold text-lg">Why PNG instead of JPG or WebP</h2>
+      <p class="text-muted dark:text-slate-400">
+        PNG re-encodes the decoded pixels without discarding any detail. That makes it the right
+        choice when the photo is going into further lossless editing, but it also means the
+        resulting file is typically several times larger than the original HEIC, and much larger
+        than a <a href="/image/heic-to-jpg/" class="text-primary dark:text-blue-400 hover:underline">HEIC to JPG</a>
+        or <a href="/image/heic-to-webp/" class="text-primary dark:text-blue-400 hover:underline">HEIC to WebP</a>
+        conversion of the same photo. If you just need to share or upload the photo somewhere,
+        one of those is usually the better fit.
+      </p>
+    </div>
+
+    <div>
+      <h2 class="tool-h2 font-semibold text-lg pt-2">FAQ</h2>
+      <div class="mt-3">
+        <FaqAccordion faqs={faqs} />
+      </div>
+    </div>
+
+    <p class="text-sm">Want to understand why iPhone photos use this format in the first place? <a href="/guides/heic-explained/" class="text-primary dark:text-blue-400 hover:underline">Read the guide</a></p>
+    <p class="text-sm">
+      Need a smaller, more universally compatible file instead? Try{' '}
+      <a href="/image/heic-to-jpg/" class="text-primary dark:text-blue-400 hover:underline">HEIC to JPG</a>{' '}
+      or <a href="/image/heic-to-webp/" class="text-primary dark:text-blue-400 hover:underline">HEIC to WebP</a>.
+    </p>
+  </div>
+
+  <div class="pt-8 sm:pt-12 pb-6 sm:pb-8">
+    <AdBanner placement="tool-page:image/heic-to-png" />
+  </div>
+
+  <script>
+    import { decodeHeicToImageData } from '../../lib/image/heicToJpg';
+    import { encodeImage } from '../../lib/image/codec';
+    import { getToolElements, wireTool } from '../../lib/ui';
+
+    const els = getToolElements();
+    wireTool(els, {
+      accept: '.heic,.heif,image/heic,image/heif',
+      multiple: true,
+      batchZipName: 'kit-bin-heic-to-png.zip',
+      validate: (files) => {
+        const bad = files.some((f) => {
+          const name = f.name.toLowerCase();
+          return !name.endsWith('.heic') && !name.endsWith('.heif');
+        });
+        return bad ? 'This tool only accepts HEIC or HEIF files.' : null;
+      },
+      runEach: async (file) => {
+        const imageData = await decodeHeicToImageData(file);
+        const blob = await encodeImage(imageData, 'image/png');
+        return { blob, filename: file.name.replace(/\.(heic|heif)$/i, '.png') };
+      },
+    });
+  </script>
+</Layout>

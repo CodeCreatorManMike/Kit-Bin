@@ -1,0 +1,124 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import AdBanner from '../../components/AdBanner.astro';
+import ToolHeader from '../../components/ToolHeader.astro';
+import FaqAccordion from '../../components/FaqAccordion.astro';
+import ToolSchema from '../../components/ToolSchema.astro';
+import ToolWidget from '../../components/ToolWidget.astro';
+import AdUnit from '../../components/AdUnit.astro';
+
+const faqs = [
+  {
+    q: 'Will this affect quality?',
+    a: 'Yes, some quality loss is expected. JPG compression is lossy: it trades a small, usually invisible amount of visual detail for a meaningfully smaller file.',
+  },
+  {
+    q: 'Why did compressing my JPG barely shrink it?',
+    a: "If the JPG has already been compressed once (most photos straight out of a phone or camera have), there's less redundancy left to remove. Re-compressing an already-compressed JPEG has diminishing returns each time, and can start visibly degrading quality before it saves much more space.",
+  },
+  {
+    q: 'Should I compress a JPG more than once?',
+    a: "Generally no. Each JPG re-save is a new lossy encoding pass on top of the last one, so repeated compression stacks up visible artifacts over time for a shrinking size benefit. It's better to compress from the original once, at the quality level you want.",
+  },
+  {
+    q: 'Why is the result bigger than my original in some cases?',
+    a: "It isn't. If re-encoding wouldn't actually make the file smaller, this tool keeps your original file instead of returning a larger one.",
+  },
+  {
+    q: 'What if my file isn\'t actually a JPG?',
+    a: 'This tool checks the file and will reject anything that isn\'t really a JPEG. Use the generic Compress Image tool if you have a PNG or WebP instead.',
+  },
+];
+---
+
+<Layout
+  title="Compress JPG Online, Reduce JPEG File Size | Kit-Bin"
+  description="Shrink a JPG/JPEG image's file size in your browser. Adjustable quality, no upload, nothing leaves your device."
+>
+  <ToolSchema
+    name="Compress JPG"
+    description="Shrink a JPG/JPEG image's file size in your browser. Adjustable quality, no upload, nothing leaves your device."
+    faqs={faqs}
+  />
+
+  <ToolHeader title="Compress a JPG and Reduce Its File Size" />
+
+  <ToolWidget accept=".jpg,.jpeg,image/jpeg" multiple dropLabel="Drop JPG photos here or click to browse" />
+
+  <AdUnit />
+
+  <div class="max-w-2xl mx-auto px-4 py-12 text-ink dark:text-slate-300 space-y-6">
+    <p>
+      Drop a JPG or JPEG image above. This tool re-encodes it at a lower quality setting to reduce
+      file size while keeping it a JPG. It's useful when an email attachment limit, a website
+      upload cap, or an app's storage quota rejects a file that's otherwise fine.
+    </p>
+
+    <div>
+      <h2 class="tool-h2 font-semibold text-lg">Lossy compression means a real trade-off</h2>
+      <p class="text-muted dark:text-slate-400">
+        JPG compression is lossy: lowering quality removes fine detail the eye mostly won't miss
+        at normal viewing sizes, in exchange for a smaller file. There's no free lunch here — a
+        big size reduction comes from a real, if often subtle, quality reduction. If the source
+        JPG has already been compressed before (as most camera and phone photos have), there's
+        less to gain: re-compressing an already-lossy file has diminishing returns and can
+        introduce visible artifacts before it saves much more space.
+      </p>
+    </div>
+
+    <div>
+      <h2 class="tool-h2 font-semibold text-lg">Wrong format, or need an exact size?</h2>
+      <p class="text-muted dark:text-slate-400">
+        If your file isn't a JPG, use the general{' '}
+        <a href="/image/compress/" class="text-primary dark:text-blue-400 hover:underline">Compress Image</a>{' '}
+        tool, which handles PNG and WebP too. If you need the result under a specific KB or MB
+        limit rather than just "smaller," use{' '}
+        <a href="/image/compress-to-size/" class="text-primary dark:text-blue-400 hover:underline">Compress to a Target Size</a>{' '}
+        instead.
+      </p>
+    </div>
+
+    <div>
+      <h2 class="tool-h2 font-semibold text-lg pt-2">FAQ</h2>
+      <div class="mt-3">
+        <FaqAccordion faqs={faqs} />
+      </div>
+    </div>
+
+    <p class="text-sm">Not sure which format you actually need? <a href="/guides/webp-vs-png-jpg/" class="text-primary dark:text-blue-400 hover:underline">Read: WebP vs PNG vs JPG</a></p>
+    <p class="text-sm">Trying to shrink a file that's much larger than it needs to display? <a href="/guides/compression-vs-resizing/" class="text-primary dark:text-blue-400 hover:underline">Read: Compression vs Resizing</a></p>
+  </div>
+
+  <div class="pt-8 sm:pt-12 pb-6 sm:pb-8">
+    <AdBanner placement="tool-page:image/compress-jpg" />
+  </div>
+
+  <script>
+    import { compressImage } from '../../lib/image/compress';
+    import { sniffMime, renameToMime } from '../../lib/image/codec';
+    import { getToolElements, wireTool } from '../../lib/ui';
+
+    function formatBytes(bytes: number): string {
+      if (bytes < 1024) return `${bytes} B`;
+      if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+      return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+    }
+
+    const els = getToolElements();
+    wireTool(els, {
+      accept: '.jpg,.jpeg,image/jpeg',
+      multiple: true,
+      batchZipName: 'kit-bin-compressed-jpg.zip',
+      validate: (files) =>
+        files.some((f) => sniffMime(f) !== 'image/jpeg' && sniffMime(f) !== 'image/jpg')
+          ? 'This tool only accepts JPG/JPEG files. Use Compress Image for other formats.'
+          : null,
+      runEach: async (file) => {
+        const { blob, originalSize, compressedSize, mimeType } = await compressImage(file);
+        const pct = Math.round((1 - compressedSize / originalSize) * 100);
+        const note = `${formatBytes(originalSize)} → ${formatBytes(compressedSize)}${pct > 0 ? ` (${pct}% smaller)` : ''}`;
+        return { blob, filename: renameToMime(file.name, mimeType), note };
+      },
+    });
+  </script>
+</Layout>
