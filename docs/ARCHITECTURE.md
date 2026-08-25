@@ -77,12 +77,12 @@ Download result — file never left the device
   /components
     Sidebar.astro                # persistent nav shell, see PAGE_LAYOUT.md "Site shell"
     ToolHeader.astro / ToolWidget.astro   # shared drop-zone/status/result chrome
-    AdsterraBanner.astro / ConsentBanner.astro   # ad system, see PAGE_LAYOUT.md monetization section
+    AdBanner.astro / ConsentBanner.astro   # ad system, see PAGE_LAYOUT.md monetization section
     FaqAccordion.astro / Breadcrumbs.astro / ToolSchema.astro / CategorySchema.astro
   /lib
     ui.ts                        # shared drop-zone/processing/result state machine every tool uses
     /pdf/ /image/ /audio/ /video/ /data/ /dev/    # one pure module per operation
-    /ads/                         # Adsterra loader, consent, processing overlay, download gate
+    /ads/                         # HilltopAds banner loader, VAST video, popunder, consent, overlays
   /data
     tools.ts                     # single source of truth per tool: title, description,
                                   # keywords, related-tool links, schema fields — see SEO.md

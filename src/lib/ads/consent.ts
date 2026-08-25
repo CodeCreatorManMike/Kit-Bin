@@ -1,6 +1,6 @@
 /** Advertising-consent state, independent of the Google-Funding-Choices CMP
  * wired through ADSENSE_CMP_CONFIGURED (that gate only applies once AdSense
- * itself goes live). Adsterra ships today, so it needs its own first-party
+ * itself goes live). The HilltopAds banner ships today, so it needs its own first-party
  * consent flag, following the same localStorage-flag pattern as `kitbin:theme`.
  *
  * Storage: 'kitbin:ad-consent' = 'granted' | 'denied'. Absent means "not yet

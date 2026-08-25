@@ -2,7 +2,7 @@
 
 **Current phase: Phase 3 in progress — Phases 1 and 2 fully shipped and live in production at
 kit-bin.com.** All 47 tools listed below across PDF/Image/Audio/Video/Data/Dev are live, plus
-the homepage, all category hubs, the `/guides/` content layer (16 guides), and Adsterra
+the homepage, all category hubs, the `/guides/` content layer (16 guides), and HilltopAds
 monetization (banners, processing-state ad, pre-download gate). Update this line as work
 progresses — this file, not `CLAUDE.md`, is the source of truth for what phase the project is
 actually in.

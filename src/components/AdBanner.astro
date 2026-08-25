@@ -1,16 +1,17 @@
 ---
-/** Reusable Adsterra placement. Renders hidden until consent is granted, so
- * a visitor who hasn't consented sees no gap and no request ever fires.
+/** Reusable HilltopAds banner placement. Renders hidden until consent is
+ * granted, so a visitor who hasn't consented sees no gap and no request
+ * ever fires.
  *
  * `placement` is a stable string used only for the accessible label and the
  * iframe title (there is no per-placement analytics call, since Kit-Bin
  * doesn't run analytics), e.g. "homepage-directory", "pdf-category",
  * "tool-page:pdf-merge".
  *
- * `variant` picks the ad size on desktop (mobile always gets 320x50):
- *   - "leaderboard" (728x90): homepage and category hub top-of-page slots only
- *   - "sidebar" (160x600): a real page sidebar, none exist on this site yet
- *   - "auto" (300x250, default): everywhere else */
+ * `variant` is kept for call-site compatibility with the old multi-size
+ * Adsterra setup, but only one creative size was issued for the current
+ * HilltopAds banner zone (300x250), so every variant renders that same box,
+ * centered in its container, on both desktop and mobile. */
 interface Props {
   placement: string;
   variant?: 'leaderboard' | 'sidebar' | 'auto';
@@ -19,13 +20,8 @@ interface Props {
 
 const { placement, variant = 'auto', class: className = '' } = Astro.props;
 
-const maxWidth = variant === 'leaderboard' ? 'max-w-[728px]' : variant === 'sidebar' ? 'max-w-[160px]' : 'max-w-[300px]';
-const minHeight =
-  variant === 'leaderboard'
-    ? 'min-h-[50px] sm:min-h-[90px]'
-    : variant === 'sidebar'
-      ? 'min-h-[50px] sm:min-h-[600px]'
-      : 'min-h-[50px] sm:min-h-[250px]';
+const maxWidth = 'max-w-[300px]';
+const minHeight = 'min-h-[250px]';
 ---
 
 <div
@@ -48,8 +44,8 @@ const minHeight =
 </div>
 
 <script>
-  import { attachAdSlot } from '../lib/ads/adsterra';
-  import type { AdVariant } from '../lib/ads/adsterra';
+  import { attachAdSlot } from '../lib/ads/bannerAd';
+  import type { AdVariant } from '../lib/ads/bannerAd';
 
   const slots = document.querySelectorAll<HTMLElement>('[data-ad-placement]:not([data-ad-bound])');
   slots.forEach((el) => {

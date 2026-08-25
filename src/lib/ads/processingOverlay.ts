@@ -1,14 +1,14 @@
-/** The "processing securely" panel that may show one Adsterra banner while a
- * real operation is in flight. This is NOT a gate: `run()` is already
+/** The "processing securely" panel that may show one HilltopAds banner while
+ * a real operation is in flight. This is NOT a gate: `run()` is already
  * executing before this module is even asked to show anything, and closing
  * or never-showing this UI never changes when the result becomes available.
  *
  * One singleton overlay element, created lazily and reused across every tool
  * page that calls `runWithProcessingUI`, so there is never more than one
- * mounted at a time and never more than one Adsterra impression per
+ * mounted at a time and never more than one banner impression per
  * operation. */
 
-import { attachAdSlot, type AdSlotHandle } from './adsterra';
+import { attachAdSlot, type AdSlotHandle } from './bannerAd';
 
 let overlayEl: HTMLElement | null = null;
 let statusTextEl: HTMLElement | null = null;
@@ -105,7 +105,7 @@ export interface ProcessingUiHandle {
 /** Wraps a single tool operation. Shows nothing for the first 250-350ms so a
  * fast operation never flashes a dialog; if the delay elapses before the
  * caller calls `finish()`, mounts the overlay (and, if ad consent is
- * granted, exactly one Adsterra banner) until `finish()` is called. */
+ * granted, exactly one HilltopAds banner) until `finish()` is called. */
 export function beginProcessingUi(): ProcessingUiHandle {
   const operationId = ++currentOperationId;
   let shown = false;

@@ -8,9 +8,9 @@
  *
  * The ad shown here is a real HilltopAds VAST video ad, played directly (see
  * `hilltopVast.ts` for why — Google's IMA SDK rejects this network's VAST
- * output) — this is a deliberate, separate choice from the Adsterra static
+ * output) — this is a deliberate, separate choice from the static HilltopAds
  * banners used everywhere else on the site (homepage/hub/tool-page banners,
- * the processing-state overlay). Do not reuse `attachAdSlot`/Adsterra here,
+ * the processing-state overlay). Do not reuse `attachAdSlot`/the banner ad system here,
  * and do not reuse `playVastAd` anywhere else — the two ad systems are
  * intentionally kept apart.
  *

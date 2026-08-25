@@ -15,7 +15,7 @@ backend for the core tool set — no server ever receives a user's file, no data
 anything, and hosting cost stays near-zero regardless of traffic because the visitor's own
 device does the processing work.
 
-Monetized via Adsterra display ads and an optional donation link, both placed to never gate the
+Monetized via HilltopAds display ads (plus a post-download popunder) and an optional donation link, placed to never gate the
 actual file processing. Google AdSense is scaffolded and ready (publisher ID + `ads.txt`
 already committed) but stays disabled — `ADSENSE_ENABLED = false` in
 [`src/data/site-config.ts`](src/data/site-config.ts) — until the account is approved and the
@@ -183,10 +183,10 @@ etc.) and update the webhook URL with the new one afterward.
     /csv/  /json/          # a few legacy tool routes predating the /data/ and /dev/ hubs
     /guides/                # explainer content layer — see docs/GUIDES.md
     privacy.astro / about.astro / contact.astro / terms.astro
-  /components               # Sidebar, ToolWidget, AdsterraBanner, ConsentBanner, Footer, etc.
+  /components               # Sidebar, ToolWidget, AdBanner, ConsentBanner, Footer, etc.
   /lib
     /pdf/ /image/ /audio/ /video/ /data/ /dev/   # one pure module per operation
-    /ads/                   # Adsterra loader, consent, processing overlay, download gate
+    /ads/                   # HilltopAds banner loader, VAST video, popunder, consent, overlays
     ui.ts                   # shared drop-zone/processing/result state machine for every tool
   /data
     tools.ts                # single source of truth: title, keywords, related tools, schema
@@ -215,7 +215,7 @@ is. Read the relevant file before making changes in that area:
 | [`docs/ADSENSE_SETUP.md`](docs/ADSENSE_SETUP.md) | The guarded AdSense integration: what's already in place, what's still needed, the dashboard checklist to go live |
 | [`docs/ROADMAP.md`](docs/ROADMAP.md) | Current phase, tool build order, what's explicitly out of scope |
 
-Adsterra's own ad system (banners, the processing-state overlay, the pre-download countdown
+HilltopAds' own ad system (banners, the processing-state overlay, the pre-download countdown
 gate) is implemented in `src/lib/ads/` and documented inline plus in the "Monetization
 placement" section of `docs/PAGE_LAYOUT.md` — there is no separate `docs/MONETIZATION.md`.
 
@@ -233,7 +233,7 @@ As of this writing:
 - **CI validation pipeline**: self-hosted GitLab CE configured and wired to a GitHub webhook
   (see CI/CD Pipeline above) — reachable at `https://gitlab.kit-bin.com`; re-confirm the webhook
   still fires on the next push if it hasn't been checked recently.
-- **Monetization**: Adsterra ads (banners, processing-state, pre-download gate) are live and
+- **Monetization**: HilltopAds ads (banners, processing-state, pre-download video gate, post-download popunder) are live and
   consent-gated; policy pages (Privacy, About, Contact, Terms) are live and up to date; the
   donation link (Ko-fi) is live in the footer; Google AdSense remains scaffolded but disabled
   pending account approval (see `docs/ADSENSE_SETUP.md`).

@@ -1,8 +1,8 @@
 /** Real VAST video ad for the pre-download gate ONLY.
  *
  * Every other ad placement on the site (homepage/hub/tool-page banners,
- * the processing-state overlay) stays exactly as it was — a static Adsterra
- * banner loaded via `src/lib/ads/adsterra.ts`. This module is unrelated to
+ * the processing-state overlay) stays exactly as it was — a static HilltopAds
+ * banner loaded via `src/lib/ads/bannerAd.ts`. This module is unrelated to
  * that one and is only ever used from `downloadGate.ts`.
  *
  * The tag is a HilltopAds VAST zone (#7298041, "file ad", plain VAST — not

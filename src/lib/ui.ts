@@ -4,6 +4,7 @@
 
 import { beginProcessingUi } from './ads/processingOverlay';
 import { maybeGateDownload, cancelActiveDownloadGate } from './ads/downloadGate';
+import { maybeTriggerPostDownloadPopunder } from './ads/popunder';
 import { zipOutputs, type NamedBlob } from './zip';
 
 export interface ToolElements {
@@ -64,6 +65,14 @@ export function showResult(els: ToolElements, blob: Blob, filename: string, note
 
   els.downloadLink.href = activeObjectUrl;
   els.downloadLink.download = filename;
+  // Bound once per element, not per run: the download link itself is
+  // reused across repeated conversions on the same page, so re-adding this
+  // listener on every showResult() call would fire the popunder's own
+  // one-shot guard multiple times for no reason.
+  if (!els.downloadLink.dataset.popunderBound) {
+    els.downloadLink.dataset.popunderBound = 'true';
+    els.downloadLink.addEventListener('click', () => maybeTriggerPostDownloadPopunder());
+  }
   const noteEl = els.result.querySelector('[data-result-note]');
   if (noteEl) noteEl.textContent = note ?? formatBytes(blob.size);
   els.result.classList.remove('hidden');

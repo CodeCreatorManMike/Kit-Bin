@@ -7,7 +7,7 @@ import {
 } from '../data/site-config';
 
 const privacyDescription =
-  'What happens to the files you process on Kit-Bin, what data is and isn\'t collected, and how Adsterra advertising and consent choices work.';
+  'What happens to the files you process on Kit-Bin, what data is and isn\'t collected, how HilltopAds advertising and consent choices work, and your GDPR rights.';
 ---
 
 <Layout
@@ -16,7 +16,7 @@ const privacyDescription =
 >
   <div class="max-w-2xl mx-auto px-4 py-16 space-y-6 text-ink dark:text-slate-300">
     <h1 class="text-3xl font-bold text-ink dark:text-slate-100">Privacy Policy</h1>
-    <p class="text-sm text-muted dark:text-slate-500">Last updated: August 2026</p>
+    <p class="text-sm text-muted dark:text-slate-500">Last updated: 25 August 2026</p>
 
     <section>
       <h2 class="text-xl font-semibold text-ink dark:text-slate-100 mb-2">Your files</h2>
@@ -52,41 +52,48 @@ const privacyDescription =
     <section id="advertising">
       <h2 class="text-xl font-semibold text-ink dark:text-slate-100 mb-2">Advertising</h2>
       <p>
-        Kit-Bin shows a small number of standard banner advertisements, served by Adsterra, to help
-        cover hosting and development costs. These are static banner ads, not video, not audio, and
-        not a full-screen interstitial. They never appear inside a file drop area or in a way that
-        could be mistaken for part of a tool.
+        Kit-Bin shows a small number of standard banner advertisements, served by HilltopAds, to
+        help cover hosting and development costs. These are static banner ads, not video, not
+        audio, and not a full-screen interstitial. They never appear inside a file drop area or in
+        a way that could be mistaken for part of a tool.
       </p>
       <p class="mt-3">
         After a tool finishes processing your file, and only if you have accepted advertising
         cookies, the download button is covered by a short 10-second panel showing a gradient
-        countdown ring and one video advertisement, served by HilltopAds, before the button becomes
-        clickable. This is the one place on the site a video ad is shown — everywhere else, ads are
-        the static banners described above. Your file is never reprocessed or held back during this
-        wait; it was already finished before the countdown started, and the 10-second wait itself
-        runs on a fixed timer independent of the video, so a slow or unavailable ad never extends
-        it. If you have declined advertising cookies, or have not yet chosen, this step does not
-        happen at all and the download button is available immediately.
+        countdown ring and one video advertisement, also served by HilltopAds, before the button
+        becomes clickable. This is the one place on the site a video ad is shown — everywhere
+        else, ads are the static banners described above. Your file is never reprocessed or held
+        back during this wait; it was already finished before the countdown started, and the
+        10-second wait itself runs on a fixed timer independent of the video, so a slow or
+        unavailable ad never extends it. If you have declined advertising cookies, or have not yet
+        chosen, this step does not happen at all and the download button is available immediately.
       </p>
       <p class="mt-3">
-        Adsterra's and HilltopAds' advertising resources are not requested at all until you accept
-        the cookie banner shown on your first visit. If you decline, or before you choose either
-        way, no advertising script or advertising cookie loads, and every tool continues to work
-        exactly the same either
-        way. You can change your choice at any time using{' '}
+        Once you click that download button to take your finished file, and only if you have
+        accepted advertising cookies, a single additional HilltopAds advertisement opens in a new
+        background browser tab. This happens once per visit, only from that click, and only after
+        your file is already downloading — never during upload, processing, or the countdown
+        described above.
+      </p>
+      <p class="mt-3">
+        None of HilltopAds' advertising resources are requested at all until you accept the cookie
+        banner shown on your first visit. If you decline, or before you choose either way, no
+        advertising script or advertising cookie loads, and every tool continues to work exactly
+        the same either way. You can change your choice at any time using{' '}
         <strong>Privacy and cookie settings</strong> in the footer, which also removes any advertising
         already loaded on the page.
       </p>
       <p class="mt-3">
-        Once loaded, Adsterra, HilltopAds, and their advertising partners may use cookies, pixels,
-        or similar technologies for ad delivery, measurement, and fraud prevention, and where
-        permitted, limited personalization. This is entirely separate from how your files are
-        handled: neither advertiser is ever given a file's name, contents, or any conversion
-        setting, because the advertising code has no access to the file-processing code at all.
-        Adsterra's banners run in an isolated frame. The download-gate video ad runs directly in a
-        standard HTML video player rather than an isolated frame, since a video element requires
-        direct access to the page to play — it only ever requests and plays a video ad, and is
-        never given anything related to your file.
+        Once loaded, HilltopAds and its advertising partners may use cookies, pixels, or similar
+        technologies for ad delivery, measurement, and fraud prevention, and where permitted,
+        limited personalization. This is entirely separate from how your files are handled: the
+        advertiser is never given a file's name, contents, or any conversion setting, because the
+        advertising code has no access to the file-processing code at all. The banner ads run in
+        an isolated frame. The download-gate video ad runs directly in a standard HTML video
+        player rather than an isolated frame, since a video element requires direct access to the
+        page to play — it only ever requests and plays a video ad, and is never given anything
+        related to your file. The post-download advertisement opens in its own separate browser
+        tab and has no access to this page at all.
       </p>
       <p class="mt-3">
         {ADSENSE_CONFIGURED ? (
@@ -103,6 +110,51 @@ const privacyDescription =
         ) : (
           'Google AdSense is not active on Kit-Bin yet. This section will be updated with the details above before AdSense is enabled.'
         )}
+      </p>
+    </section>
+
+    <section id="cookies">
+      <h2 class="text-xl font-semibold text-ink dark:text-slate-100 mb-2">Cookies</h2>
+      <p>
+        Kit-Bin itself sets no cookies. The site's own preferences (light/dark theme, your
+        Favorites list, and your advertising consent choice) are stored using
+        <code>localStorage</code> in your browser, not cookies, and are never sent to any server —
+        Kit-Bin has no backend to send them to. If you accept advertising cookies, HilltopAds and
+        its advertising partners may then set their own cookies or use similar technologies (see
+        <strong> Advertising</strong> above) for ad delivery, measurement, and fraud prevention.
+        Declining, in the cookie banner or later via <strong>Privacy and cookie settings</strong>
+        in the footer, blocks those from ever being set and removes any that already were.
+      </p>
+    </section>
+
+    <section id="gdpr">
+      <h2 class="text-xl font-semibold text-ink dark:text-slate-100 mb-2">
+        Your rights under GDPR (UK &amp; EEA visitors)
+      </h2>
+      <p>
+        Kit-Bin is built to need as little of your personal data as possible: your files are
+        processed entirely in your own browser and never uploaded (see <strong>Your files</strong>
+        above), and the site runs no analytics or account system. The only personal data Kit-Bin's
+        advertising can involve is what HilltopAds itself may collect — via cookies, pixels, or
+        similar technologies — once you have actively opted in through the cookie banner, as
+        described in <strong>Advertising</strong> above. Advertising is opt-in, not opt-out: no
+        advertising cookie is set and no advertising request is made until you accept.
+      </p>
+      <p class="mt-3">
+        If you are in the UK, EEA, or Switzerland, you have the right to: know what personal data
+        is processed and why (this page); withdraw consent to advertising at any time, with
+        immediate effect, via <strong>Privacy and cookie settings</strong> in the footer; request
+        access to, correction of, or erasure of personal data that a third party such as HilltopAds
+        holds about you, by contacting that provider directly, since Kit-Bin itself does not hold
+        or store any profile about you; and lodge a complaint with your local data protection
+        supervisory authority if you believe your rights have not been respected.
+      </p>
+      <p class="mt-3">
+        Because Kit-Bin never uploads, stores, or has a mechanism to identify the files you
+        process, there is no file-related personal data for Kit-Bin to provide, correct, or erase
+        on request — that data never reaches Kit-Bin in the first place. Requests about
+        advertising data should go to HilltopAds directly, as Kit-Bin does not have access to or
+        control over what that provider retains once an ad has been served.
       </p>
     </section>
 

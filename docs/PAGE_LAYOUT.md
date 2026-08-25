@@ -312,11 +312,12 @@ specifically to keep the two things that concern actually stayed the same as bef
 
 Live implementation, split across three distinct ad moments — do not conflate them:
 
-1. **Normal page banners** — one `<AdsterraBanner>` per page: after the complete tool list on
-   category hubs (`variant="leaderboard"`, 728x90 desktop / 320x50 mobile) and after
-   FAQ/related-content on every tool page (`variant="auto"`, 300x250 desktop / 320x50 mobile).
-   Purely passive, no interaction required. See `src/components/AdsterraBanner.astro` and
-   `src/lib/ads/adsterra.ts` for the size/variant system.
+1. **Normal page banners** — one `<AdBanner>` per page: after the complete tool list on
+   category hubs and after FAQ/related-content on every tool page. Served by HilltopAds
+   (zone #7350761); only one creative size was issued for this zone (300x250), so every
+   placement — including the old leaderboard/skyscraper slots — now shows that same box,
+   centered, on desktop and mobile alike. Purely passive, no interaction required. See
+   `src/components/AdBanner.astro` and `src/lib/ads/bannerAd.ts`.
 2. **Processing-state ad** (`src/lib/ads/processingOverlay.ts`) — shown only after a real
    operation has been running for 300ms+, purely opportunistic. **`run()` in `ui.ts` is never
    gated by this** — the file finishes exactly when the underlying `lib/*` function resolves,
@@ -328,8 +329,9 @@ Live implementation, split across three distinct ad moments — do not conflate 
    reachable. Unlike every other ad placement on the site, this one plays a real video ad — a
    HilltopAds VAST tag parsed and played directly (`src/lib/ads/hilltopVast.ts`), not through
    Google's IMA SDK (IMA rejects this network's VAST output — see that file's header comment)
-   and not an Adsterra banner. Do not mix the two systems: `attachAdSlot`/Adsterra is for
-   banners/processing only, `playVastAd` is for this gate only. The 10-second wall-clock timer is
+   and not the static HilltopAds banner used elsewhere. Do not mix the two systems:
+   `attachAdSlot`/`bannerAd.ts` is for banners/processing only, `playVastAd` is for this gate
+   only. The 10-second wall-clock timer is
    the sole unlock authority — it does not extend or shorten based on whether the video actually
    finishes, errors, or fails to load, so a broken ad response can never trap a user behind their
    own already-finished file. The file is not reprocessed or held back; only the moment the user
@@ -339,10 +341,17 @@ Live implementation, split across three distinct ad moments — do not conflate 
    Declining the cookie banner must never cost someone their file — that guarantee predates this
    gate and still applies.
 
-No pop-ups, no fake/decoy download buttons, no ads that could be mistaken for a tool control —
-that principle is unchanged. What changed is specifically: is a mandatory wait before the *real*
+No fake/decoy download buttons, no ads that could be mistaken for a tool control — that
+principle is unchanged. What changed is specifically: is a mandatory wait before the *real*
 button acceptable when it's disclosed on-screen and skipped entirely for anyone who declines ads.
 That's a judgment call for the site owner to keep revisiting, not a settled question.
+
+4. **Post-download popunder** (`src/lib/ads/popunder.ts`) — a further, later site-owner decision
+   that does supersede the old blanket "no pop-ups" line above: a single HilltopAds popunder
+   (zone #7350753, opened via `window.open` as a Direct URL) fires from directly inside the real
+   download link's own click handler — after the pre-download gate above has already run and the
+   user is actually taking their finished file, never before or during processing. Capped to once
+   per page load, and — like every ad on the site — it never fires at all without ad consent.
 
 ## Mobile-specific layout notes
 

@@ -1,6 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import AdsterraBanner from '../../components/AdsterraBanner.astro';
+import AdBanner from '../../components/AdBanner.astro';
 import CategorySchema from '../../components/CategorySchema.astro';
 import ToolCard from '../../components/ToolCard.astro';
 import { tools } from '../../data/tools';
@@ -35,7 +35,7 @@ const meta = categoryColors.image;
     <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {imageTools.slice(0, 4).map((t) => <ToolCard tool={t} />)}
       <div class="col-span-full py-6 sm:py-8">
-        <AdsterraBanner placement="image-category" variant="leaderboard" />
+        <AdBanner placement="image-category" variant="leaderboard" />
       </div>
       {imageTools.slice(4).map((t) => <ToolCard tool={t} />)}
     </div>
