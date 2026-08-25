@@ -50,6 +50,11 @@ const faqs = [
   <div class="max-w-2xl mx-auto px-4 py-12 text-ink dark:text-slate-300 space-y-6">
     <p>This tool converts a video file — MOV, WebM, MKV, AVI, or another container — into MP4. Drop your file above and download the result once it's done.</p>
     <p>MP4 is the most widely compatible video container in use: it plays natively on virtually every phone, computer, video editor, and website. A MOV straight off an iPhone or an MKV from a downloaded file can fail to open in software that only expects MP4; converting fixes that without changing what the video actually shows. Under the hood, this is either a container remux (repackaging the existing video/audio streams with no re-encoding, when they're already MP4-compatible codecs) or a full transcode (decoding and re-encoding into MP4-compatible codecs) — whichever the source file actually needs.</p>
+    <p class="text-sm">
+      Got a file with a .bin extension instead? There's no universal .bin-to-video format — read{' '}
+      <a class="text-primary hover:underline dark:text-blue-400" href="/guides/what-is-a-bin-video-file/">what a .bin file actually is</a>{' '}
+      to figure out whether yours is really a mislabeled video before converting it here.
+    </p>
     <div>
       <h2 class="tool-h2 font-semibold text-lg pt-2">FAQ</h2>
       <div class="mt-3">

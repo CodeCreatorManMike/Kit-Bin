@@ -18,6 +18,15 @@ const groups = categoryOrder
     guides: guides.filter((g) => g.category === slug),
   }))
   .filter((group) => group.guides.length > 0);
+
+// Cross-category topical clusters: comparison guides and troubleshooting
+// guides each read as their own coherent group regardless of which tool
+// category they're filed under, so they get their own linkable section on
+// top of (not instead of) the category groups above. A guide can appear in
+// both its category group and here — that's intentional, it's the same
+// content reachable from two different topical paths.
+const comparisonGuides = guides.filter((g) => g.slug.includes('-vs-'));
+const troubleshootingGuides = guides.filter((g) => g.slug.includes('/why-'));
 ---
 
 <Layout
@@ -41,6 +50,39 @@ const groups = categoryOrder
   </div>
 
   <div class="max-w-5xl mx-auto px-6 pb-16 space-y-12">
+    {[
+      { id: 'comparisons', name: 'Comparisons', list: comparisonGuides },
+      { id: 'troubleshooting', name: 'Troubleshooting', list: troubleshootingGuides },
+    ].map((section) => (
+      <div id={section.id}>
+        <div class="mb-4 flex items-center gap-3">
+          <span class="inline-flex items-center gap-2 rounded-full bg-app-bg dark:bg-slate-900 text-muted dark:text-slate-400 ring-1 ring-inset ring-border-soft dark:ring-slate-800 px-3 py-1 text-xs font-bold uppercase tracking-wide">
+            {section.name}
+          </span>
+          <span class="h-px flex-1 bg-border-soft dark:bg-slate-800" aria-hidden="true"></span>
+        </div>
+        <div class="grid gap-4 sm:grid-cols-2">
+          {section.list.map((g: Guide) => (
+            <a
+              href={g.slug}
+              class="glass-panel group flex gap-3 rounded-xl p-4 transition-all duration-150 hover:border-primary/25 hover:shadow-[0_6px_16px_rgba(16,24,47,0.08)] hover:-translate-y-0.5"
+            >
+              <div class="shrink-0 transition-transform duration-200 group-hover:scale-110 group-hover:-rotate-3">
+                <ToolIcon slug={g.slug} category="guides" />
+              </div>
+              <span>
+                <span class="block font-semibold text-ink dark:text-slate-100">{g.cardTitle}</span>
+                <span class="mt-1 block text-sm text-muted dark:text-slate-400">{g.description}</span>
+                <span class="mt-2 inline-block text-sm font-medium text-primary dark:text-indigo-400 group-hover:underline">
+                  Read the guide →
+                </span>
+              </span>
+            </a>
+          ))}
+        </div>
+      </div>
+    ))}
+
     {groups.map((group) => {
       const cc = group.slug === 'general' ? null : categoryColors[group.slug];
       return (

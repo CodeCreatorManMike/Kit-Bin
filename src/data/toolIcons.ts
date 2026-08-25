@@ -846,6 +846,16 @@ export const toolIcons: Record<string, IconPrimitive[]> = {
     { t: 'path', d: 'M7 21h6' },
     { t: 'path', d: 'M17 7h4M17 11h4M17 15h4' },
   ],
+  '/image/aspect-ratio-calculator': [
+    { t: 'rect', x: 3, y: 5, w: 18, h: 11, rx: 1.3 },
+    { t: 'path', d: 'M3 8h3M3 13h3M18 8h3M18 13h3' },
+    { t: 'path', d: 'M9.5 20.5v-3M14.5 20.5v-3' },
+  ],
+  '/guides/what-is-a-bin-video-file': [
+    { t: 'rect', x: 5, y: 3, w: 14, h: 18, rx: 1.5 },
+    { t: 'path', d: 'M9 3v4M15 3v4' },
+    { t: 'path', d: 'M9.5 12.5l2 1.8-2 1.8v-3.6zM12.5 12.5h2.5' },
+  ],
   '/guides/mp3-vs-wav-which-to-keep': [
     { t: 'path', d: 'M4 10v4h4l5 4V6l-5 4H4z' },
     { t: 'path', d: 'M16 10v4M18.5 8.5v7' },

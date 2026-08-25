@@ -33,10 +33,16 @@ Every tool originally scoped for this phase is live:
 - Data/dev tools: csv-to-json, json-to-csv, csv-to-excel, excel-to-csv, excel-to-json,
   csv-cleaner, csv-merge, json-formatter, base64, sha256, json-diff, json-schema-validator
 
-Note: `src/pages/csv/*.astro` and `src/pages/json/*.astro` are earlier routes that predate the
-`/data/` and `/dev/` hubs and now overlap in purpose with tools living there — worth an audit to
-confirm none of them are duplicate/competing content before adding more data tools (see the
-2026-08 tool audit findings in git history / PR discussion for specifics).
+**2026-08 cannibalization audit — resolved, no duplicates found.** `src/pages/csv/*.astro` and
+`src/pages/json/*.astro` are earlier routes that predate the `/data/` and `/dev/` hubs, but each
+one (`csv/to-json`, `csv/to-excel`, `json/to-csv`) is already the single registered entry for its
+conversion in `src/data/tools.ts` and already renders on the `/data/` hub via that shared array —
+they're just served at a legacy URL, not a second competing page. `data/excel-to-csv.astro` and
+`data/excel-to-json.astro` convert from Excel, not CSV/JSON, so they're genuinely different tools.
+No redirects or URL changes were made. The GSC pattern that prompted this audit (real impressions,
+poor position 60-95, on queries that already have a matching live page) has a different cause than
+duplicate content — likely indexing/authority/backlink-related — worth investigating separately
+rather than re-opening this as a content-duplication question.
 
 Programmatic format-pair expansion (see `SEO.md`) is still open-ended, gated on Search Console
 data showing which existing tools are getting impressions but not ranking top-10 — check GSC

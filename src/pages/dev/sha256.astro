@@ -7,18 +7,19 @@ import FaqAccordion from '../../components/FaqAccordion.astro';
 import AdUnit from '../../components/AdUnit.astro';
 
 const faqs = [
-  { q: 'Is my file uploaded to create the hash?', a: 'No. The browser reads the selected file and calculates its SHA-256 digest locally. The file contents are not sent to Kit-Bin.' },
-  { q: 'What is a SHA-256 checksum used for?', a: 'A checksum is a fixed fingerprint for a file. Compare it with the value published by a software vendor to check that a downloaded file has not changed.' },
+  { q: 'Is my file uploaded to create the hash?', a: 'No. The browser reads the selected file and calculates the digest locally, with whichever algorithm you pick. The file contents are not sent to Kit-Bin.' },
+  { q: 'What is a file hash used for?', a: 'A hash is a fixed fingerprint calculated from every byte in a file. Compare it with the value published by a software vendor, or paste it into the "Expected hash" field here, to check that a downloaded file has not changed.' },
+  { q: 'How do I verify a file against a hash someone published?', a: 'Pick the same algorithm they used (the value length gives it away if unstated: 32 hex characters is MD5, 40 is SHA-1, 64 is SHA-256, 128 is SHA-512), select your file, and paste their value into "Expected hash". This tool compares it against what it computes and tells you immediately whether they match.' },
+  { q: 'Which algorithm should I use?', a: 'Use whichever one the source already published a hash for — matching their algorithm is what matters, not which is "better". If you\'re creating a hash from scratch with no existing value to match, SHA-256 is the modern default; MD5 and SHA-1 are still common on older release pages but are cryptographically broken for security purposes (fine for accidental-corruption checks, not for tamper detection).' },
   { q: 'Does a matching hash prove a file is safe?', a: 'No. It only proves that the bytes match the file used to create the expected hash. Get the expected value from a source you trust.' },
-  { q: 'Can I hash a large file?', a: 'Usually, yes, but the full file must fit in browser memory for Web Crypto to process it. Very large files can be slow or exceed a mobile browser’s memory limit.' },
-  { q: 'Is a SHA-256 hash case-sensitive?', a: 'The hash itself is not case-sensitive as a value — hex digits a-f and A-F represent the same bits — but comparing two hashes as text requires matching case or lowercasing both first, since a plain string comparison treats "a3" and "A3" as different. This tool always outputs lowercase hex, so paste the published hash into a comparison as lowercase too.' },
-  { q: 'How do I get the SHA-256 hash of a file?', a: 'Choose or drop the file above. The hash is calculated locally with the browser\'s Web Crypto API and shown as a 64-character hex string, ready to copy and compare.' },
+  { q: 'Can I hash a large file?', a: 'Usually, yes, but the full file must fit in browser memory to be processed. Very large files can be slow or exceed a mobile browser’s memory limit.' },
+  { q: 'Are these hashes case-sensitive?', a: 'The hash itself is not case-sensitive as a value — hex digits a-f and A-F represent the same bits — but comparing two hashes as plain text requires matching case or lowercasing both first. This tool always outputs lowercase hex and compares the "Expected hash" field case-insensitively, so pasting a value in either case works.' },
 ];
 ---
 
-<Layout title="SHA-256 File Hash Generator, Private and Free | Kit-Bin" description="Create a SHA-256 checksum for any file in your browser. Verify downloads and compare hashes without uploading the file.">
-  <ToolSchema name="SHA-256 File Hash Generator" description="Create a SHA-256 checksum locally in your browser without uploading the file." faqs={faqs} />
-  <ToolHeader title="SHA-256 File Hash Generator" subtitle="Create a local SHA-256 checksum. Your file never leaves this browser." />
+<Layout title="File Hash Checker — MD5, SHA-1, SHA-256, SHA-512 | Kit-Bin" description="Calculate and verify a file's MD5, SHA-1, SHA-256, or SHA-512 hash in your browser. Paste an expected value to check it matches, without uploading the file.">
+  <ToolSchema name="File Hash Checker" description="Calculate and verify a file's MD5, SHA-1, SHA-256, or SHA-512 hash locally in your browser without uploading the file." faqs={faqs} />
+  <ToolHeader title="File Hash Checker" subtitle="Calculate or verify an MD5, SHA-1, SHA-256, or SHA-512 checksum. Your file never leaves this browser." />
 
   <div class="max-w-3xl mx-auto px-4">
     <div id="drop-target" class="rounded-2xl border border-dashed border-border-soft bg-surface p-6 text-center shadow-sm transition-colors dark:border-slate-700 dark:bg-slate-900">
@@ -27,19 +28,43 @@ const faqs = [
       <p class="mt-3 text-sm text-muted dark:text-slate-400">Or drop any file here. It is read locally to calculate its checksum.</p>
       <p id="file-name" class="mt-4 hidden text-sm font-medium text-ink dark:text-slate-100"></p>
       <p id="message" role="status" class="mt-4 hidden rounded-xl px-4 py-3 text-sm"></p>
-      <div id="output-wrap" class="mt-4 hidden text-left"><label for="output" class="text-sm font-medium">SHA-256 checksum</label><div class="mt-2 flex gap-2"><input id="output" readonly class="min-w-0 flex-1 rounded-lg border border-border-soft bg-transparent p-3 font-mono text-xs dark:border-slate-700" /><button id="copy" class="rounded-lg border border-border-soft px-4 text-sm font-medium dark:border-slate-700">Copy</button></div></div>
+
+      <div class="mt-4 flex flex-wrap items-center justify-center gap-2 text-left">
+        <label for="algorithm" class="text-sm font-medium">Algorithm</label>
+        <select id="algorithm" class="rounded-lg border border-border-soft bg-transparent p-2 text-sm dark:border-slate-700">
+          <option value="SHA-256" selected>SHA-256</option>
+          <option value="SHA-1">SHA-1</option>
+          <option value="SHA-512">SHA-512</option>
+          <option value="MD5">MD5</option>
+        </select>
+      </div>
+
+      <div id="output-wrap" class="mt-4 hidden text-left space-y-3">
+        <div>
+          <label for="output" class="text-sm font-medium">Checksum</label>
+          <div class="mt-2 flex gap-2">
+            <input id="output" readonly class="min-w-0 flex-1 rounded-lg border border-border-soft bg-transparent p-3 font-mono text-xs dark:border-slate-700" />
+            <button id="copy" class="rounded-lg border border-border-soft px-4 text-sm font-medium dark:border-slate-700">Copy</button>
+          </div>
+        </div>
+        <div>
+          <label for="expected" class="text-sm font-medium">Expected hash (optional)</label>
+          <input id="expected" placeholder="Paste a published hash to compare" class="mt-2 w-full rounded-lg border border-border-soft bg-transparent p-3 font-mono text-xs dark:border-slate-700" />
+          <p id="match-result" class="mt-2 hidden rounded-lg px-3 py-2 text-sm font-medium"></p>
+        </div>
+      </div>
     </div>
   </div>
 
   <AdUnit />
 
   <div class="max-w-3xl mx-auto space-y-6 px-4 py-12 text-ink dark:text-slate-300">
-    <p>A SHA-256 hash is a 64-character fingerprint calculated from every byte in a file. Use it to compare a download with the checksum published by its creator, or to record an exact version of a file before sharing it.</p>
-    <div><h2 class="tool-h2 text-lg font-semibold">How to verify a downloaded file</h2><ol class="mt-2 list-decimal space-y-1 pl-5 text-muted dark:text-slate-400"><li>Find the SHA-256 value from the vendor’s official download page or signed release notes.</li><li>Select the downloaded file here.</li><li>Compare the two 64-character values exactly.</li><li>If they differ, do not assume the download is the expected file.</li></ol></div>
+    <p>A file hash is a fingerprint calculated from every byte in a file. Use it to compare a download with the checksum published by its creator, to check a file wasn't corrupted or tampered with in transit, or to record an exact version of a file before sharing it. Pick the algorithm that matches whatever value you're checking against, or SHA-256 by default if you're just creating one from scratch.</p>
+    <div><h2 class="tool-h2 text-lg font-semibold">How to verify a downloaded file</h2><ol class="mt-2 list-decimal space-y-1 pl-5 text-muted dark:text-slate-400"><li>Find the published hash value and algorithm from the vendor's official download page or signed release notes.</li><li>Select that same algorithm above.</li><li>Select the downloaded file here.</li><li>Paste the published value into "Expected hash" and check the match result, or compare the two values yourself if you'd rather.</li><li>If they don't match, do not assume the download is the expected file.</li></ol></div>
     <div><h2 class="tool-h2 text-lg font-semibold">What this does not prove</h2><p class="mt-2 text-muted dark:text-slate-400">A hash can check equality. It cannot prove that a file is safe, identify who created it, or replace a trusted signature. The expected hash must come from a source you already trust.</p></div>
     <div><h2 class="tool-h2 text-lg font-semibold">FAQ</h2><div class="mt-3"><FaqAccordion faqs={faqs} /></div></div>
     <p class="text-sm">Need to compare structured configuration instead? Use <a class="text-primary hover:underline dark:text-blue-400" href="/dev/json-diff/">JSON Diff</a>.</p>
-    <p class="text-sm">What does a matching hash actually prove? Read <a class="text-primary hover:underline dark:text-blue-400" href="/guides/what-sha256-hash-proves/">what a SHA-256 hash proves (and what it doesn't)</a>.</p>
+    <p class="text-sm">What does a matching SHA-256 hash actually prove? Read <a class="text-primary hover:underline dark:text-blue-400" href="/guides/what-sha256-hash-proves/">what a SHA-256 hash proves (and what it doesn't)</a>.</p>
   </div>
 
   <div class="pt-8 sm:pt-12 pb-6 sm:pb-8">
@@ -47,15 +72,22 @@ const faqs = [
   </div>
 
   <script>
+    import { md5 } from '../../lib/dev/md5';
+
     const fileInput = document.querySelector<HTMLInputElement>('#file')!;
     const dropTarget = document.querySelector<HTMLElement>('#drop-target')!;
     const fileName = document.querySelector<HTMLElement>('#file-name')!;
+    const algorithmSelect = document.querySelector<HTMLSelectElement>('#algorithm')!;
     const outputWrap = document.querySelector<HTMLElement>('#output-wrap')!;
     const output = document.querySelector<HTMLInputElement>('#output')!;
     const copyButton = document.querySelector<HTMLButtonElement>('#copy')!;
+    const expectedInput = document.querySelector<HTMLInputElement>('#expected')!;
+    const matchResult = document.querySelector<HTMLElement>('#match-result')!;
     const message = document.querySelector<HTMLElement>('#message')!;
     const successClasses = ['bg-emerald-50', 'text-emerald-800', 'dark:bg-emerald-950/40', 'dark:text-emerald-300'];
     const errorClasses = ['bg-red-50', 'text-red-800', 'dark:bg-red-950/40', 'dark:text-red-300'];
+
+    let currentFile: File | null = null;
 
     function showMessage(text: string, valid: boolean) {
       message.textContent = text;
@@ -67,17 +99,35 @@ const faqs = [
       return [...new Uint8Array(buffer)].map((byte) => byte.toString(16).padStart(2, '0')).join('');
     }
 
+    function updateMatchResult() {
+      const expected = expectedInput.value.trim().toLowerCase();
+      if (!expected || !output.value) {
+        matchResult.classList.add('hidden');
+        return;
+      }
+      const matches = expected === output.value.toLowerCase();
+      matchResult.textContent = matches ? 'Matches the expected hash.' : 'Does not match the expected hash.';
+      matchResult.classList.remove('hidden', ...successClasses, ...errorClasses);
+      matchResult.classList.add(...(matches ? successClasses : errorClasses));
+    }
+
     async function hashFile(file: File) {
+      currentFile = file;
       outputWrap.classList.add('hidden');
-      if (!crypto.subtle) { showMessage('This browser does not expose the Web Crypto API needed for SHA-256.', false); return; }
+      const algorithm = algorithmSelect.value;
+      if (algorithm !== 'MD5' && !crypto.subtle) {
+        showMessage('This browser does not expose the Web Crypto API needed for this algorithm.', false);
+        return;
+      }
       fileName.textContent = `${file.name} (${file.size.toLocaleString()} bytes)`;
       fileName.classList.remove('hidden');
-      showMessage('Reading file and calculating SHA-256…', true);
+      showMessage(`Reading file and calculating ${algorithm}…`, true);
       try {
         const bytes = await file.arrayBuffer();
-        output.value = toHex(await crypto.subtle.digest('SHA-256', bytes));
+        output.value = algorithm === 'MD5' ? md5(new Uint8Array(bytes)) : toHex(await crypto.subtle.digest(algorithm, bytes));
         outputWrap.classList.remove('hidden');
-        showMessage('SHA-256 checksum created locally.', true);
+        showMessage(`${algorithm} checksum created locally.`, true);
+        updateMatchResult();
       } catch (error) {
         showMessage(`Could not calculate the hash: ${error instanceof Error ? error.message : 'Unknown error'}`, false);
       }
@@ -87,6 +137,8 @@ const faqs = [
     dropTarget.addEventListener('dragover', (event) => { event.preventDefault(); dropTarget.classList.add('border-primary'); });
     dropTarget.addEventListener('dragleave', () => dropTarget.classList.remove('border-primary'));
     dropTarget.addEventListener('drop', (event) => { event.preventDefault(); dropTarget.classList.remove('border-primary'); const file = event.dataTransfer?.files?.[0]; if (file) hashFile(file); });
+    algorithmSelect.addEventListener('change', () => { if (currentFile) hashFile(currentFile); });
+    expectedInput.addEventListener('input', updateMatchResult);
     copyButton.addEventListener('click', async () => { if (!output.value) return; try { await navigator.clipboard.writeText(output.value); showMessage('Checksum copied to clipboard.', true); } catch { output.select(); showMessage('Clipboard access was blocked. The checksum is selected, press Ctrl+C or Cmd+C.', false); } });
   </script>
 </Layout>

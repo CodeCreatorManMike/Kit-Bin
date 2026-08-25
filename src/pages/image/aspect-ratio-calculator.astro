@@ -1,0 +1,174 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import AdBanner from '../../components/AdBanner.astro';
+import ToolHeader from '../../components/ToolHeader.astro';
+import ToolSchema from '../../components/ToolSchema.astro';
+import FaqAccordion from '../../components/FaqAccordion.astro';
+import AdUnit from '../../components/AdUnit.astro';
+
+const faqs = [
+  { q: 'How does this calculate the missing dimension?', a: 'It scales proportionally: new height = original height × (new width ÷ original width), or the same formula solved for width. That single ratio is what keeps a resized image looking like a clean scaled copy instead of a stretched or squashed one.' },
+  { q: 'What does the simplified ratio like "16:9" actually mean?', a: 'It is the width-to-height relationship reduced to its smallest whole numbers using the greatest common divisor — a 1920×1080 image and a 320×180 image are both 16:9, because they scale down to the same two numbers.' },
+  { q: 'Why did my resized image come out stretched even though I used a resize tool?', a: 'Most likely the tool let you type a width and a height independently, and the two numbers you entered did not match the original ratio. Locking one field to this calculator\'s output, or using a resize tool that only exposes one dimension, prevents that.' },
+  { q: 'Does this resize my actual image file?', a: 'No — this is a calculator only, it works out the numbers. Once you have the target width and height, use Resize Image to actually process the file.' },
+  { q: 'Can I use this for video or print sizes too?', a: 'Yes, the ratio math is identical for any width/height pair — video frames, print dimensions, browser windows. It is not specific to photo files.' },
+];
+---
+
+<Layout
+  title="Aspect Ratio Calculator, Free & No Upload | Kit-Bin"
+  description="Enter your original width and height, then a new width or height, and get the matching dimension that keeps the exact aspect ratio. Calculated entirely in your browser."
+>
+  <ToolSchema
+    name="Aspect Ratio Calculator"
+    description="Calculate the matching width or height for a target aspect ratio, entirely in your browser."
+    faqs={faqs}
+  />
+  <ToolHeader title="Aspect Ratio Calculator" subtitle="Enter your original size, then a new width or height — the other side is calculated for you." />
+
+  <div class="max-w-2xl mx-auto px-4">
+    <div class="rounded-2xl border border-border-soft bg-surface p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+      <p class="text-sm font-semibold text-ink dark:text-slate-100">Original size</p>
+      <div class="mt-2 grid grid-cols-2 gap-3">
+        <label class="text-sm font-medium">Width (px)<input id="orig-width" type="number" min="1" value="4000" class="mt-1 block w-full rounded-lg border border-border-soft bg-transparent p-2.5 dark:border-slate-700" /></label>
+        <label class="text-sm font-medium">Height (px)<input id="orig-height" type="number" min="1" value="3000" class="mt-1 block w-full rounded-lg border border-border-soft bg-transparent p-2.5 dark:border-slate-700" /></label>
+      </div>
+
+      <p class="mt-5 text-sm font-semibold text-ink dark:text-slate-100">New size</p>
+      <div class="mt-2 grid grid-cols-2 gap-3">
+        <label class="text-sm font-medium">
+          New width (px)
+          <input id="new-width" type="number" min="1" value="1200" class="mt-1 block w-full rounded-lg border border-border-soft bg-transparent p-2.5 dark:border-slate-700" />
+        </label>
+        <label class="text-sm font-medium">
+          New height (px)
+          <input id="new-height" type="number" min="1" placeholder="calculated" class="mt-1 block w-full rounded-lg border border-border-soft bg-transparent p-2.5 dark:border-slate-700" />
+        </label>
+      </div>
+      <div class="mt-3 inline-flex items-center gap-1 rounded-xl bg-app-bg dark:bg-slate-950 border border-border-soft dark:border-slate-800 p-1 text-sm">
+        <button type="button" id="lock-width" class="rounded-lg px-3 py-1.5 font-semibold transition-all" aria-pressed="true">Lock width, calculate height</button>
+        <button type="button" id="lock-height" class="rounded-lg px-3 py-1.5 font-semibold transition-all" aria-pressed="false">Lock height, calculate width</button>
+      </div>
+
+      <div id="result" class="mt-5 rounded-xl bg-app-bg dark:bg-slate-950 p-4 text-center">
+        <p id="result-primary" class="text-2xl font-bold text-ink dark:text-slate-100"></p>
+        <p id="result-secondary" class="mt-1 text-sm text-muted dark:text-slate-400"></p>
+      </div>
+    </div>
+  </div>
+
+  <AdUnit />
+
+  <div class="max-w-2xl mx-auto space-y-6 px-4 py-12 text-ink dark:text-slate-300">
+    <p>
+      This tool calculates the missing dimension when you resize an image, so the result keeps
+      the exact proportions of the original. Enter your original width and height, then a new
+      width (or height) — the matching dimension and the simplified ratio (like 16:9 or 4:3) are
+      calculated as you type.
+    </p>
+    <div>
+      <h2 class="tool-h2 text-lg font-semibold">What aspect ratio is, and why distortion happens</h2>
+      <p class="mt-2 text-muted dark:text-slate-400">
+        Aspect ratio is the relationship between an image's width and height, expressed as a
+        ratio like 16:9 or 4:3. Any resize that keeps that same proportion looks like a clean
+        scaled copy, at any size. Distortion — a stretched or squashed look, circles turned into
+        ovals — happens when a new width and new height are set independently and the two numbers
+        don't match that original relationship, forcing the pixels to spread across a shape they
+        weren't captured for. The fix is always the same formula: pick one dimension, and
+        calculate the other as original × (new ÷ original) rather than typing both in by guess.
+      </p>
+    </div>
+    <div><h2 class="tool-h2 text-lg font-semibold">FAQ</h2><div class="mt-3"><FaqAccordion faqs={faqs} /></div></div>
+    <p class="text-sm">
+      Want the full explanation, including why some tools distort images by default? Read{' '}
+      <a class="text-primary hover:underline dark:text-blue-400" href="/guides/resize-without-distorting/">How to resize an image without distorting its aspect ratio</a>.
+      Once you have your target dimensions, use{' '}
+      <a class="text-primary hover:underline dark:text-blue-400" href="/image/resize/">Resize Image</a>{' '}
+      to actually process the file.
+    </p>
+    <div class="pt-2">
+      <h2 class="tool-h2 font-semibold text-lg">Related tools</h2>
+      <ul class="mt-2 list-disc list-inside space-y-1 text-sm">
+        <li><a href="/image/resize/" class="text-primary dark:text-blue-400 hover:underline">Resize Image</a></li>
+        <li><a href="/image/crop/" class="text-primary dark:text-blue-400 hover:underline">Crop Image</a></li>
+        <li><a href="/image/dpi-calculator/" class="text-primary dark:text-blue-400 hover:underline">DPI / Print Size Calculator</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="pt-8 sm:pt-12 pb-6 sm:pb-8">
+    <AdBanner placement="tool-page:image/aspect-ratio-calculator" />
+  </div>
+
+  <script>
+    const lockWidthBtn = document.querySelector<HTMLButtonElement>('#lock-width')!;
+    const lockHeightBtn = document.querySelector<HTMLButtonElement>('#lock-height')!;
+    const origWidth = document.querySelector<HTMLInputElement>('#orig-width')!;
+    const origHeight = document.querySelector<HTMLInputElement>('#orig-height')!;
+    const newWidth = document.querySelector<HTMLInputElement>('#new-width')!;
+    const newHeight = document.querySelector<HTMLInputElement>('#new-height')!;
+    const resultPrimary = document.querySelector<HTMLElement>('#result-primary')!;
+    const resultSecondary = document.querySelector<HTMLElement>('#result-secondary')!;
+
+    function gcd(a: number, b: number): number {
+      return b === 0 ? a : gcd(b, a % b);
+    }
+
+    let mode: 'lock-width' | 'lock-height' = 'lock-width';
+
+    function setMode(next: typeof mode): void {
+      mode = next;
+      const widthLocked = mode === 'lock-width';
+      lockWidthBtn.setAttribute('aria-pressed', String(widthLocked));
+      lockHeightBtn.setAttribute('aria-pressed', String(!widthLocked));
+      lockWidthBtn.classList.toggle('bg-gradient-to-br', widthLocked);
+      lockWidthBtn.classList.toggle('from-primary', widthLocked);
+      lockWidthBtn.classList.toggle('to-violet-500', widthLocked);
+      lockWidthBtn.classList.toggle('text-white', widthLocked);
+      lockHeightBtn.classList.toggle('bg-gradient-to-br', !widthLocked);
+      lockHeightBtn.classList.toggle('from-primary', !widthLocked);
+      lockHeightBtn.classList.toggle('to-violet-500', !widthLocked);
+      lockHeightBtn.classList.toggle('text-white', !widthLocked);
+      newWidth.readOnly = !widthLocked;
+      newHeight.readOnly = widthLocked;
+      newWidth.classList.toggle('opacity-60', !widthLocked);
+      newHeight.classList.toggle('opacity-60', widthLocked);
+      update();
+    }
+
+    function update(): void {
+      const ow = Number(origWidth.value);
+      const oh = Number(origHeight.value);
+      if (!ow || !oh) {
+        resultPrimary.textContent = 'Enter valid numbers';
+        resultSecondary.textContent = '';
+        return;
+      }
+
+      const divisor = gcd(Math.round(ow), Math.round(oh)) || 1;
+      const ratioLabel = `${Math.round(ow / divisor)}:${Math.round(oh / divisor)}`;
+
+      if (mode === 'lock-width') {
+        const nw = Number(newWidth.value);
+        if (!nw) { resultPrimary.textContent = 'Enter a new width'; resultSecondary.textContent = ''; return; }
+        const nh = Math.round(oh * (nw / ow));
+        newHeight.value = String(nh);
+        resultPrimary.textContent = `${nw.toLocaleString()} × ${nh.toLocaleString()} px`;
+        resultSecondary.textContent = `${ratioLabel} ratio, matching the ${ow}×${oh} original`;
+      } else {
+        const nh = Number(newHeight.value);
+        if (!nh) { resultPrimary.textContent = 'Enter a new height'; resultSecondary.textContent = ''; return; }
+        const nw = Math.round(ow * (nh / oh));
+        newWidth.value = String(nw);
+        resultPrimary.textContent = `${nw.toLocaleString()} × ${nh.toLocaleString()} px`;
+        resultSecondary.textContent = `${ratioLabel} ratio, matching the ${ow}×${oh} original`;
+      }
+    }
+
+    lockWidthBtn.addEventListener('click', () => setMode('lock-width'));
+    lockHeightBtn.addEventListener('click', () => setMode('lock-height'));
+    [origWidth, origHeight, newWidth, newHeight].forEach((el) => el.addEventListener('input', update));
+
+    setMode('lock-width');
+  </script>
+</Layout>

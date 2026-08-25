@@ -28,6 +28,10 @@ const faqs = [
     q: 'Is my image uploaded anywhere?',
     a: 'No. The source image is decoded and every size is rendered locally in this browser tab using <canvas>. Nothing leaves your device.',
   },
+  {
+    q: 'How do I actually wire these files into my site?',
+    a: 'Upload the zip contents to your site root, then paste the <link> tags shown below the preview grid into your page\'s <head>. They already reference the exact filenames generated in the zip, so no renaming or editing is needed for the tags themselves — just the manifest\'s name/short_name/colors.',
+  },
 ];
 ---
 
@@ -46,6 +50,17 @@ const faqs = [
   <ToolWidget accept="image/*" dropLabel="Drop a logo or icon image here or click to browse" />
 
   <div id="preview-grid" class="hidden max-w-2xl mx-auto mt-6 grid grid-cols-3 gap-3 px-4 sm:grid-cols-6"></div>
+
+  <div id="snippet-block" class="hidden max-w-2xl mx-auto mt-6 px-4">
+    <div class="rounded-xl border border-border-soft bg-surface p-4 dark:border-slate-800 dark:bg-slate-900">
+      <div class="flex items-center justify-between gap-2">
+        <p class="text-sm font-semibold text-ink dark:text-slate-200">Paste this into your &lt;head&gt;</p>
+        <button id="snippet-copy" type="button" class="rounded-md border border-border-soft px-2.5 py-1 text-xs font-medium text-ink hover:bg-black/5 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-white/5">Copy</button>
+      </div>
+      <pre id="snippet-code" class="mt-2 overflow-x-auto rounded-lg bg-black/5 p-3 text-xs leading-relaxed text-ink dark:bg-black/30 dark:text-slate-200"></pre>
+      <p class="mt-2 text-xs text-muted dark:text-slate-400">Upload the extracted zip contents to your site root (or wherever these paths point) so the referenced files resolve.</p>
+    </div>
+  </div>
 
   <AdUnit />
 
@@ -72,6 +87,13 @@ const faqs = [
         If your source image isn't square, it's centered on a transparent square canvas at each size rather than
         stretched or cropped, so shapes and logos keep their proportions.
       </p>
+      <p class="mt-2 text-muted dark:text-slate-400">
+        Once generated, a ready-to-copy HTML snippet appears below the preview grid with the exact
+        <span class="font-mono text-ink dark:text-slate-200">&lt;link rel="icon"&gt;</span>,
+        <span class="font-mono text-ink dark:text-slate-200">&lt;link rel="apple-touch-icon"&gt;</span>, and
+        <span class="font-mono text-ink dark:text-slate-200">&lt;link rel="manifest"&gt;</span> tags, already pointing
+        at the filenames in the zip — paste it straight into your site's <span class="font-mono text-ink dark:text-slate-200">&lt;head&gt;</span>.
+      </p>
     </div>
     <div><h2 class="tool-h2 font-semibold text-lg pt-2">FAQ</h2><div class="mt-3"><FaqAccordion faqs={faqs} /></div></div>
     <p class="text-sm">
@@ -91,7 +113,28 @@ const faqs = [
     import { getToolElements, wireTool } from '../../lib/ui';
 
     const previewGrid = document.querySelector<HTMLElement>('#preview-grid')!;
+    const snippetBlock = document.querySelector<HTMLElement>('#snippet-block')!;
+    const snippetCode = document.querySelector<HTMLElement>('#snippet-code')!;
+    const snippetCopy = document.querySelector<HTMLButtonElement>('#snippet-copy')!;
     let previewUrls: string[] = [];
+
+    const HEAD_SNIPPET = `<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" href="/favicon.ico">
+<link rel="manifest" href="/site.webmanifest">`;
+
+    function renderSnippet() {
+      snippetCode.textContent = HEAD_SNIPPET;
+      snippetBlock.classList.remove('hidden');
+    }
+
+    snippetCopy.addEventListener('click', async () => {
+      await navigator.clipboard.writeText(HEAD_SNIPPET);
+      snippetCopy.textContent = 'Copied';
+      setTimeout(() => (snippetCopy.textContent = 'Copy'), 1500);
+    });
 
     function renderPreview(sizes: FaviconSize[]) {
       previewUrls.forEach((url) => URL.revokeObjectURL(url));
@@ -122,6 +165,7 @@ const faqs = [
         report('Rendering icon sizes…');
         const { sizes, zip } = await generateFaviconSet(file);
         renderPreview(sizes);
+        renderSnippet();
         report('Packaging your files…');
         return {
           blob: zip,

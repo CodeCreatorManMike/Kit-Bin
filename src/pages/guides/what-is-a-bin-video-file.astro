@@ -1,0 +1,96 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import GuideMeta from '../../components/GuideMeta.astro';
+---
+
+<Layout
+  title="What Is a .bin Video File, and Can You Convert It to MP4? | Kit-Bin"
+  description="There is no universal .bin video format. Here is what a .bin file actually is depending on where it came from, and how to find out which case yours is."
+>
+
+  <article class="max-w-2xl mx-auto px-4 pt-10 pb-16 text-ink dark:text-slate-300 space-y-4">
+    <p class="text-sm"><a href="/guides/" class="text-primary dark:text-blue-400 hover:underline">← All guides</a></p>
+    <h1 class="text-3xl font-bold text-ink dark:text-slate-100">What Is a .bin Video File, and Can You Convert It to MP4?</h1>
+
+    <p>
+      There is no such thing as a standard ".bin video format," and no converter, this site
+      included, can reliably turn an arbitrary .bin file into a playable MP4. ".bin" just means
+      "binary data" — it is a generic extension, not a container that defines how video, audio, or
+      anything else is laid out inside. What a specific .bin file actually contains depends
+      entirely on what produced it, and that's the question worth answering before looking for a
+      converter at all.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">The three things a .bin file usually turns out to be</h2>
+    <p>
+      <strong>A raw dump from a dashcam, drone, or action camera.</strong> Some consumer camera
+      firmware writes its own proprietary recording format and only converts it to a normal video
+      file once you run the manufacturer's desktop app, or once the camera itself finishes an
+      export step. Until that happens, the .bin file on the SD card is not a video file in any
+      general sense — it is a private, device-specific structure that only that camera's own
+      software knows how to read. There is no generic tool that can decode it, because there is no
+      published spec to decode it against.
+    </p>
+    <p>
+      <strong>A disc or CD/DVD image, unrelated to a specific video clip.</strong> .bin, often
+      paired with a .cue sheet, is a long-standing format for a raw disc image — the same kind of
+      thing an .iso is. If your .bin came from disc-burning or disc-ripping software rather than a
+      camera or a download, it is not "a video" at all; it is a full disc image that might contain
+      a DVD's video files somewhere inside it, mountable with disc-image software, not convertible
+      with a video converter.
+    </p>
+    <p>
+      <strong>A video file that simply has the wrong extension.</strong> This is the most common
+      case for anyone who downloaded a file rather than recorded one. Some download managers and
+      incomplete or interrupted downloads save data with a generic .bin extension, or a browser
+      extension mislabels the file, even though the bytes inside are a perfectly normal MP4, MOV,
+      or other video file. This is the one case where there genuinely is a video in there, just
+      hiding behind the wrong file extension.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">How to tell which case yours is</h2>
+    <p>
+      <strong>Check where the file came from first.</strong> Off an SD card from a camera or drone:
+      case one. From disc-ripping or disc-burning software: case two. Downloaded from a link,
+      email attachment, or download manager: almost always case three.
+    </p>
+    <p>
+      <strong>Try renaming it.</strong> If you suspect case three, make a copy of the file (so you
+      still have the original if this doesn't work) and rename the extension from .bin to .mp4.
+      If it plays, that confirms it was a normal video file the whole time and the .bin extension
+      was simply wrong. This works because video players generally look at the actual file
+      contents, not just the extension, once they're given a plausible one to try.
+    </p>
+    <p>
+      <strong>Check the file's header for certainty.</strong> Every real file format starts with a
+      recognizable sequence of bytes at the very start of the file, sometimes called a magic
+      number or file signature — an MP4 file, for example, typically has "ftyp" a few bytes into
+      the header. Opening the file in a hex editor (or a "file signature checker" tool) and looking
+      at the first 16-32 bytes will tell you definitively whether it is a video container, a disc
+      image, or something else, without needing to guess from the file's origin.
+    </p>
+
+    <h2 class="tool-h2 font-semibold text-lg pt-2 text-ink dark:text-slate-100">If it turns out to actually be a video</h2>
+    <p>
+      Once renaming (or checking the header) confirms the bytes inside are a real video file —
+      just one that ended up with a .bin extension along the way — use{' '}
+      <a href="/video/convert-to-mp4/" class="text-primary dark:text-blue-400 hover:underline">Convert Video to MP4</a>{' '}
+      if it plays but isn't already an MP4, or if the source format still gives you playback
+      trouble in specific software. That tool runs entirely in your browser and works from
+      whatever the file's real format turns out to be, once you've correctly identified it.
+    </p>
+    <p>
+      If the header check or renaming trick doesn't produce a playable file, the .bin is almost
+      certainly a genuine device-specific dump or disc image (cases one or two above), and no
+      browser-based converter, including this one, can invent a decoder for a proprietary format it
+      was never given a specification for. At that point the manufacturer's own software, or
+      dedicated disc-image tools, is the only realistic path forward.
+    </p>
+
+    <GuideMeta
+      headline={'What Is a .bin Video File, and Can You Convert It to MP4?'}
+      description={'There is no universal .bin video format. Here is what a .bin file actually is depending on where it came from, and how to find out which case yours is.'}
+      published="2026-08-25"
+    />
+  </article>
+</Layout>

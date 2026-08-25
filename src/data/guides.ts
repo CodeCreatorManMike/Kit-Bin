@@ -369,6 +369,13 @@ export const guides: Guide[] = [
     category: 'image',
   },
   {
+    slug: '/guides/what-is-a-bin-video-file',
+    title: "What Is a .bin File, and Can You Convert It to MP4?",
+    cardTitle: 'What Is a .bin Video File?',
+    description: "There's no such thing as a universal .bin video format — here's what a .bin file actually is depending on where it came from, and how to tell which case yours is.",
+    category: 'video',
+  },
+  {
     slug: '/guides/csv-merge-stacking-vs-joining',
     title: 'Merging CSV Files: Stacking Rows vs Joining by Column',
     cardTitle: 'CSV Merge: Stacking vs Joining',
