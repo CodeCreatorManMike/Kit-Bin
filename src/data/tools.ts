@@ -36,6 +36,8 @@ export const tools: Tool[] = [
     aliases: ['remove pages pdf', 'delete pages from pdf', 'pdf page remover', 'remove blank pages pdf', 'delete pdf pages'] },
   { slug: '/pdf/to-text', name: 'PDF to Text', description: 'Extract selectable text from a PDF.', category: 'pdf',
     aliases: ['extract text from pdf', 'pdf to txt', 'copy text from pdf', 'pdf text extractor', 'convert pdf to text'] },
+  { slug: '/pdf/to-word', name: 'PDF to Word', description: "Convert a PDF's text into an editable .docx document.", category: 'pdf',
+    aliases: ['pdf to docx', 'pdf to word converter', 'convert pdf to word', 'edit pdf in word', 'pdf to editable document', 'pdf word document'] },
 
   { slug: '/image/heic-to-jpg', name: 'HEIC to JPG', description: 'Convert iPhone photos to JPG.', category: 'image',
     aliases: ['iphone photo', 'heif', 'heic converter', 'apple photo to jpg', 'open iphone photo on windows', 'heic to jpeg'] },

@@ -63,9 +63,19 @@ before adding more tools in an already-covered category.
   involved tool in the catalog (ML inference, license-safe model sourcing per `LICENSING.md`) —
   deliberately deferred because doing it wrong (AGPL dependency, bad mobile performance, slow
   inference) does more reputational damage than not having it yet.
-- Server-side fallback tier for large video files and for DOCX/PPTX ↔ PDF conversion — still the
-  one piece of the entire project with a real, scaling infrastructure cost, so it stays last,
-  built only once there's actual revenue to justify it.
+- Server-side fallback tier for large video files and for full-layout-fidelity DOCX/PPTX ↔ PDF
+  conversion — still the one piece of the entire project with a real, scaling infrastructure
+  cost, so it stays last, built only once there's actual revenue to justify it.
+- **`/pdf/to-word` — SHIPPED, but scoped differently from the item above.** Rather than the
+  LibreOffice-in-WASM/server-side path `docs/IDEA.MD` correctly ruled out as impractical, this
+  reuses the PDF text layer (same `pdf.js` extraction as `/pdf/to-text`) and rebuilds it as an
+  editable `.docx` via the `docx` npm package (MIT, client-side, see `LICENSING.md`) — paragraphs,
+  page breaks, and basic heading detection by font size, no table/column/image layout
+  reconstruction. Genuinely useful for text-first PDFs (letters, resumes, reports), not a
+  layout-fidelity converter. Confirmed no mature open-source WASM PDF→DOCX engine exists as of
+  this writing (checked directly); the realistic client-side options were this text-reconstruction
+  approach or a commercial SDK (Nutrient Web SDK, NativeDocuments docx-wasm) — went with the free,
+  MIT, client-side option instead.
 
 ## Competitive research notes (2026-08-03)
 

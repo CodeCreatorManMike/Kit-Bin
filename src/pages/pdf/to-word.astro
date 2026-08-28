@@ -1,0 +1,107 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import AdBanner from '../../components/AdBanner.astro';
+import ToolHeader from '../../components/ToolHeader.astro';
+import FaqAccordion from '../../components/FaqAccordion.astro';
+import ToolSchema from '../../components/ToolSchema.astro';
+import ToolWidget from '../../components/ToolWidget.astro';
+import AdUnit from '../../components/AdUnit.astro';
+
+const faqs = [
+  {
+    q: 'Is my PDF uploaded to a server?',
+    a: 'No. The PDF is read and the .docx file is built entirely in your browser. Nothing is uploaded to Kit-Bin or anywhere else.',
+  },
+  {
+    q: 'Will the Word document look exactly like the PDF?',
+    a: "No, and this tool doesn't try to. It rebuilds the PDF's selectable text as editable paragraphs, keeps page breaks, and gives noticeably larger lines a heading style — but it does not reconstruct tables, multi-column layouts, images, or exact positioning. A PDF with a simple layout (a letter, a resume, a report body) converts cleanly; a PDF with tables or multiple columns will need manual cleanup afterward.",
+  },
+  {
+    q: 'Why not full layout-accurate conversion, like some paid tools offer?',
+    a: 'That requires a real page-layout engine reconstructing exact positioning, which is a fundamentally heavier problem — the kind of thing desktop Word or a server-side conversion service does. Kit-Bin only does work that can run entirely in your browser; this tool trades pixel-perfect layout for something genuinely useful and 100% private: real, editable text in a real .docx file.',
+  },
+  {
+    q: 'Can this read scanned PDFs?',
+    a: "Not yet. Like PDF to Text, this reads the selectable text layer already inside a PDF. A scan is usually just a picture of a page, so there's no text to extract until it's run through OCR.",
+  },
+  {
+    q: 'What file do I get?',
+    a: 'A standard .docx file that opens in Microsoft Word, Google Docs, LibreOffice Writer, and Apple Pages.',
+  },
+];
+---
+
+<Layout
+  title="PDF to Word Converter, Get an Editable .docx | Kit-Bin"
+  description="Convert a PDF's text into an editable Word (.docx) document in your browser. Private, free, and no account required."
+>
+  <ToolSchema
+    name="PDF to Word"
+    description="Convert a PDF's text into an editable Word (.docx) document in your browser. Private, free, and no account required."
+    faqs={faqs}
+  />
+
+  <ToolHeader title="Convert PDF to an Editable Word Document" />
+  <ToolWidget accept="application/pdf" multiple dropLabel="Drop PDF files here or click to browse" />
+  <AdUnit />
+
+  <div class="max-w-2xl mx-auto px-4 py-12 text-ink dark:text-slate-300 space-y-6">
+    <p>
+      Turn a PDF's text into a real, editable .docx file without uploading the document anywhere.
+      This reads the PDF's existing text layer, rebuilds it as Word paragraphs with page breaks in
+      the right places, and applies a heading style to lines whose font is noticeably larger than
+      the rest of the page — useful for reports, letters, resumes, and other text-first documents
+      you want to actually edit afterward, rather than just read.
+    </p>
+    <div>
+      <h2 class="tool-h2 font-semibold text-lg">What this does and doesn't preserve</h2>
+      <p class="mt-2 text-muted dark:text-slate-400">
+        Paragraph structure, page breaks, and basic heading emphasis carry over. Tables,
+        multi-column layouts, images, and exact fonts/positions do not — this is a text
+        reconstruction, not a layout clone. For a PDF that's mostly prose (letters, contracts,
+        articles, resumes), the result is usually clean and ready to edit. For dense tables or
+        magazine-style multi-column pages, expect to tidy up spacing and structure by hand
+        afterward.
+      </p>
+    </div>
+    <div>
+      <h2 class="tool-h2 font-semibold text-lg pt-2">FAQ</h2>
+      <div class="mt-3"><FaqAccordion faqs={faqs} /></div>
+    </div>
+    <p class="text-sm">
+      Just need the raw text, not a formatted document? Try{' '}
+      <a href="/pdf/to-text/" class="text-primary dark:text-blue-400 hover:underline">PDF to Text</a>.
+      Need images of each page instead? Try{' '}
+      <a href="/pdf/to-images/" class="text-primary dark:text-blue-400 hover:underline">PDF to PNG</a>.
+    </p>
+    <p class="text-sm">Wondering why some PDFs come back with no text at all? Read <a href="/guides/why-cant-select-text-in-pdf/" class="text-primary dark:text-blue-400 hover:underline">why you can't select text in some PDFs</a>.</p>
+  </div>
+
+  <div class="pt-8 sm:pt-12 pb-6 sm:pb-8">
+    <AdBanner placement="tool-page:pdf/to-word" />
+  </div>
+
+  <script>
+    import { pdfToWord } from '../../lib/pdf/toWord';
+    import { getToolElements, wireTool } from '../../lib/ui';
+
+    const els = getToolElements();
+    wireTool(els, {
+      accept: 'application/pdf',
+      multiple: true,
+      batchZipName: 'kit-bin-pdf-to-word.zip',
+      validate: (files) =>
+        files.some((f) => f.type !== 'application/pdf' && !f.name.toLowerCase().endsWith('.pdf'))
+          ? 'This tool only accepts PDF files.'
+          : null,
+      runEach: async (file, reportProgress) => {
+        const result = await pdfToWord(file, reportProgress);
+        return {
+          blob: result.blob,
+          filename: result.filename,
+          note: `Converted ${result.pageCount} page${result.pageCount === 1 ? '' : 's'} to a Word document.`,
+        };
+      },
+    });
+  </script>
+</Layout>

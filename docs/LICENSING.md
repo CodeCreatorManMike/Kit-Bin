@@ -45,6 +45,7 @@ versions.
 | `Cropper.js` | Image crop UI | MIT | Yes |
 | `wavesurfer.js` (+ Regions plugin) | Waveform/region UI (`/audio/trim`) | BSD-3-Clause | Yes — visual-only, pairs with Mediabunny for the actual trim operation |
 | `react-dropzone` | Upload UI (only if using React components) | MIT | Yes |
+| `docx` (dolanmiu) | Generate .docx files client-side (`/pdf/to-word`) | MIT, verified in `node_modules/docx/package.json` | Yes. Its own dependencies (`jszip`, `nanoid`, `hash.js`, `xml`, `xml-js`) are all MIT too. Used only for building an editable Word document from PDF text — see the ROADMAP note distinguishing this (text-reconstruction, no layout engine) from the still-deferred full DOCX/PPTX↔PDF round-trip fidelity conversion, which is a genuinely different, much harder problem this does not attempt. |
 | Stirling-PDF | Reference only, not a dependency | AGPL-3.0, server-side Java | **Do not import code. Reference for feature/UX ideas only.** |
 | IT-Tools | Reference only, not a dependency | GPL-3.0 | **Do not import code — see the note on GPL and client-side distribution below.** |
 | BentoPDF | Reference only, not a dependency | Inconsistent across mirrors (AGPL-3.0 and Apache-2.0 both seen); canonical repo has a split commercial/self-hosted license model | **Treat as UX/feature reference only. Do not assume any given fork's license is authoritative.** |

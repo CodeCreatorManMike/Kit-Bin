@@ -206,6 +206,15 @@ export const toolIcons: Record<string, IconPrimitive[]> = {
     { t: 'path', d: 'M8 13.5h5.5' },
     { t: 'path', d: 'M8 17h8' },
   ],
+  /** Same page glyph as to-text, plus a small pencil stroke over the last
+   * line to signal "editable output" rather than plain extracted text. */
+  '/pdf/to-word': [
+    ...page,
+    { t: 'path', d: 'M8 10h8' },
+    { t: 'path', d: 'M8 13.5h5.5' },
+    { t: 'path', d: 'M8 16h4' },
+    { t: 'path', d: 'M15.3 15.2l1.6 1.6-3.6 3.6-1.9 0.3 0.3-1.9z' },
+  ],
 
   // Image
   '/image/heic-to-jpg': [
