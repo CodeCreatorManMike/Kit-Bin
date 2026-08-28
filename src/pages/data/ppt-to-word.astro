@@ -14,11 +14,11 @@ const faqs = [
   },
   {
     q: 'What exactly ends up in the Word document?',
-    a: "Every slide's visible text, in reading order, with a \"Slide N\" heading marking where each slide starts and a page break between slides. A slide's title placeholder (if it has one) gets its own sub-heading so the structure is easy to scan.",
+    a: "Every slide's visible text and pictures, in reading order, with a \"Slide N\" heading marking where each slide starts and a page break between slides. A slide's title gets its own sub-heading, bold/italic/underline and font size/color on individual words or lines carry over, and bullet points keep their indent level, so the result reads close to what the slide actually looked like — just laid out top-to-bottom as a document instead of positioned on a canvas.",
   },
   {
     q: 'What does not carry over?',
-    a: "Images, shape positions, colors, fonts, tables, charts, and speaker notes. This reconstructs the text content of a presentation as an editable document, not a visual copy of the slides — for that, export the PPTX to PDF or images in PowerPoint/Google Slides directly.",
+    a: "Exact shape positions, slide backgrounds, speaker notes, and theme-based colors/fonts (as opposed to a color explicitly set on a specific run of text, which does carry over) don't survive, because a Word document has no equivalent to PowerPoint's absolutely-positioned, overlapping shapes on a canvas — everything has to become plain top-to-bottom text and paragraphs. Vector image formats some presentations embed (WMF/EMF) also aren't converted, since browsers can't decode those directly. If you need a pixel-identical copy of the slides themselves rather than an editable rewrite of their content, export the PPTX to PDF or images in PowerPoint/Google Slides instead.",
   },
   {
     q: 'Does this work on .ppt (the older format)?',
@@ -51,19 +51,23 @@ const faqs = [
 
   <div class="max-w-2xl mx-auto px-4 py-12 text-ink dark:text-slate-300 space-y-6">
     <p>
-      Turn a PowerPoint presentation's text into a real, editable .docx file without uploading it
+      Turn a PowerPoint presentation into a real, editable .docx file without uploading it
       anywhere. Each slide becomes a clearly marked section — "Slide 1", "Slide 2", and so on —
-      with a page break between slides and the slide's own title styled as a heading, so the
-      result reads like a structured outline of the deck rather than a wall of run-together text.
+      with a page break between slides and the slide's own title styled as a heading. Bold,
+      italics, underline, font size and color, bullet/indent levels, and any pictures on the
+      slide all carry over too, so the result actually looks like the deck's content, not a flat
+      text dump of it.
     </p>
     <div>
       <h2 class="tool-h2 font-semibold text-lg">What this does and doesn't preserve</h2>
       <p class="mt-2 text-muted dark:text-slate-400">
-        Slide text, slide order, and title/body structure carry over. Images, shape layout,
-        colors, fonts, tables, charts, and speaker notes do not — this is a text reconstruction of
-        what a slide says, not a visual copy of what it looks like. It's most useful for turning a
-        text-heavy deck (a training outline, a meeting recap, a script) into something you can
-        actually edit as a document, rather than clicking through slides to copy text by hand.
+        Slide text with its formatting (bold/italic/underline, font size, explicit text color),
+        bullet structure, pictures, slide order, and title/body structure all carry over. Exact
+        shape positions, slide backgrounds, and speaker notes do not, because Word has no
+        equivalent to PowerPoint's freely-positioned, overlapping shapes on a canvas — content
+        becomes top-to-bottom text and paragraphs instead. It's most useful for turning a deck
+        into something you can actually edit as a document, rather than clicking through slides to
+        copy content by hand.
       </p>
     </div>
     <div>
