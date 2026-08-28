@@ -10,15 +10,19 @@ import AdUnit from '../../components/AdUnit.astro';
 const faqs = [
   {
     q: 'Is my presentation uploaded to a server?',
-    a: 'No. The .pptx file is read and the .docx file is built entirely in your browser. Nothing is uploaded to Kit-Bin or anywhere else.',
+    a: 'No. Every slide is rendered and packaged into a .docx file entirely in your browser. Nothing is uploaded to Kit-Bin or anywhere else.',
   },
   {
-    q: 'What exactly ends up in the Word document?',
-    a: "Every slide's visible text and pictures, in reading order, with a \"Slide N\" heading marking where each slide starts and a page break between slides. A slide's title gets its own sub-heading, bold/italic/underline and font size/color on individual words or lines carry over, and bullet points keep their indent level, so the result reads close to what the slide actually looked like — just laid out top-to-bottom as a document instead of positioned on a canvas.",
+    q: 'Will it actually look the same as the presentation?',
+    a: "Yes — each slide is redrawn from its real text, positions, colors, and pictures, then placed as a picture on its own page. It isn't a generic Word outline reconstructed from extracted text; it's a rendering of that specific slide's own layout and styling.",
   },
   {
-    q: 'What does not carry over?',
-    a: "Exact shape positions, slide backgrounds, speaker notes, and theme-based colors/fonts (as opposed to a color explicitly set on a specific run of text, which does carry over) don't survive, because a Word document has no equivalent to PowerPoint's absolutely-positioned, overlapping shapes on a canvas — everything has to become plain top-to-bottom text and paragraphs. Vector image formats some presentations embed (WMF/EMF) also aren't converted, since browsers can't decode those directly. If you need a pixel-identical copy of the slides themselves rather than an editable rewrite of their content, export the PPTX to PDF or images in PowerPoint/Google Slides instead.",
+    q: "What's the catch?",
+    a: "Each page is a picture, not editable text — you can't click into it in Word and edit a sentence the way you could in a document written from scratch. This is the same tradeoff PDF to PowerPoint makes, and the same one commercial converters (CloudConvert, FreeConvert) make for this exact conversion: exact appearance in exchange for not being editable. There's no lossless middle ground, because Word has no equivalent to PowerPoint's freely-positioned, overlapping shapes.",
+  },
+  {
+    q: 'What does not render correctly?',
+    a: "Embedded fonts are approximated with a standard sans-serif rather than the exact original typeface (browsers can't load arbitrary fonts embedded in a .pptx), gradients/theme-based colors fall back to a plain default rather than being resolved exactly, and vector image formats some presentations embed (WMF/EMF) can't be decoded by a browser and are skipped. Plain text color, size, bold/italic/underline, solid-color shape fills, bullet structure, and raster pictures (PNG/JPG/GIF/BMP) all render correctly.",
   },
   {
     q: 'Does this work on .ppt (the older format)?',
@@ -36,38 +40,35 @@ const faqs = [
 ---
 
 <Layout
-  title="PowerPoint to Word Converter, PPTX to DOCX | Kit-Bin"
-  description="Convert a PowerPoint presentation's slide text into an editable Word (.docx) document in your browser. Private, free, and no account required."
+  title="PowerPoint to Word Converter, Keep the Exact Look | Kit-Bin"
+  description="Convert a PowerPoint presentation into a Word (.docx) document that looks exactly like the slides, one per page. Private, free, and no account required."
 >
   <ToolSchema
     name="PowerPoint to Word"
-    description="Convert a PowerPoint presentation's slide text into an editable Word (.docx) document in your browser. Private, free, and no account required."
+    description="Convert a PowerPoint presentation into a Word (.docx) document that looks exactly like the slides, one per page. Private, free, and no account required."
     faqs={faqs}
   />
 
-  <ToolHeader title="Convert PowerPoint to an Editable Word Document" />
+  <ToolHeader title="Convert PowerPoint to Word, Keeping the Exact Look" />
   <ToolWidget accept=".pptx,application/vnd.openxmlformats-officedocument.presentationml.presentation" multiple dropLabel="Drop .pptx files here or click to browse" />
   <AdUnit />
 
   <div class="max-w-2xl mx-auto px-4 py-12 text-ink dark:text-slate-300 space-y-6">
     <p>
-      Turn a PowerPoint presentation into a real, editable .docx file without uploading it
-      anywhere. Each slide becomes a clearly marked section — "Slide 1", "Slide 2", and so on —
-      with a page break between slides and the slide's own title styled as a heading. Bold,
-      italics, underline, font size and color, bullet/indent levels, and any pictures on the
-      slide all carry over too, so the result actually looks like the deck's content, not a flat
-      text dump of it.
+      Turn a PowerPoint presentation into a .docx file without uploading it anywhere, one slide
+      per page, looking like the original slide rather than a generic reformatted outline. Each
+      slide's real text positions, sizes, colors, and pictures are redrawn and placed as a picture
+      on its own page — there's no formatting to lose in translation, because the page simply
+      shows the slide.
     </p>
     <div>
-      <h2 class="tool-h2 font-semibold text-lg">What this does and doesn't preserve</h2>
+      <h2 class="tool-h2 font-semibold text-lg">The tradeoff, up front</h2>
       <p class="mt-2 text-muted dark:text-slate-400">
-        Slide text with its formatting (bold/italic/underline, font size, explicit text color),
-        bullet structure, pictures, slide order, and title/body structure all carry over. Exact
-        shape positions, slide backgrounds, and speaker notes do not, because Word has no
-        equivalent to PowerPoint's freely-positioned, overlapping shapes on a canvas — content
-        becomes top-to-bottom text and paragraphs instead. It's most useful for turning a deck
-        into something you can actually edit as a document, rather than clicking through slides to
-        copy content by hand.
+        Exact visual fidelity means each page is a picture, not editable text — you get a document
+        that looks right immediately, at the cost of not being able to click in and edit a
+        sentence. If you need the words editable more than you need the exact look preserved,
+        convert to <a href="/pdf/to-word/" class="text-primary dark:text-blue-400 hover:underline">PDF to Word</a> after
+        exporting the deck to PDF instead, which reconstructs real text but not the exact layout.
       </p>
     </div>
     <div>
@@ -75,9 +76,8 @@ const faqs = [
       <div class="mt-3"><FaqAccordion faqs={faqs} /></div>
     </div>
     <p class="text-sm">
-      Need to go from a document to a PDF instead? Try{' '}
-      <a href="/pdf/to-word/" class="text-primary dark:text-blue-400 hover:underline">PDF to Word</a>{' '}
-      for the reverse direction on a text document.
+      Need a PDF turned into slides instead? <a href="/pdf/to-powerpoint/" class="text-primary dark:text-blue-400 hover:underline">PDF to PowerPoint</a>{' '}
+      keeps the exact look of each page as a picture on its own slide, the same approach in reverse.
     </p>
   </div>
 

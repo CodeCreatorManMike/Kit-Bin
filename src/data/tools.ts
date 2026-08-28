@@ -38,6 +38,8 @@ export const tools: Tool[] = [
     aliases: ['extract text from pdf', 'pdf to txt', 'copy text from pdf', 'pdf text extractor', 'convert pdf to text'] },
   { slug: '/pdf/to-word', name: 'PDF to Word', description: "Convert a PDF's text into an editable .docx document.", category: 'pdf',
     aliases: ['pdf to docx', 'pdf to word converter', 'convert pdf to word', 'edit pdf in word', 'pdf to editable document', 'pdf word document'] },
+  { slug: '/pdf/to-powerpoint', name: 'PDF to PowerPoint', description: 'Convert a PDF into a .pptx presentation, one slide per page, pixel-identical.', category: 'pdf',
+    aliases: ['pdf to ppt', 'pdf to pptx', 'pdf to powerpoint converter', 'convert pdf to powerpoint', 'pdf to slides', 'pdf to presentation'] },
 
   { slug: '/image/heic-to-jpg', name: 'HEIC to JPG', description: 'Convert iPhone photos to JPG.', category: 'image',
     aliases: ['iphone photo', 'heif', 'heic converter', 'apple photo to jpg', 'open iphone photo on windows', 'heic to jpeg'] },

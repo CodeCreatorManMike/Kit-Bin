@@ -215,6 +215,20 @@ export const toolIcons: Record<string, IconPrimitive[]> = {
     { t: 'path', d: 'M8 16h4' },
     { t: 'path', d: 'M15.3 15.2l1.6 1.6-3.6 3.6-1.9 0.3 0.3-1.9z' },
   ],
+  /** Mirror of '/data/ppt-to-word's slide glyph, direction reversed: a small
+   * page (lines standing in for a picture of text) feeding into a slide with
+   * a play-style triangle. */
+  '/pdf/to-powerpoint': [
+    { t: 'fill', d: 'M2 5h9v14h-9z' },
+    { t: 'rect', x: 2, y: 5, w: 9, h: 14, rx: 1.2 },
+    { t: 'path', d: 'M4.5 9h4' },
+    { t: 'path', d: 'M4.5 12h4' },
+    { t: 'path', d: 'M4.5 15h2.5' },
+    { t: 'path', d: 'M13.3 12h2.4' },
+    { t: 'path', d: 'M14.7 10.3l1.7 1.7-1.7 1.7' },
+    { t: 'rect', x: 18, y: 9, w: 4.5, h: 6, rx: 1 },
+    { t: 'path', d: 'M19.7 10.5v3l2.2-1.5z' },
+  ],
 
   // Image
   '/image/heic-to-jpg': [
