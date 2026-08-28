@@ -140,6 +140,8 @@ export const tools: Tool[] = [
     aliases: ['xlsx to csv', 'spreadsheet to csv', 'xls to csv', 'workbook to csv', 'export excel as csv'] },
   { slug: '/data/excel-to-json', name: 'Excel to JSON', description: 'Convert a spreadsheet sheet to JSON.', category: 'data',
     aliases: ['xlsx to json', 'spreadsheet to json', 'xls to json', 'excel data to json'] },
+  { slug: '/data/ppt-to-word', name: 'PowerPoint to Word', description: "Convert a .pptx presentation's slide text into an editable .docx.", category: 'data',
+    aliases: ['ppt to word', 'pptx to docx', 'powerpoint to word converter', 'convert powerpoint to word', 'slides to word document', 'pptx to word'] },
   { slug: '/data/json-formatter', name: 'JSON Formatter', description: 'Format, minify, and validate JSON.', category: 'data',
     aliases: ['json beautifier', 'pretty print json', 'json validator', 'fix json', 'json lint', 'minify json', 'json syntax error'] },
   { slug: '/data/csv-merge', name: 'Merge CSV Files', description: 'Stack multiple CSV files into one.', category: 'data',

@@ -1,0 +1,107 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import AdBanner from '../../components/AdBanner.astro';
+import ToolHeader from '../../components/ToolHeader.astro';
+import FaqAccordion from '../../components/FaqAccordion.astro';
+import ToolSchema from '../../components/ToolSchema.astro';
+import ToolWidget from '../../components/ToolWidget.astro';
+import AdUnit from '../../components/AdUnit.astro';
+
+const faqs = [
+  {
+    q: 'Is my presentation uploaded to a server?',
+    a: 'No. The .pptx file is read and the .docx file is built entirely in your browser. Nothing is uploaded to Kit-Bin or anywhere else.',
+  },
+  {
+    q: 'What exactly ends up in the Word document?',
+    a: "Every slide's visible text, in reading order, with a \"Slide N\" heading marking where each slide starts and a page break between slides. A slide's title placeholder (if it has one) gets its own sub-heading so the structure is easy to scan.",
+  },
+  {
+    q: 'What does not carry over?',
+    a: "Images, shape positions, colors, fonts, tables, charts, and speaker notes. This reconstructs the text content of a presentation as an editable document, not a visual copy of the slides — for that, export the PPTX to PDF or images in PowerPoint/Google Slides directly.",
+  },
+  {
+    q: 'Does this work on .ppt (the older format)?',
+    a: "No, only .pptx. The old .ppt format is a completely different, proprietary binary structure (not a ZIP of XML like .pptx), which this tool doesn't parse. Re-save the file as .pptx from PowerPoint or Google Slides first.",
+  },
+  {
+    q: 'Will slide order be correct if slides were reordered or moved between sections?',
+    a: "Yes. This reads the presentation's actual slide order (the same data PowerPoint itself uses), not just the numeric order of the slide files inside the .pptx package, which can differ once slides have been reordered or duplicated.",
+  },
+  {
+    q: 'What file do I get?',
+    a: 'A standard .docx file that opens in Microsoft Word, Google Docs, LibreOffice Writer, and Apple Pages.',
+  },
+];
+---
+
+<Layout
+  title="PowerPoint to Word Converter, PPTX to DOCX | Kit-Bin"
+  description="Convert a PowerPoint presentation's slide text into an editable Word (.docx) document in your browser. Private, free, and no account required."
+>
+  <ToolSchema
+    name="PowerPoint to Word"
+    description="Convert a PowerPoint presentation's slide text into an editable Word (.docx) document in your browser. Private, free, and no account required."
+    faqs={faqs}
+  />
+
+  <ToolHeader title="Convert PowerPoint to an Editable Word Document" />
+  <ToolWidget accept=".pptx,application/vnd.openxmlformats-officedocument.presentationml.presentation" multiple dropLabel="Drop .pptx files here or click to browse" />
+  <AdUnit />
+
+  <div class="max-w-2xl mx-auto px-4 py-12 text-ink dark:text-slate-300 space-y-6">
+    <p>
+      Turn a PowerPoint presentation's text into a real, editable .docx file without uploading it
+      anywhere. Each slide becomes a clearly marked section — "Slide 1", "Slide 2", and so on —
+      with a page break between slides and the slide's own title styled as a heading, so the
+      result reads like a structured outline of the deck rather than a wall of run-together text.
+    </p>
+    <div>
+      <h2 class="tool-h2 font-semibold text-lg">What this does and doesn't preserve</h2>
+      <p class="mt-2 text-muted dark:text-slate-400">
+        Slide text, slide order, and title/body structure carry over. Images, shape layout,
+        colors, fonts, tables, charts, and speaker notes do not — this is a text reconstruction of
+        what a slide says, not a visual copy of what it looks like. It's most useful for turning a
+        text-heavy deck (a training outline, a meeting recap, a script) into something you can
+        actually edit as a document, rather than clicking through slides to copy text by hand.
+      </p>
+    </div>
+    <div>
+      <h2 class="tool-h2 font-semibold text-lg pt-2">FAQ</h2>
+      <div class="mt-3"><FaqAccordion faqs={faqs} /></div>
+    </div>
+    <p class="text-sm">
+      Need to go from a document to a PDF instead? Try{' '}
+      <a href="/pdf/to-word/" class="text-primary dark:text-blue-400 hover:underline">PDF to Word</a>{' '}
+      for the reverse direction on a text document.
+    </p>
+  </div>
+
+  <div class="pt-8 sm:pt-12 pb-6 sm:pb-8">
+    <AdBanner placement="tool-page:data/ppt-to-word" />
+  </div>
+
+  <script>
+    import { pptxToWord } from '../../lib/data/pptxToWord';
+    import { getToolElements, wireTool } from '../../lib/ui';
+
+    const els = getToolElements();
+    wireTool(els, {
+      accept: '.pptx',
+      multiple: true,
+      batchZipName: 'kit-bin-ppt-to-word.zip',
+      validate: (files) =>
+        files.some((f) => !f.name.toLowerCase().endsWith('.pptx'))
+          ? 'This tool only accepts .pptx files (the old .ppt format is not supported).'
+          : null,
+      runEach: async (file, reportProgress) => {
+        const result = await pptxToWord(file, reportProgress);
+        return {
+          blob: result.blob,
+          filename: result.filename,
+          note: `Converted ${result.slideCount} slide${result.slideCount === 1 ? '' : 's'} to a Word document.`,
+        };
+      },
+    });
+  </script>
+</Layout>

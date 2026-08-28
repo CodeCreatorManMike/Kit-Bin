@@ -655,6 +655,19 @@ export const toolIcons: Record<string, IconPrimitive[]> = {
     { t: 'path', d: 'M14.5 7.5c2 0 2 1.8 2 4.5s0 4.5-2 4.5' },
     { t: 'path', d: 'M21 7.5c-2 0-2 1.8-2 4.5s0 4.5 2 4.5' },
   ],
+  /** Slide (rounded rect + small play-style triangle) → arrow → page with
+   * text lines, matching the pdf-to-word page glyph's spirit for "editable
+   * document" without reusing its exact primitives. */
+  '/data/ppt-to-word': [
+    { t: 'rect', x: 2, y: 5, w: 9, h: 7, rx: 1 },
+    { t: 'path', d: 'M5.3 6.8v3.4l3-1.7z' },
+    { t: 'path', d: 'M14 8.5h2.8' },
+    { t: 'path', d: 'M15.4 6.7l1.8 1.8-1.8 1.8' },
+    { t: 'fill', d: 'M13 11h9v9h-9z' },
+    { t: 'rect', x: 13, y: 11, w: 9, h: 9, rx: 1 },
+    { t: 'path', d: 'M15 14.5h5' },
+    { t: 'path', d: 'M15 17h3.5' },
+  ],
   '/data/json-formatter': [
     { t: 'path', d: 'M8.5 4.5c-2.5 0-2.5 2.8-2.5 7.5s0 7.5 2.5 7.5' },
     { t: 'path', d: 'M15.5 4.5c2.5 0 2.5 2.8 2.5 7.5s0 7.5-2.5 7.5' },
